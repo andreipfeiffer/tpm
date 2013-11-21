@@ -8,7 +8,7 @@ config.web.port = process.env.PORT || 3000;
 config.mysql.host = 'localhost';
 config.mysql.user = 'root';
 config.mysql.password = '';
-config.mysql.database = 'api';
+config.mysql.database = 'tpm';
 
 // @todo should move these 2 somewhere else
 // @todo provide an MySQL ALTER file
