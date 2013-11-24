@@ -5,7 +5,7 @@ var express = require('express'),
 var allowCrossDomain = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Auth-Token');
 
 	// intercept OPTIONS method
 	if ('OPTIONS' == req.method) {
@@ -34,7 +34,9 @@ app.configure(function () {
 
 var db    = require('./controllers/db')( connection ),
 	todos = require('./controllers/todos')( connection );
+	auth  = require('./controllers/auth')( connection );
 
+app.post('/auth', auth.login);
 app.get('/todos', todos.getAll);
 app.get('/todos/:id', todos.getById);
 app.put('/todos/:id', todos.update);
