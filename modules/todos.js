@@ -9,7 +9,8 @@ module.exports = function(connection) {
 
 
 		getById: function(req, res) {
-			var id = req.params.id;
+			var id = req.params.id,
+				userLogged = req.user;
 
 			if( isNaN(parseInt( req.params.id, 10 )) ) {
 				return res.send('TypeError: a number is required');

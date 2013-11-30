@@ -83,7 +83,7 @@ module.exports = function(connection) {
                 return next(err);
             }
             if (!user) {
-                return res.send(400, { error: 'Bad username or password'} );
+                return res.send(200, { error: 'Bad username or password'});
             }
 
             req.logIn(user, function(err) {
@@ -91,7 +91,12 @@ module.exports = function(connection) {
                     return next(err);
                 }
 
-                res.json(200/*, user*/);
+                var loggedData = {
+                    authToken: md5(String( new Date().getTime() )),
+                    authUserId: user.id
+                };
+
+                res.json(200, loggedData);
             });
         })(req, res, next);
     };
@@ -103,6 +108,7 @@ module.exports = function(connection) {
 
     // NOTE: Need to protect all API calls (other than login/logout) with this check
     var ensureAuthenticated = function(req, res, next) {
+        console.log(req);
         if (req.isAuthenticated()) {
             return next();
         } else {

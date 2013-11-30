@@ -33,6 +33,7 @@ app.use(express.cookieParser());
 app.use(express.session({ secret: 'upsidedown-inseamna-Lia-si-Andrei' }));
 app.use(passport.initialize());
 app.use(passport.session());
+// app.use(express.csrf());
 app.use(express.static(__dirname + '/public'));
 app.use(app.router);
 

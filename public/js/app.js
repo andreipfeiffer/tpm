@@ -14,8 +14,28 @@ Todos.ApplicationAdapter = DS.RESTAdapter.extend({
     host: Todos.config.urlApi
 });
 
-Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-    if (!jqXHR.crossDomain) {
-        jqXHR.setRequestHeader('X-Auth-Token', localStorage.token);
-    }
-});
+/*Todos.Auth = Ember.Auth.extend({
+    request: 'jquery',
+    response: 'json',
+
+    strategy: 'token',
+    tokenKey: 'authToken',
+    tokenLocation: 'authHeader',
+    tokenHeaderKey: 'X-Auth-Token',
+    tokenIdKey: 'authUserId',
+
+    session: 'local-storage',
+    modules: ['emberData'],
+    // emberData: {
+    //     userModel: 'user'
+    // }
+
+    signInEndPoint: '/login' ,
+    signOutEndPoint: '/logout'
+});*/
+
+// Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+//     if (!jqXHR.crossDomain) {
+//         jqXHR.setRequestHeader('X-Auth-Token', localStorage.authToken);
+//     }
+// });

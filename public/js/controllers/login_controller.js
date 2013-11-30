@@ -8,11 +8,16 @@ Todos.LoginController = Ember.Controller.extend({
         });
     },
 
-    token: localStorage.token,
+    authToken: localStorage.authToken,
+    authUserId: localStorage.authUserId,
 
     tokenChanged: function() {
-        localStorage.token = this.get('token');
-    }.observes('token'),
+        localStorage.authToken = this.get('authToken');
+    }.observes('authToken'),
+
+    userIdChanged: function() {
+        localStorage.authUserId = this.get('authUserId');
+    }.observes('authUserId'),
 
     actions: {
         login: function() {
@@ -24,26 +29,24 @@ Todos.LoginController = Ember.Controller.extend({
             this.set('errorMessage', '');
 
             $.post(Todos.config.urlApi + '/login', data).then(function(response) {
-
-                console.info(response);
-
-                if (response.error) {
-                    self.set('errorMessage', response.error);
-                } else {
-                    alert('Login succeeded!');
-                    self.set('token', response.token);
-
-                    var attemptedTransition = self.get('attemptedTransition');
-                    if (attemptedTransition) {
-                        attemptedTransition.retry();
-                        self.set('attemptedTransition', null);
+                    if (response.error) {
+                        self.set('errorMessage', response.error);
                     } else {
-                        // Redirect to 'articles' by default.
-                        self.transitionToRoute('todos');
-                    }
-                }
-            });
-        },
+                        alert('Login succeeded!');
+                        console.log(response);
+                        self.set('authToken', response.authToken);
+                        self.set('authUserId', response.authUserId);
 
+                        var attemptedTransition = self.get('attemptedTransition');
+                        if (attemptedTransition) {
+                            attemptedTransition.retry();
+                            self.set('attemptedTransition', null);
+                        } else {
+                            // Redirect to 'todos' by default.
+                            self.transitionToRoute('todos');
+                        }
+                    }
+                });
+        }
     }
 });
