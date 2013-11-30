@@ -1,7 +1,8 @@
 module.exports = function(connection) {
 	return {
 		getAll: function(req, res) {
-			connection.query('select * from `todos`', function(err, docs) {
+			var userLogged = req.user;
+			connection.query('select * from `todos` where `id_user`="' + userLogged.id + '"', function(err, docs) {
 				res.send({'todos': docs});
 			});
 		},
