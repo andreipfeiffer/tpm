@@ -52,6 +52,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'ember_handlebars'
+        'karma'
     ]);
 };

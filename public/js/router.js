@@ -47,9 +47,8 @@ Todos.AuthenticatedRoute = Ember.Route.extend({
     },
 
     redirectToLogin: function(transition) {
-        alert('You must log in!');
-
         var loginController = this.controllerFor('login');
+        loginController.set('errorMessage', 'You need to login first!');
         loginController.set('attemptedTransition', transition);
         this.transitionTo('login');
     },
