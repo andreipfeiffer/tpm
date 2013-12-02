@@ -25,8 +25,8 @@ Todos.LoginRoute = Ember.Route.extend({
         // controller.reset();
     },
     actions: {
-        loading: function(transition, originRoute) {
-            console.log('loading');
+        error: function(res) {
+            console.log(res);
         }
     }
 });

@@ -8,6 +8,7 @@ Todos.LoginController = Ember.Controller.extend({
         });
     },
 
+    isLoading: false,
     authToken: localStorage.authToken,
     authUserId: localStorage.authUserId,
 
@@ -21,19 +22,25 @@ Todos.LoginController = Ember.Controller.extend({
 
     actions: {
         login: function() {
-
             var self = this, 
                 data = this.getProperties('username', 'password');
 
+            if (this.get('isLoading')) {
+                return;
+            }
+
             // Clear out any error messages.
             this.set('errorMessage', '');
+            this.set('isLoading', true);
 
-            $.post(Todos.config.urlApi + '/login', data).then(function(response) {
+            $.post(Todos.config.urlApi + '/login', data).then(
+                function(response) {
+                    self.set('isLoading', false);
+
                     if (response.error) {
                         self.set('errorMessage', response.error);
                     } else {
-                        alert('Login succeeded!');
-                        console.log(response);
+                        // console.log(response);
                         self.set('authToken', response.authToken);
                         self.set('authUserId', response.authUserId);
 
@@ -46,7 +53,12 @@ Todos.LoginController = Ember.Controller.extend({
                             self.transitionToRoute('todos');
                         }
                     }
-                });
+                },
+                function(res) {
+                    self.set('isLoading', false);
+                    self.set('errorMessage', 'Please try again, because something unexpected has happened. ');
+                }
+            );
         }
     }
 });

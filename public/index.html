@@ -18,35 +18,80 @@
         <script type="text/x-handlebars">
             
             <!-- these are going to be visible all the time -->
-            <br>
             <div class="container">
-                <ul class="nav nav-tabs">
-                    <li>{{#link-to 'todos'}}Todos{{/link-to}}</li>
-                    {{#if isAuthenticated}}
-                        <li>{{#link-to 'logout'}}Logout{{/link-to}}</li>
-                    {{else}}
-                        <li>{{#link-to 'login'}}Login{{/link-to}}</li>
-                    {{/if}}
-                </ul>
-            </div>
+                {{#if isAuthenticated}}
+                    <ul class="nav nav-tabs">
+                        <li>{{#link-to 'todos'}}Todos{{/link-to}}</li>
+                        {{#if isAuthenticated}}
+                            <li>{{#link-to 'logout'}}Logout{{/link-to}}</li>
+                        {{else}}
+                            <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+                        {{/if}}
+                    </ul>
+                {{/if}}
 
-            <!-- Ember will drop here the rendered template, depending on route -->
-            {{outlet}}
+                <!-- Ember will drop here the rendered template, depending on route -->
+                {{outlet}}
+            </div>
         </script>
 
         <script type="text/x-handlebars" data-template-name="login">
-            {{#if session.isAuthenticated}}
+            {{#if isAuthenticated}}
                 <p>You are already logged in!</p>
             {{else}}
-                <form class="form-inline" {{action login on="submit"}}>
-                    <h2>Log In</h2>
-                    {{input value=username type="text" placeholder="Username"}}
-                    {{input value=password type="password" placeholder="Password"}}
-                    {{input class="btn" type="submit" value="Log In"}}
-                </form>
-                {{#if errorMessage}}
-                    <div class="alert alert-error">{{errorMessage}}</div>
-                {{/if}}
+
+                <div class="row">
+                    <br>
+                    <br>
+                    <form method="post" class="well col-md-4 col-md-offset-4" {{action login on="submit"}}>
+
+                        <h1>Welcome!</h1>
+                        <p class="subheading">Please Login To Your Account</p>
+
+                        <div class="form-group">
+                            <!-- <label>Email address:</label> -->
+                            {{input value=username type="text" placeholder="Email address" class="form-control"}}
+                        </div>
+
+                        <div class="form-group">
+                            <!-- <label>Password:</label> -->
+                            {{input value=password type="password" placeholder="Password" class="form-control"}}
+                        </div>
+
+                        <div class="form-group clearfix">
+                            <button type="submit" 
+                                {{bindAttr class=":btn :btn-primary :pull-left :col-md-4 isLoading:disabled"}} 
+                            >
+                                {{#if isLoading}}
+                                    Logging In...
+                                {{else}}
+                                    Sign In
+                                {{/if}}
+                            </button>
+
+                            <div class="checkbox pull-right">
+                                <label>
+                                    <input type="checkbox"> Remember Me
+                                </label>
+                            </div>
+                        </div>
+
+                        {{#if errorMessage}}
+                            <div class="alert alert-danger fade in">
+                                <strong>Ohh shoot!</strong><br>
+                                {{errorMessage}}
+                            </div>
+                        {{/if}}
+
+                        <hr>
+                        <div class="clearfix">
+                            <a href="#" class="pull-left">Forgot Your Password?</a>
+                            <a href="/signup" class="pull-right">Create An Account</a>
+                        </div>
+                    </form>
+
+                </div>
+
             {{/if}}
         </script>
 

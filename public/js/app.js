@@ -21,7 +21,7 @@ Todos.ApplicationAdapter = DS.RESTAdapter.extend({
     strategy: 'token',
     tokenKey: 'authToken',
     tokenLocation: 'authHeader',
-    tokenHeaderKey: 'X-Auth-Token',
+    tokenHeaderKey: 'Authorization',
     tokenIdKey: 'authUserId',
 
     session: 'local-storage',
