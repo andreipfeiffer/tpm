@@ -16,10 +16,10 @@ Todos.IndexRoute = Ember.Route.extend({
 
 Todos.LoginRoute = Ember.Route.extend({
     beforeModel: function(transition) {
-        // if (this.controllerFor('login').get('authToken')) {
-        //     this.transitionTo('todos');
-        // }
-        console.log('Already logged in');
+        if (this.controllerFor('login').get('authToken')) {
+            console.log('Already logged in');
+            this.transitionTo('todos');
+        }
     },
     setupController: function(controller, context) {
         // controller.reset();
@@ -54,18 +54,15 @@ Todos.AuthenticatedRoute = Ember.Route.extend({
         this.transitionTo('login');
     },
 
-    getJSONWithToken: function(url) {
-        var authToken = this.controllerFor('login').get('authToken');
-        return $.getJSON(url, { authToken: authToken });
-    },
+    // getJSONWithToken: function(url) {
+    //     var authToken = this.controllerFor('login').get('authToken');
+    //     return $.getJSON(url, { authToken: authToken });
+    // },
 
     actions: {
         error: function(reason, transition) {
-            if (reason.status === 401) {
-                this.redirectToLogin(transition);
-            } else {
-                alert('Something went wrong');
-            }
+            this.controllerFor('login').set('authToken', '');
+            this.transitionTo('login');
         }
     }
 });

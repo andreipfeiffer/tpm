@@ -35,22 +35,29 @@ module.exports = function(connection) {
 
     var findUserById = function(id, callback) {
         connection.query('select * from `users` where `id`="' + id + '"', function (err, user) {
-            callback(user[0]);
+            callback(err, user[0]);
         });
     };
 
     var findUserByUsername = function(username, callback) {
         connection.query('select * from `users` where `email`="' + username + '"', function (err, user) {
-            callback(user[0]);
+            callback(err, user[0]);
         });
     };
 
+    var findUserByToken = function(token, callback) {
+        connection.query('select * from `users` where `auth_token`="' + token + '"', function (err, user) {
+            callback(err, user[0]);
+        });
+    };
+
+    // used for initial username/password authentication
     var localStrategy = new localStrategy(
         function(username, password, done) {
             // saltAndHash(password, function(resp) {
             //     console.log(resp);
             // });
-            findUserByUsername(username, function(user) {
+            findUserByUsername(username, function(err, user) {
                 // console.log(user);
                 if (!user) {
                     done(null, false, { message: 'Incorrect username.' });
@@ -68,7 +75,7 @@ module.exports = function(connection) {
     };
 
     var deserializeUser = function(id, done) {
-        findUserById(id, function(user) {
+        findUserById(id, function(err, user) {
             if (user) {
                 done(null, user);
             } else {
@@ -91,12 +98,17 @@ module.exports = function(connection) {
                     return next(err);
                 }
 
-                var loggedData = {
-                    authToken: md5(String( new Date().getTime() )),
+                var newAuthToken = md5(String( new Date().getTime() )),
+                    loggedData = {
+                    authToken: newAuthToken,
                     authUserId: user.id
                 };
 
-                res.json(200, loggedData);
+                // update token in database
+                connection.query('update `users` set `auth_token`="' + newAuthToken + '" where `id`="' + user.id + '"', function (err, user) {
+                    res.json(200, loggedData);
+                });
+                
             });
         })(req, res, next);
     };
@@ -108,22 +120,20 @@ module.exports = function(connection) {
 
     // NOTE: Need to protect all API calls (other than login/logout) with this check
     var ensureAuthenticated = function(req, res, next) {
-        console.log(req);
-        if (req.isAuthenticated()) {
-            return next();
-        } else {
-            return res.send(401);
-        }
-    };
+        var token = req.headers.authorization;
 
-    /*var ensureAdmin = function(req, res, next) {
-        // ensure authenticated user exists with admin role, otherwise send 401 response status
-        if (req.user && req.user.role == 'ADMIN') {
+        findUserByToken(token, function(err, user) {
+            if (err) { return res.send(401); }
+            if (!user) { return res.send(401); }
+
+            // @todo refresh token ?!
+
+            // add the logged user's data in the request, so the "next()" method can access it
+            req.user = user;
             return next();
-        } else {
-            return res.send(401);
-        }
-    };*/
+        })
+
+    };
 
     // publics
     return {

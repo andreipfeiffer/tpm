@@ -34,8 +34,8 @@ Todos.ApplicationAdapter = DS.RESTAdapter.extend({
     signOutEndPoint: '/logout'
 });*/
 
-// Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-//     if (!jqXHR.crossDomain) {
-//         jqXHR.setRequestHeader('X-Auth-Token', localStorage.authToken);
-//     }
-// });
+Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    if (!jqXHR.crossDomain) {
+        jqXHR.setRequestHeader('Authorization', localStorage.authToken);
+    }
+});
