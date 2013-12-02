@@ -10,10 +10,16 @@ module.exports = function(grunt) {
 
         pkg: grunt.file.readJSON('package.json'), // the package file to use
 
+        karma: {
+            unit:  { configFile: 'karma.conf.js', keepalive: true },
+            // e2e:   { configFile: 'test/config/e2e.js', keepalive: true },
+            // watch: { configFile: 'test/config/unit.js', singleRun:false, autoWatch: true, keepalive: true }
+        },
+
         jshint: {
             files: [
                 'Gruntfile.js',
-                'src/*.js',
+                'js/*.js',
                 'spec/*.js',
             ],
             options: {
@@ -35,18 +41,6 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     'src/<%= pkg.name %>-<%= pkg.version %>.min.js': ['src/jquery.esoh-lift.js']
-                }
-            }
-        },
-
-        ember_handlebars: {
-            compile: {
-                options: {
-                    namespace: 'Todos.TEMPLATES'
-                },
-                files: {
-                    'public/js/app.js': 'public/templates/login.hbs'
-                    // 'path/to/another.js': ['path/to/sources/*.hbs', 'path/to/more/*.hbs']
                 }
             }
         },

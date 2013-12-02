@@ -1,0 +1,55 @@
+{
+    "camelcase": true,     // force all variable names to use either camelCase style or UPPER_CASE with underscores
+    "curly": true,         // requires you to always put curly braces around blocks in loops and conditionals
+    "eqeqeq": true,        // prohibits the use of == and != in favor of === and !==
+    "freeze": true,        // prohibits overwriting prototypes of native objects such as Array, Date and so on
+    "immed": true,         // prohibits the use of immediate function invocations without wrapping them in parentheses
+    "indent": 4,
+    "latedef": true,       // prohibits the use of a variable before it was defined
+    "newcap": true,        // requires you to capitalize names of constructor functions
+    "plusplus": true,      // prohibits the use of unary increment and decrement operators
+    "quotmark": "single",  // enforces the consistency of quotation marks used throughout your code
+    "undef": true,         // prohibits the use of explicitly undeclared variables
+    "unused": true,        // warns when you define and never use your variables
+    "strict": true,        // requires all functions to run in ECMAScript-re normally you would expect to see assignments or function calls
+    // "trailing": true,      // prohibits to leave a trailing whitespace in your code
+    "maxparams": 3,        // set the max number of formal parameters allowed per function
+    "maxdepth": 3,         // control how nested do you want your blocks to be
+    "maxstatements": 20,   // set the max number of statements allowed per function
+
+    // suppressors to override JSHint defaults
+    "expr": true,          // suppresses warnings about the use of expressions where normally you would expect to see assignments or function calls
+    "sub": true,           // suppresses warnings about using [] notation when it can be expressed in dot notation: person['name'] vs. person.name
+
+    "globals": {
+        // project and vendors
+        "jQuery": true,
+        "$": true,
+
+        // defaults
+        "console": true,
+        "document": true,
+        "window": true,
+        "setTimeout": true,
+        "clearTimeout": true,
+
+        // jasmine
+        "jasmine": true,
+        "loadFixtures": true,
+        "beforeEach": true,
+        "afterEach": true,
+        "describe": true,
+        "xdescribe": true,
+        "it": true,
+        "xit": true,
+        "expect": true,
+        "runs": true,
+        "waitsFor": true,
+        "AsyncSpec": true,
+        "spyOn": true,
+
+        // node
+        "module": true,
+        "require": true
+    }
+}
