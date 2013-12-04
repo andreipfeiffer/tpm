@@ -15,13 +15,7 @@ module.exports = function(config) {
             'js/libs/handlebars-1.0.0.js',
             'js/libs/ember.js',
             'js/libs/ember-data.js',
-            'spec/libs/*.js',
-            {
-                pattern: 'example/*.html', 
-                watch: true, 
-                included: false, 
-                served: true
-            },
+            // 'spec/libs/*.js',
 
             'js/app.js',
             'js/router.js',
@@ -35,9 +29,20 @@ module.exports = function(config) {
         exclude: [
         ],
 
+        preprocessors: {
+            'js/app.js': 'coverage',
+            'js/router.js': 'coverage',
+            'js/models/*.js': 'coverage',
+            'js/controllers/*.js': 'coverage'
+        },
+        coverageReporter: {
+            type : 'text',
+            dir : 'coverage/'
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['coverage'],
+        reporters: ['dots', 'coverage'],
 
         // web server port
         port: 9876,

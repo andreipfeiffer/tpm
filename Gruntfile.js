@@ -45,6 +45,14 @@ module.exports = function(grunt) {
             }
         },
 
+        mochacli: {
+            options: {
+                reporter: "spec",
+                ui: "tdd"
+            },
+            all: ["test/*Test.js"]
+        },
+
         watch: {
             files: ['src/*.js', 'spec/*.js', 'css/*.css'],
             tasks: ['jshint', 'csslint'],
@@ -52,6 +60,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'karma'
+        'mochacli', 'karma'
     ]);
 };
