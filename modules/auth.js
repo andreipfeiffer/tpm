@@ -46,7 +46,7 @@ module.exports = function(connection) {
     };
 
     var findUserByToken = function(token, callback) {
-        connection.query('select * from `users` where `auth_token`="' + token + '"', function (err, user) {
+        connection.query('select * from `users` where `authToken`="' + token + '"', function (err, user) {
             callback(err, user[0]);
         });
     };
@@ -105,7 +105,7 @@ module.exports = function(connection) {
                 };
 
                 // update token in database
-                connection.query('update `users` set `auth_token`="' + newAuthToken + '" where `id`="' + user.id + '"', function (err, user) {
+                connection.query('update `users` set `authToken`="' + newAuthToken + '" where `id`="' + user.id + '"', function (err, user) {
                     res.json(200, loggedData);
                 });
                 

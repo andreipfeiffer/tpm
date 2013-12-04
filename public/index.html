@@ -134,7 +134,7 @@
                                 {{input type="checkbox" checked=isCompleted}}
                                 {{title}}
                             </label>
-                            <button type="button" class="close" aria-hidden="true">&times;</button>
+                            <button type="button" class="close" aria-hidden="true" {{action 'remove'}}>&times;</button>
                         </li>
                         {{/each}}
                     </ul>

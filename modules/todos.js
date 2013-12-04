@@ -1,75 +1,76 @@
 module.exports = function(connection) {
-	return {
-		getAll: function(req, res) {
-			var userLogged = req.user;
-			connection.query('select * from `todos` where `id_user`="' + userLogged.id + '"', function(err, docs) {
-				res.send({'todos': docs});
-			});
-		},
+    return {
+        getAll: function(req, res) {
+            var userLogged = req.user;
+            connection.query('select * from `todos` where `idUser`="' + userLogged.id + '"', function(err, docs) {
+                res.send({'todos': docs});
+            });
+        },
 
 
-		getById: function(req, res) {
-			var id = req.params.id,
-				userLogged = req.user;
+        getById: function(req, res) {
+            var id = req.params.id,
+                userLogged = req.user;
 
-			if( isNaN(parseInt( req.params.id, 10 )) ) {
-				return res.send('TypeError: a number is required');
-			}
+            if( isNaN(parseInt( req.params.id, 10 )) ) {
+                return res.send('TypeError: a number is required');
+            }
 
-			console.log('Retrieving todo: ' + id);
-			db.collection('todos', function(err, collection) {
-				collection.findOne({'id': parseInt(id, 10)}, function(err, item) {
+            console.log('Retrieving todo: ' + id);
+            db.collection('todos', function(err, collection) {
+                collection.findOne({'id': parseInt(id, 10)}, function(err, item) {
 
-					if (err) {
-						res.statusCode = 404;
-						return res.send('Error: something went wrong');
-					}
+                    if (err) {
+                        res.statusCode = 404;
+                        return res.send('Error: something went wrong');
+                    }
 
-					if (!item) {
-						res.statusCode = 404;
-						return res.send('Error 404: todo with id="' + id + '" was not found');
-					}
+                    if (!item) {
+                        res.statusCode = 404;
+                        return res.send('Error 404: todo with id="' + id + '" was not found');
+                    }
 
-					res.send(item);
-				});
-			});
+                    res.send(item);
+                });
+            });
 
-		},
+        },
 
-		update: function(req, res) {
-			var id = parseInt( req.params.id, 10 );
+        update: function(req, res) {
+            var id = parseInt( req.params.id, 10 ),
+                userLogged = req.user;
 
-			// @todo handle all update variations
-			connection.query('update `todos` set `isCompleted`=' + req.body.todo.isCompleted + ' where `id`="' + id + '"', function(err) {
-				res.send(true);
-			});
-		},
+            // @todo handle all update variations
+            connection.query('update `todos` set `isCompleted`=' + req.body.todo.isCompleted + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+                res.send(true);
+            });
+        },
 
-		/*exports.add = function(req, res) {
-			if(!req.body.hasOwnProperty('author') || 
-				 !req.body.hasOwnProperty('text')) {
-				res.statusCode = 400;
-				return res.send('Error 400: Post syntax incorrect.');
-			}
+        add: function(req, res) {
+            var data = req.body.todo,
+                userLogged = req.user;
 
-			var newQuote = {
-				author : req.body.author,
-				text : req.body.text
-			};
+            connection.query('insert into `todos` (`idUser`, `title`, `isCompleted`) values ("' + userLogged.id + '", "' + data.title + '", "' + data.isCompleted + '")', function(err) {
+                res.send(true);
+            });
 
-			todos.push(newQuote);
-			res.json(true);
-		};
+        },
 
-		exports.remove = function(req, res) {
-			if(todos.length <= req.params.id) {
-				res.statusCode = 404;
-				return res.send('Error 404: No quote found');
-			}
+        remove: function(req, res) {
+            var id = parseInt( req.params.id, 10 ),
+                userLogged = req.user;
 
-			todos.splice(req.params.id, 1);
-			res.json(true);
-		};*/
-	};
+            connection.query('select `id` from `todos` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+                if ( docs.length === 0 ) {
+                    res.statusCode = 404;
+                    return res.send('id "' + id + '" was not found');
+                } else {
+                    connection.query('delete from `todos` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+                        res.send(true);
+                    });
+                }
+            });
+        }
+    };
 
 };

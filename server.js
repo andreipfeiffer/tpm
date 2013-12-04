@@ -64,8 +64,13 @@ app.put('/todos/:id',
     auth.ensureAuthenticated,
     todos.update
 );
-
-// app.post('/todo', todos.add);
-// app.delete('/todo/:id', todos.remove);
+app.post('/todos',
+    auth.ensureAuthenticated,
+    todos.add
+);
+app.delete('/todos/:id', 
+    auth.ensureAuthenticated,
+    todos.remove
+);
 
 app.listen(config.web.port);

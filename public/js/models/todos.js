@@ -1,7 +1,7 @@
 Todos.Todo = DS.Model.extend({
-  // id: DS.attr('number'),
-  title: DS.attr('string'),
-  isCompleted: DS.attr('boolean')
+    idUser: DS.attr('number'),
+    title: DS.attr('string'),
+    isCompleted: DS.attr('boolean')
 });
 
 // Todos.Todo.FIXTURES = [
