@@ -7,7 +7,7 @@ describe("The Client App...", function() {
 
 	it("undefined", function() {
 		expect(x).not.toBeUndefined();
-		expect(x).toBe(2);
+		expect(x).toBe(1);
 	});
 
 	it("undefined", function() {

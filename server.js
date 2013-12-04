@@ -73,4 +73,12 @@ app.delete('/todos/:id',
     todos.remove
 );
 
-app.listen(config.web.port);
+function start(port) {
+    app.listen(port);
+    console.log("Express server listening on port %d in %s mode", port, app.settings.env);
+}
+
+exports.start = start;
+exports.app = app;
+
+start(config.web.port);

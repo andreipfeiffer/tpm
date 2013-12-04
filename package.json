@@ -13,6 +13,8 @@
         "passport-local": "0.1.6"
     },
     "devDependencies": {
+        "should": "*",
+        "supertest": "*",
         "matchdep": "0.3.0",
         "grunt": "0.4.1",
         "grunt-contrib-jshint": "0.7.0",
@@ -30,6 +32,3 @@
         "karma-phantomjs-launcher": "*"
     }
 }
-
-
-

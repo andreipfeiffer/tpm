@@ -18,16 +18,17 @@ module.exports = function(grunt) {
 
         jshint: {
             files: [
-                'Gruntfile.js',
-                'js/*.js',
-                'spec/*.js',
+                '*.js',
+                'modules/*.js',
+                'test/*.js',
+                'public/js/**/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc',
-                ignores: [
+                /*ignores: [
                     'src/*.min.js',
                     'src/*map.js'
-                ]
+                ]*/
             }
         },
 
@@ -60,6 +61,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'mochacli', 'karma'
+        'jshint', 'mochacli', 'karma'
     ]);
 };

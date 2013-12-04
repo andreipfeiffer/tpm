@@ -35,19 +35,22 @@ module.exports = function(connection) {
 
     var findUserById = function(id, callback) {
         connection.query('select * from `users` where `id`="' + id + '"', function (err, user) {
-            callback(err, user[0]);
+            var result = user ? user[0] : null;
+            callback(err, result);
         });
     };
 
     var findUserByUsername = function(username, callback) {
         connection.query('select * from `users` where `email`="' + username + '"', function (err, user) {
-            callback(err, user[0]);
+            var result = user ? user[0] : null;
+            callback(err, result);
         });
     };
 
     var findUserByToken = function(token, callback) {
         connection.query('select * from `users` where `authToken`="' + token + '"', function (err, user) {
-            callback(err, user[0]);
+            var result = user ? user[0] : null;
+            callback(err, result);
         });
     };
 

@@ -40,7 +40,8 @@ config.mysql.structure.users = ''
 	+     '`password` varchar(255) NOT NULL,'
 	+     '`authToken` varchar(64) NOT NULL,'
 	+     '`dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
-	+     'PRIMARY KEY (`id`)'
+	+     'PRIMARY KEY (`id`),'
+	+     'KEY `authToken` (`authToken`)'
 	+ ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
 
 config.mysql.populate.users = ''
