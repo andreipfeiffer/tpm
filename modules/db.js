@@ -2,6 +2,8 @@ var config = require('../config');
 
 module.exports = function(connection) {
 
+	'use strict';
+
 	// Create database, if it doesn't exist
 	connection.query('CREATE DATABASE IF NOT EXISTS ' + config.mysql.database + ' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci', function (err) {
 		if (err) {

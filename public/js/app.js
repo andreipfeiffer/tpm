@@ -1,41 +1,46 @@
 window.Todos = Ember.Application.create();
 
-Todos.config = {
-    urlApi: 'http://localhost:3000'
-};
+(function() {
 
-// Todos.ApplicationAdapter = DS.FixtureAdapter.extend();
+    'use strict';
 
-// Todos.ApplicationAdapter = DS.LSAdapter.extend({
-//  namespace: 'todos-emberjs'
-// });
+    Todos.config = {
+        urlApi: 'http://localhost:3000'
+    };
 
-Todos.ApplicationAdapter = DS.RESTAdapter.extend({
-    host: Todos.config.urlApi
-});
+    // Todos.ApplicationAdapter = DS.FixtureAdapter.extend();
 
-/*Todos.Auth = Ember.Auth.extend({
-    request: 'jquery',
-    response: 'json',
+    // Todos.ApplicationAdapter = DS.LSAdapter.extend({
+    //  namespace: 'todos-emberjs'
+    // });
 
-    strategy: 'token',
-    tokenKey: 'authToken',
-    tokenLocation: 'authHeader',
-    tokenHeaderKey: 'Authorization',
-    tokenIdKey: 'authUserId',
+    Todos.ApplicationAdapter = DS.RESTAdapter.extend({
+        host: Todos.config.urlApi
+    });
 
-    session: 'local-storage',
-    modules: ['emberData'],
-    // emberData: {
-    //     userModel: 'user'
-    // }
+    /*Todos.Auth = Ember.Auth.extend({
+        request: 'jquery',
+        response: 'json',
 
-    signInEndPoint: '/login' ,
-    signOutEndPoint: '/logout'
-});*/
+        strategy: 'token',
+        tokenKey: 'authToken',
+        tokenLocation: 'authHeader',
+        tokenHeaderKey: 'Authorization',
+        tokenIdKey: 'authUserId',
 
-Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-    if (!jqXHR.crossDomain) {
-        jqXHR.setRequestHeader('Authorization', localStorage.authToken);
-    }
-});
+        session: 'local-storage',
+        modules: ['emberData'],
+        // emberData: {
+        //     userModel: 'user'
+        // }
+
+        signInEndPoint: '/login' ,
+        signOutEndPoint: '/logout'
+    });*/
+
+    Ember.$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+        if (!jqXHR.crossDomain) {
+            jqXHR.setRequestHeader('Authorization', localStorage.authToken);
+        }
+    });
+})();

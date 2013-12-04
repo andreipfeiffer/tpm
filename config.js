@@ -1,4 +1,6 @@
-var config = {}
+/*jshint laxbreak: true*/
+
+var config = {};
 
 config.mysql = {};
 config.web = {};

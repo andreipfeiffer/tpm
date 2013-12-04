@@ -1,9 +1,12 @@
-var app = require("../server.js"),
-    should = require("should"),
-    assert = require('assert'),
-    request = require('supertest');
+/*jshint globalstrict: true*/
 
-var port = 3030,
+'use strict';
+
+require('should');
+
+var app = require('../server.js'),
+    request = require('supertest'),
+    port = 3030,
     url  = 'http://localhost:' + port;
 
 app.start(port);
@@ -21,23 +24,23 @@ describe('Routes', function() {
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
-                })
+                });
         });
-        it('should return unauthorized', function(done) {
-            request(url)
-                .get('/todos/1')
-                .end(function(err, res) {
-                    res.should.have.status(401);
-                    done();
-                })
-        });
+        // it('should return unauthorized', function(done) {
+        //     request(url)
+        //         .get('/todos/1')
+        //         .end(function(err, res) {
+        //             res.should.have.status(401);
+        //             done();
+        //         });
+        // });
         it('should return unauthorized', function(done) {
             request(url)
                 .put('/todos/1')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
-                })
+                });
         });
         it('should return unauthorized', function(done) {
             request(url)
@@ -45,7 +48,7 @@ describe('Routes', function() {
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
-                })
+                });
         });
         it('should return unauthorized', function(done) {
             request(url)
@@ -53,7 +56,7 @@ describe('Routes', function() {
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
-                })
+                });
         });
     });
 
@@ -71,7 +74,7 @@ describe('Routes', function() {
                 .end(function(err, res) {
                     res.body.should.have.property('error');
                     done();
-                })
+                });
         });
         it('should login the user with correct credentials', function(done) {
             var body = {
@@ -87,7 +90,7 @@ describe('Routes', function() {
                     res.body.should.have.property('authToken');
                     res.should.have.status(200);
                     done();
-                })
+                });
         });
     });
 });

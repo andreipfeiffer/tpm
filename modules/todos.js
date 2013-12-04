@@ -1,14 +1,18 @@
 module.exports = function(connection) {
+
+    'use strict';
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
             connection.query('select * from `todos` where `idUser`="' + userLogged.id + '"', function(err, docs) {
+                if (err) { return res.send(503, { error: 'Database error'}); }
+
                 res.send({'todos': docs});
             });
         },
 
-
-        getById: function(req, res) {
+        /*getById: function(req, res) {
             var id = req.params.id,
                 userLogged = req.user;
 
@@ -34,7 +38,7 @@ module.exports = function(connection) {
                 });
             });
 
-        },
+        },*/
 
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
@@ -42,6 +46,8 @@ module.exports = function(connection) {
 
             // @todo handle all update variations
             connection.query('update `todos` set `isCompleted`=' + req.body.todo.isCompleted + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+                if (err) { return res.send(503, { error: 'Database error'}); }
+
                 res.send(true);
             });
         },
@@ -51,6 +57,8 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             connection.query('insert into `todos` (`idUser`, `title`, `isCompleted`) values ("' + userLogged.id + '", "' + data.title + '", "' + data.isCompleted + '")', function(err) {
+                if (err) { return res.send(503, { error: 'Database error'}); }
+
                 res.send(true);
             });
 
@@ -61,11 +69,15 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             connection.query('select `id` from `todos` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+                if (err) { return res.send(503, { error: 'Database error'}); }
+
                 if ( docs.length === 0 ) {
                     res.statusCode = 404;
                     return res.send('id "' + id + '" was not found');
                 } else {
-                    connection.query('delete from `todos` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+                    connection.query('delete from `todos` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err) {
+                        if (err) { return res.send(503, { error: 'Database error'}); }
+
                         res.send(true);
                     });
                 }

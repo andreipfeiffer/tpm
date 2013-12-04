@@ -25,10 +25,9 @@ module.exports = function(grunt) {
             ],
             options: {
                 jshintrc: '.jshintrc',
-                /*ignores: [
-                    'src/*.min.js',
-                    'src/*map.js'
-                ]*/
+                ignores: [
+                    'public/js/libs/*.js'
+                ]
             }
         },
 
@@ -48,10 +47,10 @@ module.exports = function(grunt) {
 
         mochacli: {
             options: {
-                reporter: "spec",
-                ui: "tdd"
+                reporter: 'spec',
+                ui: 'tdd'
             },
-            all: ["test/*Test.js"]
+            all: ['test/*Test.js']
         },
 
         watch: {
