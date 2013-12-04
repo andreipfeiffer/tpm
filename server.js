@@ -61,10 +61,10 @@ app.get('/todos',
     auth.ensureAuthenticated,
     todos.getAll
 );
-// app.get('/todos/:id',
-//     auth.ensureAuthenticated,
-//     todos.getById
-// );
+app.get('/todos/:id',
+    auth.ensureAuthenticated,
+    todos.getById
+);
 app.put('/todos/:id', 
     auth.ensureAuthenticated,
     todos.update

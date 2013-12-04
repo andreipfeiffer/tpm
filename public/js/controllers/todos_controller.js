@@ -8,7 +8,7 @@
                 // Get the todo title set by the "New Todo" text field
                 var title = this.get('newTitle');
 
-                if (!title.trim()) {
+                if (typeof title === 'undefined' || title.trim() === '') {
                     // alert('Please fill in the title');
                     return;
                 }

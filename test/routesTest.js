@@ -26,14 +26,14 @@ describe('Routes', function() {
                     done();
                 });
         });
-        // it('should return unauthorized', function(done) {
-        //     request(url)
-        //         .get('/todos/1')
-        //         .end(function(err, res) {
-        //             res.should.have.status(401);
-        //             done();
-        //         });
-        // });
+        it('should return unauthorized', function(done) {
+            request(url)
+                .get('/todos/1')
+                .end(function(err, res) {
+                    res.should.have.status(401);
+                    done();
+                });
+        });
         it('should return unauthorized', function(done) {
             request(url)
                 .put('/todos/1')
