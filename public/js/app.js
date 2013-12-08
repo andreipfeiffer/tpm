@@ -1,24 +1,24 @@
-window.Todos = Ember.Application.create();
+window.TPM = Ember.Application.create();
 
 (function() {
 
     'use strict';
 
-    Todos.config = {
+    TPM.config = {
         urlApi: 'http://localhost:3000'
     };
 
-    // Todos.ApplicationAdapter = DS.FixtureAdapter.extend();
+    // TPM.ApplicationAdapter = DS.FixtureAdapter.extend();
 
-    // Todos.ApplicationAdapter = DS.LSAdapter.extend({
-    //  namespace: 'todos-emberjs'
+    // TPM.ApplicationAdapter = DS.LSAdapter.extend({
+    //  namespace: 'TPM-emberjs'
     // });
 
-    Todos.ApplicationAdapter = DS.RESTAdapter.extend({
-        host: Todos.config.urlApi
+    TPM.ApplicationAdapter = DS.RESTAdapter.extend({
+        host: TPM.config.urlApi
     });
 
-    /*Todos.Auth = Ember.Auth.extend({
+    /*TPM.Auth = Ember.Auth.extend({
         request: 'jquery',
         response: 'json',
 

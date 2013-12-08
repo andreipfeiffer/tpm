@@ -43,8 +43,8 @@ app.use(app.router);
 
 
 var db    = require('./modules/db')( connection ),
-    todos = require('./modules/todos')( connection ),
-    auth  = require('./modules/auth')( connection );
+    auth  = require('./modules/auth')( connection ),
+    projects = require('./modules/projects')( connection );
 
 console.log(db);
 
@@ -57,25 +57,25 @@ passport.deserializeUser(auth.deserializeUser);
 app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 
-app.get('/todos', 
+app.get('/projects', 
     auth.ensureAuthenticated,
-    todos.getAll
+    projects.getAll
 );
-app.get('/todos/:id',
+app.get('/projects/:id',
     auth.ensureAuthenticated,
-    todos.getById
+    projects.getById
 );
-app.put('/todos/:id', 
+app.put('/projects/:id', 
     auth.ensureAuthenticated,
-    todos.update
+    projects.update
 );
-app.post('/todos',
+app.post('/projects',
     auth.ensureAuthenticated,
-    todos.add
+    projects.add
 );
-app.delete('/todos/:id', 
+app.delete('/projects/:id', 
     auth.ensureAuthenticated,
-    todos.remove
+    projects.remove
 );
 
 function start(port) {

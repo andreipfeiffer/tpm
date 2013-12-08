@@ -4,27 +4,27 @@
 
     'use strict';
 
-    Todos.Router.map(function () {
+    TPM.Router.map(function () {
         this.route('login');
         this.route('logout');
-        this.resource('todos');
+        this.resource('projects');
     });
 
     /**
         Index Route
         Redirect to Login
      */
-    Todos.IndexRoute = Ember.Route.extend({
+    TPM.IndexRoute = Ember.Route.extend({
         beforeModel: function(transition) {
             this.transitionTo('login');
         }
     });
 
-    Todos.LoginRoute = Ember.Route.extend({
+    TPM.LoginRoute = Ember.Route.extend({
         beforeModel: function(transition) {
             if (this.controllerFor('login').get('authToken')) {
                 console.log('Already logged in');
-                this.transitionTo('todos');
+                this.transitionTo('projects');
             }
         },
         setupController: function(controller, context) {
@@ -37,14 +37,14 @@
         }
     });
 
-    Todos.LogoutRoute = Ember.Route.extend({
+    TPM.LogoutRoute = Ember.Route.extend({
         setupController: function(controller, context) {
             this.controllerFor('login').set('authToken', '');
             this.transitionTo('login');
         }
     });
 
-    Todos.AuthenticatedRoute = Ember.Route.extend({
+    TPM.AuthenticatedRoute = Ember.Route.extend({
 
         beforeModel: function(transition) {
             if (!this.controllerFor('login').get('authToken')) {
@@ -72,9 +72,11 @@
         }
     });
 
-    Todos.TodosRoute = Todos.AuthenticatedRoute.extend({
+    TPM.ProjectsRoute = TPM.AuthenticatedRoute.extend({
         model: function () {
-            return this.get('store').find('todo');
+            // return only the items from the logged user (in case previously logged in as another user)
+            // return this.get('store').findQuery('project', { idUser: localStorage.authUserId });
+            return this.get('store').find('project');
         }
     });
 

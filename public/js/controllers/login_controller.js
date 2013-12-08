@@ -2,7 +2,8 @@
 
     'use strict';
 
-    Todos.LoginController = Ember.Controller.extend({
+    TPM.LoginController = Ember.Controller.extend({
+        needs: ['projects'],
 
         reset: function() {
             this.setProperties({
@@ -37,7 +38,7 @@
                 this.set('errorMessage', '');
                 this.set('isLoading', true);
 
-                $.post(Todos.config.urlApi + '/login', data).then(
+                $.post(TPM.config.urlApi + '/login', data).then(
                     function(response) {
                         self.set('isLoading', false);
 
@@ -48,13 +49,15 @@
                             self.set('authToken', response.authToken);
                             self.set('authUserId', response.authUserId);
 
+                            // this clears the store (temp method until EmberData supports clear/unload data)
+                            self.get('store').init();
+
                             var attemptedTransition = self.get('attemptedTransition');
                             if (attemptedTransition) {
                                 attemptedTransition.retry();
                                 self.set('attemptedTransition', null);
                             } else {
-                                // Redirect to 'todos' by default.
-                                self.transitionToRoute('todos');
+                                self.transitionToRoute('projects');
                             }
                         }
                     },

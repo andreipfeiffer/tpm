@@ -20,7 +20,7 @@ describe('Routes', function() {
     describe('Unauthorized', function() {
         it('should return unauthorized', function(done) {
             request(url)
-                .get('/todos')
+                .get('/projects')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
@@ -28,7 +28,7 @@ describe('Routes', function() {
         });
         it('should return unauthorized', function(done) {
             request(url)
-                .get('/todos/1')
+                .get('/projects/1')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
@@ -36,7 +36,7 @@ describe('Routes', function() {
         });
         it('should return unauthorized', function(done) {
             request(url)
-                .put('/todos/1')
+                .put('/projects/1')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
@@ -44,7 +44,7 @@ describe('Routes', function() {
         });
         it('should return unauthorized', function(done) {
             request(url)
-                .post('/todos')
+                .post('/projects')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
@@ -52,7 +52,7 @@ describe('Routes', function() {
         });
         it('should return unauthorized', function(done) {
             request(url)
-                .del('/todos/1')
+                .del('/projects/1')
                 .end(function(err, res) {
                     res.should.have.status(401);
                     done();
@@ -78,7 +78,7 @@ describe('Routes', function() {
         });
         it('should login the user with correct credentials', function(done) {
             var body = {
-                username: 'asd@asd.asd',
+                username: 'asd',
                 password: 'asdasd'
             };
 

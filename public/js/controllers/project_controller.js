@@ -2,7 +2,7 @@
 
     'use strict';
 
-    Todos.TodoController = Ember.ObjectController.extend({
+    TPM.ProjectController = Ember.ObjectController.extend({
         isCompleted: function(key, value){
             var model = this.get('model');
 

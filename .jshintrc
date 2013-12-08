@@ -23,7 +23,7 @@
 
     "globals": {
         // project and vendors
-        "Todos": true,
+        "TPM": true,
         "jQuery": true,
         "$": true,
         "Ember": true,
