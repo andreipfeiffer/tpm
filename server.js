@@ -44,9 +44,8 @@ app.use(app.router);
 
 var db    = require('./modules/db')( connection ),
     auth  = require('./modules/auth')( connection ),
+    clients = require('./modules/clients')( connection ),
     projects = require('./modules/projects')( connection );
-
-console.log(db);
 
 // setup passport auth (before routes, after express session)
 passport.use(auth.localStrategyAuth);
@@ -57,6 +56,7 @@ passport.deserializeUser(auth.deserializeUser);
 app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 
+// Projects routes
 app.get('/projects', 
     auth.ensureAuthenticated,
     projects.getAll
@@ -76,6 +76,28 @@ app.post('/projects',
 app.delete('/projects/:id', 
     auth.ensureAuthenticated,
     projects.remove
+);
+
+// Clients routes
+app.get('/clients', 
+    auth.ensureAuthenticated,
+    clients.getAll
+);
+app.get('/clients/:id',
+    auth.ensureAuthenticated,
+    clients.getById
+);
+app.put('/clients/:id', 
+    auth.ensureAuthenticated,
+    clients.update
+);
+app.post('/clients',
+    auth.ensureAuthenticated,
+    clients.add
+);
+app.delete('/clients/:id', 
+    auth.ensureAuthenticated,
+    clients.remove
 );
 
 function start(port) {

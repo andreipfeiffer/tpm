@@ -38,6 +38,7 @@
                         <div class="collapse navbar-collapse" id="navbar">
                             <ul class="nav navbar-nav navbar-left">
                                 <li>{{#link-to 'projects'}}Projects{{/link-to}}</li>
+                                <li>{{#link-to 'clients'}}Clients{{/link-to}}</li>
                             </ul>
 
                             <div class="nav navbar-nav navbar-right">
@@ -173,6 +174,33 @@
             </section>
         </script>
 
+        <script type="text/x-handlebars" data-template-name="clients">
+            <header>
+                <h1>Clients</h1>
+            </header>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Client name</th>
+                            <th>Projects</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each content itemController="client"}}
+                        <tr>
+                            <td>{{#idx}}{{/idx}}</td>
+                            <td>{{name}}</td>
+                            <td></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </script>
+
         <script src="js/libs/jquery-1.10.2.min.js"></script>
         <script src="js/libs/bootstrap.min.js"></script>
         <script src="js/libs/handlebars-1.0.0.js"></script>
@@ -184,9 +212,12 @@
         <script src="js/app.js"></script>
         <script src="js/router.js"></script>
         <script src="js/models/project.js"></script>
+        <script src="js/models/client.js"></script>
         <script src="js/controllers/application_controller.js"></script>
         <script src="js/controllers/login_controller.js"></script>
         <script src="js/controllers/projects_controller.js"></script>
         <script src="js/controllers/project_controller.js"></script>
+        <script src="js/controllers/clients_controller.js"></script>
+        <script src="js/controllers/client_controller.js"></script>
     </body>
 </html>

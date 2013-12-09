@@ -2,7 +2,7 @@ module.exports = function(connection) {
 
     'use strict';
 
-    var table = 'projects';
+    var table = 'clients';
 
     var getById = function(id, idUser, callback) {
         connection.query('select * from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '"', function(err, docs) {
@@ -16,7 +16,7 @@ module.exports = function(connection) {
             connection.query('select * from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
-                res.send({'projects': docs});
+                res.send({'clients': docs});
             });
         },
 
@@ -28,7 +28,7 @@ module.exports = function(connection) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
                 if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                res.send({'project': docs[0]});
+                res.send({'client': docs[0]});
             });
         },
 
@@ -37,7 +37,7 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             // @todo handle all update variations
-            connection.query('update `' + table + '` set `isCompleted`=' + req.body.project.isCompleted + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+            connection.query('update `' + table + '` set `name`=' + req.body.client.name + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
@@ -45,10 +45,10 @@ module.exports = function(connection) {
         },
 
         add: function(req, res) {
-            var data = req.body.project,
+            var data = req.body.client,
                 userLogged = req.user;
 
-            connection.query('insert into `' + table + '` (`idUser`, `name`, `isCompleted`) values ("' + userLogged.id + '", "' + data.name + '", "' + data.isCompleted + '")', function(err, newItem) {
+            connection.query('insert into `' + table + '` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.name + '")', function(err, newItem) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 getById(newItem.insertId, userLogged.id, function(err, docs) {
@@ -57,7 +57,7 @@ module.exports = function(connection) {
 
                     // need to return an object that contains all the data including the database id
                     // so Ember can update its store, with the new ID from database
-                    res.send({'project': docs[0]});
+                    res.send({'client': docs[0]});
                 });
             });
 

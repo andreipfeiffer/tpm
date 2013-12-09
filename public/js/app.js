@@ -11,7 +11,7 @@ window.TPM = Ember.Application.create();
     // TPM.ApplicationAdapter = DS.FixtureAdapter.extend();
 
     // TPM.ApplicationAdapter = DS.LSAdapter.extend({
-    //  namespace: 'TPM-emberjs'
+    //  namespace: 'tpm-emberjs'
     // });
 
     TPM.ApplicationAdapter = DS.RESTAdapter.extend({
@@ -43,4 +43,10 @@ window.TPM = Ember.Application.create();
             jqXHR.setRequestHeader('Authorization', localStorage.authToken);
         }
     });
+
+    Handlebars.registerHelper('idx', function(options) {
+        var index = options.data.view.contentIndex + 1;
+        return index;
+    });
+
 })();

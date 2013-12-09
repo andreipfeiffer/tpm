@@ -7,6 +7,7 @@
     TPM.Router.map(function () {
         this.route('login');
         this.route('logout');
+        this.route('clients');
         this.resource('projects');
     });
 
@@ -74,9 +75,13 @@
 
     TPM.ProjectsRoute = TPM.AuthenticatedRoute.extend({
         model: function () {
-            // return only the items from the logged user (in case previously logged in as another user)
-            // return this.get('store').findQuery('project', { idUser: localStorage.authUserId });
             return this.get('store').find('project');
+        }
+    });
+
+    TPM.ClientsRoute = TPM.AuthenticatedRoute.extend({
+        model: function () {
+            return this.get('store').find('client');
         }
     });
 
