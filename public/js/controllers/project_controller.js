@@ -18,6 +18,14 @@
         }.property('model.isCompleted'),
 
         actions: {
+            view: function() {
+                var model = this.get('model');
+                // this.transitionToToute('project/' + model.id);
+            },
+            edit: function() {
+                var model = this.get('model');
+                console.log(model);
+            },
             remove: function() {
                 var model = this.get('model');
                 model.deleteRecord();
@@ -25,5 +33,6 @@
             }
         }
     });
+
 
 })();

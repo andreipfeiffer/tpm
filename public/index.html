@@ -126,25 +126,55 @@
                 
                 <header>
                     <h1>Projects</h1>
-                    {{input type="text" class="form-control" placeholder="What is your next project?" 
-                        value=newProjectName
-                        action="createProject"}}
+                    {{#link-to 'project.new'}}New project?{{/link-to}}
                 </header>
 
                 <section>
-                    <ul>
-                        {{#each itemController="project"}}
-                        <li {{bind-attr class="isCompleted:text-muted"}}>
-                            <label>
-                                {{input type="checkbox" checked=isCompleted}}
-                                {{name}}
-                            </label>
-                            <button type="button" class="close" aria-hidden="true" {{action 'remove'}}>&times;</button>
-                        </li>
-                        {{/each}}
-                    </ul>
+                    {{#if content.length}}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Project name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each content itemController="project"}}
+                                <tr {{bind-attr class="isCompleted:text-muted"}}>
+                                    <td>
+                                        <label>
+                                            {{input type="checkbox" checked=isCompleted}}
+                                            {{name}}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            {{#link-to 'project' content class="btn btn-default btn-sm"}}
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                            {{/link-to}}
+                                            {{#link-to 'project.edit' content class="btn btn-default btn-sm"}}
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            {{/link-to}}
 
-                    <input type="checkbox">
+                                            <!--<button type="button" class="btn btn-default btn-sm" {{action 'view'}}>
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-sm" {{action 'edit'}}>
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </button>-->
+                                            <button type="button" class="btn btn-default btn-sm" {{action 'remove'}}>
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    {{else}}
+                        <div class="alert alert-info">Add your first client.</div>
+                    {{/if}}
+
                 </section>
 
                 <footer>
@@ -174,30 +204,82 @@
             </section>
         </script>
 
+        <script type="text/x-handlebars" data-template-name="project">
+            <header>
+                <h1>Project Details</h1>
+                {{#link-to 'projects'}}Back{{/link-to}}
+            </header>
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="project/new">
+            <header>
+                <h1>New Project</h1>
+                {{#link-to 'projects'}}Back{{/link-to}}
+            </header>
+
+            <form action="createProject">
+                {{input
+                    type="text"
+                    class="form-control"
+                    placeholder="What is your next project?" 
+                    value=newProjectName}}
+
+                {{view Ember.Select
+                    contentBinding="content.clients"
+                }}
+
+            </form>
+        </script>
+
         <script type="text/x-handlebars" data-template-name="clients">
             <header>
                 <h1>Clients</h1>
+                {{input type="text" class="form-control" placeholder="New client name" 
+                    value=newClientName
+                    action="createClient"}}
             </header>
 
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Client name</th>
-                            <th>Projects</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each content itemController="client"}}
-                        <tr>
-                            <td>{{#idx}}{{/idx}}</td>
-                            <td>{{name}}</td>
-                            <td></td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+                {{#if content.length}}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Client name</th>
+                                <th>Projects</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each content itemController="client"}}
+                            <tr>
+                                <td>
+                                    {{#if isEditing}}
+                                        {{edit-client value=name type="text" placeholder="Client name" class="form-control"
+                                            focus-out="cancelChanges"
+                                            insert-newline="acceptChanges"
+                                        }}
+                                    {{else}}
+                                        {{name}}
+                                    {{/if}}
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-sm" {{action 'edit'}}>
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-sm" {{action 'remove'}}>
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                {{else}}
+                    <div class="alert alert-info">Add your first client.</div>
+                {{/if}}
             </div>
         </script>
 
@@ -219,5 +301,6 @@
         <script src="js/controllers/project_controller.js"></script>
         <script src="js/controllers/clients_controller.js"></script>
         <script src="js/controllers/client_controller.js"></script>
+        <script src="js/views/client_view.js"></script>
     </body>
 </html>

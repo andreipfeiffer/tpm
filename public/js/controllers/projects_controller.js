@@ -4,7 +4,7 @@
 
     TPM.ProjectsController = Ember.ArrayController.extend({
         actions: {
-            createProject: function () {
+            createProject: function() {
                 // Get the project title set by the "New project" text field
                 var name = this.get('newProjectName');
 
@@ -28,11 +28,11 @@
             }
         },
 
-        remaining: function () {
+        remaining: function() {
             return this.filterBy('isCompleted', false).get('length');
         }.property('@each.isCompleted'),
 
-        inflection: function () {
+        inflection: function() {
             var remaining = this.get('remaining');
             return remaining === 1 ? 'item' : 'items';
         }.property('remaining')

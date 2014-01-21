@@ -37,7 +37,7 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             // @todo handle all update variations
-            connection.query('update `' + table + '` set `name`=' + req.body.client.name + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+            connection.query('update `' + table + '` set `name`="' + req.body.client.name + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
@@ -73,6 +73,9 @@ module.exports = function(connection) {
                 if ( docs.length === 0 ) {
                     return res.send(404, { error: 'id "' + id + '" was not found'});
                 } else {
+
+                    // @todo remove projects also
+
                     connection.query('delete from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err) {
                         if (err) { return res.send(503, { error: 'Database error'}); }
 

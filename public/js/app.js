@@ -44,9 +44,4 @@ window.TPM = Ember.Application.create();
         }
     });
 
-    Handlebars.registerHelper('idx', function(options) {
-        var index = options.data.view.contentIndex + 1;
-        return index;
-    });
-
 })();
