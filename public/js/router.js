@@ -89,6 +89,8 @@
         }
     });    
     TPM.ProjectNewRoute = TPM.AuthenticatedRoute.extend({
+        // get content from other "places"
+        // http://stackoverflow.com/questions/14630037/populating-contents-of-ember-select-view-from-recordarray-retrieved-using-ember
         setupController: function(controller, model) {
             this._super(controller, model);
             controller.set('clients', this.get('store').find('client'));

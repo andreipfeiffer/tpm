@@ -217,7 +217,7 @@
                 {{#link-to 'projects'}}Back{{/link-to}}
             </header>
 
-            <form action="createProject">
+            <form>
                 {{input
                     type="text"
                     class="form-control"
@@ -225,9 +225,14 @@
                     value=newProjectName}}
 
                 {{view Ember.Select
-                    contentBinding="content.clients"
+                    contentBinding="controller.clients"
+                    optionValuePath="content.id"
+                    optionLabelPath="content.name"
+                    selectionBinding="controller.newProjectClient"
+                    prompt="Pick a client:"
                 }}
 
+                <button type="button" {{action "createProject"}}>Submit</button>
             </form>
         </script>
 
