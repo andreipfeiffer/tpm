@@ -16,7 +16,7 @@
     TPM.ProjectNewController = Ember.ArrayController.extend({
         actions: {
             createProject: function() {
-                // Get the project title set by the "New project" text field
+                // Get the project title set by the 'New project' text field
                 var name = this.get('newProjectName'),
                     client = this.get('newProjectClient');
 
@@ -37,7 +37,7 @@
                     isCompleted: false
                 });
 
-                // Clear the "New project" text field
+                // Clear the 'New project' text field
                 this.set('newProjectName', '');
 
                 // Save the new model

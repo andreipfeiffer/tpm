@@ -3,6 +3,7 @@
 'use strict';
 
 var express = require('express'),
+    // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
     config  = require('./config');
@@ -29,10 +30,10 @@ var connection = mysql.createConnection({
     password : config.mysql.password
 });
 
-// express - cookieParser and session needed for passport 
 app.use(express.logger('dev'));
 app.use(allowCrossDomain);
 app.use(express.bodyParser());
+// express cookieParser and session needed for passport 
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'upsidedown-inseamna-Lia-si-Andrei' }));
 app.use(passport.initialize());

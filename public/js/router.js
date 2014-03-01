@@ -9,9 +9,9 @@
         this.route('logout');
         this.route('clients');
 
-        this.resource('projects',    {path:'/projects' });
-        this.resource('project.new', {path:'/project/new'});  
-        this.resource('project',     {path:'/project/:id'}, function(){
+        this.route('projects',    {path:'/projects' });
+        this.route('project.new', {path:'/project/new'});
+        this.resource('project',  {path:'/project/:id'}, function() {
             this.route('edit');
         });
     });
@@ -84,6 +84,10 @@
         }
     });
     TPM.ProjectRoute = TPM.AuthenticatedRoute.extend({
+        setupController: function(controller, model) {
+            this._super(controller, model);
+            controller.set('clientDetails', this.get('store').find('client', model.get('idClient')));
+        },
         model: function(params) {
             return this.store.find('project', params.id);
         }
@@ -97,8 +101,12 @@
         }
     });
     TPM.ProjectEditRoute = TPM.AuthenticatedRoute.extend({
-        model: function(params) {
-            return this.store.find('project', params.id);
+        setupController: function(controller, model) {
+            this._super(controller, model);
+            controller.set('clients', this.get('store').find('client'));
+        },
+        renderTemplate: function() {
+            this.render('project/new');
         }
     });
 

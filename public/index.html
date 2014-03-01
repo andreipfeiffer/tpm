@@ -89,7 +89,7 @@
                                 </div> -->
 
                                 <button type="submit" 
-                                    {{bindAttr class=":btn :btn-primary :pull-right :col-md-5 isLoading:disabled"}} 
+                                    {{bind-attr class=":btn :btn-primary :pull-right :col-md-5 isLoading:disabled"}} 
                                 >
                                     {{#if isLoading}}
                                         Logging In...
@@ -135,6 +135,7 @@
                             <thead>
                                 <tr>
                                     <th>Project name</th>
+                                    <th>Client</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -147,21 +148,17 @@
                                             {{name}}
                                         </label>
                                     </td>
+                                    <td>{{clientName}}</td>
                                     <td>
                                         <div class="btn-group">
                                             {{#link-to 'project' content class="btn btn-default btn-sm"}}
                                                 <span class="glyphicon glyphicon-list-alt"></span>
                                             {{/link-to}}
+
                                             {{#link-to 'project.edit' content class="btn btn-default btn-sm"}}
                                                 <span class="glyphicon glyphicon-pencil"></span>
                                             {{/link-to}}
 
-                                            <!--<button type="button" class="btn btn-default btn-sm" {{action 'view'}}>
-                                                <span class="glyphicon glyphicon-list-alt"></span>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm" {{action 'edit'}}>
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>-->
                                             <button type="button" class="btn btn-default btn-sm" {{action 'remove'}}>
                                                 <span class="glyphicon glyphicon-remove"></span>
                                             </button>
@@ -208,6 +205,10 @@
             <header>
                 <h1>Project Details</h1>
                 {{#link-to 'projects'}}Back{{/link-to}}
+
+                <h2>{{name}}</h2>
+                <div>{{idClient}}</div>
+                <div>{{clientDetails.name}}</div>
             </header>
         </script>
 

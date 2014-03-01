@@ -6,10 +6,10 @@
         // id: DS.attr('number'),
         idUser: DS.attr('number'),
         idClient: DS.attr('number'),
-        // nameClient: DS.attr('string'),
         name: DS.attr('string'),
         isCompleted: DS.attr('boolean'),
-        client: DS.belongsTo('client')
+        client: DS.belongsTo('client'),
+        clientName: DS.attr('string')
     });
 
 })();

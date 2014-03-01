@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select * from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `'+table+'`.*, `clients`.name AS `clientName` from `'+table+'` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send({'projects': docs});
@@ -48,7 +48,8 @@ module.exports = function(connection) {
             var data = req.body.project,
                 userLogged = req.user;
 
-            connection.query('insert into `' + table + '` (`idUser`, `name`, `isCompleted`) values ("' + userLogged.id + '", "' + data.name + '", "' + data.isCompleted + '")', function(err, newItem) {
+            // @todo use knex (http://knexjs.org/#Builder-insert)
+            connection.query('insert into `' + table + '` (`idUser`, `idClient`, `name`, `isCompleted`) values ("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.isCompleted + '")', function(err, newItem) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 getById(newItem.insertId, userLogged.id, function(err, docs) {
