@@ -16,6 +16,7 @@ module.exports = function(connection) {
 			}
 
 			Object.keys(config.mysql.structure).forEach(function(item){
+
 				// Update the structure
 				connection.query(config.mysql.structure[item], function (err) {
 					if (err) {

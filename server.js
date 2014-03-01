@@ -42,8 +42,11 @@ app.use(express.static(__dirname + '/public'));
 app.use(app.router);
 
 
-var db    = require('./modules/db')( connection ),
-    auth  = require('./modules/auth')( connection ),
+// verify database structure
+require('./modules/db')( connection );
+
+
+var auth  = require('./modules/auth')( connection ),
     clients = require('./modules/clients')( connection ),
     projects = require('./modules/projects')( connection );
 

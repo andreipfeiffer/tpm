@@ -20,6 +20,7 @@
         actions: {
             view: function() {
                 var model = this.get('model');
+                console.log(model);
                 // this.transitionToToute('project/' + model.id);
             },
             edit: function() {
@@ -33,6 +34,5 @@
             }
         }
     });
-
 
 })();
