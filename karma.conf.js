@@ -13,14 +13,18 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            // vendors
             '../bower_components/jquery/dist/jquery.min.js',
             '../bower_components/angular/angular.min.js',
             '../bower_components/bootstrap/dist/js/bootstrap.min.js',
 
+            // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
 
+            // app
             'js/app.js',
 
+            // tests
             'spec/*Spec.js'
         ],
 

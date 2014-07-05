@@ -6,7 +6,7 @@
 
         beforeEach(module('tmp'));
 
-        it('should create "phones" model with 3 phones', inject(function($controller) {
+        it('should contain 2 projects', inject(function($controller) {
             var scope = {},
                 ctrl = $controller('ProjectsController', {$scope:scope});
 

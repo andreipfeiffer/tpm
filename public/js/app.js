@@ -1,19 +1,15 @@
 (function() {
-    'use strict';
+
+    // 'use strict';
 
     var app = angular.module('tmp', []);
 
-    app.controller('ProjectsController', function($scope) {
-        $scope.projectsList = [
-            {
-                projectName: '10 Negri Mititei',
-                clientName: 'Lia draguta'
-            },
-            {
-                projectName: 'Mutulica mititica',
-                clientName: 'Un client simpatic'
-            }
-        ];
-    });
+    app.controller('ProjectsController', ['$scope', '$http', function($scope, $http) {
+        $http
+            .get('js/tempData/projects.json')
+            .success(function(data) {
+                $scope.projectsList = data;
+            });
+    }]);
 
 }());
