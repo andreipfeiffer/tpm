@@ -1,182 +1,95 @@
 <!doctype html>
-<html>
+<html class="no-js" ng-app="tmp">
     <head>
         <meta charset="utf-8">
-        <title>TPM: Tiny Project Manager</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="assets/css/bootstrap.css">
-        <link rel="stylesheet" href="assets/css/style.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Angular example</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+        <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
 
-        <!-- this is the "application" View, as having 'data-template-name="application"' -->
-        <script type="text/x-handlebars">
-            
-            <!-- these are going to be visible all the time -->
-            <div class="container">
-                {{#if isAuthenticated}}
-                    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 
-                        <!-- Brand and toggle get grouped for better mobile display -->
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <a class="navbar-brand" href="./">TPM</a>
-                        </div>
-
-                        <!-- Collect the nav links, forms, and other content for toggling -->
-                        <div class="collapse navbar-collapse" id="navbar">
-                            <ul class="nav navbar-nav navbar-left">
-                                <li>{{#link-to 'projects'}}Projects{{/link-to}}</li>
-                                <li>{{#link-to 'clients'}}Clients{{/link-to}}</li>
-                            </ul>
-
-                            <div class="nav navbar-nav navbar-right">
-                                {{#if isAuthenticated}}
-                                    {{#link-to 'logout' class="btn btn-default navbar-btn"}}Logout{{/link-to}}
-                                {{else}}
-                                    {{#link-to 'login' class="btn btn-default navbar-btn"}}Login{{/link-to}}
-                                {{/if}}
-                            </div>
-                        </div>
-                    </nav>
-                {{/if}}
-
-                <!-- Ember will drop here the rendered template, depending on route -->
-                {{outlet}}
-            </div>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="login">
-            {{#if isAuthenticated}}
-                <p>You are already logged in!</p>
-            {{else}}
-
-                <div class="row">
-                    <form method="post" class="b-login col-sm-6 col-sm-offset-3" {{action login on="submit"}}>
-
-                        <div class="b-login__logo">
-                            TPM
-                        </div>
-
-                        <div class="b-login__form">
-                            <div class="form-group">
-                                <!-- <label>Email address:</label> -->
-                                {{input value=username type="text" placeholder="Email address" class="form-control"}}
-                            </div>
-
-                            <div class="form-group">
-                                <!-- <label>Password:</label> -->
-                                {{input value=password type="password" placeholder="Password" class="form-control"}}
-                            </div>
-
-                            <div class="form-group clearfix">
-                                <a href="#" class="btn btn-link pull-left">Forgot Password?</a>
-                                <!-- <div class="checkbox pull-left">
-                                    <label>
-                                        <input type="checkbox"> Remember Me
-                                    </label>
-                                </div> -->
-
-                                <button type="submit" 
-                                    {{bind-attr class=":btn :btn-primary :pull-right :col-md-5 isLoading:disabled"}} 
-                                >
-                                    {{#if isLoading}}
-                                        Logging In...
-                                    {{else}}
-                                        Sign In
-                                    {{/if}}
-                                </button>
-
-                            </div>
-
-                            {{#if errorMessage}}
-                                <div class="alert alert-danger fade in">
-                                    <strong>Ohh shoot!</strong><br>
-                                    {{errorMessage}}
-                                </div>
-                            {{/if}}
-
-                            <hr>
-                            <div class="clearfix">
-                                <span class="btn disabled">New member?</span>
-                                <a href="#" type="submit" class="btn btn-default pull-right col-md-5">Create Account</a>
-                                <!-- <a href="/signup" class="pull-right">Create An Account</a> -->
-                            </div>
-                        </div>
-                </form>
-
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./">TPM</a>
                 </div>
 
-            {{/if}}
-        </script>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#clients">Clients</a></li>
+                    </ul>
 
-        <script type="text/x-handlebars" data-template-name="projects">
-            <section>
+                    <div class="nav navbar-nav navbar-right">
+                        <a href="#logout" class="btn btn-default navbar-btn">Logout</a>
+                    </div>
+                </div>
+            </nav>
+
+
+
+
+            <section ng-controller="ProjectsController as projects">
                 
                 <header>
                     <h1>Projects</h1>
-                    {{#link-to 'project.new'}}New project?{{/link-to}}
+                    <a href="#project.new">New project?</a>
                 </header>
 
                 <section>
-                    {{#if content.length}}
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Project name</th>
-                                    <th>Client</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each content itemController="project"}}
-                                <tr {{bind-attr class="isCompleted:text-muted"}}>
-                                    <td>
-                                        <label>
-                                            {{input type="checkbox" checked=isCompleted}}
-                                            {{name}}
-                                        </label>
-                                    </td>
-                                    <td>{{clientName}}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            {{#link-to 'project' content class="btn btn-default btn-sm"}}
-                                                <span class="glyphicon glyphicon-list-alt"></span>
-                                            {{/link-to}}
-
-                                            {{#link-to 'project.edit' content class="btn btn-default btn-sm"}}
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            {{/link-to}}
-
-                                            <button type="button" class="btn btn-default btn-sm" {{action 'remove'}}>
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    {{else}}
-                        <div class="alert alert-info">Add your first client.</div>
-                    {{/if}}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Project name</th>
+                                <th>Client</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="project in projects.projectsList | orderBy:'-projectName'">
+                                <td>
+                                    <label>
+                                        <input type="checkbox" name="check[]">
+                                        {{project.projectName}}
+                                    </label>
+                                </td>
+                                <td>{{project.clientName}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="#project.view" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-list-alt"></span>
+                                        </a>
+                                        <a href="#project.edit" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                        <button type="button" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </section>
 
                 <footer>
                     <span>
-                        <strong>{{remaining}}</strong> {{inflection}} left
+                        <strong>{{5 + 6}}</strong> projects left
                     </span>
                     <ul>
                         <li>
@@ -199,114 +112,13 @@
                     <p>Double-click to edit a todo</p>
                 </div>
             </section>
-        </script>
+        </div>
 
-        <script type="text/x-handlebars" data-template-name="project">
-            <header>
-                <h1>Project Details</h1>
-                {{#link-to 'projects'}}Back{{/link-to}}
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-                <h2>{{name}}</h2>
-                <div>{{idClient}}</div>
-                <div>{{clientDetails.name}}</div>
-            </header>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="project/new">
-            <header>
-                <h1>New Project</h1>
-                {{#link-to 'projects'}}Back{{/link-to}}
-            </header>
-
-            <form>
-                {{input
-                    type="text"
-                    class="form-control"
-                    placeholder="What is your next project?" 
-                    value=newProjectName}}
-
-                {{view Ember.Select
-                    contentBinding="controller.clients"
-                    optionValuePath="content.id"
-                    optionLabelPath="content.name"
-                    selectionBinding="controller.newProjectClient"
-                    prompt="Pick a client:"
-                }}
-
-                <button type="button" {{action "createProject"}}>Submit</button>
-            </form>
-        </script>
-
-        <script type="text/x-handlebars" data-template-name="clients">
-            <header>
-                <h1>Clients</h1>
-                {{input type="text" class="form-control" placeholder="New client name" 
-                    value=newClientName
-                    action="createClient"}}
-            </header>
-
-            <div class="table-responsive">
-                {{#if content.length}}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Client name</th>
-                                <th>Projects</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each content itemController="client"}}
-                            <tr>
-                                <td>
-                                    {{#if isEditing}}
-                                        {{edit-client value=name type="text" placeholder="Client name" class="form-control"
-                                            focus-out="cancelChanges"
-                                            insert-newline="acceptChanges"
-                                        }}
-                                    {{else}}
-                                        {{name}}
-                                    {{/if}}
-                                </td>
-                                <td></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default btn-sm" {{action 'edit'}}>
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm" {{action 'remove'}}>
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                {{else}}
-                    <div class="alert alert-info">Add your first client.</div>
-                {{/if}}
-            </div>
-        </script>
-
-        <script src="js/libs/jquery-1.10.2.min.js"></script>
-        <script src="js/libs/bootstrap.min.js"></script>
-        <script src="js/libs/handlebars-1.0.0.js"></script>
-        <script src="js/libs/ember.js"></script>
-        <script src="js/libs/ember-data.js"></script>
-        <!-- <script src="js/libs/ember-auth.js"></script> -->
-        <!-- <script src="js/libs/localstorage_adapter.js"></script> -->
-
-        <script src="js/app.js"></script>
-        <script src="js/router.js"></script>
-        <script src="js/models/project.js"></script>
-        <script src="js/models/client.js"></script>
-        <script src="js/controllers/application_controller.js"></script>
-        <script src="js/controllers/login_controller.js"></script>
-        <script src="js/controllers/projects_controller.js"></script>
-        <script src="js/controllers/project_controller.js"></script>
-        <script src="js/controllers/clients_controller.js"></script>
-        <script src="js/controllers/client_controller.js"></script>
-        <script src="js/views/client_view.js"></script>
+        <script src="assets/js/app.js"></script>
+        
     </body>
 </html>

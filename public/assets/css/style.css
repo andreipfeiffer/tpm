@@ -1,0 +1,37 @@
+body {
+    padding-top: 70px;
+}
+
+.navbar-fixed-top .navbar-right:last-child {
+	padding-right: 8px;
+	margin-right: 0;
+}
+
+
+@media (min-width: 768px) {
+	.b-login {
+		display: table;
+		margin-top: 2em;
+		border-radius: 5px;
+		box-shadow: 0 0 2px #aaa;
+		padding: 0;
+	}
+		.b-login__logo {
+			display: table-cell;
+			background-color: #c8a900;
+			padding: 2em;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			text-align: center;
+
+			color: white;
+			font-size: 18px;
+		}
+		.b-login__form {
+			display: table-cell;
+			background-color: #f5f5f5;
+			padding: 2em;
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+		}
+}
