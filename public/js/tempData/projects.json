@@ -1,9 +1,11 @@
 [
     {
+        "id": 1,
         "projectName": "10 Negri Mititei",
         "clientName": "Lia draguta"
     },
     {
+        "id": 2,
         "projectName": "Mutulica mititica",
         "clientName": "Un client simpatic"
     }

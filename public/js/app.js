@@ -1,15 +1,26 @@
+var TPM = TPM || {};
+
 (function() {
 
-    // 'use strict';
+    'use strict';
 
-    var app = angular.module('tmp', []);
+    TPM = angular.module('tmp', [
+        'ngRoute',
+        'projectsControllers'
+    ]);
 
-    app.controller('ProjectsController', ['$scope', '$http', function($scope, $http) {
-        $http
-            .get('js/tempData/projects.json')
-            .success(function(data) {
-                $scope.projectsList = data;
+    TPM.config(['$routeProvider', function($routeProvider) {
+        $routeProvider
+            .when('/projects', {
+                templateUrl: 'partials/projects.html',
+                controller: 'ProjectsController'
+            })
+            .when('/projects/:projectId', {
+                templateUrl: 'partials/project.html',
+                controller: 'ProjectController'
+            })
+            .otherwise({
+                redirectTo: '/projects'
             });
     }]);
-
 }());

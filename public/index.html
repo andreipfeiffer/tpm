@@ -40,74 +40,9 @@
                 </div>
             </nav>
 
+            
+            <div ng-view></div>
 
-
-
-            <section ng-controller="ProjectsController">
-                
-                <header>
-                    <h1>Projects</h1>
-                    <a href="#project.new">New project?</a>
-                </header>
-
-                <section>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Project name</th>
-                                <th>Client</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="project in projectsList | orderBy:'-projectName'">
-                                <td>
-                                    <label>
-                                        <input type="checkbox" name="check[]">
-                                        {{project.projectName}}
-                                    </label>
-                                </td>
-                                <td>{{project.clientName}}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="#project.view" class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-list-alt"></span>
-                                        </a>
-                                        <a href="#project.edit" class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </a>
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </section>
-
-                <footer>
-                    <span>
-                        <strong>{{5 + 6}}</strong> projects left
-                    </span>
-                    <ul>
-                        <li>
-                            <a href="all" class="selected">All</a>
-                        </li>
-                        <li>
-                            <a href="active">Active</a>
-                        </li>
-                        <li>
-                            <a href="completed">Completed</a>
-                        </li>
-                    </ul>
-
-                    <button>
-                        Clear completed (0)
-                    </button>
-                </footer>
-            </section>
         </div>
 
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -117,6 +52,7 @@
         <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 
         <script src="js/app.js"></script>
+        <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
         
     </body>
