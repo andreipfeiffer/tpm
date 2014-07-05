@@ -2,21 +2,16 @@
 
     'use strict';
 
-	describe("The Client App...", function() {
-		var x = 0;
+    describe('ProjectsController', function() {
 
-		beforeEach(function(){
-			x += 1;
-		});
+        beforeEach(module('tmp'));
 
-		it("undefined", function() {
-			expect(x).not.toBeUndefined();
-			expect(x).toBe(1);
-		});
+        it('should create "phones" model with 3 phones', inject(function($controller) {
+            var scope = {},
+                ctrl = $controller('ProjectsController', {$scope:scope});
 
-		it("undefined", function() {
-			expect(x).toBe(2);
-		});
-	});
+            expect(scope.projectsList.length).toBe(2);
+        }));
+    });
 
 })();

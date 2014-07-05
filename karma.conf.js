@@ -13,17 +13,13 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'js/libs/jquery-1.10.2.min.js',
-            'js/libs/bootstrap.min.js',
-            'js/libs/handlebars-1.0.0.js',
-            'js/libs/ember.js',
-            'js/libs/ember-data.js',
-            // 'spec/libs/*.js',
+            '../bower_components/jquery/dist/jquery.min.js',
+            '../bower_components/angular/angular.min.js',
+            '../bower_components/bootstrap/dist/js/bootstrap.min.js',
+
+            '../bower_components/angular-mocks/angular-mocks.js',
 
             'js/app.js',
-            'js/router.js',
-            'js/models/*.js',
-            'js/controllers/*.js',
 
             'spec/*Spec.js'
         ],
@@ -34,9 +30,6 @@ module.exports = function(config) {
 
         preprocessors: {
             'js/app.js': 'coverage',
-            'js/router.js': 'coverage',
-            'js/models/*.js': 'coverage',
-            'js/controllers/*.js': 'coverage'
         },
         coverageReporter: {
             type : 'text',
