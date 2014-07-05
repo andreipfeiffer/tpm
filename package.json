@@ -16,7 +16,7 @@
         "should": "*",
         "supertest": "*",
         "matchdep": "0.3.0",
-        "grunt": "0.4.1",
+        "grunt": "0.4.4",
         "grunt-contrib-jshint": "0.7.0",
         "grunt-contrib-watch": "0.5.3",
         "grunt-contrib-jasmine": "0.5.1",
@@ -29,6 +29,11 @@
         "karma-firefox-launcher": "*",
         "karma-jasmine": "*",
         "karma-coverage": "*",
-        "karma-phantomjs-launcher": "*"
+        "karma-phantomjs-launcher": "*",
+        "protractor": "*",
+        "grunt-protractor-runner": "*"
+    },
+    "scripts": {
+        "install": "node node_modules/protractor/bin/webdriver-manager update"
     }
 }

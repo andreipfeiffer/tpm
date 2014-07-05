@@ -16,6 +16,15 @@ module.exports = function(grunt) {
             // watch: { configFile: 'test/config/unit.js', singleRun:false, autoWatch: true, keepalive: true }
         },
 
+        protractor: {
+            options: {
+                keepAlive: false,
+                configFile: 'protractor.conf.js',
+                noColor: false
+            },
+            run: {}
+        },
+
         jshint: {
             files: [
                 '*.js',
@@ -61,5 +70,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', [
         'jshint', 'mochacli', 'karma'
+    ]);
+
+    // run this first:
+    // node node_modules/protractor/bin/webdriver-manager start
+    grunt.registerTask('e2e', [
+        'protractor'
     ]);
 };
