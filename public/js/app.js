@@ -3,8 +3,8 @@
 
     var app = angular.module('tmp', []);
 
-    app.controller('ProjectsController', function() {
-        this.projectsList = [
+    app.controller('ProjectsController', function($scope) {
+        $scope.projectsList = [
             {
                 projectName: '10 Negri Mititei',
                 clientName: 'Lia draguta'
