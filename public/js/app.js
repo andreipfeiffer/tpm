@@ -6,7 +6,8 @@ var TPM = TPM || {};
 
     TPM = angular.module('tmp', [
         'ngRoute',
-        'projectsControllers'
+        'projectsControllers',
+        'tpmServices'
     ]);
 
     TPM.config(['$routeProvider', function($routeProvider) {
@@ -15,7 +16,7 @@ var TPM = TPM || {};
                 templateUrl: 'partials/projects.html',
                 controller: 'ProjectsController'
             })
-            .when('/projects/:projectId', {
+            .when('/projects/:id', {
                 templateUrl: 'partials/project.html',
                 controller: 'ProjectController'
             })

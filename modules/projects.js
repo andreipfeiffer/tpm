@@ -16,7 +16,7 @@ module.exports = function(connection) {
             connection.query('select `'+table+'`.*, `clients`.name AS `clientName` from `'+table+'` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
-                res.send({'projects': docs});
+                res.send(docs);
             });
         },
 
@@ -28,7 +28,7 @@ module.exports = function(connection) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
                 if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                res.send({'project': docs[0]});
+                res.send(docs[0]);
             });
         },
 
