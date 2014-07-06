@@ -12,4 +12,5 @@
 	projectsControllers.controller('ProjectController', ['$scope', '$routeParams', 'Projects', function($scope, $routeParams, Projects) {
 		$scope.project = Projects.get({ id: $routeParams.id });
 	}]);
+
 }());
