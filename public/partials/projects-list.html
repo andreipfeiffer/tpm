@@ -18,7 +18,7 @@
                 <tr ng-repeat="project in projectsList | orderBy:'-projectName'">
                     <td>
                         <label>
-                            <input type="checkbox" name="check[]">
+                            <input type="checkbox" ng-model="project.isCompleted" ng-true-value="true" ng-false-value="false">
                             {{project.name}}
                         </label>
                     </td>

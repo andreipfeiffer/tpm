@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `'+table+'`.*, `clients`.name AS `clientName` from `'+table+'` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `'+table+'`.*, `clients`.name AS `clientName` from `' + table + '` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
@@ -34,12 +34,16 @@ module.exports = function(connection) {
 
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user;
+                userLogged = req.user,
+                query = '';
 
             // @todo handle all update variations
-            var q = 'update `' + table + '` set `name`= "' + req.body.name + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
-            console.log(q);
-            connection.query(q, function(err) {
+            query += 'update `' + table + '` set ';
+            query += '`name`= "' + req.body.name + '", ';
+            query += '`isCompleted`= "' + req.body.isCompleted + '" ';
+            query += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
+
+            connection.query(query, function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
