@@ -20,18 +20,18 @@ var TPM = TPM || {};
                 templateUrl: 'partials/projects-list.html',
                 controller: 'ProjectsListController'
             })
-            // .when('/projects/new', {
-            //     templateUrl: 'partials/project.html',
-            //     controller: 'ProjectNewController'
-            // })
+            .when('/projects/new', {
+                templateUrl: 'partials/project.html',
+                controller: 'ProjectNewController'
+            })
             .when('/projects/:id', {
                 templateUrl: 'partials/project.html',
                 controller: 'ProjectsViewController'
             })
-            // .when('/projects/:id/edit', {
-            //     templateUrl: 'partials/project.html',
-            //     controller: 'ProjectsEditController'
-            // })
+            .when('/projects/:id/edit', {
+                templateUrl: 'partials/project.html',
+                controller: 'ProjectsEditController'
+            })
             .otherwise({
                 redirectTo: '/projects'
             });
