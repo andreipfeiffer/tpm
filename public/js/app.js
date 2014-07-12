@@ -17,13 +17,21 @@ var TPM = TPM || {};
         
         $routeProvider
             .when('/projects', {
-                templateUrl: 'partials/projects.html',
-                controller: 'ProjectsController'
+                templateUrl: 'partials/projects-list.html',
+                controller: 'ProjectsListController'
             })
+            // .when('/projects/new', {
+            //     templateUrl: 'partials/project.html',
+            //     controller: 'ProjectNewController'
+            // })
             .when('/projects/:id', {
                 templateUrl: 'partials/project.html',
-                controller: 'ProjectController'
+                controller: 'ProjectsViewController'
             })
+            // .when('/projects/:id/edit', {
+            //     templateUrl: 'partials/project.html',
+            //     controller: 'ProjectsEditController'
+            // })
             .otherwise({
                 redirectTo: '/projects'
             });
