@@ -37,7 +37,9 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             // @todo handle all update variations
-            connection.query('update `' + table + '` set `isCompleted`=' + req.body.project.isCompleted + ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+            var q = 'update `' + table + '` set `name`= "' + req.body.name + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
+            console.log(q);
+            connection.query(q, function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);

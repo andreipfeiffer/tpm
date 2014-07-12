@@ -29,7 +29,7 @@ var TPM = TPM || {};
                 controller: 'ProjectsViewController'
             })
             .when('/projects/:id/edit', {
-                templateUrl: 'partials/project.html',
+                templateUrl: 'partials/project-form.html',
                 controller: 'ProjectsEditController'
             })
             .otherwise({

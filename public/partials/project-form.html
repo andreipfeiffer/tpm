@@ -1,0 +1,14 @@
+<section>
+
+    <header>
+        <h1>Edit Project</h1>
+        <a href="#projects">Back</a>
+    </header>
+
+    <span>id: {{project.id}}</span>
+    <form ng-submit="editProject()">
+        <input type="text" value="{{project.name}}" ng-model="project.name">
+        <button type="submit">Edit</button>
+    </form>
+
+</section>

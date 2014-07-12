@@ -21,6 +21,19 @@
             function($scope, $routeParams, Projects) {
                 $scope.project = Projects.get({ id: $routeParams.id });
             }
+        ])
+
+        .controller('ProjectsEditController', [
+            '$scope',
+            '$routeParams',
+            'Projects',
+            function($scope, $routeParams, Projects) {
+                $scope.project = Projects.get({ id: $routeParams.id });
+
+                $scope.editProject = function() {
+                    Projects.update({ id: $routeParams.id }, $scope.project);
+                }
+            }
         ]);
 
 }());
