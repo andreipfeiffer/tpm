@@ -127,7 +127,9 @@ module.exports = function(connection) {
 
         // @todo TEMPORARY REMOVE AUTH
         req.user = {id: 1};
-        return next();
+        if (1) {
+            return next();
+        }
 
         findUserByToken(token, function(err, user) {
             if (err) { return res.send(401); }
