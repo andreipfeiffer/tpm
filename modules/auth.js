@@ -111,7 +111,7 @@ module.exports = function(connection) {
                 connection.query('update `users` set `authToken`="' + newAuthToken + '" where `id`="' + user.id + '"', function () {
                     res.json(200, loggedData);
                 });
-                
+
             });
         })(req, res, next);
     };
@@ -124,11 +124,11 @@ module.exports = function(connection) {
     // NOTE: Need to protect all API calls (other than login/logout) with this check
     var ensureAuthenticated = function(req, res, next) {
         var token = req.headers.authorization;
-        
+
         // @todo TEMPORARY REMOVE AUTH
         req.user = {id: 1};
         return next();
-        
+
         findUserByToken(token, function(err, user) {
             if (err) { return res.send(401); }
             if (!user) { return res.send(401); }

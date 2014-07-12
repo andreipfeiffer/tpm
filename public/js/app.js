@@ -14,7 +14,7 @@ var TPM = TPM || {};
 
         // @note: if you define the controller here, don't define again in the view
         // @note: this will cause double init, requesting XHR twice
-        
+
         $routeProvider
             .when('/projects', {
                 templateUrl: 'partials/projects-list.html',
