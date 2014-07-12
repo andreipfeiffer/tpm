@@ -33,7 +33,7 @@ var connection = mysql.createConnection({
 app.use(express.logger('dev'));
 app.use(allowCrossDomain);
 app.use(express.bodyParser());
-// express cookieParser and session needed for passport 
+// express cookieParser and session needed for passport
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'upsidedown-inseamna-Lia-si-Andrei' }));
 app.use(passport.initialize());
@@ -62,7 +62,7 @@ app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 
 // Projects routes
-app.get('/projects', 
+app.get('/projects',
     auth.ensureAuthenticated,
     projects.getAll
 );
@@ -70,7 +70,7 @@ app.get('/projects/:id',
     auth.ensureAuthenticated,
     projects.getById
 );
-app.put('/projects/:id', 
+app.put('/projects/:id',
     auth.ensureAuthenticated,
     projects.update
 );
@@ -78,13 +78,13 @@ app.post('/projects',
     auth.ensureAuthenticated,
     projects.add
 );
-app.delete('/projects/:id', 
+app.delete('/projects/:id',
     auth.ensureAuthenticated,
     projects.remove
 );
 
 // Clients routes
-app.get('/clients', 
+app.get('/clients',
     auth.ensureAuthenticated,
     clients.getAll
 );
@@ -92,7 +92,7 @@ app.get('/clients/:id',
     auth.ensureAuthenticated,
     clients.getById
 );
-app.put('/clients/:id', 
+app.put('/clients/:id',
     auth.ensureAuthenticated,
     clients.update
 );
@@ -100,7 +100,7 @@ app.post('/clients',
     auth.ensureAuthenticated,
     clients.add
 );
-app.delete('/clients/:id', 
+app.delete('/clients/:id',
     auth.ensureAuthenticated,
     clients.remove
 );
