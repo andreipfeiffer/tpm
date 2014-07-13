@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `' + table + '`.*, `clients`.name AS `clientName` from `' + table + '` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `' + table + '`.* from `' + table + '` WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);

@@ -8,9 +8,38 @@
 
         .controller('ProjectsListController', [
             '$scope',
+            '$q',
             'Projects',
-            function($scope, Projects) {
-                $scope.projectsList = Projects.query();
+            'Clients',
+            function($scope, $q, Projects, Clients) {
+
+                $q.all([
+                    Projects.query().$promise,
+                    Clients.query().$promise
+                ]).then(function(data) {
+
+                    $scope.projectsList = data[0];
+                    $scope.clientsList = data[1];
+
+                    setClientNames();
+                });
+
+                function getClientById(id) {
+                    return $scope.clientsList.filter(function(client) {
+                        return client.id === id;
+                    })[0];
+                }
+
+                function setClientNames() {
+                    angular.forEach( $scope.projectsList, function(project) {
+                        if ( !project.idClient ) {
+                            project.clientName = '-';
+                        } else {
+                            project.clientName = getClientById( project.idClient ).name;
+                        }
+                    });
+                }
+
             }
         ])
 
@@ -23,16 +52,6 @@
             }
         ])
 
-        // .controller('ProjectsNewController', [
-        //     '$scope',
-        //     'Projects',
-        //     function($scope, Projects) {
-        //         $scope.addProject = function() {
-        //             $scope.project = Projects.save();
-        //         };
-        //     }
-        // ])
-
         .controller('ProjectsEditController', [
             '$scope',
             '$routeParams',
@@ -41,10 +60,8 @@
             function($scope, $routeParams, Projects, Clients) {
 
                 if ($routeParams.id) {
-                    console.log($routeParams.id);
                     $scope.project = Projects.get({ id: $routeParams.id });
                 } else {
-                    console.log('new');
                     $scope.project = {
                         name: '',
                         idClient: 0,
@@ -62,7 +79,6 @@
                     if ($routeParams.id) {
                         Projects.update({ id: $routeParams.id }, $scope.project);
                     } else {
-                        console.log($scope.project);
                         Projects.save($scope.project);
                     }
                 };
