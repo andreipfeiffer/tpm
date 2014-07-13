@@ -25,9 +25,11 @@
                 });
 
                 function getClientById(id) {
-                    return $scope.clientsList.filter(function(client) {
+                    var filtered = $scope.clientsList.filter(function(client) {
                         return client.id === id;
-                    })[0];
+                    });
+
+                    return filtered[0];
                 }
 
                 function setClientNames() {
