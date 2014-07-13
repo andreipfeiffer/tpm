@@ -6,9 +6,9 @@ var TPM = TPM || {};
 
     TPM = angular.module('tmp', [
         'ngRoute',
-        'projectsControllers',
-        'clientsControllers',
-        'tpmServices'
+        'TPM.ProjectsControllers',
+        'TPM.ClientsControllers',
+        'TPM.Services'
     ]);
 
     TPM.config(['$routeProvider', function($routeProvider) {

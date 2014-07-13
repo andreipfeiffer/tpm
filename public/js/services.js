@@ -2,7 +2,7 @@
 
     'use strict';
 
-    var tpmServices = angular.module('tpmServices', ['ngResource']);
+    var tpmServices = angular.module('TPM.Services', ['ngResource']);
 
     tpmServices.factory('Projects', ['$resource', function($resource) {
         return $resource(

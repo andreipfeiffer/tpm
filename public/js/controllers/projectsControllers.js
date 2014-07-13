@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('projectsControllers', [])
+    angular.module('TPM.ProjectsControllers', [])
 
         .controller('ProjectsListController', [
             '$scope',
