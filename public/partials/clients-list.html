@@ -16,10 +16,8 @@
             </thead>
             <tbody>
                 <tr ng-repeat="client in clientsList | orderBy:'name'">
-                    <td>
-                        {{client.name}}
-                    </td>
-                    <td>0</td>
+                    <td>{{client.name}}</td>
+                    <td>{{client.nrProjects}}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#clients/{{client.id}}" class="btn btn-default btn-sm">

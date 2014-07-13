@@ -12,8 +12,13 @@ module.exports = function(connection) {
 
     return {
         getAll: function(req, res) {
-            var userLogged = req.user;
-            connection.query('select * from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
+            var userLogged = req.user,
+                qClients,
+                qProjects;
+
+            qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
+
+            connection.query('select `' + table + '`.*, '+qProjects+' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
