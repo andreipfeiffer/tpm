@@ -7,6 +7,7 @@ var TPM = TPM || {};
     TPM = angular.module('tmp', [
         'ngRoute',
         'projectsControllers',
+        'clientsControllers',
         'tpmServices'
     ]);
 
@@ -16,6 +17,8 @@ var TPM = TPM || {};
         // @note: this will cause double init, requesting XHR twice
 
         $routeProvider
+
+            // projects
             .when('/projects', {
                 templateUrl: 'partials/projects-list.html',
                 controller: 'ProjectsListController'
@@ -32,6 +35,13 @@ var TPM = TPM || {};
                 templateUrl: 'partials/project-form.html',
                 controller: 'ProjectsEditController'
             })
+
+            // clients
+            .when('/clients', {
+                templateUrl: 'partials/clients-list.html',
+                controller: 'ClientsListController'
+            })
+
             .otherwise({
                 redirectTo: '/projects'
             });

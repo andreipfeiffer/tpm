@@ -28,7 +28,7 @@ module.exports = function(connection) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
                 if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                res.send({'client': docs[0]});
+                res.send(docs[0]);
             });
         },
 
@@ -55,9 +55,7 @@ module.exports = function(connection) {
                     if (err) { return res.send(503, { error: 'Database error'}); }
                     if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                    // need to return an object that contains all the data including the database id
-                    // so Ember can update its store, with the new ID from database
-                    res.send({'client': docs[0]});
+                    res.send(docs[0]);
                 });
             });
 

@@ -1,0 +1,41 @@
+<section>
+
+    <header>
+        <h1>Clients</h1>
+        <a href="#clients/new">New client?</a>
+    </header>
+
+    <section>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Client name</th>
+                    <th>Nr. Projects</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="client in clientsList | orderBy:'name'">
+                    <td>
+                        {{client.name}}
+                    </td>
+                    <td>0</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="#clients/{{client.id}}" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-list-alt"></span>
+                            </a>
+                            <a href="#clients/{{client.id}}/edit" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <button type="button" class="btn btn-default btn-sm" ng-click="deleteClient($index)">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+</section>
