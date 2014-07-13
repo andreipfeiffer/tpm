@@ -22,6 +22,10 @@ var TPM = TPM || {};
             controller: 'LoginController',
             requireLogin: false
         },
+        '/logout': {
+            controller: 'LogoutController',
+            requireLogin: false
+        },
 
         // projects
         '/projects': {
@@ -51,29 +55,30 @@ var TPM = TPM || {};
 
     TPM.config(['$routeProvider', function($routeProvider) {
 
-        //this loads up our routes dynamically from the previous object
+        //this loads up our routes dynamically from the routes object
         for (var path in TPM.routesList) {
             $routeProvider.when(path, TPM.routesList[path]);
         }
         $routeProvider.otherwise({redirectTo: '/login'});
 
-    }]).run(function($rootScope, SessionService){
+    }]).run(function($rootScope, SessionService) {
 
-        $rootScope.$on("$locationChangeStart", function(event, next, current) {
+            $rootScope.$on("$locationChangeStart", function(event, next, current) {
 
-            $rootScope.isAuth = SessionService.getUserAuthenticated();
+                $rootScope.isAuth = SessionService.getUserAuthenticated();
 
-            for (var i in TPM.routesList) {
-                if (next.indexOf(i) != -1) {
-                    if (TPM.routesList[i].requireLogin && !SessionService.getUserAuthenticated()) {
-                        alert("You need to be authenticated to see this page!");
-                        event.preventDefault();
+                for (var i in TPM.routesList) {
+                    if (next.indexOf(i) != -1) {
+                        if (TPM.routesList[i].requireLogin && !SessionService.getUserAuthenticated()) {
+                            alert("You need to be authenticated to see this page!");
+                            event.preventDefault();
+                        }
                     }
                 }
-            }
-        });
+            });
 
-    });
+        }
+    );
 
 
 }());

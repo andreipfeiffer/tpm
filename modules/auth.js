@@ -126,10 +126,10 @@ module.exports = function(connection) {
         var token = req.headers.authorization;
 
         // @todo TEMPORARY REMOVE AUTH
-        req.user = {id: 1};
-        if (1) {
-            return next();
-        }
+        // req.user = {id: 1};
+        // if (1) {
+        //     return next();
+        // }
 
         findUserByToken(token, function(err, user) {
             if (err) { return res.send(401); }

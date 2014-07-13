@@ -1,5 +1,5 @@
 <div class="row">
-    <form method="post" class="b-login col-sm-6 col-sm-offset-3" {{action login on="submit"}}>
+    <form method="post" class="b-login col-sm-6 col-sm-offset-3" ng-submit="login()">
 
         <div class="b-login__logo">
             TPM
@@ -8,12 +8,12 @@
         <div class="b-login__form">
             <div class="form-group">
                 <!-- <label>Email address:</label> -->
-                <input type="text" placeholder="Email address" class="form-control">
+                <input type="text" placeholder="Email address" class="form-control" ng-model="credentials.username">
             </div>
 
             <div class="form-group">
                 <!-- <label>Password:</label> -->
-                <input type="password" placeholder="Password" class="form-control">
+                <input type="password" placeholder="Password" class="form-control" ng-model="credentials.password">
             </div>
 
             <div class="form-group clearfix">

@@ -4,7 +4,7 @@
 
     angular.module('TPM.Services', ['ngResource'])
 
-        .factory('ProjectsService', ['$resource', function($resource) {
+        .factory('ProjectsService', ['$http', '$resource', function($http, $resource) {
             return $resource(
                 'http://localhost:3000/projects/:id',
                 {
