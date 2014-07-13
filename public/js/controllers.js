@@ -40,6 +40,11 @@
                     });
                 }
 
+                $scope.deleteProject = function(index) {
+                    $scope.projectsList[index].$delete();
+                    $scope.projectsList.splice(index, 1);
+                };
+
             }
         ])
 
