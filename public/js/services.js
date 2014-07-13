@@ -15,4 +15,17 @@
             }
         );
     }]);
+
+    tpmServices.factory('Clients', ['$resource', function($resource) {
+        return $resource(
+            'http://localhost:3000/clients/:id',
+            {
+                id: '@id'
+            },
+            {
+                'update': { method:'PUT' }
+            }
+        );
+    }]);
+
 }());

@@ -21,8 +21,8 @@ var TPM = TPM || {};
                 controller: 'ProjectsListController'
             })
             .when('/projects/new', {
-                templateUrl: 'partials/project.html',
-                controller: 'ProjectNewController'
+                templateUrl: 'partials/project-form.html',
+                controller: 'ProjectsEditController'
             })
             .when('/projects/:id', {
                 templateUrl: 'partials/project.html',

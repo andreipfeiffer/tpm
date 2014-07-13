@@ -16,7 +16,7 @@ module.exports = function(connection) {
             connection.query('select * from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
-                res.send({'clients': docs});
+                res.send(docs);
             });
         },
 

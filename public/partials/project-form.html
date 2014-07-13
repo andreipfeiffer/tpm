@@ -6,9 +6,12 @@
     </header>
 
     <span>id: {{project.id}}</span>
-    <form ng-submit="editProject()">
+    <form ng-submit="submitForm()">
         <input type="checkbox" ng-model="project.isCompleted" ng-true-value="true" ng-false-value="false">
         <input type="text" ng-model="project.name">
+        <select ng-model="project.idClient" ng-options="client.id as client.name for client in clientsList">
+            <option value="">No Client</option>
+        </select>
         <button type="submit">Edit</button>
     </form>
 

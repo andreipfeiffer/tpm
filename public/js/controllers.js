@@ -23,16 +23,48 @@
             }
         ])
 
+        // .controller('ProjectsNewController', [
+        //     '$scope',
+        //     'Projects',
+        //     function($scope, Projects) {
+        //         $scope.addProject = function() {
+        //             $scope.project = Projects.save();
+        //         };
+        //     }
+        // ])
+
         .controller('ProjectsEditController', [
             '$scope',
             '$routeParams',
             'Projects',
-            function($scope, $routeParams, Projects) {
+            'Clients',
+            function($scope, $routeParams, Projects, Clients) {
 
-                $scope.project = Projects.get({ id: $routeParams.id });
+                if ($routeParams.id) {
+                    console.log($routeParams.id);
+                    $scope.project = Projects.get({ id: $routeParams.id });
+                } else {
+                    console.log('new');
+                    $scope.project = {
+                        name: '',
+                        idClient: 0,
+                        isCompleted: 'false'
+                    };
+                }
 
-                $scope.editProject = function() {
-                    Projects.update({ id: $routeParams.id }, $scope.project);
+                $scope.clientsList = Clients.query();
+
+                $scope.submitForm = function() {
+
+                    // default value is 'null', so convert it to int
+                    $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
+
+                    if ($routeParams.id) {
+                        Projects.update({ id: $routeParams.id }, $scope.project);
+                    } else {
+                        console.log($scope.project);
+                        Projects.save($scope.project);
+                    }
                 };
             }
         ]);

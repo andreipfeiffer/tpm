@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `'+table+'`.*, `clients`.name AS `clientName` from `' + table + '` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `' + table + '`.*, `clients`.name AS `clientName` from `' + table + '` RIGHT JOIN `clients` ON `' + table + '`.idClient = `clients`.id WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
@@ -51,7 +51,7 @@ module.exports = function(connection) {
         },
 
         add: function(req, res) {
-            var data = req.body.project,
+            var data = req.body,
                 userLogged = req.user;
 
             // @todo use knex (http://knexjs.org/#Builder-insert)
