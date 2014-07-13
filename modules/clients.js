@@ -17,8 +17,9 @@ module.exports = function(connection) {
                 qProjects;
 
             qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
+            qClients = 'select `' + table + '`.*, '+qProjects+' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"';
 
-            connection.query('select `' + table + '`.*, '+qProjects+' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"', function(err, docs) {
+            connection.query(qClients, function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
