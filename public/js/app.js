@@ -6,44 +6,74 @@ var TPM = TPM || {};
 
     TPM = angular.module('tmp', [
         'ngRoute',
+
+        'TPM.AuthControllers',
         'TPM.ProjectsControllers',
         'TPM.ClientsControllers',
+
         'TPM.Services'
     ]);
 
+    TPM.routesList = {
+
+        // auth
+        '/login': {
+            templateUrl: 'partials/login.html',
+            controller: 'LoginController',
+            requireLogin: false
+        },
+
+        // projects
+        '/projects': {
+            templateUrl: 'partials/projects-list.html',
+            controller: 'ProjectsListController',
+            requireLogin: true
+        },
+        '/projects/new': {
+            templateUrl: 'partials/project-form.html',
+            controller: 'ProjectsEditController'
+        },
+        '/projects/:id': {
+            templateUrl: 'partials/project.html',
+            controller: 'ProjectsViewController'
+        },
+        '/projects/:id/edit': {
+            templateUrl: 'partials/project-form.html',
+            controller: 'ProjectsEditController'
+        },
+
+        // clients
+        '/clients': {
+            templateUrl: 'partials/clients-list.html',
+            controller: 'ClientsListController'
+        }
+    };
+
     TPM.config(['$routeProvider', function($routeProvider) {
 
-        // @note: if you define the controller here, don't define again in the view
-        // @note: this will cause double init, requesting XHR twice
+        //this loads up our routes dynamically from the previous object
+        for (var path in TPM.routesList) {
+            $routeProvider.when(path, TPM.routesList[path]);
+        }
+        $routeProvider.otherwise({redirectTo: '/login'});
 
-        $routeProvider
+    }]).run(function($rootScope, SessionService){
 
-            // projects
-            .when('/projects', {
-                templateUrl: 'partials/projects-list.html',
-                controller: 'ProjectsListController'
-            })
-            .when('/projects/new', {
-                templateUrl: 'partials/project-form.html',
-                controller: 'ProjectsEditController'
-            })
-            .when('/projects/:id', {
-                templateUrl: 'partials/project.html',
-                controller: 'ProjectsViewController'
-            })
-            .when('/projects/:id/edit', {
-                templateUrl: 'partials/project-form.html',
-                controller: 'ProjectsEditController'
-            })
+        $rootScope.$on("$locationChangeStart", function(event, next, current) {
 
-            // clients
-            .when('/clients', {
-                templateUrl: 'partials/clients-list.html',
-                controller: 'ClientsListController'
-            })
+            $rootScope.isAuth = SessionService.getUserAuthenticated();
 
-            .otherwise({
-                redirectTo: '/projects'
-            });
-    }]);
+            for (var i in TPM.routesList) {
+                if (next.indexOf(i) != -1) {
+                    if (TPM.routesList[i].requireLogin && !SessionService.getUserAuthenticated()) {
+                        alert("You need to be authenticated to see this page!");
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
+
+    });
+
+
 }());

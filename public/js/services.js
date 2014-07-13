@@ -26,6 +26,18 @@
                     'update': { method:'PUT' }
                 }
             );
-        }]);
+        }])
+
+        .service('SessionService', function() {
+            var isUserAuthenticated = false;
+
+            this.setUserAuthenticated = function(value) {
+                isUserAuthenticated = value;
+            };
+
+            this.getUserAuthenticated = function() {
+                return isUserAuthenticated;
+            };
+        });
 
 }());

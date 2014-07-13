@@ -1,0 +1,45 @@
+<div class="row">
+    <form method="post" class="b-login col-sm-6 col-sm-offset-3" {{action login on="submit"}}>
+
+        <div class="b-login__logo">
+            TPM
+        </div>
+
+        <div class="b-login__form">
+            <div class="form-group">
+                <!-- <label>Email address:</label> -->
+                <input type="text" placeholder="Email address" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <!-- <label>Password:</label> -->
+                <input type="password" placeholder="Password" class="form-control">
+            </div>
+
+            <div class="form-group clearfix">
+                <a href="#" class="btn btn-link pull-left">Forgot Password?</a>
+                <!-- <div class="checkbox pull-left">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                </div> -->
+
+                <button type="submit" class="btn btn-primary pull-right col-md-5">Login</button>
+
+            </div>
+
+<!--                 <div class="alert alert-danger fade in">
+                    <strong>Ohh shoot!</strong><br>
+                    {{errorMessage}}
+                </div>
+ -->
+            <hr>
+
+            <div class="clearfix">
+                <span class="btn disabled">New member?</span>
+                <a href="#" type="submit" class="btn btn-default pull-right col-md-5">Create Account</a>
+            </div>
+        </div>
+    </form>
+
+</div>
