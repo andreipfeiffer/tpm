@@ -4,7 +4,7 @@
 
     angular.module('TPM.Services', ['ngResource'])
 
-        .factory('Projects', ['$resource', function($resource) {
+        .factory('ProjectsService', ['$resource', function($resource) {
             return $resource(
                 'http://localhost:3000/projects/:id',
                 {
@@ -16,7 +16,7 @@
             );
         }])
 
-        .factory('Clients', ['$resource', function($resource) {
+        .factory('ClientsService', ['$resource', function($resource) {
             return $resource(
                 'http://localhost:3000/clients/:id',
                 {

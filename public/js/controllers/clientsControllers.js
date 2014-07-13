@@ -6,7 +6,7 @@
 
         .controller('ClientsListController', [
             '$scope',
-            'Clients',
+            'ClientsService',
             function($scope, Clients) {
 
                 $scope.clientsList = Clients.query();

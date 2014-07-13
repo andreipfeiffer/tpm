@@ -7,8 +7,8 @@
         .controller('ProjectsListController', [
             '$scope',
             '$q',
-            'Projects',
-            'Clients',
+            'ProjectsService',
+            'ClientsService',
             function($scope, $q, Projects, Clients) {
 
                 $q.all([
@@ -51,7 +51,7 @@
         .controller('ProjectsViewController', [
             '$scope',
             '$routeParams',
-            'Projects',
+            'ProjectsService',
             function($scope, $routeParams, Projects) {
                 $scope.project = Projects.get({ id: $routeParams.id });
             }
@@ -60,8 +60,8 @@
         .controller('ProjectsEditController', [
             '$scope',
             '$routeParams',
-            'Projects',
-            'Clients',
+            'ProjectsService',
+            'ClientsService',
             function($scope, $routeParams, Projects, Clients) {
 
                 if ($routeParams.id) {
