@@ -2,30 +2,30 @@
 
     'use strict';
 
-    var tpmServices = angular.module('TPM.Services', ['ngResource']);
+    angular.module('TPM.Services', ['ngResource'])
 
-    tpmServices.factory('Projects', ['$resource', function($resource) {
-        return $resource(
-            'http://localhost:3000/projects/:id',
-            {
-                id: '@id'
-            },
-            {
-                'update': { method:'PUT' }
-            }
-        );
-    }]);
+        .factory('Projects', ['$resource', function($resource) {
+            return $resource(
+                'http://localhost:3000/projects/:id',
+                {
+                    id: '@id'
+                },
+                {
+                    'update': { method:'PUT' }
+                }
+            );
+        }])
 
-    tpmServices.factory('Clients', ['$resource', function($resource) {
-        return $resource(
-            'http://localhost:3000/clients/:id',
-            {
-                id: '@id'
-            },
-            {
-                'update': { method:'PUT' }
-            }
-        );
-    }]);
+        .factory('Clients', ['$resource', function($resource) {
+            return $resource(
+                'http://localhost:3000/clients/:id',
+                {
+                    id: '@id'
+                },
+                {
+                    'update': { method:'PUT' }
+                }
+            );
+        }]);
 
 }());
