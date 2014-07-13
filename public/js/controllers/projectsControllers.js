@@ -2,9 +2,7 @@
 
     'use strict';
 
-    var projectsControllers = angular.module('projectsControllers', []);
-
-    projectsControllers
+    angular.module('projectsControllers', [])
 
         .controller('ProjectsListController', [
             '$scope',
