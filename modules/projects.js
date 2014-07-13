@@ -40,6 +40,7 @@ module.exports = function(connection) {
             // @todo handle all update variations
             query += 'update `' + table + '` set ';
             query += '`name`= "' + req.body.name + '", ';
+            query += '`idClient`= "' + req.body.idClient + '", ';
             query += '`isCompleted`= "' + req.body.isCompleted + '" ';
             query += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
 
