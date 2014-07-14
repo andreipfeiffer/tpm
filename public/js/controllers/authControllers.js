@@ -28,6 +28,9 @@
                             $http.defaults.headers.common['Authorization'] = res.authToken;
                             Session.setUserAuthenticated(true);
                             $location.path('/projects');
+                        })
+                        .error(function (res) {
+                            alert(res.error);
                         });
                 }
             }

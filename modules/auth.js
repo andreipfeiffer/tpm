@@ -93,7 +93,7 @@ module.exports = function(connection) {
                 return next(err);
             }
             if (!user) {
-                return res.send(200, { error: 'Bad username or password'});
+                return res.send(401, { error: 'Bad username or password'});
             }
 
             req.logIn(user, function(err) {
