@@ -7,8 +7,14 @@
         .controller('LoginController', [
             '$scope',
             '$http',
+            '$location',
             'SessionService',
-            function($scope, $http, Session) {
+            function($scope, $http, $location, Session) {
+
+                // if user is already authenticated, redirect
+                if ( Session.getUserAuthenticated() ) {
+                    $location.path('/projects');
+                }
 
                 $scope.credentials = {
                     username: '',
@@ -21,24 +27,25 @@
                         .success(function (res) {
                             $http.defaults.headers.common['Authorization'] = res.authToken;
                             Session.setUserAuthenticated(true);
+                            $location.path('/projects');
                         });
                 }
             }
         ])
 
         .controller('LogoutController', [
-            '$scope',
             '$http',
+            '$location',
             'SessionService',
-            function($scope, $http, Session) {
-                $scope.login = function() {
-                    $http.defaults.headers.common['Authorization'] = '';
-                    $http
-                        .post('/logout')
-                        .success(function (res) {
-                            Session.setUserAuthenticated(false);
-                        });
-                }
+            function($http, $location, Session) {
+
+                $http
+                    .get('/logout')
+                    .success(function (res) {
+                        $http.defaults.headers.common['Authorization'] = '';
+                        Session.setUserAuthenticated(false);
+                        $location.path('/login');
+                    });
             }
         ]);
 

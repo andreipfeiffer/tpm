@@ -23,8 +23,9 @@ var TPM = TPM || {};
             requireLogin: false
         },
         '/logout': {
+            templateUrl: 'partials/logout.html',
             controller: 'LogoutController',
-            requireLogin: false
+            requireLogin: true
         },
 
         // projects
@@ -35,21 +36,25 @@ var TPM = TPM || {};
         },
         '/projects/new': {
             templateUrl: 'partials/project-form.html',
-            controller: 'ProjectsEditController'
+            controller: 'ProjectsEditController',
+            requireLogin: true
         },
         '/projects/:id': {
             templateUrl: 'partials/project.html',
-            controller: 'ProjectsViewController'
+            controller: 'ProjectsViewController',
+            requireLogin: true
         },
         '/projects/:id/edit': {
             templateUrl: 'partials/project-form.html',
-            controller: 'ProjectsEditController'
+            controller: 'ProjectsEditController',
+            requireLogin: true
         },
 
         // clients
         '/clients': {
             templateUrl: 'partials/clients-list.html',
-            controller: 'ClientsListController'
+            controller: 'ClientsListController',
+            requireLogin: true
         }
     };
 
