@@ -16,12 +16,14 @@
                     $location.path('/projects');
                 }
 
+                $scope.errorMessage = '';
                 $scope.credentials = {
                     username: '',
                     password: ''
                 };
 
                 $scope.login = function() {
+                    $scope.errorMessage = '';
                     $http
                         .post('/login', $scope.credentials)
                         .success(function (res) {
@@ -30,7 +32,7 @@
                             $location.path('/projects');
                         })
                         .error(function (res) {
-                            alert(res.error);
+                            $scope.errorMessage = res.error;
                         });
                 }
             }
