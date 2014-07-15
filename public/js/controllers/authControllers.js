@@ -12,7 +12,7 @@
             function($scope, $http, $location, Session) {
 
                 // if user is already authenticated, redirect
-                if ( Session.getUserAuthenticated() ) {
+                if ( Session.getAuthToken() ) {
                     $location.path('/projects');
                 }
 
@@ -27,8 +27,7 @@
                     $http
                         .post('/login', $scope.credentials)
                         .success(function (res) {
-                            $http.defaults.headers.common['Authorization'] = res.authToken;
-                            Session.setUserAuthenticated(true);
+                            Session.setAuthToken( res.authToken );
                             $location.path('/projects');
                         })
                         .error(function (res) {
@@ -47,8 +46,7 @@
                 $http
                     .get('/logout')
                     .success(function (res) {
-                        $http.defaults.headers.common['Authorization'] = '';
-                        Session.setUserAuthenticated(false);
+                        Session.setAuthToken('');
                         $location.path('/login');
                     });
             }

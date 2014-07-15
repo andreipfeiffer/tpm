@@ -28,15 +28,15 @@
             );
         }])
 
-        .service('SessionService', function() {
-            var isUserAuthenticated = false;
+        .service('SessionService', function($http) {
 
-            this.setUserAuthenticated = function(value) {
-                isUserAuthenticated = value;
+            this.setAuthToken = function(token) {
+                localStorage.setItem('TPMtoken', token);
+                $http.defaults.headers.common['Authorization'] = token;
             };
 
-            this.getUserAuthenticated = function() {
-                return isUserAuthenticated;
+            this.getAuthToken = function() {
+                return localStorage.getItem('TPMtoken');
             };
         });
 

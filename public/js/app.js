@@ -66,17 +66,17 @@ var TPM = TPM || {};
         }
         $routeProvider.otherwise({redirectTo: '/login'});
 
-    }]).run(function($rootScope, $location, SessionService) {
+    }]).run(function($rootScope, $location, $http, SessionService) {
 
             // simple client authentication method: https://coderwall.com/p/f6brkg
             // @note: another more complex: https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
             $rootScope.$on("$locationChangeStart", function(event, next, current) {
 
-                $rootScope.isAuth = SessionService.getUserAuthenticated();
+                $rootScope.isAuth = SessionService.getAuthToken();
 
                 for (var i in TPM.routesList) {
                     if (next.indexOf(i) != -1) {
-                        if (TPM.routesList[i].requireLogin && !SessionService.getUserAuthenticated()) {
+                        if (TPM.routesList[i].requireLogin && !SessionService.getAuthToken()) {
                             $location.path('/login');
                             // event.preventDefault();
                         }
@@ -84,6 +84,7 @@ var TPM = TPM || {};
                 }
             });
 
+            $http.defaults.headers.common['Authorization'] = SessionService.getAuthToken();
         }
     );
 
