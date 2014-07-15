@@ -24,7 +24,7 @@
         "expect.js": "*",
         "grunt-contrib-uglify": "0.2.4",
         "grunt-karma": "*",
-        "karma": "0.10.6",
+        "karma": "*",
         "karma-chrome-launcher": "*",
         "karma-firefox-launcher": "*",
         "karma-jasmine": "*",
