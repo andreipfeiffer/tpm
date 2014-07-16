@@ -36,7 +36,7 @@ var TPM = TPM || {};
         },
         '/projects/new': {
             templateUrl: 'partials/project-form.html',
-            controller: 'ProjectsEditController',
+            controller: 'ProjectsFormController',
             requireLogin: true
         },
         '/projects/:id': {
@@ -46,7 +46,7 @@ var TPM = TPM || {};
         },
         '/projects/:id/edit': {
             templateUrl: 'partials/project-form.html',
-            controller: 'ProjectsEditController',
+            controller: 'ProjectsFormController',
             requireLogin: true
         },
 

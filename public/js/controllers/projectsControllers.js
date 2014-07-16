@@ -57,7 +57,7 @@
             }
         ])
 
-        .controller('ProjectsEditController', [
+        .controller('ProjectsFormController', [
             '$scope',
             '$routeParams',
             'ProjectsService',
