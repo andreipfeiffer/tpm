@@ -64,13 +64,21 @@
             'ClientsService',
             function($scope, $routeParams, Projects, Clients) {
 
+                $scope.isDatePickerOpened = false;
+                $scope.dateFormat  = 'dd MMMM yyyy';
+                $scope.dateOptions = {
+                    formatYear: 'yy',
+                    startingDay: 1
+                };
+
                 if ($routeParams.id) {
                     $scope.project = Projects.get({ id: $routeParams.id });
                 } else {
                     $scope.project = {
                         name: '',
                         idClient: 0,
-                        isCompleted: 'false'
+                        isCompleted: 'false',
+                        date: new Date()
                     };
                 }
 
@@ -87,6 +95,14 @@
                         Projects.save($scope.project);
                     }
                 };
+
+                $scope.openDatePicker = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.isDatePickerOpened = true;
+                };
+
             }
         ]);
 

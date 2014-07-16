@@ -11,7 +11,9 @@ var TPM = TPM || {};
         'TPM.ProjectsControllers',
         'TPM.ClientsControllers',
 
-        'TPM.Services'
+        'TPM.Services',
+
+        'ui.bootstrap'
     ]);
 
     TPM.routesList = {
