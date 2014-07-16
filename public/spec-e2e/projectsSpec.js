@@ -21,6 +21,17 @@
             });
         });
 
+        it('should display error message on failed login', function() {
+            element(by.model('credentials.username')).sendKeys('xxx');
+            element(by.model('credentials.password')).sendKeys('yyy');
+
+            expect( $('.alert').isDisplayed() ).toBeFalsy();
+
+            element(by.css('button[type="submit"]')).click().then(function() {
+                expect( $('.alert').isDisplayed() ).toBeTruthy();
+            });
+        });
+
     });
 
 })();
