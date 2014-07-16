@@ -8,6 +8,10 @@
             browser.get('/');
         });
 
+        afterEach(function() {
+            browser.executeScript('localStorage.setItem("TPMtoken", "");');
+        });
+
         it('should redirect users to /login', function() {
             browser.getLocationAbsUrl().then(function(url) {
                 expect(url.split('#')[1]).toBe('/login');
@@ -39,6 +43,19 @@
             element(by.css('button[type="submit"]')).click().then(function() {
                 browser.getLocationAbsUrl().then(function(url) {
                     expect(url.split('#')[1]).toBe('/projects');
+                });
+            });
+        });
+
+        it('should logout the user, redirecting to login', function() {
+            element(by.model('credentials.username')).sendKeys('asd');
+            element(by.model('credentials.password')).sendKeys('asdasd');
+
+            element(by.css('button[type="submit"]')).click().then(function() {
+                element(by.css('a[href="#logout"]')).click().then(function() {
+                    browser.getLocationAbsUrl().then(function(url) {
+                        expect(url.split('#')[1]).toBe('/login');
+                    });
                 });
             });
         });
