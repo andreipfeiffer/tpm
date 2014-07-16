@@ -2,6 +2,11 @@
 
     'use strict';
 
+    var setCredentials = function(username, password) {
+        element(by.model('credentials.username')).sendKeys( username );
+        element(by.model('credentials.password')).sendKeys( password );
+    };
+
     describe('Login', function() {
 
         beforeEach(function() {
@@ -26,8 +31,7 @@
         });
 
         it('should display error message on wrong credentials', function() {
-            element(by.model('credentials.username')).sendKeys('xxx');
-            element(by.model('credentials.password')).sendKeys('yyy');
+            setCredentials('xxx', 'yyy');
 
             expect( $('.alert').isDisplayed() ).toBeFalsy();
 
@@ -37,8 +41,7 @@
         });
 
         it('should login the user and redirect to projects, on correct credentials', function() {
-            element(by.model('credentials.username')).sendKeys('asd');
-            element(by.model('credentials.password')).sendKeys('asdasd');
+            setCredentials('asd', 'asdasd');
 
             element(by.css('button[type="submit"]')).click().then(function() {
                 browser.getLocationAbsUrl().then(function(url) {
@@ -48,8 +51,7 @@
         });
 
         it('should logout the user, redirecting to login', function() {
-            element(by.model('credentials.username')).sendKeys('asd');
-            element(by.model('credentials.password')).sendKeys('asdasd');
+            setCredentials('asd', 'asdasd');
 
             element(by.css('button[type="submit"]')).click().then(function() {
                 element(by.css('a[href="#logout"]')).click().then(function() {
