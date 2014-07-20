@@ -29,8 +29,9 @@ module.exports = function(config) {
             'js/app.js',
             'js/**/*.js',
 
-            // tests
-            'spec/_utils.js',
+            // test utils
+            'spec/_*.js',
+            // test specs
             'spec/*Spec.js'
         ],
 
