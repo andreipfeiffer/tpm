@@ -4,7 +4,7 @@ var TPM = TPM || {};
 
     'use strict';
 
-    TPM = angular.module('tmp', [
+    TPM = angular.module('tpm', [
         'ngRoute',
 
         'TPM.AuthControllers',
@@ -90,5 +90,7 @@ var TPM = TPM || {};
         }
     );
 
+    // @todo make this read-only
+    TPM.apiUrl = 'http://localhost:3000/';
 
 }());

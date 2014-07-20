@@ -6,7 +6,7 @@
 
         .factory('ProjectsService', ['$http', '$resource', function($http, $resource) {
             return $resource(
-                'http://localhost:3000/projects/:id',
+                TPM.apiUrl + 'projects/:id',
                 {
                     id: '@id'
                 },
@@ -18,7 +18,7 @@
 
         .factory('ClientsService', ['$resource', function($resource) {
             return $resource(
-                'http://localhost:3000/clients/:id',
+                TPM.apiUrl + 'clients/:id',
                 {
                     id: '@id'
                 },
