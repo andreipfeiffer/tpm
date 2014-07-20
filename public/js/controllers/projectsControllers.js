@@ -65,7 +65,7 @@
             }
         ])
 
-        .controller('ProjectsFormController', [
+        .controller('ProjectsNewController', [
             '$scope',
             '$routeParams',
             'ProjectsService',
@@ -74,30 +74,58 @@
 
                 $scope.date = dateSettings;
                 $scope.isDatePickerOpened = false;
-
-                if ($routeParams.id) {
-                    $scope.project = Projects.get({ id: $routeParams.id });
-                } else {
-                    $scope.project = {
-                        name: '',
-                        idClient: 0,
-                        isCompleted: 'false',
-                        date: new Date()
-                    };
-                }
+                $scope.project = {
+                    name: '',
+                    idClient: 0,
+                    isCompleted: 'false',
+                    date: new Date()
+                };
 
                 $scope.clientsList = Clients.query();
 
                 $scope.submitForm = function() {
-
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
 
-                    if ($routeParams.id) {
-                        Projects.update({ id: $routeParams.id }, $scope.project);
-                    } else {
-                        Projects.save($scope.project);
-                    }
+                    Projects.save($scope.project);
+                };
+
+                $scope.openDatePicker = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    $scope.isDatePickerOpened = true;
+                };
+
+            }
+        ])
+
+        .controller('ProjectsEditController', [
+            '$scope',
+            '$q',
+            '$routeParams',
+            'ProjectsService',
+            'ClientsService',
+            function($scope, $q, $routeParams, Projects, Clients) {
+
+                $scope.date = dateSettings;
+                $scope.isDatePickerOpened = false;
+
+                $q.all([
+                    Projects.get({ id: $routeParams.id }).$promise,
+                    Clients.query().$promise
+                ]).then(function(data) {
+
+                    $scope.project = data[0];
+                    $scope.clientsList = data[1];
+
+                });
+
+                $scope.submitForm = function() {
+                    // default value is 'null', so convert it to int
+                    $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
+
+                    Projects.update({ id: $routeParams.id }, $scope.project);
                 };
 
                 $scope.openDatePicker = function($event) {
