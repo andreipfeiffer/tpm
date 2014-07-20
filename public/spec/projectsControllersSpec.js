@@ -75,6 +75,13 @@
                 $httpBackend.flush();
             });
 
+            it('should display the date picker', function() {
+                $httpBackend.flush();
+
+                scope.openDatePicker( $.Event('click') );
+                expect(scope.isDatePickerOpened).toBeTruthy();
+            });
+
         });
 
 
@@ -105,6 +112,36 @@
 
                 scope.submitForm();
                 $httpBackend.flush();
+            });
+
+            it('should display the date picker', function() {
+                $httpBackend.flush();
+
+                scope.openDatePicker( $.Event('click') );
+                expect(scope.isDatePickerOpened).toBeTruthy();
+            });
+
+        });
+
+
+        describe('ProjectsViewController', function() {
+            var scope, ctrl, $httpBackend;
+            var routeParams = { id: 1 };
+            var projectDetails = TPM.mocks.projectsList[0];
+
+            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+                $httpBackend = _$httpBackend_;
+                $httpBackend.expectGET(TPM.apiUrl + 'projects/1').respond( projectDetails );
+
+                scope = $rootScope.$new();
+                ctrl = $controller('ProjectsViewController', {$scope: scope, $routeParams : routeParams});
+            }));
+
+
+            it('should edit a project', function() {
+                $httpBackend.flush();
+
+                expect(scope.project.name).toEqual(projectDetails.name );
             });
 
         });
