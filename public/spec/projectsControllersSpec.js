@@ -65,7 +65,7 @@
                 expect(scope.projectsList).toEqualDeep([]);
                 $httpBackend.flush();
 
-                expect(scope.projectsList.length).toEqualDeep(mockResponseProjects.length);
+                expect(scope.projectsList.length).toEqual( mockResponseProjects.length );
                 expect(scope.projectsList[0].clientName).toBeDefined();
 
                 var project1 = scope.projectsList[0];
@@ -73,6 +73,13 @@
 
                 var project2 = scope.projectsList[1];
                 expect(project2.clientName).toContain('-');
+            });
+
+            it('should delete a project', function() {
+                $httpBackend.flush();
+
+                scope.deleteProject(0);
+                expect(scope.projectsList.length).toEqual( mockResponseProjects.length - 1 );
             });
 
         });
