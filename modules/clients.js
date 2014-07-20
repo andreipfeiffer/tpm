@@ -61,7 +61,7 @@ module.exports = function(connection) {
                     if (err) { return res.send(503, { error: 'Database error'}); }
                     if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                    res.send(docs[0]);
+                    res.send(201, docs[0]);
                 });
             });
 
@@ -83,7 +83,7 @@ module.exports = function(connection) {
                     connection.query('delete from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err) {
                         if (err) { return res.send(503, { error: 'Database error'}); }
 
-                        res.send(true);
+                        res.send(204);
                     });
                 }
             });
