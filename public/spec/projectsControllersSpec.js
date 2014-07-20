@@ -56,7 +56,7 @@
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.whenGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsNewController', {$scope: scope});
@@ -76,6 +76,37 @@
             });
 
         });
+
+
+        describe('ProjectsEditController', function() {
+            var scope, ctrl, $httpBackend;
+            var routeParams = { id: 1 };
+            var projectDetails = TPM.mocks.projectsList[0];
+
+            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+                $httpBackend = _$httpBackend_;
+                $httpBackend.expectGET(TPM.apiUrl + 'projects/1').respond( projectDetails );
+                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+
+                scope = $rootScope.$new();
+                ctrl = $controller('ProjectsEditController', {$scope: scope,  $routeParams : routeParams});
+            }));
+
+
+            it('should edit a project', function() {
+                $httpBackend.flush();
+
+                expect(scope.project.name).toEqual(projectDetails.name );
+
+                scope.project.name = 'new project name';
+                $httpBackend.expectPUT(TPM.apiUrl + 'projects/1', angular.toJson(scope.project)).respond(201, scope.project);
+
+                scope.submitForm();
+                $httpBackend.flush();
+            });
+
+        });
+
     });
 
 })();
