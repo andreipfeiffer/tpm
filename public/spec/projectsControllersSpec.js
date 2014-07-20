@@ -49,6 +49,33 @@
             });
 
         });
+
+
+        describe('ProjectsNewController', function() {
+            var scope, ctrl, $httpBackend;
+
+            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+                $httpBackend = _$httpBackend_;
+                $httpBackend.whenGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+
+                scope = $rootScope.$new();
+                ctrl = $controller('ProjectsNewController', {$scope: scope});
+            }));
+
+
+            it('should create a new project', function() {
+                $httpBackend.flush();
+
+                expect(scope.project.name).toEqual('');
+
+                scope.project.name = 'new project name';
+                $httpBackend.expectPOST(TPM.apiUrl + 'projects', angular.toJson(scope.project)).respond(201, scope.project);
+
+                scope.submitForm();
+                $httpBackend.flush();
+            });
+
+        });
     });
 
 })();
