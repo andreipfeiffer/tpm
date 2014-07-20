@@ -80,6 +80,8 @@
 
         describe('ProjectsEditController', function() {
             var scope, ctrl, $httpBackend;
+            // the controller reads the id from routeParams
+            // we need this so the GET request for details works as expected
             var routeParams = { id: 1 };
             var projectDetails = TPM.mocks.projectsList[0];
 
@@ -89,7 +91,7 @@
                 $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
 
                 scope = $rootScope.$new();
-                ctrl = $controller('ProjectsEditController', {$scope: scope,  $routeParams : routeParams});
+                ctrl = $controller('ProjectsEditController', {$scope: scope, $routeParams : routeParams});
             }));
 
 
