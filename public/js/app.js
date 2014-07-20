@@ -72,12 +72,12 @@ var TPM = TPM || {};
 
             // simple client authentication method: https://coderwall.com/p/f6brkg
             // @note: another more complex: https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
-            $rootScope.$on("$locationChangeStart", function(event, next, current) {
+            $rootScope.$on('$locationChangeStart', function(event, next/*, current*/) {
 
                 $rootScope.isAuth = SessionService.getAuthToken();
 
                 for (var i in TPM.routesList) {
-                    if (next.indexOf(i) != -1) {
+                    if (next.indexOf(i) !== -1) {
                         if (TPM.routesList[i].requireLogin && !SessionService.getAuthToken()) {
                             $location.path('/login');
                             // event.preventDefault();

@@ -33,7 +33,7 @@
                         .error(function (res) {
                             $scope.errorMessage = res.error;
                         });
-                }
+                };
             }
         ])
 
@@ -45,7 +45,7 @@
 
                 $http
                     .get('/logout')
-                    .success(function (res) {
+                    .success(function () {
                         Session.setAuthToken('');
                         $location.path('/login');
                     });

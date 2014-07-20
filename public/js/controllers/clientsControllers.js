@@ -12,6 +12,6 @@
                 $scope.clientsList = Clients.query();
 
             }
-        ])
+        ]);
 
 }());
