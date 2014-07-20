@@ -2,6 +2,14 @@
 
     'use strict';
 
+    var dateSettings = {
+        dateFormat: 'dd MMMM yyyy',
+        dateOptions: {
+            formatYear: 'yy',
+            startingDay: 1
+        }
+    };
+
     angular.module('TPM.ProjectsControllers', [])
 
         .controller('ProjectsListController', [
@@ -64,12 +72,8 @@
             'ClientsService',
             function($scope, $routeParams, Projects, Clients) {
 
+                $scope.date = dateSettings;
                 $scope.isDatePickerOpened = false;
-                $scope.dateFormat  = 'dd MMMM yyyy';
-                $scope.dateOptions = {
-                    formatYear: 'yy',
-                    startingDay: 1
-                };
 
                 if ($routeParams.id) {
                     $scope.project = Projects.get({ id: $routeParams.id });
