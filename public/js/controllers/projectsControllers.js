@@ -72,6 +72,7 @@
             'ClientsService',
             function($scope, $routeParams, Projects, Clients) {
 
+                $scope.formAction = 'Add';
                 $scope.date = dateSettings;
                 $scope.isDatePickerOpened = false;
                 $scope.project = {
@@ -108,6 +109,7 @@
             'ClientsService',
             function($scope, $q, $routeParams, Projects, Clients) {
 
+                $scope.formAction = 'Edit';
                 $scope.date = dateSettings;
                 $scope.isDatePickerOpened = false;
 
