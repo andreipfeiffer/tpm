@@ -34,7 +34,7 @@
             }));
 
 
-            it('should set the response from the ApiServiceQuery to $scope.clientsList', function() {
+            it('should set the response from the API to $scope.clientsList', function() {
                 expect(scope.clientsList).toEqualDeep([]);
                 $httpBackend.flush();
 
