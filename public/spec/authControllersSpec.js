@@ -59,6 +59,7 @@
 
         describe('LogoutController', function() {
             var scope, controller, $httpBackend, location, Session;
+            var token = 'abcdef';
 
             beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
                 $httpBackend = _$httpBackend_;
@@ -66,15 +67,14 @@
                 Session = _SessionService_;
 
                 scope = $rootScope.$new();
+                // authenticate the user
+                Session.setAuthToken( token );
 
                 controller = $controller;
             }));
 
 
             it('should logout and redirect to login', function() {
-                var token = 'abcdef';
-
-                Session.setAuthToken( token );
 
                 controller('LogoutController', {$scope: scope});
 
