@@ -44,7 +44,7 @@
             function($http, $location, Session) {
 
                 $http
-                    .get('/logout')
+                    .get(TPM.apiUrl + 'logout')
                     .success(function () {
                         Session.removeAuthToken();
                         $location.path('/login');
