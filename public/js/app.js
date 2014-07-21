@@ -12,6 +12,7 @@ var TPM = TPM || {};
         'TPM.ClientsControllers',
 
         'TPM.Services',
+        'TPM.Interceptors',
 
         'ui.bootstrap'
     ]);
