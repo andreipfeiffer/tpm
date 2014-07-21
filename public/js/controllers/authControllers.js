@@ -25,7 +25,7 @@
                 $scope.login = function() {
                     $scope.errorMessage = '';
                     $http
-                        .post('/login', $scope.credentials)
+                        .post(TPM.apiUrl + 'login', $scope.credentials)
                         .success(function (res) {
                             Session.setAuthToken( res.authToken );
                             $location.path('/projects');
@@ -46,7 +46,7 @@
                 $http
                     .get('/logout')
                     .success(function () {
-                        Session.setAuthToken('');
+                        Session.removeAuthToken();
                         $location.path('/login');
                     });
             }

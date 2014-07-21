@@ -38,6 +38,10 @@
             this.getAuthToken = function() {
                 return localStorage.getItem('TPMtoken');
             };
+
+            this.removeAuthToken = function() {
+                return localStorage.removeItem('TPMtoken');
+            };
         });
 
 }());
