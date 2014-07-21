@@ -8,7 +8,7 @@
 
 
         describe('LoginController', function() {
-            var scope, ctrl, $httpBackend, location, Session;
+            var scope, controller, $httpBackend, location, Session;
 
             beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
                 $httpBackend = _$httpBackend_;
@@ -16,12 +16,19 @@
                 Session = _SessionService_;
 
                 scope = $rootScope.$new();
-                ctrl = $controller('LoginController', {$scope: scope});
+                location.path('/login');
+                controller = $controller;
             }));
+
+            afterEach(function() {
+                Session.removeAuthToken();
+            });
 
 
             it('should set error message with wrong credentials', function() {
                 var expectedError = 'bad credentials';
+
+                controller('LoginController', {$scope: scope});
 
                 scope.credentials = {
                     username: 'xxx',
@@ -40,6 +47,8 @@
             it('should login and redirect with correct credentials', function() {
                 var token = 'fdab0fb82c66a2b802266b3a5478bf39';
 
+                controller('LoginController', {$scope: scope});
+
                 scope.credentials = {
                     username: 'asd',
                     password: 'asdasd'
@@ -52,6 +61,16 @@
 
                 expect(Session.getAuthToken()).toEqual( token );
                 expect(location.path()).not.toEqual('/login');
+            });
+
+            it('should redirect already logged users', function() {
+
+                // login user
+                Session.setAuthToken('abcdef');
+
+                controller('LoginController', {$scope: scope});
+                expect(location.path()).not.toEqual('/login');
+
             });
 
         });
