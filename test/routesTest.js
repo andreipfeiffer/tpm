@@ -22,7 +22,7 @@ describe('Routes', function() {
             request(url)
                 .get('/projects')
                 .end(function(err, res) {
-                    res.should.have.status(401);
+                    res.should.have.property('status', 401);
                     done();
                 });
         });
@@ -30,7 +30,7 @@ describe('Routes', function() {
             request(url)
                 .get('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.status(401);
+                    res.should.have.property('status', 401);
                     done();
                 });
         });
@@ -38,7 +38,7 @@ describe('Routes', function() {
             request(url)
                 .put('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.status(401);
+                    res.should.have.property('status', 401);
                     done();
                 });
         });
@@ -46,7 +46,7 @@ describe('Routes', function() {
             request(url)
                 .post('/projects')
                 .end(function(err, res) {
-                    res.should.have.status(401);
+                    res.should.have.property('status', 401);
                     done();
                 });
         });
@@ -54,7 +54,7 @@ describe('Routes', function() {
             request(url)
                 .del('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.status(401);
+                    res.should.have.property('status', 401);
                     done();
                 });
         });
@@ -88,7 +88,7 @@ describe('Routes', function() {
                 .end(function(err, res) {
                     res.body.should.have.property('authUserId');
                     res.body.should.have.property('authToken');
-                    res.should.have.status(200);
+                    res.should.have.property('status', 200);
                     done();
                 });
         });
