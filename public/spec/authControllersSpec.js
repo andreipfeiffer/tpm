@@ -56,6 +56,38 @@
 
         });
 
+
+        describe('LogoutController', function() {
+            var scope, controller, $httpBackend, location, Session;
+
+            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
+                $httpBackend = _$httpBackend_;
+                location = _$location_;
+                Session = _SessionService_;
+
+                scope = $rootScope.$new();
+
+                controller = $controller;
+            }));
+
+
+            it('should logout and redirect to login', function() {
+                var token = 'abcdef';
+
+                Session.setAuthToken( token );
+
+                controller('LogoutController', {$scope: scope});
+
+                $httpBackend.expectGET(TPM.apiUrl + 'logout').respond(200);
+                $httpBackend.flush();
+
+                expect(Session.getAuthToken()).not.toEqual( token );
+                expect(Session.getAuthToken()).toBeFalsy();
+                expect(location.path()).toEqual('/login');
+            });
+
+        });
+
     });
 
 })();
