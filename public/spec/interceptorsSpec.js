@@ -2,7 +2,7 @@
 
     'use strict';
 
-    describe('Interceptors Controllers', function() {
+    describe('Interceptors', function() {
 
         beforeEach(module('tpm'));
 
@@ -25,6 +25,8 @@
 
 
             it('should redirect logged users if they get a request with the status "401"', function() {
+
+                // load a random controller to trigger a request
                 controller('ClientsListController', {$scope: scope});
                 $httpBackend.flush();
 
