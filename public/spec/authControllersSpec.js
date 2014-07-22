@@ -107,6 +107,31 @@
 
         });
 
+
+        // @todo should this belong here?
+        describe('Redirection', function() {
+            var scope, location, rootScope;
+
+            beforeEach(inject(function(_$location_, $rootScope) {
+                location = _$location_;
+                rootScope = $rootScope;
+
+                scope = rootScope.$new();
+            }));
+
+
+            it('should redirect if trying to access protected routes', function() {
+
+                // try to access another route, without being logged in
+                location.path('/clients');
+                rootScope.$apply();
+
+                expect(location.path()).toEqual('/login');
+
+            });
+
+        });
+
     });
 
 })();
