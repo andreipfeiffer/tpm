@@ -10,6 +10,8 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
   * Server unit-tests, using Mocha
   * Client unit-tests, using Jasmine
   * Client e2e testing, using Protractor
+  * Bower components management
+  * Code linting
 
 ## To-do
 
@@ -19,3 +21,4 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
   * Full server unit-tests
   * Offline availability
   * Mobile optimizations
+  * Build and optimize resources
