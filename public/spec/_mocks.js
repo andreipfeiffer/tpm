@@ -10,14 +10,20 @@ var TPM = TPM || {};
                 "idUser": 1,
                 "idClient": 1,
                 "name": "Pufosenie roz",
-                "isCompleted": ""
+                "status": "on hold",
+                "price": 0,
+                "dateAdded": "2014-07-22T21:00:00.000Z",
+                "dateEstimated": "2014-12-29T22:00:00.000Z"
             },
             {
                 "id": 2,
                 "idUser": 1,
                 "idClient": 0,
                 "name": "Album foto",
-                "isCompleted": ""
+                "status": "in progress",
+                "price": 20,
+                "dateAdded": "2014-07-22T21:00:00.000Z",
+                "dateEstimated": "2014-09-11T21:00:00.000Z"
             }
         ],
 
