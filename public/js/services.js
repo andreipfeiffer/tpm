@@ -28,6 +28,20 @@
             );
         }])
 
+        .service('ModalAlertService', function($modal, $location) {
+
+            var modalInstance;
+
+            this.open = function (location) {
+                modalInstance = $modal.open({
+                    templateUrl: 'partials/modal-alert.html'
+                });
+                modalInstance.result.then(function () {
+                    $location.path( location );
+                });
+            };
+        })
+
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {
