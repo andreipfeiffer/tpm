@@ -74,6 +74,7 @@
             function($scope, $routeParams, $filter, Projects, Clients) {
 
                 $scope.formAction = 'Add';
+                $scope.formSubmit = $scope.formAction + ' project';
                 $scope.dateSettings = dateSettings;
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
@@ -99,8 +100,11 @@
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
                     $scope.isLoading = true;
+                    $scope.formSubmit = 'Please wait ...';
 
-                    Projects.save($scope.project);
+                    Projects.save($scope.project).$promise.then(function() {
+                        console.log('done');
+                    });
                 };
 
                 $scope.openDatePicker = function($event) {
@@ -123,6 +127,7 @@
             function($scope, $q, $routeParams, $filter, Projects, Clients) {
 
                 $scope.formAction = 'Edit';
+                $scope.formSubmit = $scope.formAction + ' project';
                 $scope.dateSettings = dateSettings;
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
@@ -147,8 +152,11 @@
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
                     $scope.isLoading = true;
+                    $scope.formSubmit = 'Please wait ...';
 
-                    Projects.update({ id: $routeParams.id }, $scope.project);
+                    Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
+                        console.log('edited');
+                    });
                 };
 
                 $scope.openDatePicker = function($event) {
