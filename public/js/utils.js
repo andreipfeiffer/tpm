@@ -9,6 +9,10 @@ TPM.utils = (function() {
                 return 0;
             }
             return parseInt(x);
+        },
+
+        isDateFormat: function(str) {
+            return /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.test(str.trim());
         }
     };
 
