@@ -93,5 +93,10 @@ var TPM = TPM || {};
 
     // @todo make this read-only
     TPM.apiUrl = 'http://localhost:3000/';
+    // @todo or use angular's internal methods to make these CONST
+    TPM.projectsStatusList = ['on hold','in progress','finished','payed'];
+    TPM.settings = {
+        dateFormat: 'yyyy-MM-dd'
+    };
 
 }());

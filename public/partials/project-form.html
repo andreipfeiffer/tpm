@@ -7,14 +7,22 @@
 
     <span>id: {{project.id}}</span>
     <form ng-submit="submitForm()">
-        <input type="checkbox" ng-model="project.isCompleted" ng-true-value="true" ng-false-value="false">
         <input type="text" ng-model="project.name">
         <select ng-model="project.idClient" ng-options="client.id as client.name for client in clientsList">
             <option value="">No Client</option>
         </select>
+        <select ng-model="project.status" ng-options="status for status in statusList">
+        </select>
+
+        <div class="form-group">
+            <div class="input-group">
+                <input class="form-control" ng-model="project.price" type="number" placeholder="price">
+                <div class="input-group-addon">RON</div>
+            </div>
+        </div>
 
         <p class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{date.dateFormat}}" ng-model="project.date" is-open="isDatePickerOpened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="date.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+          <input type="text" class="form-control" datepicker-popup="{{dateSettings.dateFormat}}" ng-model="selectedDateEstimated" is-open="isDatePickerOpened" datepicker-options="dateSettings.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>

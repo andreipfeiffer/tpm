@@ -69,7 +69,7 @@
                 expect(scope.project.name).toEqual('');
 
                 scope.project.name = 'new project name';
-                $httpBackend.expectPOST(TPM.apiUrl + 'projects', angular.toJson(scope.project)).respond(201, scope.project);
+                $httpBackend.expectPOST(TPM.apiUrl + 'projects').respond(201);
 
                 scope.submitForm();
                 $httpBackend.flush();

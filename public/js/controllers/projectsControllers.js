@@ -68,18 +68,25 @@
         .controller('ProjectsNewController', [
             '$scope',
             '$routeParams',
+            '$filter',
             'ProjectsService',
             'ClientsService',
-            function($scope, $routeParams, Projects, Clients) {
+            function($scope, $routeParams, $filter, Projects, Clients) {
 
                 $scope.formAction = 'Add';
-                $scope.date = dateSettings;
+                $scope.dateSettings = dateSettings;
+                $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
+                $scope.statusList = TPM.projectsStatusList;
+
+                // project model
                 $scope.project = {
                     name: '',
                     idClient: 0,
-                    isCompleted: 'false',
-                    date: new Date()
+                    price: 0,
+                    status: TPM.projectsStatusList[0],
+                    dateEstimated: '',
+                    dateAdded: ''
                 };
 
                 $scope.clientsList = Clients.query();
@@ -87,6 +94,9 @@
                 $scope.submitForm = function() {
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
+                    // convert the dates to match the DB format
+                    $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
+                    $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
 
                     Projects.save($scope.project);
                 };
