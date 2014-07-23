@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `' + table + '`.* from `' + table + '` WHERE `'+table+'`.idUser="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `' + table + '`.* from `' + table + '` WHERE `' + table + '`.idUser="' + userLogged.id + '"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
@@ -35,16 +35,18 @@ module.exports = function(connection) {
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
-                query = '';
+                sql = '';
 
-            // @todo handle all update variations
-            query += 'update `' + table + '` set ';
-            query += '`name`= "' + req.body.name + '", ';
-            query += '`idClient`= "' + req.body.idClient + '", ';
-            query += '`isCompleted`= "' + req.body.isCompleted + '" ';
-            query += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
+            sql += 'update `' + table + '` set ';
+            sql += '`name`= "' + req.body.name + '", ';
+            sql += '`idClient`= "' + req.body.idClient + '", ';
+            sql += '`status`= "' + req.body.status + '" ';
+            sql += '`price`= "' + req.body.price + '" ';
+            sql += '`dateAdded`= "' + req.body.dateAdded + '" ';
+            sql += '`dateEstimated`= "' + req.body.dateEstimated + '" ';
+            sql += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
 
-            connection.query(query, function(err) {
+            connection.query(sql, function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
@@ -53,10 +55,15 @@ module.exports = function(connection) {
 
         add: function(req, res) {
             var data = req.body,
-                userLogged = req.user;
+                userLogged = req.user,
+                sql = '';
+
+            sql += 'insert into `' + table + '` ';
+            sql += '(`idUser`, `idClient`, `name`, `status`, `price`, `dateAdded`, `dateEstimated`) values ';
+            sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.price + '", "' + data.dateAdded + '", "' + data.dateEstimated + '")';
 
             // @todo use knex (http://knexjs.org/#Builder-insert)
-            connection.query('insert into `' + table + '` (`idUser`, `idClient`, `name`, `isCompleted`) values ("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.isCompleted + '")', function(err, newItem) {
+            connection.query(sql, function(err, newItem) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 getById(newItem.insertId, userLogged.id, function(err, docs) {
