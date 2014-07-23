@@ -12,7 +12,7 @@ TPM.utils = (function() {
         },
 
         isDateFormat: function(str) {
-            return /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/.test(str.trim());
+            return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
         }
     };
 
