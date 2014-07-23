@@ -71,7 +71,8 @@
             '$filter',
             'ProjectsService',
             'ClientsService',
-            function($scope, $routeParams, $filter, Projects, Clients) {
+            'ModalAlertService',
+            function($scope, $routeParams, $filter, Projects, Clients, ModalAlert) {
 
                 $scope.formAction = 'Add';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -103,7 +104,7 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.save($scope.project).$promise.then(function() {
-                        console.log('done');
+                        ModalAlert.open('/projects');
                     });
                 };
 
@@ -124,7 +125,8 @@
             '$filter',
             'ProjectsService',
             'ClientsService',
-            function($scope, $q, $routeParams, $filter, Projects, Clients) {
+            'ModalAlertService',
+            function($scope, $q, $routeParams, $filter, Projects, Clients, ModalAlert) {
 
                 $scope.formAction = 'Edit';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -155,7 +157,7 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
-                        console.log('edited');
+                        ModalAlert.open('/projects');
                     });
                 };
 
