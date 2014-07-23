@@ -41,9 +41,12 @@ module.exports = function(connection) {
             sql += '`name`= "' + req.body.name + '", ';
             sql += '`idClient`= "' + req.body.idClient + '", ';
             sql += '`status`= "' + req.body.status + '", ';
-            sql += '`price`= "' + req.body.price + '", ';
+            sql += '`days`= "' + req.body.days + '", ';
+            sql += '`priceEstimated`= "' + req.body.priceEstimated + '", ';
+            sql += '`priceFinal`= "' + req.body.priceFinal + '", ';
             sql += '`dateAdded`= "' + req.body.dateAdded + '", ';
-            sql += '`dateEstimated`= "' + req.body.dateEstimated + '" ';
+            sql += '`dateEstimated`= "' + req.body.dateEstimated + '", ';
+            sql += '`description`= "' + req.body.description + '" ';
             sql += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
 
             connection.query(sql, function(err) {
@@ -59,8 +62,8 @@ module.exports = function(connection) {
                 sql = '';
 
             sql += 'insert into `' + table + '` ';
-            sql += '(`idUser`, `idClient`, `name`, `status`, `price`, `dateAdded`, `dateEstimated`) values ';
-            sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.price + '", "' + data.dateAdded + '", "' + data.dateEstimated + '")';
+            sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
+            sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.days + '", "' + data.priceEstimated + '", "' + data.priceFinal + '", "' + data.dateAdded + '", "' + data.dateEstimated + '", "' + data.description + '")';
 
             // @todo use knex (http://knexjs.org/#Builder-insert)
             connection.query(sql, function(err, newItem) {
