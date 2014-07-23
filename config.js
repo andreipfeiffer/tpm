@@ -54,18 +54,21 @@ config.mysql.structure.projects = ''
     +     '`idUser` smallint(6) NOT NULL,'
     +     '`idClient` smallint(6) NOT NULL DEFAULT "0",'
     +     '`name` text NOT NULL,'
-    +     '`isCompleted` enum("false","true") NOT NULL DEFAULT "false",'
+    +     '`status` enum("on hold","in progress","finished","payed") NOT NULL DEFAULT "on hold",'
+    +     '`price` mediumint(8) unsigned NOT NULL,'
+    +     '`dateAdded` datetime NOT NULL,'
+    +     '`dateEstimated` datetime NOT NULL,'
     +     'PRIMARY KEY (`id`),'
-    +     'KEY `isCompleted` (`isCompleted`),'
+    +     'KEY `status` (`status`),'
     +     'KEY `idUser` (`idUser`),'
     +     'KEY `idClient` (`idClient`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
 
 config.mysql.populate.projects = ''
-    + 'INSERT INTO `' + config.mysql.database + '`.`projects` (`id`, `idUser`, `idClient`, `name`, `isCompleted`) VALUES'
-    + '  (1, 1, 1, \'Pufosenie roz\', 0)'
-    + ', (2, 1, 1, \'Album foto\', 0)'
-    + ', (3, 1, 2, \'Bratari\', 0)'
-    + ', (4, 2, 3, \'Proiect alt user\', 0);';
+    + 'INSERT INTO `' + config.mysql.database + '`.`projects` (`id`, `idUser`, `idClient`, `name`, `status`, `price`, `dateAdded`, `dateEstimated`) VALUES'
+    + '  (1, 1, 1, \'Pufosenie roz\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
+    + ', (2, 1, 1, \'Album foto\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
+    + ', (3, 1, 2, \'Bratari\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
+    + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\');';
 
 module.exports = config;
