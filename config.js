@@ -56,8 +56,8 @@ config.mysql.structure.projects = ''
     +     '`name` text NOT NULL,'
     +     '`status` enum("on hold","in progress","finished","payed") NOT NULL DEFAULT "on hold",'
     +     '`price` mediumint(8) unsigned NOT NULL,'
-    +     '`dateAdded` datetime NOT NULL,'
-    +     '`dateEstimated` datetime NOT NULL,'
+    +     '`dateAdded` date NOT NULL,'
+    +     '`dateEstimated` date NOT NULL,'
     +     'PRIMARY KEY (`id`),'
     +     'KEY `status` (`status`),'
     +     'KEY `idUser` (`idUser`),'
@@ -66,9 +66,9 @@ config.mysql.structure.projects = ''
 
 config.mysql.populate.projects = ''
     + 'INSERT INTO `' + config.mysql.database + '`.`projects` (`id`, `idUser`, `idClient`, `name`, `status`, `price`, `dateAdded`, `dateEstimated`) VALUES'
-    + '  (1, 1, 1, \'Pufosenie roz\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
-    + ', (2, 1, 1, \'Album foto\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
-    + ', (3, 1, 2, \'Bratari\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\')'
-    + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', 0, \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\');';
+    + '  (1, 1, 1, \'Pufosenie roz\', \'on hold\', 0, \'0000-00-00\', \'0000-00-00\')'
+    + ', (2, 1, 1, \'Album foto\', \'on hold\', 0, \'0000-00-00\', \'0000-00-00\')'
+    + ', (3, 1, 2, \'Bratari\', \'on hold\', 0, \'0000-00-00\', \'0000-00-00\')'
+    + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', 0, \'0000-00-00\', \'0000-00-00\');';
 
 module.exports = config;
