@@ -37,6 +37,9 @@
                     templateUrl: 'partials/modal-alert.html'
                 });
                 modalInstance.result.then(function () {
+                    // close callback
+                },function () {
+                    // dismiss callback
                     $location.path( location );
                 });
             };
