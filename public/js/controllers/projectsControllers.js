@@ -86,10 +86,13 @@
                 $scope.project = {
                     name: '',
                     idClient: 0,
-                    price: 0,
+                    priceEstimated: 0,
+                    priceFinal: 0,
+                    days: 0,
                     status: TPM.projectsStatusList[0],
                     dateEstimated: '',
-                    dateAdded: ''
+                    dateAdded: '',
+                    description: ''
                 };
 
                 $scope.clientsList = Clients.query();

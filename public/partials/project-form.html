@@ -25,6 +25,11 @@
 
         <div class="form-group row">
 
+            <div class="col-sm-2">
+                <label class="control-label" for="projectDays">Estimated days:</label>
+                <input id="projectDays" class="form-control" ng-model="project.days" type="number" placeholder="Number of days">
+            </div>
+
             <div class="col-sm-3">
                 <label class="control-label" for="projectPriceFinal">Deadline:</label>
                 <div class="input-group">
@@ -38,7 +43,7 @@
             <div class="col-sm-2">
                 <label class="control-label" for="projectPriceEstimated">Estimated price:</label>
                 <div class="input-group">
-                    <input id="projectPriceEstimated" class="form-control" ng-model="project.price" type="number" placeholder="price">
+                    <input id="projectPriceEstimated" class="form-control" ng-model="project.priceEstimated" type="number">
                     <div class="input-group-addon">RON</div>
                 </div>
             </div>
@@ -46,7 +51,7 @@
             <div class="col-sm-2">
                 <label class="control-label" for="projectPriceFinal">Final price:</label>
                 <div class="input-group">
-                    <input id="projectPriceFinal" class="form-control" ng-model="project.price" type="number" placeholder="price">
+                    <input id="projectPriceFinal" class="form-control" ng-model="project.priceFinal" type="number">
                     <div class="input-group-addon">RON</div>
                 </div>
             </div>
@@ -55,7 +60,13 @@
                 <label class="control-label" for="projectStatus">Status:</label>
                 <select id="projectStatus" ng-model="project.status" ng-options="status for status in statusList" class="form-control"></select>
             </div>
+        </div>
 
+        <br>
+
+        <div class="form-group">
+            <label class="control-label" for="projectDescription">Project description:</label>
+            <textarea id="projectDescription" ng-model="project.description" class="form-control"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary" ng-disabled="isLoading">{{formSubmit}}</button>
