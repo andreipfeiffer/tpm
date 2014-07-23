@@ -40,9 +40,9 @@ module.exports = function(connection) {
             sql += 'update `' + table + '` set ';
             sql += '`name`= "' + req.body.name + '", ';
             sql += '`idClient`= "' + req.body.idClient + '", ';
-            sql += '`status`= "' + req.body.status + '" ';
-            sql += '`price`= "' + req.body.price + '" ';
-            sql += '`dateAdded`= "' + req.body.dateAdded + '" ';
+            sql += '`status`= "' + req.body.status + '", ';
+            sql += '`price`= "' + req.body.price + '", ';
+            sql += '`dateAdded`= "' + req.body.dateAdded + '", ';
             sql += '`dateEstimated`= "' + req.body.dateEstimated + '" ';
             sql += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
 

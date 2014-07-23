@@ -115,13 +115,16 @@
             '$scope',
             '$q',
             '$routeParams',
+            '$filter',
             'ProjectsService',
             'ClientsService',
-            function($scope, $q, $routeParams, Projects, Clients) {
+            function($scope, $q, $routeParams, $filter, Projects, Clients) {
 
                 $scope.formAction = 'Edit';
-                $scope.date = dateSettings;
+                $scope.dateSettings = dateSettings;
+                $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
+                $scope.statusList = TPM.projectsStatusList;
 
                 $q.all([
                     Projects.get({ id: $routeParams.id }).$promise,
@@ -130,12 +133,16 @@
 
                     $scope.project = data[0];
                     $scope.clientsList = data[1];
+                    $scope.selectedDateEstimated = $scope.project.dateEstimated;
 
                 });
 
                 $scope.submitForm = function() {
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
+                    // convert the dates to match the DB format
+                    $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
+                    $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
 
                     Projects.update({ id: $routeParams.id }, $scope.project);
                 };
