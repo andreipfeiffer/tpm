@@ -8,11 +8,11 @@
     <hr>
     <br>
 
-    <form ng-submit="submitForm()">
+    <form name="projectsForm" ng-submit="submitForm()">
 
         <div class="form-group row">
             <div class="col-sm-8">
-                <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name">
+                <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" required>
             </div>
             <div class="col-sm-4">
                 <select ng-model="project.idClient" ng-options="client.id as client.name for client in clientsList" class="form-control input-lg">
