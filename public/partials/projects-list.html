@@ -1,28 +1,30 @@
 <section>
 
-    <header>
-        <h1>Projects</h1>
-        <a href="#projects/new">New project?</a>
+    <header class="clearfix">
+        <h1 class="pull-left">Projects list</h1>
+        <br><a href="#projects/new" class="btn btn-success pull-right">Got a New project?</a>
     </header>
+
+    <hr>
+    <br>
 
     <section>
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Project name</th>
-                    <th>Client</th>
-                    <th>Actions</th>
+                    <th width="50%" class="text-uppercase">Project name</th>
+                    <th class="text-uppercase">Client</th>
+                    <th class="text-uppercase">Status</th>
+                    <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="project in projectsList | orderBy:'-projectName'">
                     <td>
-                        <label>
-                            <input type="checkbox" ng-model="project.isCompleted" ng-true-value="true" ng-false-value="false">
-                            {{project.name}}
-                        </label>
+                        <b>{{project.name}}</b>
                     </td>
                     <td>{{project.clientName}}</td>
+                    <td class="text-capitalize">{{project.status}}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#projects/{{project.id}}" class="btn btn-default btn-sm">

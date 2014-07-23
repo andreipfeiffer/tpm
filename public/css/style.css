@@ -35,3 +35,7 @@ body {
 			border-bottom-right-radius: 5px;
 		}
 }
+
+.table > tbody > tr > td {
+	vertical-align: middle;
+}
