@@ -57,6 +57,7 @@
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.whenGET(/partials\//).respond(200);
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsNewController', {$scope: scope});
@@ -98,6 +99,7 @@
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'projects/1').respond( projectDetails );
                 $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.whenGET(/partials\//).respond(200);
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsEditController', {$scope: scope, $routeParams : routeParams});
