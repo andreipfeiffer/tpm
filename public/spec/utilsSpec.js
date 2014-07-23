@@ -21,6 +21,23 @@
             });
 
         });
+
+        describe('isDateFormat', function() {
+
+            it('should return true', function() {
+                expect( TPM.utils.isDateFormat('2014-12-12') ).toBeTruthy();
+                expect( TPM.utils.isDateFormat(' 2014-12-12 ') ).toBeTruthy();
+            });
+
+            it('should return false', function() {
+                expect( TPM.utils.isDateFormat('2014 12 12') ).toBeFalsy();
+                expect( TPM.utils.isDateFormat('204-12-12') ).toBeFalsy();
+                expect( TPM.utils.isDateFormat('20444-12-12') ).toBeFalsy();
+                expect( TPM.utils.isDateFormat('2014-2-12') ).toBeFalsy();
+                expect( TPM.utils.isDateFormat('2014-12-1') ).toBeFalsy();
+            });
+
+        });
     });
 
 })();
