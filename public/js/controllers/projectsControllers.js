@@ -78,6 +78,7 @@
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
                 $scope.statusList = TPM.projectsStatusList;
+                $scope.isLoading = false;
 
                 // project model
                 $scope.project = {
@@ -97,6 +98,7 @@
                     // convert the dates to match the DB format
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
+                    $scope.isLoading = true;
 
                     Projects.save($scope.project);
                 };
@@ -125,6 +127,7 @@
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
                 $scope.statusList = TPM.projectsStatusList;
+                $scope.isLoading = false;
 
                 $q.all([
                     Projects.get({ id: $routeParams.id }).$promise,
@@ -143,6 +146,7 @@
                     // convert the dates to match the DB format
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
+                    $scope.isLoading = true;
 
                     Projects.update({ id: $routeParams.id }, $scope.project);
                 };
