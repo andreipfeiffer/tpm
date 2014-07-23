@@ -72,6 +72,8 @@
                 $httpBackend.expectPOST(TPM.apiUrl + 'projects').respond(201);
 
                 scope.submitForm();
+                expect( TPM.utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
+                expect( TPM.utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
                 $httpBackend.flush();
             });
 
@@ -111,6 +113,8 @@
                 $httpBackend.expectPUT(TPM.apiUrl + 'projects/1').respond(201);
 
                 scope.submitForm();
+                expect( TPM.utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
+                expect( TPM.utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
                 $httpBackend.flush();
             });
 
