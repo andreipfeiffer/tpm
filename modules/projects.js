@@ -58,24 +58,40 @@ module.exports = function(connection) {
 
         add: function(req, res) {
             var data = req.body,
-                userLogged = req.user,
-                sql = '';
+                userLogged = req.user;
 
-            sql += 'insert into `' + table + '` ';
-            sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
-            sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.days + '", "' + data.priceEstimated + '", "' + data.priceFinal + '", "' + data.dateAdded + '", "' + data.dateEstimated + '", "' + data.description + '")';
-
-            // @todo use knex (http://knexjs.org/#Builder-insert)
-            connection.query(sql, function(err, newItem) {
-                if (err) { return res.send(503, { error: 'Database error'}); }
-
-                getById(newItem.insertId, userLogged.id, function(err, docs) {
+            if ( data.newClientName.length ) {
+                // insert new client first, to get the ID
+                connection.query('insert into `clients` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.newClientName + '")', function(err, newItem) {
                     if (err) { return res.send(503, { error: 'Database error'}); }
-                    if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                    res.send(201, docs[0]);
+                    data.idClient = newItem.insertId;
+                    addNewProject();
                 });
-            });
+            } else {
+                addNewProject();
+            }
+
+            function addNewProject() {
+                var sql = ''
+
+                sql += 'insert into `' + table + '` ';
+                sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
+                sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.days + '", "' + data.priceEstimated + '", "' + data.priceFinal + '", "' + data.dateAdded + '", "' + data.dateEstimated + '", "' + data.description + '")';
+
+                // @todo use knex (http://knexjs.org/#Builder-insert)
+                connection.query(sql, function(err, newItem) {
+                    if (err) { return res.send(503, { error: 'Database error'}); }
+
+                    getById(newItem.insertId, userLogged.id, function(err, docs) {
+                        if (err) { return res.send(503, { error: 'Database error'}); }
+                        if (!docs) { return res.send(410, { error: 'Record not found'}); }
+
+                        res.send(201, docs[0]);
+                    });
+                });
+            }
+
 
         },
 

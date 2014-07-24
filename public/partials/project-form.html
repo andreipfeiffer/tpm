@@ -15,9 +15,19 @@
                 <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" required>
             </div>
             <div class="col-sm-4">
-                <select ng-model="project.idClient" ng-options="client.id as client.name for client in clientsList" class="form-control input-lg">
-                    <option value="">No client, Personal project</option>
-                </select>
+                <div class="input-group" ng-if="showQuickClient">
+                    <input type="text" ng-model="project.newClientName" ng-if="isNewClient" ng-show="isNewClient" class="form-control" placeholder="New client name">
+                    <clients-select></clients-select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="toggleClientSelect()">
+                            <span class="glyphicon glyphicon-th-large" ng-show="isNewClient"></span>
+                            <span class="glyphicon glyphicon-plus" ng-hide="isNewClient"></span>
+                        </button>
+                    </span>
+                </div>
+                <span class="help-block" ng-if="showQuickClient">Add a new client or set an existing one.</span>
+
+                <clients-select ng-if="!showQuickClient"></clients-select>
             </div>
         </div>
 

@@ -80,12 +80,15 @@
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
                 $scope.statusList = TPM.projectsStatusList;
+                $scope.showQuickClient = true;
+                $scope.isNewClient = true;
                 $scope.isLoading = false;
 
                 // project model
                 $scope.project = {
                     name: '',
                     idClient: 0,
+                    newClientName: '',
                     priceEstimated: 0,
                     priceFinal: 0,
                     days: 0,
@@ -116,6 +119,10 @@
                     $event.stopPropagation();
 
                     $scope.isDatePickerOpened = true;
+                };
+
+                $scope.toggleClientSelect = function() {
+                    $scope.isNewClient = !$scope.isNewClient;
                 };
 
             }
