@@ -15,7 +15,6 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 
 ## To-dos
 
-* Quick client add from from projects
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Dashboard, with color coding depending on "urgency"
 * Projects "finished" but not "payed", that passed X days
