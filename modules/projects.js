@@ -60,20 +60,8 @@ module.exports = function(connection) {
             var data = req.body,
                 userLogged = req.user;
 
-            if ( data.newClientName.length ) {
-                // insert new client first, to get the ID
-                connection.query('insert into `clients` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.newClientName + '")', function(err, newItem) {
-                    if (err) { return res.send(503, { error: 'Database error'}); }
-
-                    data.idClient = newItem.insertId;
-                    addNewProject();
-                });
-            } else {
-                addNewProject();
-            }
-
             function addNewProject() {
-                var sql = ''
+                var sql = '';
 
                 sql += 'insert into `' + table + '` ';
                 sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
@@ -92,6 +80,17 @@ module.exports = function(connection) {
                 });
             }
 
+            if ( data.newClientName.length ) {
+                // insert new client first, to get the ID
+                connection.query('insert into `clients` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.newClientName + '")', function(err, newItem) {
+                    if (err) { return res.send(503, { error: 'Database error'}); }
+
+                    data.idClient = newItem.insertId;
+                    addNewProject();
+                });
+            } else {
+                addNewProject();
+            }
 
         },
 
