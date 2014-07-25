@@ -85,6 +85,14 @@
                 expect(scope.isDatePickerOpened).toBeTruthy();
             });
 
+            it('should toggle client select', function() {
+                $httpBackend.flush();
+
+                expect(scope.isNewClient).toBeTruthy();
+                scope.toggleClientSelect();
+                expect(scope.isNewClient).toBeFalsy();
+            });
+
         });
 
 
