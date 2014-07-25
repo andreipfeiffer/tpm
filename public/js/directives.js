@@ -2,7 +2,7 @@
 
     'use strict';
 
-    TPM.directive('clientsSelect', function() {
+    TPM.directive('clientSelect', function() {
         return {
             restrict: 'E',
             // require: '^ngModel',
