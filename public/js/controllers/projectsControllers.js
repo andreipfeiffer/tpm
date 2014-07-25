@@ -110,7 +110,7 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.save($scope.project).$promise.then(function() {
-                        ModalAlert.open('/projects');
+                        $scope.modal = ModalAlert.open('/projects');
                     });
                 };
 

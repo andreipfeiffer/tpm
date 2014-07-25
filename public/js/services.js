@@ -42,6 +42,7 @@
                     // dismiss callback
                     $location.path( location );
                 });
+                return modalInstance;
             };
         })
 
