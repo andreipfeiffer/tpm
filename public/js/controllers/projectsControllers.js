@@ -19,6 +19,9 @@
             'ClientsService',
             function($scope, $q, Projects, Clients) {
 
+                $scope.filterStatus = '';
+                $scope.filterStatusOptions = TPM.projectsStatusList;
+
                 $q.all([
                     Projects.query().$promise,
                     Clients.query().$promise
@@ -53,6 +56,9 @@
                     $scope.projectsList.splice(index, 1);
                 };
 
+                $scope.setFilterStatus = function(filter) {
+                    $scope.filterStatus = filter;
+                };
             }
         ])
 

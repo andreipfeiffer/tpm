@@ -48,6 +48,13 @@
                 expect(scope.projectsList.length).toEqual( TPM.mocks.projectsList.length - 1 );
             });
 
+            it('should set the status filter', function() {
+                $httpBackend.flush();
+
+                scope.setFilterStatus('random filter');
+                expect(scope.filterStatus).toEqual('random filter');
+            });
+
         });
 
 

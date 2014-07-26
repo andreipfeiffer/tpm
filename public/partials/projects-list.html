@@ -9,6 +9,21 @@
     <br>
 
     <section>
+
+        <form>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm"
+                    ng-class="{active: filterStatus == ''}"
+                    ng-click="setFilterStatus('')">All active projects</button>
+                <button type="button" class="btn btn-default btn-sm"
+                    ng-repeat="status in filterStatusOptions"
+                    ng-class="{active: filterStatus == status}"
+                    ng-click="setFilterStatus(status)">{{status}}</button>
+            </div>
+        </form>
+
+        <br>
+
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -19,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="project in projectsList | orderBy:'-projectName'">
+                <tr ng-repeat="project in projectsList | orderBy:'-projectName' | filter: filterStatus">
                     <td>
                         <b>{{project.name}}</b>
                     </td>
