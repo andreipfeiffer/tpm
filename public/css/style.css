@@ -1,5 +1,9 @@
 body {
-    padding-top: 70px;
+	padding-top: 70px;
+}
+
+.app-footer {
+	margin: 5em 0 2em 0;
 }
 
 .navbar-fixed-top .navbar-right:last-child {
