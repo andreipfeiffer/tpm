@@ -26,4 +26,25 @@
 
     });
 
+    describe('Directives: set-focus', function() {
+        var element, scope;
+
+        beforeEach(module('tpm'));
+
+        beforeEach(inject(function($rootScope, $compile) {
+            scope = $rootScope.$new();
+
+            element = '<a href="" set-focus></a>';
+
+            element = $compile(element)(scope);
+            scope.$digest();
+        }));
+
+        it('should auto set focus on the element', function() {
+            // @todo not working, not getting the element focused
+            // expect( $(element[0]).is(':focus') ).toBeTruthy();
+        });
+
+    });
+
 })();

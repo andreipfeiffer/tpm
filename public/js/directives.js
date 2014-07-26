@@ -14,11 +14,17 @@
         return {
             restrict: 'A',
             link: function(scope, element){
-                // don't exactly understand why we need this timeout
-                // maybe because of the animation of the modal
-                setTimeout( function() {
-                    element[0].focus();
-                }, 50);
+                var $elem = $(element[0]);
+
+                // attempt to set focus
+                $elem.focus();
+
+                // need this second attempt for modals
+                if ( !$elem.is(':focus') ) {
+                    setTimeout( function() {
+                        $elem.focus();
+                    }, 50);
+                }
 
             }
         };
