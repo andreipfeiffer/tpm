@@ -21,6 +21,7 @@ module.exports = function(config) {
             '../bower_components/angular-resource/angular-resource.min.js',
             '../bower_components/angular-bootstrap/ui-bootstrap.min.js',
             '../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            '../bower_components/moment/min/moment.min.js',
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
