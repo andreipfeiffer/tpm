@@ -2,6 +2,8 @@
 
 Personal app that uses the MEAN stack concept (need to switch from MySQL to Mongo) for educational purposes.
 
+https://travis-ci.org/andreipfeiffer/tpm.svg?branch=master
+
 ## Achieved Goals
 
 * RESTful API
