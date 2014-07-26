@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-default btn-sm"
                     ng-class="{active: filterStatus == ''}"
                     ng-click="setFilterStatus('')">All projects</button>
-                <button type="button" class="btn btn-default btn-sm"
+                <button type="button" class="btn btn-default btn-sm text-capitalize"
                     ng-repeat="status in filterStatusOptions"
                     ng-class="{active: filterStatus == status}"
                     ng-click="setFilterStatus(status)">{{status}}</button>
@@ -30,16 +30,18 @@
                     <th width="50%" class="text-uppercase">Project name</th>
                     <th class="text-uppercase">Client</th>
                     <th class="text-uppercase">Status</th>
+                    <th class="text-uppercase">Deadline</th>
                     <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="project in projectsList | orderBy:'-projectName' | filter: filterStatus">
+                <tr ng-repeat="project in projectsList | orderBy:'remainingDays' | filter: filterStatus">
                     <td>
                         <b>{{project.name}}</b>
                     </td>
                     <td>{{project.clientName}}</td>
                     <td class="text-capitalize">{{project.status}}</td>
+                    <td>{{project.remainingText}}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#projects/{{project.id}}" class="btn btn-default btn-sm">
@@ -57,7 +59,7 @@
             </tbody>
         </table>
 
-        <p class="alert alert-warning text-center hide" ng-show="!(projectsList | filter: filterStatus).length">The are no Projects to display</p>
+        <p class="alert alert-warning text-center" ng-show="!(projectsList | filter: filterStatus).length">The are no Projects to display</p>
     </section>
 
 </section>

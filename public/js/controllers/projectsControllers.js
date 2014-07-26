@@ -30,7 +30,7 @@
                     $scope.projectsList = data[0];
                     $scope.clientsList = data[1];
 
-                    setClientNames();
+                    initProjectsList();
                 });
 
                 function getClientById(id) {
@@ -41,13 +41,23 @@
                     return filtered[0];
                 }
 
-                function setClientNames() {
+                function initProjectsList() {
                     angular.forEach( $scope.projectsList, function(project) {
+
+                        // set clients name
                         if ( !project.idClient ) {
                             project.clientName = '-';
                         } else {
                             project.clientName = getClientById( project.idClient ).name;
                         }
+
+                        // set remaining time
+                        var today = moment(),
+                            deadline = moment(project.dateEstimated),
+                            timeLeft = deadline.diff(today);
+
+                        project.remainingDays = moment.duration(timeLeft, 'ms').asDays();
+                        project.remainingText = moment.duration(timeLeft, 'ms').humanize(true);
                     });
                 }
 

@@ -24,6 +24,7 @@
     "angular-mocks": "~1.2.19",
     "angular-route": "~1.2.19",
     "angular-resource": "~1.2.19",
-    "angular-bootstrap": "0.11.0"
+    "angular-bootstrap": "0.11.0",
+    "moment": "2.7.0"
   }
 }
