@@ -14,6 +14,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 * Client e2e testing, using Protractor
 * Bower components management
 * Code linting
+* Travis-CI integration
 
 ## To-dos
 
