@@ -2,7 +2,7 @@
 
 Personal app that uses the MEAN stack concept (need to switch from MySQL to Mongo) for educational purposes.
 
-https://travis-ci.org/andreipfeiffer/tpm.svg?branch=master
+[![Build Status](https://travis-ci.org/andreipfeiffer/tpm.svg?branch=master)](https://travis-ci.org/andreipfeiffer/tpm)
 
 ## Achieved Goals
 
