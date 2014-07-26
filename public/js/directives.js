@@ -10,6 +10,20 @@
         };
     });
 
+    TPM.directive('setFocus', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element){
+                // don't exactly understand why we need this timeout
+                // maybe because of the animation of the modal
+                setTimeout( function() {
+                    element[0].focus();
+                }, 50);
+
+            }
+        };
+    });
+
 }());
 
 
