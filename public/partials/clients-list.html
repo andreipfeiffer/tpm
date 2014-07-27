@@ -8,7 +8,7 @@
                 ng-show="!isFormNewDisplayed">Got a New Client?</button>
 
             <div class="input-group pull-right" ng-show="isFormNewDisplayed">
-                <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name">
+                <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name" required>
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-disable="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
                     <button type="submit" class="btn btn-primary" ng-disable="isFormNewLoading">Add Client</button>
@@ -24,15 +24,15 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Client name</th>
-                    <th>Nr. Projects</th>
-                    <th>Actions</th>
+                    <th class="text-uppercase">Client name</th>
+                    <th width="160" class="text-uppercase text-center">Nr. Projects</th>
+                    <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="client in clientsList | orderBy:'name'">
                     <td>{{client.name}}</td>
-                    <td>{{client.nrProjects}}</td>
+                    <td class="text-center">{{client.nrProjects}}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#clients/{{client.id}}" class="btn btn-default btn-sm">
