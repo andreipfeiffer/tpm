@@ -8,7 +8,7 @@
                 ng-show="!isFormNewDisplayed">Got a New Client?</button>
 
             <div class="input-group pull-right" ng-show="isFormNewDisplayed">
-                <input type="text" class="form-control" ng-model="newClient.name" placeholder="Client name">
+                <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-disable="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
                     <button type="submit" class="btn btn-primary" ng-disable="isFormNewLoading">Add Client</button>

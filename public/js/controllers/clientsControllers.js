@@ -31,6 +31,9 @@
 
                 $scope.toggleNewFormDisplay = function() {
                     $scope.isFormNewDisplayed = !$scope.isFormNewDisplayed;
+                    setTimeout(function() {
+                        angular.element('#new-client-name').focus();
+                    }, 10);
                 };
 
                 $scope.addNewClient = function() {
