@@ -34,20 +34,24 @@
             });
 
             it('should add a new client', function() {
-                var nr = TPM.mocks.clientsList.length,
-                    name = 'New client';
-
                 $httpBackend.flush();
 
                 scope.toggleNewFormDisplay();
-                scope.newClient.name = name;
+                scope.newClient.name = 'New client';
 
                 $httpBackend.expectPOST(TPM.apiUrl + 'clients').respond(201);
                 scope.addNewClient();
                 $httpBackend.flush();
 
-                expect(scope.clientsList.length).toBe( nr + 1 );
+                expect(scope.clientsList.length).toBe( TPM.mocks.clientsList.length + 1 );
                 expect(scope.newClient.name).toBe('');
+            });
+
+            it('should delete a client', function() {
+                $httpBackend.flush();
+
+                scope.deleteClient( TPM.mocks.clientsList[0].id );
+                expect(scope.clientsList.length).toEqual( TPM.mocks.clientsList.length - 1 );
             });
 
         });

@@ -17,6 +17,18 @@
 
                 $scope.clientsList = Clients.query();
 
+                function getClientIndex(id) {
+                    var index;
+
+                    $scope.clientsList.forEach(function(client, idx) {
+                        if (client.id === id) {
+                            index = idx;
+                        }
+                    });
+
+                    return index;
+                }
+
                 $scope.toggleNewFormDisplay = function() {
                     $scope.isFormNewDisplayed = !$scope.isFormNewDisplayed;
                 };
@@ -28,6 +40,11 @@
                         $scope.newClient.name = '';
                         $scope.clientsList.push(result);
                     });
+                };
+
+                $scope.deleteClient = function(id) {
+                    Clients.delete({ id: id });
+                    $scope.clientsList.splice(getClientIndex(id), 1);
                 };
             }
         ]);
