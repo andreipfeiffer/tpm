@@ -31,7 +31,10 @@
             </thead>
             <tbody>
                 <tr ng-repeat="client in clientsList | orderBy:'name'">
-                    <td>{{client.name}}</td>
+                    <td ng-dblclick="openEditDialog(client.id)">
+                        <strong>{{client.name}}</strong>
+                        <p ng-show="client.description.length">{{client.description}}</p>
+                    </td>
                     <td class="text-center">{{client.nrProjects}}</td>
                     <td>
                         <div class="btn-group">
