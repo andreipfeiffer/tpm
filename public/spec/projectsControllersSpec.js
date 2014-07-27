@@ -44,7 +44,7 @@
             it('should delete a project', function() {
                 $httpBackend.flush();
 
-                scope.deleteProject(0);
+                scope.deleteProject( TPM.mocks.projectsList[0].id );
                 expect(scope.projectsList.length).toEqual( TPM.mocks.projectsList.length - 1 );
             });
 
