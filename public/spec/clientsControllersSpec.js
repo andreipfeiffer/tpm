@@ -12,6 +12,7 @@
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.whenGET(/partials\//).respond(200);
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ClientsListController', {$scope: scope});
@@ -45,6 +46,23 @@
 
                 expect(scope.clientsList.length).toBe( TPM.mocks.clientsList.length + 1 );
                 expect(scope.newClient.name).toBe('');
+            });
+
+            it('should edit a client', function() {
+                var client = TPM.mocks.clientsList[0];
+                $httpBackend.flush();
+
+                // called just for coverage
+                var modal = scope.openEditDialog( client.id );
+
+                var newClientData = angular.extend( {}, client );
+                newClientData.name = 'Edited client name';
+
+                $httpBackend.expectPUT(TPM.apiUrl + 'clients/' + client.id).respond(200);
+                scope.editClient( newClientData );
+                $httpBackend.flush();
+
+                expect(scope.clientsList[0]).toEqualDeep( newClientData );
             });
 
             it('should delete a client', function() {

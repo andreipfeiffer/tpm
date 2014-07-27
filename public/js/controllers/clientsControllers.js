@@ -50,12 +50,10 @@
 
                     $scope.client = angular.extend({}, client);
 
-                    $scope.submit = function () {
-                        $modalInstance.close($scope.client);
-                    };
-                    $scope.cancel = function () {
-                        $modalInstance.dismiss('cancel');
-                    };
+                    // method called directly from template
+                    // $scope.submit = function () {
+                    //     $modalInstance.close($scope.client);
+                    // };
                 };
 
                 $scope.openEditDialog = function(id) {
@@ -79,6 +77,8 @@
                     modalInstance.result.then(function (client) {
                         $scope.editClient(client);
                     });
+
+                    return modalInstance;
                 };
 
                 $scope.editClient = function(client) {
