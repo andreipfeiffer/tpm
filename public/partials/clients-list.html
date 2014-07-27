@@ -10,8 +10,8 @@
             <div class="input-group pull-right" ng-show="isFormNewDisplayed">
                 <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name" required>
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-disable="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" ng-disable="isFormNewLoading">Add Client</button>
+                    <button type="button" class="btn btn-default" ng-disabled="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isFormNewLoading">Add</button>
                 </div>
             </div>
         </form>
@@ -26,7 +26,7 @@
                 <tr>
                     <th class="text-uppercase">Client name</th>
                     <th width="160" class="text-uppercase text-center">Nr. Projects</th>
-                    <th width="120" class="text-uppercase text-center">Actions</th>
+                    <th width="90" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,12 +35,9 @@
                     <td class="text-center">{{client.nrProjects}}</td>
                     <td>
                         <div class="btn-group">
-                            <a href="#clients/{{client.id}}" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-list-alt"></span>
-                            </a>
-                            <a href="#clients/{{client.id}}/edit" class="btn btn-default btn-sm">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="openEditDialog(client.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>
-                            </a>
+                            </button>
                             <button type="button" class="btn btn-default btn-sm" ng-click="deleteClient(client.id)">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
