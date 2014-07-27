@@ -5,7 +5,12 @@ module.exports = function(connection) {
     var table = 'clients';
 
     var getById = function(id, idUser, callback) {
-        connection.query('select * from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '"', function(err, docs) {
+        var qClients, qProjects;
+
+        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
+        qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '"';
+
+        connection.query(qClients, function(err, docs) {
             callback(err, docs);
         });
     };
@@ -17,7 +22,7 @@ module.exports = function(connection) {
                 qProjects;
 
             qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
-            qClients = 'select `' + table + '`.*, '+qProjects+' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"';
+            qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"';
 
             connection.query(qClients, function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
@@ -43,7 +48,7 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             // @todo handle all update variations
-            connection.query('update `' + table + '` set `name`="' + req.body.client.name + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+            connection.query('update `' + table + '` set `name`="' + req.body.name + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
@@ -51,7 +56,7 @@ module.exports = function(connection) {
         },
 
         add: function(req, res) {
-            var data = req.body.client,
+            var data = req.body,
                 userLogged = req.user;
 
             connection.query('insert into `' + table + '` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.name + '")', function(err, newItem) {

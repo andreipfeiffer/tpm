@@ -1,9 +1,24 @@
 <section>
+    <header class="clearfix">
+        <h1 class="pull-left">Clients</h1>
+        <br>
+        <form class="pull-right col-sm-4" ng-submit="addNewClient()">
+            <button type="button" class="btn btn-success pull-right"
+                ng-click="toggleNewFormDisplay()"
+                ng-show="!isFormNewDisplayed">Got a New Client?</button>
 
-    <header>
-        <h1>Clients</h1>
-        <a href="#clients/new">New client?</a>
+            <div class="input-group pull-right" ng-show="isFormNewDisplayed">
+                <input type="text" class="form-control" ng-model="newClient.name" placeholder="Client name">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-disable="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" ng-disable="isFormNewLoading">Add Client</button>
+                </div>
+            </div>
+        </form>
     </header>
+
+    <hr>
+    <br>
 
     <section>
         <table class="table table-hover">
