@@ -41,6 +41,18 @@
                     return filtered[0];
                 }
 
+                function getProjectIndex(id) {
+                    var index;
+
+                    $scope.projectsList.forEach(function(project, idx) {
+                        if (project.id === id) {
+                            index = idx;
+                        }
+                    });
+
+                    return index;
+                }
+
                 function initProjectsList() {
                     angular.forEach( $scope.projectsList, function(project) {
 
@@ -61,9 +73,9 @@
                     });
                 }
 
-                $scope.deleteProject = function(index) {
-                    $scope.projectsList[index].$delete();
-                    $scope.projectsList.splice(index, 1);
+                $scope.deleteProject = function(id) {
+                    Projects.delete({ id: id });
+                    $scope.projectsList.splice(getProjectIndex(id), 1);
                 };
 
                 $scope.setFilterStatus = function(filter) {
