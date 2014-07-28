@@ -28,8 +28,7 @@ module.exports = function(grunt) {
         jshint: {
             files: [
                 '*.js',
-                'modules/*.js',
-                'test/*.js',
+                'server/**/*.js',
                 'public/js/**/*.js'
             ],
             options: {
@@ -59,13 +58,13 @@ module.exports = function(grunt) {
                 reporter: 'spec',
                 ui: 'tdd'
             },
-            all: ['test/*Test.js']
+            all: ['server/test/*Test.js']
         },
 
-        watch: {
-            files: ['src/*.js', 'spec/*.js', 'css/*.css'],
-            tasks: ['jshint', 'csslint'],
-        },
+        // watch: {
+        //     files: ['src/*.js', 'spec/*.js', 'css/*.css'],
+        //     tasks: ['jshint', 'csslint'],
+        // },
     });
 
     grunt.registerTask('default', [

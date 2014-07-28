@@ -4,7 +4,7 @@
 
 require('should');
 
-var app = require('../server.js'),
+var app = require('../../server.js'),
     request = require('supertest'),
     port = 3030,
     url  = 'http://localhost:' + port;
