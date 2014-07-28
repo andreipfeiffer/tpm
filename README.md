@@ -37,3 +37,6 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 * Offline availability
 * Mobile optimizations
 * Build and optimize resources
+* Create new accounts
+* Recover password
+* Close account
