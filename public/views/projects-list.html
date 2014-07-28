@@ -11,14 +11,24 @@
     <section>
 
         <form>
+
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm"
                     ng-class="{active: filterStatus == ''}"
-                    ng-click="setFilterStatus('')">All projects</button>
+                    ng-click="setFilterStatus('')">All active projects</button>
                 <button type="button" class="btn btn-default btn-sm text-capitalize"
-                    ng-repeat="status in filterStatusOptions"
+                    ng-repeat="status in filterStatusOptions | limitTo:2"
                     ng-class="{active: filterStatus == status}"
                     ng-click="setFilterStatus(status)">{{status}}</button>
+            </div>
+
+            &nbsp;&nbsp;
+
+            <div class="btn-group">
+                <a href="#projects/list/{{filterStatusOptions[2]}}" class="btn btn-default btn-sm text-capitalize"
+                    ng-class="{active: filterStatus == filterStatusOptions[2]}">{{filterStatusOptions[2]}}</a>
+                <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
+                    ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a>
             </div>
         </form>
 

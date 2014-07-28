@@ -15,12 +15,15 @@
         .controller('ProjectsListController', [
             '$scope',
             '$q',
+            '$routeParams',
             'ProjectsService',
             'ClientsService',
-            function($scope, $q, Projects, Clients) {
+            function($scope, $q, $routeParams, Projects, Clients) {
 
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.projectsStatusList;
+
+console.log($routeParams.status);
 
                 $q.all([
                     Projects.query().$promise,
