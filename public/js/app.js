@@ -13,6 +13,7 @@ var TPM = TPM || {};
 
         'TPM.Services',
         'TPM.Interceptors',
+        'TPM.Filters',
 
         'ui.bootstrap'
     ]);

@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="project in projectsList | orderBy:'remainingDays' | filter: filterStatus">
+                <tr ng-repeat="project in projectsList | orderBy:'remainingDays' | filterByProjectStatus:filterStatus">
                     <td>
                         <b>{{project.name}}</b>
                     </td>
