@@ -34,7 +34,7 @@
 
             this.open = function (location) {
                 modalInstance = $modal.open({
-                    templateUrl: 'partials/modal-alert.html'
+                    templateUrl: 'views/modal-alert.html'
                 });
                 modalInstance.result.then(function () {
                     // close callback

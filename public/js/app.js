@@ -22,41 +22,41 @@ var TPM = TPM || {};
 
         // auth
         '/login': {
-            templateUrl: 'partials/login.html',
+            templateUrl: 'views/login.html',
             controller: 'LoginController',
             requireLogin: false
         },
         '/logout': {
-            templateUrl: 'partials/logout.html',
+            templateUrl: 'views/logout.html',
             controller: 'LogoutController',
             requireLogin: true
         },
 
         // projects
         '/projects': {
-            templateUrl: 'partials/projects-list.html',
+            templateUrl: 'views/projects-list.html',
             controller: 'ProjectsListController',
             requireLogin: true
         },
         '/projects/new': {
-            templateUrl: 'partials/project-form.html',
+            templateUrl: 'views/project-form.html',
             controller: 'ProjectsNewController',
             requireLogin: true
         },
         '/projects/:id': {
-            templateUrl: 'partials/project.html',
+            templateUrl: 'views/project.html',
             controller: 'ProjectsViewController',
             requireLogin: true
         },
         '/projects/:id/edit': {
-            templateUrl: 'partials/project-form.html',
+            templateUrl: 'views/project-form.html',
             controller: 'ProjectsEditController',
             requireLogin: true
         },
 
         // clients
         '/clients': {
-            templateUrl: 'partials/clients-list.html',
+            templateUrl: 'views/clients-list.html',
             controller: 'ClientsListController',
             requireLogin: true
         }

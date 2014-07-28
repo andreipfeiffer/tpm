@@ -12,7 +12,7 @@
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
-                $httpBackend.whenGET(/partials\//).respond(200);
+                $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ClientsListController', {$scope: scope});

@@ -58,7 +58,7 @@
 
                 $scope.openEditDialog = function(id) {
                     var modalInstance = $modal.open({
-                        templateUrl: 'partials/clients-edit-modal.html',
+                        templateUrl: 'views/clients-edit-modal.html',
                         controller: ModalInstanceCtrl,
                         resolve: {
                             client: function () {
