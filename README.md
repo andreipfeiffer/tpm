@@ -18,8 +18,9 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 
 ## Short term To-dos
 
+* Delete confirmation
 * Notify if work days + current date = deadline (-2, -5, etc)
-* Dashboard, with color coding depending on "urgency"
+* Display "urgent" projects number + filtering
 * Log status change
 * Projects "finished" but not "payed", that passed X days
 * Check for duplicate names on server
