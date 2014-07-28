@@ -1,11 +1,40 @@
 <section>
 
-    <header>
-        <h1>Project Details</h1>
-        <a href="#projects">Back</a>
+    <header class="clearfix row">
+        <h1 class="pull-left col-sm-8">{{project.name}}</h1>
+        <br>
+        <div class="pull-right col-sm-4">
+            <a href="#projects" class="btn btn-default pull-right">Back to listing</a>
+        </div>
     </header>
 
-    <span>id: {{project.id}}</span>
-    <p>name: {{project.name}}</p>
+    <hr>
+    <br>
+
+    <blockquote>
+        <p class="nl2br">{{project.description}}</p>
+    </blockquote>
+
+    <br>
+
+    <dl class="dl-horizontal">
+        <dt>Status:</dt>
+        <dd>{{project.status}}</dd>
+
+        <dt>Client:</dt>
+        <dd>{{project.clientName}}</dd>
+
+        <dt>Work days:</dt>
+        <dd>{{project.days}}</dd>
+
+        <dt>Deadline:</dt>
+        <dd>{{project.remainingText}}</dd>
+
+        <dt>Estimated price:</dt>
+        <dd>{{project.priceEstimated}}</dd>
+
+        <dt>Final price:</dt>
+        <dd>{{project.priceEstimated}}</dd>
+    </dl>
 
 </section>

@@ -43,3 +43,7 @@ body {
 .table > tbody > tr > td {
 	vertical-align: middle;
 }
+
+.nl2br {
+	white-space: pre;
+}
