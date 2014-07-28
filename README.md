@@ -16,7 +16,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 * Code linting
 * Travis-CI integration
 
-## To-dos
+## Short term To-dos
 
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Dashboard, with color coding depending on "urgency"
@@ -29,6 +29,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 
 * Make it look not-shitty
 * Migrate from MySQL to Mongo using Mongoose
+* Update to express.js 4.0
 * Websockets messaging
 * Full server unit-tests
 * Offline availability
