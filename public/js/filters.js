@@ -13,12 +13,6 @@
 
                 var _status = status.trim();
 
-                // create an array with all active statuses
-                var activeStatusList = [
-                    TPM.projectsStatusList[0],
-                    TPM.projectsStatusList[1]
-                ];
-
                 return arr.filter(function(item) {
                     return (function() {
                         if (_status.length) {
@@ -27,7 +21,7 @@
                         } else {
                             // if we don't pass specific filter
                             // return only the active statuses
-                            return (activeStatusList.indexOf(item.status) > -1);
+                            return (TPM.utils.getActiveStatusList().indexOf(item.status) > -1);
                         }
                     })();
                 });

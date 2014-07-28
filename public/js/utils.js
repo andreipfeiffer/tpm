@@ -13,6 +13,15 @@ TPM.utils = (function() {
 
         isDateFormat: function(str) {
             return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
+        },
+
+        statusList: ['on hold','in progress','finished','payed'],
+
+        getActiveStatusList: function() {
+            return [
+                this.statusList[0],
+                this.statusList[1]
+            ];
         }
     };
 

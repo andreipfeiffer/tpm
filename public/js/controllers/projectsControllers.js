@@ -21,7 +21,7 @@
             function($scope, $q, $routeParams, Projects, Clients) {
 
                 $scope.filterStatus = '';
-                $scope.filterStatusOptions = TPM.projectsStatusList;
+                $scope.filterStatusOptions = TPM.utils.statusList;
 
                 $q.all([
                     Projects.query().$promise,
@@ -109,7 +109,7 @@
                 $scope.dateSettings = dateSettings;
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
-                $scope.statusList = TPM.projectsStatusList;
+                $scope.statusList = TPM.utils.statusList;
                 $scope.showQuickClient = true;
                 $scope.isNewClient = true;
                 $scope.isLoading = false;
@@ -122,7 +122,7 @@
                     priceEstimated: 0,
                     priceFinal: 0,
                     days: 0,
-                    status: TPM.projectsStatusList[0],
+                    status: TPM.utils.statusList[0],
                     dateEstimated: '',
                     dateAdded: '',
                     description: ''
@@ -173,7 +173,7 @@
                 $scope.dateSettings = dateSettings;
                 $scope.selectedDateEstimated = new Date();
                 $scope.isDatePickerOpened = false;
-                $scope.statusList = TPM.projectsStatusList;
+                $scope.statusList = TPM.utils.statusList;
                 $scope.isLoading = false;
 
                 $q.all([

@@ -38,6 +38,28 @@
             });
 
         });
+
+        describe('statusList', function() {
+
+            it('should be an array with all the project statuses', function() {
+                expect( TPM.utils.statusList[0] ).toEqual('on hold');
+                expect( TPM.utils.statusList[1] ).toEqual('in progress');
+                expect( TPM.utils.statusList[2] ).toEqual('finished');
+                expect( TPM.utils.statusList[3] ).toEqual('payed');
+            });
+
+        });
+
+        describe('getActiveStatusList', function() {
+
+            it('should return an array with the active statuses only', function() {
+                var arr = TPM.utils.getActiveStatusList();
+                expect( arr.length ).toBe(2);
+                expect( arr[0] ).toEqual('on hold');
+                expect( arr[1] ).toEqual('in progress');
+            });
+
+        });
     });
 
 })();
