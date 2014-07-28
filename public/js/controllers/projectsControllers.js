@@ -22,6 +22,7 @@
 
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
+                $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
 
                 $q.all([
                     Projects.query().$promise,
@@ -70,7 +71,7 @@
                             deadline = moment(project.dateEstimated).add('hours', 19),
                             timeLeft = deadline.diff(today);
 
-                        project.remainingDays = moment.duration(timeLeft, 'ms').asDays();
+                        project.remainingDays = moment.duration(timeLeft, 'ms').asDays().toFixed(2);
                         project.remainingText = moment.duration(timeLeft, 'ms').humanize(true);
                     });
                 }
@@ -121,7 +122,7 @@
                     newClientName: '',
                     priceEstimated: 0,
                     priceFinal: 0,
-                    days: 0,
+                    days: 1,
                     status: TPM.utils.statusList[0],
                     dateEstimated: '',
                     dateAdded: '',

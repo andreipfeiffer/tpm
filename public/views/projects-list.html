@@ -42,8 +42,8 @@
                 <tr
                     ng-repeat="project in projectsList | orderBy:'remainingDays' | filterByProjectStatus:filterStatus"
                     ng-class="{
-                        danger: project.status && (project.remainingDays < project.days),
-                        warning: (project.remainingDays + 2) < project.days
+                        danger: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < project.days),
+                        warning: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < (project.days + 2))
                     }">
                     <td>
                         <b>{{project.name}}</b>
