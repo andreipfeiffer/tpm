@@ -23,8 +23,6 @@
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.projectsStatusList;
 
-console.log($routeParams.status);
-
                 $q.all([
                     Projects.query().$promise,
                     Clients.query().$promise
