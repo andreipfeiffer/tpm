@@ -22,6 +22,18 @@ TPM.utils = (function() {
                 this.statusList[0],
                 this.statusList[1]
             ];
+        },
+
+        getRemainingTime: function(date) {
+            var today = moment(),
+                // add 19 hours, to set the deadline to 7:00 PM that day
+                deadline = moment(date).add('hours', 19),
+                timeLeft = deadline.diff(today);
+
+            return {
+                days: moment.duration(timeLeft, 'ms').asDays().toFixed(2),
+                text: moment.duration(timeLeft, 'ms').humanize(true)
+            };
         }
     };
 

@@ -59,6 +59,7 @@
                     angular.forEach( $scope.projectsList, function(project) {
 
                         // set clients name
+                        // @todo set on the server !!!
                         if ( !project.idClient ) {
                             project.clientName = '-';
                         } else {
@@ -66,13 +67,9 @@
                         }
 
                         // set remaining time
-                        var today = moment(),
-                            // add 19 hours, to set the deadline to 7:00 PM that day
-                            deadline = moment(project.dateEstimated).add('hours', 19),
-                            timeLeft = deadline.diff(today);
-
-                        project.remainingDays = moment.duration(timeLeft, 'ms').asDays().toFixed(2);
-                        project.remainingText = moment.duration(timeLeft, 'ms').humanize(true);
+                        var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
+                        project.remainingDays = remaining.days;
+                        project.remainingText = remaining.text;
                     });
                 }
 
@@ -92,7 +89,13 @@
             '$routeParams',
             'ProjectsService',
             function($scope, $routeParams, Projects) {
-                $scope.project = Projects.get({ id: $routeParams.id });
+                Projects.get({ id: $routeParams.id }).$promise.then(function(data) {
+                    $scope.project = data;
+                    // set remaining time
+                    var remaining = TPM.utils.getRemainingTime( data.dateEstimated );
+                    $scope.project.remainingDays = remaining.days;
+                    $scope.project.remainingText = remaining.text;
+                });
             }
         ])
 
