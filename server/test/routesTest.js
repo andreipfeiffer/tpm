@@ -78,8 +78,8 @@ describe('Routes', function() {
         });
         it('should login the user with correct credentials', function(done) {
             var body = {
-                username: 'asd',
-                password: 'asdasd'
+                username: 'zxc',
+                password: 'zxczxc'
             };
 
             request(url)
