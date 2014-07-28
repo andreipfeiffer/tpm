@@ -66,7 +66,8 @@
 
                         // set remaining time
                         var today = moment(),
-                            deadline = moment(project.dateEstimated),
+                            // add 19 hours, to set the deadline to 7:00 PM that day
+                            deadline = moment(project.dateEstimated).add('hours', 19),
                             timeLeft = deadline.diff(today);
 
                         project.remainingDays = moment.duration(timeLeft, 'ms').asDays();
