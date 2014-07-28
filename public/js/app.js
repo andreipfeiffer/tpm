@@ -33,7 +33,7 @@ var TPM = TPM || {};
         },
 
         // projects
-        '/projects/list/:status': {
+        '/projects': {
             templateUrl: 'views/projects-list.html',
             controller: 'ProjectsListController',
             requireLogin: true
@@ -52,9 +52,6 @@ var TPM = TPM || {};
             templateUrl: 'views/project-form.html',
             controller: 'ProjectsEditController',
             requireLogin: true
-        },
-        '/projects': {
-            redirectTo: '/projects/list/active'
         },
 
         // clients
