@@ -5,7 +5,7 @@ module.exports = function(connection) {
     var table = 'projects';
 
     var getById = function(id, idUser, callback) {
-        connection.query('select * from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '"', function(err, docs) {
+        connection.query('select * from `' + table + '` where `id`="' + id + '" and `idUser`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
             callback(err, docs);
         });
     };
@@ -13,7 +13,7 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `' + table + '`.* from `' + table + '` WHERE `' + table + '`.idUser="' + userLogged.id + '"', function(err, docs) {
+            connection.query('select `' + table + '`.* from `' + table + '` WHERE `' + table + '`.idUser="' + userLogged.id + '" and `isDeleted`="0"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(docs);
@@ -96,15 +96,21 @@ module.exports = function(connection) {
 
         remove: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user;
+                userLogged = req.user,
+                sql = '';
 
-            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '" and `isDeleted`="0"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 if ( docs.length === 0 ) {
                     return res.send(404, { error: 'id "' + id + '" was not found'});
                 } else {
-                    connection.query('delete from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err) {
+
+                    sql += 'update `' + table + '` set ';
+                    sql += '`isDeleted`= "1" ';
+                    sql += ' where `id`="' + id + '" and `idUser`="' + userLogged.id + '" and `isDeleted`="0"';
+
+                    connection.query(sql, function(err) {
                         if (err) { return res.send(503, { error: 'Database error'}); }
 
                         res.send(204);

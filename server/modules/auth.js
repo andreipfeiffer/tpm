@@ -34,21 +34,21 @@ module.exports = function(connection) {
     };
 
     var findUserById = function(id, callback) {
-        connection.query('select * from `users` where `id`="' + id + '"', function (err, user) {
+        connection.query('select * from `users` where `id`="' + id + '" and `isDeleted`="0"', function (err, user) {
             var result = user ? user[0] : null;
             callback(err, result);
         });
     };
 
     var findUserByUsername = function(username, callback) {
-        connection.query('select * from `users` where `email`="' + username + '"', function (err, user) {
+        connection.query('select * from `users` where `email`="' + username + '" and `isDeleted`="0"', function (err, user) {
             var result = user ? user[0] : null;
             callback(err, result);
         });
     };
 
     var findUserByToken = function(token, callback) {
-        connection.query('select * from `users` where `authToken`="' + token + '"', function (err, user) {
+        connection.query('select * from `users` where `authToken`="' + token + '" and `isDeleted`="0"', function (err, user) {
             var result = user ? user[0] : null;
             callback(err, result);
         });

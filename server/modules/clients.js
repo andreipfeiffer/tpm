@@ -2,13 +2,13 @@ module.exports = function(connection) {
 
     'use strict';
 
-    var table = 'clients';
+    var table = 'clients',
+        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0")';
 
     var getById = function(id, idUser, callback) {
-        var qClients, qProjects;
+        var qClients;
 
-        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
-        qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '"';
+        qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '" and `isDeleted`="0"';
 
         connection.query(qClients, function(err, docs) {
             callback(err, docs);
@@ -18,11 +18,9 @@ module.exports = function(connection) {
     return {
         getAll: function(req, res) {
             var userLogged = req.user,
-                qClients,
-                qProjects;
+                qClients;
 
-            qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id)';
-            qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '"';
+            qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '" and `isDeleted`="0"';
 
             connection.query(qClients, function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
@@ -48,7 +46,7 @@ module.exports = function(connection) {
                 userLogged = req.user;
 
             // @todo handle all update variations
-            connection.query('update `' + table + '` set `name`="' + req.body.name + '", `description`="' + req.body.description + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"', function(err) {
+            connection.query('update `' + table + '` set `name`="' + req.body.name + '", `description`="' + req.body.description + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 res.send(true);
@@ -76,7 +74,7 @@ module.exports = function(connection) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
-            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err, docs) {
+            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '" and `isDeleted`="0"', function(err, docs) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
                 if ( docs.length === 0 ) {
@@ -85,7 +83,7 @@ module.exports = function(connection) {
 
                     // @todo remove projects also
 
-                    connection.query('delete from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '"', function(err) {
+                    connection.query('update `' + table + '` set `isDeleted`="1" where `id`="' + id + '" and `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
                         if (err) { return res.send(503, { error: 'Database error'}); }
 
                         res.send(204);
