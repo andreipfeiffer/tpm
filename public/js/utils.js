@@ -24,17 +24,39 @@ TPM.utils = (function() {
             ];
         },
 
-        getRemainingTime: function(date) {
-            var today = moment(),
-                // date param always starts at 00:00
+        getRemainingTime: function(_deadline) {
+            var result = {},
+                today = moment(),
+                weekendDays = this.getWeekendDays( _deadline ),
+                // deadline always starts at 00:00
                 // so we add 19 hours, to set the deadline to 7:00 PM that day
-                deadline = moment(date).add('hours', 19),
-                timeLeft = deadline.diff(today);
+                deadline = moment(_deadline).add('hours', 19),
+                timeLeft = moment.duration(deadline.diff(today), 'ms');
 
-            return {
-                days: parseFloat(moment.duration(timeLeft, 'ms').asDays().toFixed(2)),
-                text: moment.duration(timeLeft, 'ms').humanize(true)
-            };
+            result.weekendDays = weekendDays;
+            result.textTotal = timeLeft.humanize(true);
+            result.daysWork = timeLeft.subtract(weekendDays, 'days').asDays();
+
+            return result;
+        },
+
+        getWeekendDays: function(deadline) {
+            var nr = 0,
+                dateStart = moment(),
+                dateEnd = moment(deadline);
+
+            if ( dateStart.isAfter(dateEnd, 'day') ) {
+                return nr;
+            }
+
+            while ( !dateStart.isAfter(dateEnd, 'day') ) {
+                if ( dateStart.day() === 6 || dateStart.day() === 0 ) {
+                    nr += 1;
+                }
+                dateStart.add('days', 1);
+            }
+
+            return nr;
         }
     };
 

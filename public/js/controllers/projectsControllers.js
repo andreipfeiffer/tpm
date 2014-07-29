@@ -67,8 +67,9 @@
 
                         // set remaining time
                         var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
-                        project.remainingDays = remaining.days;
-                        project.remainingText = remaining.text;
+                        project.remainingDays = Math.round( remaining.daysWork );
+                        project.remainingText = remaining.textTotal;
+                        project.remainingWeekendDays = remaining.weekendDays;
                     });
 
                     return arr;

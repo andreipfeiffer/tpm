@@ -34,7 +34,7 @@
                     <th width="50%" class="text-uppercase">Project name</th>
                     <th class="text-uppercase">Status</th>
                     <th width="100" class="text-uppercase">Deadline</th>
-                    <th width="80" class="text-uppercase">Days</th>
+                    <th width="160" class="text-uppercase">Work Days</th>
                     <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
@@ -42,8 +42,8 @@
                 <tr
                     ng-repeat="project in projectsList | orderBy:'remainingDays' | filterByProjectStatus:filterStatus"
                     ng-class="{
-                        danger: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < project.days),
-                        warning: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < (project.days + 2))
+                        danger: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= project.days),
+                        warning: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= (project.days + 2))
                     }">
                     <td>
                         <b>{{project.name}}</b><br>
@@ -51,7 +51,7 @@
                     </td>
                     <td class="text-capitalize">{{project.status}}</td>
                     <td>{{project.remainingText}}</td>
-                    <td>{{project.days}}</td>
+                    <td>{{project.remainingDays}} left / {{project.days}} est.</td>
                     <td>
                         <div class="btn-group">
                             <a href="#projects/{{project.id}}" class="btn btn-default btn-sm">
