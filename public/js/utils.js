@@ -40,13 +40,13 @@ TPM.utils = (function() {
             return result;
         },
 
-        getWeekendDays: function(deadline) {
+        getWeekendDays: function(_deadline) {
             var nr = 0,
                 dateStart = moment(),
-                dateEnd = moment(deadline);
+                dateEnd = moment(_deadline);
 
             if ( dateStart.isAfter(dateEnd, 'day') ) {
-                return nr;
+                return -1;
             }
 
             while ( !dateStart.isAfter(dateEnd, 'day') ) {
