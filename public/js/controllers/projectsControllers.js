@@ -29,10 +29,9 @@
                     Clients.query().$promise
                 ]).then(function(data) {
 
-                    $scope.projectsList = data[0];
                     $scope.clientsList = data[1];
+                    $scope.projectsList = initProjectsList( data[0] );
 
-                    initProjectsList();
                 });
 
                 function getClientById(id) {
@@ -55,8 +54,8 @@
                     return index;
                 }
 
-                function initProjectsList() {
-                    angular.forEach( $scope.projectsList, function(project) {
+                function initProjectsList(arr) {
+                    angular.forEach( arr, function(project) {
 
                         // set clients name
                         // @todo set on the server !!!
@@ -68,9 +67,11 @@
 
                         // set remaining time
                         var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
-                        project.remainingDays = remaining.days;
+                        project.remainingDays = parseFloat(remaining.days);
                         project.remainingText = remaining.text;
                     });
+
+                    return arr;
                 }
 
                 $scope.deleteProject = function(id) {
