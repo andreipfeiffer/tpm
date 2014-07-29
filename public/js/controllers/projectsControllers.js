@@ -67,7 +67,7 @@
 
                         // set remaining time
                         var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
-                        project.remainingDays = parseFloat(remaining.days);
+                        project.remainingDays = remaining.days;
                         project.remainingText = remaining.text;
                     });
 
