@@ -27,7 +27,7 @@ module.exports = function(connection) {
 						if (err) {
 							throw err;
 						}
-						if ( docs.length === 0 ) {
+						if ( docs.length === 0 && config.mysql.populate[item] ) {
 							connection.query(config.mysql.populate[item], function (err) {
 								if (err) {
 									throw err;
