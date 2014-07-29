@@ -76,6 +76,23 @@
             });
 
         });
+
+        describe('getRemainingTime', function() {
+
+            // it('should return a property containing the work days excluding weekends', function() {
+                // cannot test this, because it depends on when you run the tests
+            // });
+
+            it('should return a property containing the humanized text of period, including weekends', function() {
+                // if we pass 2 weeks from now, should work everytime
+                var endDate = moment().add(14, 'days').format('YYYY-MM-DD'),
+                    remaining = TPM.utils.getRemainingTime(endDate);
+
+                expect( remaining.textTotal ).toBeDefined();
+                expect( remaining.textTotal ).toEqual('in 14 days');
+            });
+
+        });
     });
 
 })();
