@@ -32,9 +32,9 @@
             <thead>
                 <tr>
                     <th width="50%" class="text-uppercase">Project name</th>
-                    <th class="text-uppercase">Client</th>
                     <th class="text-uppercase">Status</th>
-                    <th class="text-uppercase">Deadline</th>
+                    <th width="100" class="text-uppercase">Deadline</th>
+                    <th width="80" class="text-uppercase">Days</th>
                     <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
@@ -46,11 +46,12 @@
                         warning: (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < (project.days + 2))
                     }">
                     <td>
-                        <b>{{project.name}}</b>
+                        <b>{{project.name}}</b><br>
+                        {{project.clientName}}
                     </td>
-                    <td>{{project.clientName}}</td>
                     <td class="text-capitalize">{{project.status}}</td>
                     <td>{{project.remainingText}}</td>
+                    <td>{{project.days}}</td>
                     <td>
                         <div class="btn-group">
                             <a href="#projects/{{project.id}}" class="btn btn-default btn-sm">
