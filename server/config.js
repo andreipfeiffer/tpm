@@ -18,7 +18,7 @@ config.mysql.populate = {};
 // @todo provide an SQL ALTER file
 config.mysql.structure.users = ''
     + 'CREATE TABLE IF NOT EXISTS `users` ('
-    +     '`id` int(11) NOT NULL AUTO_INCREMENT,'
+    +     '`id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,'
     +     '`email` varchar(255) NOT NULL,'
     +     '`password` varchar(255) NOT NULL,'
     +     '`authToken` varchar(64) NOT NULL,'
@@ -36,8 +36,8 @@ config.mysql.populate.users = ''
 
 config.mysql.structure.clients = ''
     + 'CREATE TABLE IF NOT EXISTS `clients` ('
-    +     '`id` int(11) NOT NULL AUTO_INCREMENT,'
-    +     '`idUser` smallint(6) NOT NULL,'
+    +     '`id` int(10) unsigned NOT NULL AUTO_INCREMENT,'
+    +     '`idUser` smallint(5) unsigned NOT NULL,'
     +     '`name` text NOT NULL,'
     +     '`description` text NOT NULL,'
     +     '`dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
@@ -55,7 +55,7 @@ config.mysql.populate.clients = ''
 
 config.mysql.structure.projects = ''
     + 'CREATE TABLE IF NOT EXISTS `projects` ('
-    +     '`id` int(11) NOT NULL AUTO_INCREMENT,'
+    +     '`id` int(10) unsigned NOT NULL AUTO_INCREMENT,'
     +     '`idUser` smallint(5) unsigned NOT NULL,'
     +     '`idClient` smallint(5) unsigned NOT NULL DEFAULT "0",'
     +     '`name` text NOT NULL,'
@@ -80,5 +80,16 @@ config.mysql.populate.projects = ''
     + ', (2, 1, 0, \'Album foto\', \'in progress\', \'2014-07-23\', \'2014-09-12\')'
     + ', (3, 1, 2, \'Bratari\', \'on hold\', \'2014-07-23\', \'2014-12-31\')'
     + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', \'2014-07-23\', \'2014-12-30\');';
+
+config.mysql.structure.projects_status_log = ''
+    + 'CREATE TABLE IF NOT EXISTS `projects_status_log` ('
+    +     '`idUser` smallint(5) unsigned NOT NULL,'
+    +     '`idProject` int(10) unsigned NOT NULL,'
+    +     '`oldStatus` varchar(24) NOT NULL,'
+    +     '`status` varchar(24) NOT NULL,'
+    +     '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
+    +     'KEY `idUser` (`idUser`),'
+    +     'KEY `idProject` (`idProject`)'
+    + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
 module.exports = config;
