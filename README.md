@@ -19,7 +19,6 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 ## Short term To-dos
 
 * Delete confirmation
-* Exclude weekends from remaining days
 * Set client name for projects from server
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Display "urgent" projects number + filtering
@@ -30,7 +29,6 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 
 ## Future Goals
 
-* Make it look not-shitty
 * Migrate from MySQL to Mongo using Mongoose
 * Update to express.js 4.0
 * Websockets messaging
