@@ -19,6 +19,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 ## Short term To-dos
 
 * Delete confirmation
+* Separate tokens table
 * Set client name for projects from server
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Display "urgent" projects number + filtering
