@@ -25,7 +25,7 @@
                     { status: 'in progress' },
                     { status: 'on hold' },
                     { status: 'finished' },
-                    { status: 'payed' },
+                    { status: 'paid' },
                     { status: 'in progress' },
                     { status: 'on hold' }
                 ];

@@ -45,7 +45,7 @@
                 expect( TPM.utils.statusList[0] ).toEqual('on hold');
                 expect( TPM.utils.statusList[1] ).toEqual('in progress');
                 expect( TPM.utils.statusList[2] ).toEqual('finished');
-                expect( TPM.utils.statusList[3] ).toEqual('payed');
+                expect( TPM.utils.statusList[3] ).toEqual('paid');
             });
 
         });
