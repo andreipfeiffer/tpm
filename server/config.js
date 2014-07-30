@@ -11,7 +11,7 @@ module.exports = (function(){
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'tpm'
+                    database: 'upsidedown_ro_tpm'
                 }
             };
 
