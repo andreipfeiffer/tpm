@@ -10,6 +10,30 @@ module.exports = function(connection) {
         });
     };
 
+    var insertStatusChange = function(params, forced, callback) {
+        var sql = '';
+
+        connection.query('select `status` from `' + table + '` where `id`="' + params.idProject + '" and `idUser`="' + params.idUser + '"', function(err, docs) {
+
+            // make a log entry only if the status has changed
+            if (forced || docs[0].status !== params.status) {
+
+                sql += 'insert into `projects_status_log` ';
+                sql += '(`idUser`, `idProject`, `status`) values ';
+                sql += '( "' + params.idUser + '"';
+                sql += ', "' + params.idProject + '"';
+                sql += ', "' + params.status + '" )';
+
+                connection.query(sql, function(err) {
+                    callback(err);
+                });
+            } else {
+                callback(err);
+            }
+        });
+
+    };
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -35,7 +59,8 @@ module.exports = function(connection) {
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
-                sql = '';
+                sql = '',
+                dataStatusChange = {};
 
             sql += 'update `' + table + '` set ';
             sql += '`name`= "' + req.body.name + '", ';
@@ -49,16 +74,28 @@ module.exports = function(connection) {
             sql += '`description`= "' + req.body.description + '" ';
             sql += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
 
-            connection.query(sql, function(err) {
+            dataStatusChange = {
+                idUser: userLogged.id,
+                idProject: id,
+                status: req.body.status
+            };
+
+            insertStatusChange(dataStatusChange, false, function(err) {
                 if (err) { return res.send(503, { error: 'Database error'}); }
 
-                res.send(true);
+                connection.query(sql, function(err) {
+                    if (err) { return res.send(503, { error: 'Database error'}); }
+
+                    res.send(true);
+                });
             });
+
         },
 
         add: function(req, res) {
             var data = req.body,
-                userLogged = req.user;
+                userLogged = req.user,
+                dataStatusChange = {};
 
             function addNewProject() {
                 var sql = '';
@@ -75,7 +112,17 @@ module.exports = function(connection) {
                         if (err) { return res.send(503, { error: 'Database error'}); }
                         if (!docs) { return res.send(410, { error: 'Record not found'}); }
 
-                        res.send(201, docs[0]);
+                        dataStatusChange = {
+                            idUser: userLogged.id,
+                            idProject: newItem.insertId,
+                            status: data.status
+                        };
+
+                        insertStatusChange(dataStatusChange, true, function(err) {
+                            if (err) { return res.send(503, { error: 'Database error'}); }
+
+                            res.send(201, docs[0]);
+                        });
                     });
                 });
             }

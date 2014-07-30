@@ -79,11 +79,11 @@ schema.structure['projects_status_log'] = ''
     + 'CREATE TABLE IF NOT EXISTS `projects_status_log` ('
     +     '`idUser` smallint(5) unsigned NOT NULL,'
     +     '`idProject` int(10) unsigned NOT NULL,'
-    +     '`oldStatus` varchar(24) NOT NULL,'
     +     '`status` varchar(24) NOT NULL,'
     +     '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
     +     'KEY `idUser` (`idUser`),'
-    +     'KEY `idProject` (`idProject`)'
+    +     'KEY `idProject` (`idProject`),'
+    +     'KEY `status` (`status`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
 module.exports = schema;
