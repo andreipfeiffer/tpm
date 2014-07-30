@@ -31,7 +31,19 @@ var connection = mysql.createConnection({
     password : config.mysql.password
 });
 
-app.use(express.logger('dev'));
+
+// setup middleware based on ENV
+switch (process.env.NODE_ENV) {
+    case 'production':
+        // @todo set a file logger ?!?!
+        break;
+
+    case 'development':
+    default:
+        app.use(express.logger('dev'));
+}
+
+// setup common middleware
 app.use(allowCrossDomain);
 app.use(express.bodyParser());
 // express cookieParser and session needed for passport
