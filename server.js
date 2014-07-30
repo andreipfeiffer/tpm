@@ -6,7 +6,8 @@ var express = require('express'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
-    config  = require('./server/config');
+    config  = require('./server/config'),
+    schema  = require('./server/schema');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -110,7 +111,7 @@ function start(port) {
     console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 }
 
-exports.start = start;
-exports.app = app;
+// exports.start = start;
+// exports.app = app;
 
-start(config.web.port);
+start(config.port);

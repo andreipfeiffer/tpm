@@ -1,4 +1,5 @@
-var config = require('../config');
+var config = require('../config'),
+	schema = require('../schema');
 
 module.exports = function(connection) {
 
@@ -15,10 +16,10 @@ module.exports = function(connection) {
 				throw err;
 			}
 
-			Object.keys(config.mysql.structure).forEach(function(item){
+			Object.keys(schema.structure).forEach(function(item){
 
 				// Update the structure
-				connection.query(config.mysql.structure[item], function (err) {
+				connection.query(schema.structure[item], function (err) {
 					if (err) {
 						throw err;
 					}
@@ -27,8 +28,8 @@ module.exports = function(connection) {
 						if (err) {
 							throw err;
 						}
-						if ( docs.length === 0 && config.mysql.populate[item] ) {
-							connection.query(config.mysql.populate[item], function (err) {
+						if ( docs.length === 0 && schema.populate[item] ) {
+							connection.query(schema.populate[item], function (err) {
 								if (err) {
 									throw err;
 								}
