@@ -22,7 +22,8 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 // Application initialization
-var app = express();
+var app = express(),
+    env = app.settings.env;
 
 var connection = mysql.createConnection({
     host     : config.mysql.host,
@@ -30,15 +31,9 @@ var connection = mysql.createConnection({
     password : config.mysql.password
 });
 
-
 // setup middleware based on ENV
-switch (process.env.NODE_ENV) {
-    case 'production':
-        // @todo set a file logger ?!?!
-        break;
-
-    default:
-        app.use(express.logger('dev'));
+if ('development' === env) {
+    app.use(express.logger({format: 'dev'}));
 }
 
 // setup common middleware
