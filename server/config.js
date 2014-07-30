@@ -1,7 +1,8 @@
-/*jshint laxbreak: true*/
-
 module.exports = (function(){
-    switch(process.env.NODE_ENV) {
+
+    'use strict';
+
+    switch (process.env.NODE_ENV) {
 
         case 'production':
             return {
@@ -13,9 +14,7 @@ module.exports = (function(){
                     database: 'tpm'
                 }
             };
-            break;
 
-        case 'development':
         default:
             return {
                 port: (process.env.PORT || 3000),

@@ -6,8 +6,7 @@ var express = require('express'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
-    config  = require('./server/config'),
-    schema  = require('./server/schema');
+    config  = require('./server/config');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -38,7 +37,6 @@ switch (process.env.NODE_ENV) {
         // @todo set a file logger ?!?!
         break;
 
-    case 'development':
     default:
         app.use(express.logger('dev'));
 }
@@ -123,7 +121,7 @@ function start(port) {
     console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 }
 
-// exports.start = start;
-// exports.app = app;
+exports.start = start;
+exports.app = app;
 
 start(config.port);
