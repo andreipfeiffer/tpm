@@ -81,7 +81,7 @@ config.mysql.populate.projects = ''
     + ', (3, 1, 2, \'Bratari\', \'on hold\', \'2014-07-23\', \'2014-12-31\')'
     + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', \'2014-07-23\', \'2014-12-30\');';
 
-config.mysql.structure.projects_status_log = ''
+config.mysql.structure['projects_status_log'] = ''
     + 'CREATE TABLE IF NOT EXISTS `projects_status_log` ('
     +     '`idUser` smallint(5) unsigned NOT NULL,'
     +     '`idProject` int(10) unsigned NOT NULL,'
