@@ -89,13 +89,13 @@ var TPM = TPM || {};
             });
 
             $http.defaults.headers.common['Authorization'] = SessionService.getAuthToken();
+
+            // @todo make this read-only
+            TPM.apiUrl = ($location.host() === 'localhost') ? 'http://localhost:' + $location.port() + '/' : 'http://tpm.upsidedown.ro/';
+            TPM.settings = {
+                dateFormat: 'yyyy-MM-dd'
+            };
         }
     );
-
-    // @todo make this read-only
-    TPM.apiUrl = 'http://localhost:3000/';
-    TPM.settings = {
-        dateFormat: 'yyyy-MM-dd'
-    };
 
 }());
