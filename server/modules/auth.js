@@ -93,7 +93,7 @@ module.exports = function(connection) {
                 return next(err);
             }
             if (!user) {
-                return res.send(401, { error: 'Bad username or password'});
+                return res.status(401).send({ error: 'Bad username or password'});
             }
 
             req.logIn(user, function(err) {
@@ -109,7 +109,7 @@ module.exports = function(connection) {
 
                 // update token in database
                 connection.query('update `users` set `authToken`="' + newAuthToken + '" where `id`="' + user.id + '"', function () {
-                    res.json(200, loggedData);
+                    res.status(200).json(loggedData);
                 });
 
             });
@@ -118,7 +118,7 @@ module.exports = function(connection) {
 
     var logout = function(req, res) {
         req.logout();
-        return res.send(200);
+        return res.status(200).end();
     };
 
     // NOTE: Need to protect all API calls (other than login/logout) with this check
@@ -132,8 +132,8 @@ module.exports = function(connection) {
         // }
 
         findUserByToken(token, function(err, user) {
-            if (err) { return res.send(401); }
-            if (!user) { return res.send(401); }
+            if (err) { return res.status(401).end(); }
+            if (!user) { return res.status(401).end(); }
 
             // @todo refresh token ?!
 
