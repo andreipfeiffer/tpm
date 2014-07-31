@@ -45,7 +45,6 @@ module.exports = function(connection) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
-            // @todo handle all update variations
             connection.query('update `' + table + '` set `name`="' + req.body.name + '", `description`="' + req.body.description + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
                 if (err) { return res.status(503).send({ error: 'Database error'}); }
 
@@ -80,8 +79,6 @@ module.exports = function(connection) {
                 if ( docs.length === 0 ) {
                     return res.status(404).send({ error: 'id "' + id + '" was not found'});
                 } else {
-
-                    // @todo remove projects also
 
                     connection.query('update `' + table + '` set `isDeleted`="1" where `id`="' + id + '" and `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
                         if (err) { return res.status(503).send({ error: 'Database error'}); }

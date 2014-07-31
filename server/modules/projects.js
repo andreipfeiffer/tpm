@@ -104,7 +104,6 @@ module.exports = function(connection) {
                 sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
                 sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.days + '", "' + data.priceEstimated + '", "' + data.priceFinal + '", "' + data.dateAdded + '", "' + data.dateEstimated + '", "' + data.description + '")';
 
-                // @todo use knex (http://knexjs.org/#Builder-insert)
                 connection.query(sql, function(err, newItem) {
                     if (err) { return res.status(503).send({ error: 'Database error'}); }
 
