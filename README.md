@@ -30,8 +30,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 
 ## Future Goals
 
-* Migrate from MySQL to Mongo using Mongoose
-* Update to express.js 4.0
+* Use knex as SQL builder
 * Websockets messaging
 * Full server unit-tests
 * Offline availability
