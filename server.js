@@ -3,6 +3,10 @@
 'use strict';
 
 var express = require('express'),
+    logger = require('morgan'),
+    bodyParser = require('body-parser'),
+    cookieParser = require('cookie-parser'),
+    session = require('express-session'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
@@ -23,7 +27,7 @@ var allowCrossDomain = function(req, res, next) {
 
 // Application initialization
 var app = express(),
-    env = app.settings.env;
+    env = process.env.NODE_ENV || 'development';
 
 var connection = mysql.createConnection({
     host     : config.mysql.host,
@@ -33,21 +37,24 @@ var connection = mysql.createConnection({
 
 // setup middleware based on ENV
 if ('development' === env) {
-    app.use(express.logger({format: 'dev'}));
+    app.use(logger('dev'));
 }
 
 // setup common middleware
 app.use(allowCrossDomain);
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 // express cookieParser and session needed for passport
-app.use(express.cookieParser());
-app.use(express.session({ secret: 'upsidedown-inseamna-Lia-si-Andrei' }));
+app.use(cookieParser());
+app.use(session({
+    secret: 'upsidedown-inseamna-Lia-si-Andrei' ,
+    saveUninitialized: true,
+    resave: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use(express.csrf());
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
-app.use(app.router);
 
 
 // verify database structure
@@ -113,7 +120,7 @@ app.delete('/clients/:id',
 
 function start(port) {
     app.listen(port);
-    console.log('Express server listening on port %d in %s mode', port, app.settings.env);
+    console.log('Express server listening on port %d in %s mode', port, env);
 }
 
 exports.start = start;

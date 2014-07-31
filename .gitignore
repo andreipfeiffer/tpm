@@ -1,7 +1,7 @@
 node_modules/*
 bower_components/*
 public/coverage/*
-server/config.production.js
+server/config.production*.js
 
 #################
 ## Eclipse
