@@ -23,7 +23,6 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 * Set client name for projects from server
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Display "urgent" projects number + filtering
-* Log status change
 * Projects "finished" but not "payed", that passed X days
 * Check for duplicate names on server
 * Separate 3rd party services & directives (like modals) and exclude them from test coverage
