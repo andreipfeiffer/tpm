@@ -121,15 +121,9 @@ module.exports = function(connection) {
         return res.status(200).end();
     };
 
-    // NOTE: Need to protect all API calls (other than login/logout) with this check
+    // @note: Need to protect all API calls (other than login/logout) with this check
     var ensureAuthenticated = function(req, res, next) {
         var token = req.headers.authorization;
-
-        // @todo TEMPORARY REMOVE AUTH
-        // req.user = {id: 1};
-        // if (1) {
-        //     return next();
-        // }
 
         findUserByToken(token, function(err, user) {
             if (err) { return res.status(401).end(); }
@@ -144,7 +138,6 @@ module.exports = function(connection) {
 
     };
 
-    // publics
     return {
         login: login,
         logout: logout,
