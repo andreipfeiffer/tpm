@@ -10,13 +10,6 @@
         }
     };
 
-    // custom validator, that is used with ui.validator
-    var isValidName = function(value) {
-        var _value = value.trim();
-        if ( _value.length < 2 ) return false;
-        return true;
-    };
-
     angular.module('TPM.ProjectsControllers', [])
 
         .controller('ProjectsListController', [
@@ -144,11 +137,6 @@
                 $scope.clientsList = Clients.query();
 
                 $scope.submitForm = function() {
-
-                    if ( !$scope.projectsForm.$valid ) {
-                        return;
-                    }
-
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
@@ -207,11 +195,6 @@
                 });
 
                 $scope.submitForm = function() {
-
-                    if ( !$scope.projectsForm.$valid ) {
-                        return;
-                    }
-
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format

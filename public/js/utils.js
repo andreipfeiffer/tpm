@@ -57,6 +57,13 @@ TPM.utils = (function() {
             }
 
             return nr;
+        },
+
+        // custom validator, that is used with ui.validator
+        isValidName: function(_value) {
+            var value = String(_value).trim();
+            if ( value.length < 2 ) return false;
+            return true;
         }
     };
 
