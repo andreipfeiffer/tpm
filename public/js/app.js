@@ -15,7 +15,8 @@ var TPM = TPM || {};
         'TPM.Interceptors',
         'TPM.Filters',
 
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ui.validate'
     ]);
 
     TPM.routesList = {

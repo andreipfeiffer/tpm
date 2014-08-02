@@ -8,11 +8,11 @@
     <hr>
     <br>
 
-    <form name="projectsForm" ng-submit="submitForm()">
+    <form name="projectsForm" ng-submit="submitForm()" novalidate>
 
         <div class="form-group row">
             <div class="col-sm-8">
-                <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" required set-focus>
+                <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" ui-validate=" 'validateName($value)' " set-focus>
             </div>
             <div class="col-sm-4">
                 <div class="input-group" ng-if="showQuickClient">
@@ -43,7 +43,13 @@
             <div class="col-sm-3">
                 <label class="control-label" for="projectPriceFinal">Deadline:</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{dateSettings.dateFormat}}" ng-model="selectedDateEstimated" is-open="isDatePickerOpened" datepicker-options="dateSettings.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <input type="text" class="form-control"
+                        ng-model="selectedDateEstimated"
+                        datepicker-popup="{{dateSettings.dateFormat}}"
+                        datepicker-options="dateSettings.dateOptions"
+                        date-disabled="disabled(date, mode)"
+                        is-open="isDatePickerOpened" close-text="Close"
+                    />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -76,10 +82,10 @@
 
         <div class="form-group">
             <label class="control-label" for="projectDescription">Project description:</label>
-            <textarea id="projectDescription" ng-model="project.description" class="form-control"></textarea>
+            <textarea id="projectDescription" ng-model="project.description" class="form-control" rows="5"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary" ng-disabled="isLoading">{{formSubmit}}</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="isLoading || projectsForm.$invalid">{{formSubmit}}</button>
     </form>
 
 </section>

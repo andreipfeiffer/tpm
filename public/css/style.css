@@ -47,3 +47,12 @@ body {
 .nl2br {
 	white-space: pre;
 }
+
+.form-control.ng-invalid.ng-dirty {
+	border-color:#e9322d;
+}
+.form-control.ng-invalid.ng-dirty:focus {
+	-webkit-box-shadow:0 0 6px #f8b9b7;
+	-moz-box-shadow:0 0 6px #f8b9b7;
+	box-shadow:0 0 6px #f8b9b7;
+}
