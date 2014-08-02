@@ -160,7 +160,7 @@
                     $scope.isNewClient = !$scope.isNewClient;
                 };
                 $scope.validateName = function(value) {
-                    return isValidName(value);
+                    return TPM.utils.isValidName(value);
                 };
             }
         ])
@@ -215,7 +215,7 @@
                     $scope.isDatePickerOpened = true;
                 };
                 $scope.validateName = function(value) {
-                    return isValidName(value);
+                    return TPM.utils.isValidName(value);
                 };
 
             }
