@@ -15,8 +15,12 @@
                 $scope.newClient = {
                     name: ''
                 };
+                $scope.isLoading = true;
 
-                $scope.clientsList = Clients.query();
+                Clients.query().$promise.then(function(data) {
+                    $scope.clientsList = data;
+                    $scope.isLoading = false;
+                });
 
                 function getClientIndex(id) {
                     var index;
@@ -43,6 +47,7 @@
                         $scope.isFormNewLoading = false;
                         $scope.newClient.name = '';
                         $scope.clientsList.push(result);
+                        $scope.clientsForm.$setPristine(true);
                     });
                 };
 

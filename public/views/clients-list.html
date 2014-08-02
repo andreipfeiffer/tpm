@@ -2,19 +2,21 @@
     <header class="clearfix row">
         <h1 class="pull-left col-sm-6">Clients</h1>
         <br>
-        <form class="pull-right col-sm-4" ng-submit="addNewClient()">
+        <form name="clientsForm" class="pull-right col-sm-4" ng-submit="addNewClient()" novalidate>
             <button type="button" class="btn btn-success pull-right"
                 ng-click="toggleNewFormDisplay()"
                 ng-show="!isFormNewDisplayed">Got a New Client?</button>
 
             <div class="input-group pull-right" ng-show="isFormNewDisplayed">
-                <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name" required>
+                <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name" ui-validate=" '$value.trim().length >= 3' ">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-disabled="isFormNewLoading" ng-click="toggleNewFormDisplay()">Cancel</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="isFormNewLoading">Add</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="isFormNewLoading || clientsForm.$invalid">Add</button>
                 </div>
             </div>
         </form>
+            <p class="b-loading pull-right col-sm-2" ng-show="isFormNewLoading"></p>
+
     </header>
 
     <hr>
@@ -49,6 +51,9 @@
                 </tr>
             </tbody>
         </table>
+
+        <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsList.length">The are no Clients to display</p>
+        <p class="b-loading center-block" ng-show="isLoading"></p>
 
     </section>
 </section>
