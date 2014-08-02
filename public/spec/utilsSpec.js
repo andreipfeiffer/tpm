@@ -96,16 +96,6 @@
 
         });
 
-        describe('isValidName', function() {
-
-            it('should validate only names with at least 2 letters excluding trailing spaces', function() {
-                expect( TPM.utils.isValidName('') ).toBeFalsy();
-                expect( TPM.utils.isValidName('  ') ).toBeFalsy();
-                expect( TPM.utils.isValidName('  x  ') ).toBeFalsy();
-                expect( TPM.utils.isValidName('  xx  ') ).toBeTruthy();
-            });
-
-        });
     });
 
 })();

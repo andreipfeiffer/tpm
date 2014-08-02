@@ -159,9 +159,6 @@
                 $scope.toggleClientSelect = function() {
                     $scope.isNewClient = !$scope.isNewClient;
                 };
-                $scope.validateName = function(value) {
-                    return TPM.utils.isValidName(value);
-                };
             }
         ])
 
@@ -213,9 +210,6 @@
                     $event.stopPropagation();
 
                     $scope.isDatePickerOpened = true;
-                };
-                $scope.validateName = function(value) {
-                    return TPM.utils.isValidName(value);
                 };
 
             }
