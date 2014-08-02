@@ -23,6 +23,7 @@
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
+                $scope.isLoading = true;
 
                 $q.all([
                     Projects.query().$promise,
@@ -31,6 +32,7 @@
 
                     $scope.clientsList = data[1];
                     $scope.projectsList = initProjectsList( data[0] );
+                    $scope.isLoading = false;
 
                 });
 

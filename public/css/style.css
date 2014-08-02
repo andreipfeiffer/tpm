@@ -56,3 +56,43 @@ body {
 	-moz-box-shadow:0 0 6px #f8b9b7;
 	box-shadow:0 0 6px #f8b9b7;
 }
+
+/* loading spinner */
+.b-loading {
+	margin: 6em auto;
+	font-size: 10px;
+	position: relative;
+	text-indent: -9999em;
+	border-top: 0.5em solid rgba(255, 255, 255, 0.2);
+	border-right: 0.5em solid rgba(255, 255, 255, 0.2);
+	border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
+	border-left: 0.5em solid #5bc0de;
+	-webkit-animation: spinAnimation 0.6s infinite linear;
+	animation: spinAnimation 0.6s infinite linear;
+}
+.b-loading,
+.b-loading:after {
+	border-radius: 50%;
+	width: 4em;
+	height: 4em;
+}
+@-webkit-keyframes spinAnimation {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+	}
+	@keyframes spinAnimation {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
