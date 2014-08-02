@@ -25,6 +25,16 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 
+/*var delay = function(req, res, next) {
+    if ( req.url === '/projects' ) {
+        setTimeout(function() {
+            next();
+        }, 2000);
+    } else {
+        next();
+    }
+};*/
+
 // Application initialization
 var app = express(),
     env = process.env.NODE_ENV || 'development';
@@ -55,6 +65,7 @@ app.use(passport.session());
 // app.use(express.csrf());
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+// app.use(delay);
 
 
 // verify database structure
