@@ -16,7 +16,6 @@
 
                     // Server error
                     if (parseInt(rejection.status) >= 500) {
-                        console.log(rejection);
                         $location.path('/error500');
                     }
 
