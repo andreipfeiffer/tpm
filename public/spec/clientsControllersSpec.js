@@ -16,6 +16,11 @@
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ClientsListController', {$scope: scope});
+
+                // stub the form methods
+                scope.clientsForm = {
+                    $setPristine: function() {}
+                };
             }));
 
 
