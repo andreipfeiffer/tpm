@@ -14,7 +14,6 @@
                 $httpBackend = _$httpBackend_;
                 location = _$location_;
                 Session = _SessionService_;
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(401);
 
                 scope = $rootScope.$new();
                 controller = $controller;
@@ -27,11 +26,22 @@
             it('should redirect logged users if they get a request with the status "401"', function() {
 
                 // load a random controller to trigger a request
+                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(401);
                 controller('ClientsListController', {$scope: scope});
                 $httpBackend.flush();
 
                 expect(location.path()).toEqual('/login');
                 expect(Session.getAuthToken()).not.toEqual( token );
+            });
+
+            it('should redirect requests with the status "5xx"', function() {
+
+                // load a random controller to trigger a request
+                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(500);
+                controller('ClientsListController', {$scope: scope});
+                $httpBackend.flush();
+
+                expect(location.path()).toEqual('/error500');
             });
 
         });

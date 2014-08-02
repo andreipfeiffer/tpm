@@ -64,7 +64,7 @@
         describe('getWeekendDays', function() {
 
             it('should return the number of weekend days between 2 dates', function() {
-                // if the current day is Saturday, then
+                // if the current day is in weekend, the number is higher
                 var expected = ( moment().day() === 6 || moment().day() === 0 ) ? 5 : 4;
                 // if we pass 2 weeks from now, should work everytime
                 var endDate = moment().add(14, 'days').format('YYYY-MM-DD');
