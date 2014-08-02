@@ -48,33 +48,32 @@ body {
 	white-space: pre;
 }
 
-.form-control.ng-invalid.ng-dirty {
+.form-control.ng-invalid.ng-dirty:not(:focus) {
 	border-color:#e9322d;
-}
-.form-control.ng-invalid.ng-dirty:focus {
 	-webkit-box-shadow:0 0 6px #f8b9b7;
 	-moz-box-shadow:0 0 6px #f8b9b7;
 	box-shadow:0 0 6px #f8b9b7;
 }
+/*.form-control.ng-invalid.ng-dirty:focus {
+}*/
 
 /* loading spinner */
 .b-loading {
-	margin: 6em auto;
-	font-size: 10px;
+	/*font-size: 14px;*/
 	position: relative;
 	text-indent: -9999em;
-	border-top: 0.5em solid rgba(255, 255, 255, 0.2);
-	border-right: 0.5em solid rgba(255, 255, 255, 0.2);
-	border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
-	border-left: 0.5em solid #5bc0de;
+	border-top: 5px solid rgba(255, 255, 255, 0.2);
+	border-right: 5px solid rgba(255, 255, 255, 0.2);
+	border-bottom: 5px solid rgba(255, 255, 255, 0.2);
+	border-left: 5px solid #5bc0de;
 	-webkit-animation: spinAnimation 0.6s infinite linear;
 	animation: spinAnimation 0.6s infinite linear;
 }
 .b-loading,
 .b-loading:after {
 	border-radius: 50%;
-	width: 4em;
-	height: 4em;
+	width: 32px;
+	height: 32px;
 }
 @-webkit-keyframes spinAnimation {
 	0% {
