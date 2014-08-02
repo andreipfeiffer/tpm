@@ -27,6 +27,7 @@ Personal app that uses the MEAN stack concept (need to switch from MySQL to Mong
 * Check for duplicate names on server
 * Separate 3rd party services & directives (like modals) and exclude them from test coverage
 * Handle all server errors on client: 4xx (verbosely) and 5xx (generic, silent)
+* Display version in footer
 
 ## Future Goals
 
