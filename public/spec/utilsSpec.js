@@ -64,9 +64,11 @@
         describe('getWeekendDays', function() {
 
             it('should return the number of weekend days between 2 dates', function() {
+                // if the current day is Saturday, then
+                var expected = ( moment().day() === 6 || moment().day() === 0 ) ? 5 : 4;
                 // if we pass 2 weeks from now, should work everytime
                 var endDate = moment().add(14, 'days').format('YYYY-MM-DD');
-                expect( TPM.utils.getWeekendDays(endDate) ).toBe(4);
+                expect( TPM.utils.getWeekendDays(endDate) ).toBe( expected );
             });
 
             it('should return -1 if the end date already passed', function() {
