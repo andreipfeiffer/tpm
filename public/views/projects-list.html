@@ -2,7 +2,7 @@
 
     <header class="clearfix">
         <h1 class="pull-left">Projects list</h1>
-        <br><a href="#projects/new" class="btn btn-success pull-right">Got a New Project?</a>
+        <br><a href="#projects/new" class="btn btn-success pull-right"><span class="hidden-xs">Got a </span>New Project?</a>
     </header>
 
     <hr>
@@ -31,10 +31,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th width="50%" class="text-uppercase">Project name</th>
+                    <th width="50%" class="text-uppercase"><span class="hidden-xs">Project </span>Name</th>
                     <th class="text-uppercase">Status</th>
-                    <th width="100" class="text-uppercase">Deadline</th>
-                    <th width="160" class="text-uppercase">Work Days</th>
+                    <th width="100" class="hidden-xs text-uppercase">Deadline</th>
+                    <th width="160" class="text-uppercase"><span class="hidden-xs">Work</span> Days</th>
                     <th width="120" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
@@ -50,7 +50,7 @@
                         {{project.clientName}}
                     </td>
                     <td class="text-capitalize">{{project.status}}</td>
-                    <td>{{project.remainingText}}</td>
+                    <td class="hidden-xs">{{project.remainingText}}</td>
                     <td>{{project.remainingDays}} left / {{project.days}} est.</td>
                     <td>
                         <div class="btn-group">

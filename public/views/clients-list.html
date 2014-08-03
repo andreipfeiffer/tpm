@@ -5,7 +5,7 @@
         <form name="clientsForm" class="pull-right col-sm-4" ng-submit="addNewClient()" novalidate>
             <button type="button" class="btn btn-success pull-right"
                 ng-click="toggleNewFormDisplay()"
-                ng-show="!isFormNewDisplayed">Got a New Client?</button>
+                ng-show="!isFormNewDisplayed"><span class="hidden-xs">Got a </span>New Client?</button>
 
             <div class="input-group pull-right" ng-show="isFormNewDisplayed">
                 <input id="new-client-name" type="text" class="form-control" ng-model="newClient.name" placeholder="Client name" ui-validate=" '$value.trim().length >= 3' ">
@@ -26,8 +26,8 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="text-uppercase">Client name</th>
-                    <th width="160" class="text-uppercase text-center">Nr. Projects</th>
+                    <th class="text-uppercase"><span class="hidden-xs">Client </span>Name</th>
+                    <th width="160" class="text-uppercase text-center"><span class="hidden-xs">Nr. </span>Projects</th>
                     <th width="90" class="text-uppercase text-center">Actions</th>
                 </tr>
             </thead>
@@ -35,7 +35,7 @@
                 <tr ng-repeat="client in clientsList | orderBy:'name'">
                     <td ng-dblclick="openEditDialog(client.id)">
                         <strong>{{client.name}}</strong>
-                        <p ng-show="client.description.length">{{client.description}}</p>
+                        <p class="hidden-xs" ng-show="client.description.length">{{client.description}}</p>
                     </td>
                     <td class="text-center">{{client.nrProjects}}</td>
                     <td>

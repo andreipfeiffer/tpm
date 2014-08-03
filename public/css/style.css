@@ -11,6 +11,17 @@ body {
 	margin-right: 0;
 }
 
+h1,
+.h1 {
+	font-size: 28px;
+	line-height: 36px;
+}
+@media (min-width: 768px) {
+	h1,
+	.h1 {
+		font-size: 36px;
+	}
+}
 
 @media (min-width: 768px) {
 	.b-login {
