@@ -24,6 +24,7 @@
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
                 $scope.isLoading = true;
+                $scope.showActions = false;
 
                 $q.all([
                     Projects.query().$promise,

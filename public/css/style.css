@@ -150,3 +150,9 @@ h1,
 		transform: rotate(360deg);
 	}
 }
+
+.b-one-line {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

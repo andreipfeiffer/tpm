@@ -16,6 +16,7 @@
                     name: ''
                 };
                 $scope.isLoading = true;
+                $scope.showActions = false;
 
                 Clients.query().$promise.then(function(data) {
                     $scope.clientsList = data;
