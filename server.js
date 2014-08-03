@@ -10,7 +10,8 @@ var express = require('express'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
-    config  = require('./server/config');
+    config  = require('./server/config'),
+    pack = require('./package.json');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -51,6 +52,11 @@ if ('development' === env) {
 }
 
 // setup common middleware
+app.set('views', __dirname + '/public');
+app.set('view engine', 'jade');
+app.set('view options', { layout: false });
+app.locals.pretty = true; // render templates with identation
+
 app.use(allowCrossDomain);
 app.use(bodyParser.json());
 // express cookieParser and session needed for passport
@@ -81,11 +87,21 @@ passport.use(auth.localStrategyAuth);
 passport.serializeUser(auth.serializeUser);
 passport.deserializeUser(auth.deserializeUser);
 
+
+// Projects routes
 // @todo move routes reparately
+
+app.get('/', function(req, res) {
+    res.render('index', {
+        title: pack.name,
+        description: pack.description,
+        version: pack.version
+    });
+});
+
 app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 
-// Projects routes
 app.route('/projects')
     .get(auth.ensureAuthenticated, projects.getAll)
     .post(auth.ensureAuthenticated, projects.add);
