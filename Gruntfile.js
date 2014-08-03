@@ -73,6 +73,8 @@ module.exports = function(grunt) {
 
     // run this first:
     // node node_modules/protractor/bin/webdriver-manager start
+    // to update run:
+    // node node_modules/protractor/bin/webdriver-manager update
     grunt.registerTask('e2e', [
         'protractor'
     ]);

@@ -36,8 +36,5 @@
         "karma-phantomjs-launcher": "0.1.4",
         "protractor": "1.0.0-rc6",
         "grunt-protractor-runner": "1.0.1"
-    },
-    "scripts": {
-        "postinstall": "node node_modules/protractor/bin/webdriver-manager update"
     }
 }
