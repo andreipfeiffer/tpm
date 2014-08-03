@@ -6,6 +6,7 @@ var TPM = TPM || {};
 
     TPM = angular.module('tpm', [
         'ngRoute',
+        'ngTouch',
 
         'TPM.AuthControllers',
         'TPM.ProjectsControllers',
