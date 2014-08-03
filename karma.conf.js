@@ -23,6 +23,7 @@ module.exports = function(config) {
             '../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
             '../bower_components/moment/min/moment.min.js',
             '../bower_components/angular-ui-utils/ui-utils.min.js',
+            '../bower_components/angular-touch/angular-touch.min.js',
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
