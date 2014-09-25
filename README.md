@@ -1,6 +1,6 @@
 # tpm - Tiny Project Manager
 
-Personal app that uses the MEAN stack concept (need to switch from MySQL to Mongo) for educational purposes.
+Personal app that uses the MEAN stack concept, except that "M" is from MySQL, not Mongo.
 
 [![Build Status](https://travis-ci.org/andreipfeiffer/tpm.svg?branch=master)](https://travis-ci.org/andreipfeiffer/tpm)
 
