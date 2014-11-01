@@ -73,6 +73,7 @@
                         project.remainingDays = Math.round( remaining.daysWork );
                         project.remainingText = remaining.textTotal;
                         project.remainingWeekendDays = remaining.weekendDays;
+                        project.dateEstimatedFormatted = moment(project.dateEstimated).format('ddd, DD MMM');
                     });
 
                     return arr;
