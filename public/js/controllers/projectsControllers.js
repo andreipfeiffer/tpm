@@ -18,12 +18,14 @@
             '$routeParams',
             'ProjectsService',
             'ClientsService',
-            function($scope, $q, $routeParams, Projects, Clients) {
+            'screenSize',
+            function($scope, $q, $routeParams, Projects, Clients, screenSize) {
 
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
                 $scope.isLoading = true;
+                $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;
 
                 $q.all([

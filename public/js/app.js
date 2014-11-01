@@ -17,7 +17,8 @@ var TPM = TPM || {};
         'TPM.Filters',
 
         'ui.bootstrap',
-        'ui.validate'
+        'ui.validate',
+        'matchMedia'
     ]);
 
     TPM.routesList = {
