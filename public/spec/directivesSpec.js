@@ -45,4 +45,34 @@
 
     });
 
+    describe('Directives: click-confirm', function() {
+        var element, scope, compile, rootScope, timeout;
+        var message = 'Are you sure?';
+
+        beforeEach(inject(function($rootScope, $compile, $timeout) {
+            scope = $rootScope.$new();
+            compile = $compile;
+            rootScope = $rootScope;
+            timeout = $timeout;
+
+            element = '<a href="" click-confirm="" click-confirm-message="' + message + '"></a>';
+
+            element = $compile(element)(scope);
+            scope.$digest();
+        }));
+
+        it('open a modal with the title set in attribute', function() {
+            // trigger click on element
+            compile(element)(rootScope).triggerHandler('click');
+            // needs a delay, while the modal is displayed
+            timeout(function() {
+                expect( $('.modal-title').text() ).toBe( message );
+            }, 100);
+        });
+
+        // it('execute the callback, set in attribute', function() {
+        // });
+
+    });
+
 })();
