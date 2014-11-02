@@ -9,7 +9,8 @@
             '$modal',
             'ClientsService',
             'ModalConfirmService',
-            function($scope, $modal, Clients, ModalConfirm) {
+            'screenSize',
+            function($scope, $modal, Clients, ModalConfirm, screenSize) {
 
                 $scope.isFormNewDisplayed = false;
                 $scope.isFormNewLoading = false;
@@ -17,6 +18,7 @@
                     name: ''
                 };
                 $scope.isLoading = true;
+                $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;
 
                 Clients.query().$promise.then(function(data) {
