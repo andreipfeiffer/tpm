@@ -30,8 +30,34 @@
         };
     });
 
+    TPM.directive('ngReallyClick', ['$modal', '$parse', function($modal, $parse) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+
+                var modalInstance, clickHandler;
+
+                element.bind('click', function() {
+                    modalInstance = $modal.open({
+                        templateUrl: 'views/modal-confirm.html',
+                        controller: function ($scope) {
+                            $scope.message = attrs.ngReallyMessage;
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        // close callback
+                    },function () {
+                        // dismiss callback
+
+                        clickHandler = $parse(attrs.ngReallyClick);
+                        // Run the function returned by $parse.
+                        // It needs the scope object to operate properly.
+                        clickHandler(scope);
+                    });
+                });
+            }
+        };
+    }]);
+
 }());
-
-
-
-

@@ -45,7 +45,10 @@
                             <button type="button" class="btn btn-default" ng-click="openEditDialog(client.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
-                            <button type="button" class="btn btn-default" ng-click="deleteClient(client.id)">
+                            <button type="button" class="btn btn-default"
+                                ng-really-click="deleteClient(client.id)"
+                                ng-really-message="Really delete the client?"
+                            >
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                             <button type="button" class="btn btn-default" ng-show="isEnabledToggleActions"  ng-click="showActions = false">

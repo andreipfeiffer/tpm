@@ -8,9 +8,8 @@
             '$scope',
             '$modal',
             'ClientsService',
-            'ModalConfirmService',
             'screenSize',
-            function($scope, $modal, Clients, ModalConfirm, screenSize) {
+            function($scope, $modal, Clients, screenSize) {
 
                 $scope.isFormNewDisplayed = false;
                 $scope.isFormNewLoading = false;
@@ -97,10 +96,8 @@
                 };
 
                 $scope.deleteClient = function(id) {
-                    ModalConfirm.open(function() {
-                        Clients.delete({ id: id });
-                        $scope.clientsList.splice(getClientIndex(id), 1);
-                    });
+                    Clients.delete({ id: id });
+                    $scope.clientsList.splice(getClientIndex(id), 1);
                 };
             }
         ]);

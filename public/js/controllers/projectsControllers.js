@@ -19,8 +19,7 @@
             'ProjectsService',
             'ClientsService',
             'screenSize',
-            'ModalConfirmService',
-            function($scope, $q, $routeParams, Projects, Clients, screenSize, ModalConfirm) {
+            function($scope, $q, $routeParams, Projects, Clients, screenSize) {
 
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
@@ -83,10 +82,8 @@
                 }
 
                 $scope.deleteProject = function(id) {
-                    ModalConfirm.open(function() {
-                        Projects.delete({ id: id });
-                        $scope.projectsList.splice(getProjectIndex(id), 1);
-                    });
+                    Projects.delete({ id: id });
+                    $scope.projectsList.splice(getProjectIndex(id), 1);
                 };
 
                 $scope.setFilterStatus = function(filter) {

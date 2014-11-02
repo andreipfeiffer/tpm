@@ -67,7 +67,10 @@
                             <a href="#projects/{{project.id}}/edit" class="btn btn-default">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                            <button type="button" class="btn btn-default" ng-click="deleteProject(project.id)">
+                            <button type="button" class="btn btn-default"
+                                ng-really-click="deleteProject(project.id)"
+                                ng-really-message="Really delete the project?"
+                            >
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                             <button type="button" class="btn btn-default" ng-show="isEnabledToggleActions" ng-click="showActions = false">
