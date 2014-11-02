@@ -8,7 +8,8 @@
             '$scope',
             '$modal',
             'ClientsService',
-            function($scope, $modal, Clients) {
+            'ModalConfirmService',
+            function($scope, $modal, Clients, ModalConfirm) {
 
                 $scope.isFormNewDisplayed = false;
                 $scope.isFormNewLoading = false;
@@ -94,8 +95,10 @@
                 };
 
                 $scope.deleteClient = function(id) {
-                    Clients.delete({ id: id });
-                    $scope.clientsList.splice(getClientIndex(id), 1);
+                    ModalConfirm.open(function() {
+                        Clients.delete({ id: id });
+                        $scope.clientsList.splice(getClientIndex(id), 1);
+                    });
                 };
             }
         ]);
