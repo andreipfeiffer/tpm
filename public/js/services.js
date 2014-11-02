@@ -46,6 +46,23 @@
             };
         })
 
+        .service('ModalConfirmService', function($modal) {
+
+            var modalInstance;
+
+            this.open = function (callback) {
+                modalInstance = $modal.open({
+                    templateUrl: 'views/modal-confirm.html'
+                });
+                modalInstance.result.then(function () {
+                    // close callback
+                },function () {
+                    callback();
+                });
+                return modalInstance;
+            };
+        })
+
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {
