@@ -2,10 +2,10 @@
 
     'use strict';
 
+    beforeEach(module('tpm'));
+
     describe('Directives: client-select', function() {
         var element, scope;
-
-        beforeEach(module('tpm'));
 
         beforeEach(inject(function($rootScope, $compile) {
             scope = $rootScope.$new();
@@ -28,8 +28,6 @@
 
     describe('Directives: set-focus', function() {
         var element, scope;
-
-        beforeEach(module('tpm'));
 
         beforeEach(inject(function($rootScope, $compile) {
             scope = $rootScope.$new();
