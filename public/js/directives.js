@@ -30,7 +30,7 @@
         };
     });
 
-    TPM.directive('ngReallyClick', ['$modal', '$parse', function($modal, $parse) {
+    TPM.directive('clickConfirm', ['$modal', '$parse', function($modal, $parse) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -41,7 +41,7 @@
                     modalInstance = $modal.open({
                         templateUrl: 'views/modal-confirm.html',
                         controller: function ($scope) {
-                            $scope.message = attrs.ngReallyMessage;
+                            $scope.message = attrs.clickConfirmMessage;
                         }
                     });
 
@@ -50,7 +50,7 @@
                     },function () {
                         // dismiss callback
 
-                        clickHandler = $parse(attrs.ngReallyClick);
+                        clickHandler = $parse(attrs.clickConfirm);
                         // Run the function returned by $parse.
                         // It needs the scope object to operate properly.
                         clickHandler(scope);
