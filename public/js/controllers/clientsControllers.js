@@ -9,7 +9,8 @@
             '$modal',
             'ClientsService',
             'screenSize',
-            function($scope, $modal, Clients, screenSize) {
+            'ngNotify',
+            function($scope, $modal, Clients, screenSize, ngNotify) {
 
                 $scope.isFormNewDisplayed = false;
                 $scope.isFormNewLoading = false;
@@ -51,6 +52,7 @@
                         $scope.newClient.name = '';
                         $scope.clientsList.push(result);
                         $scope.clientsForm.$setPristine(true);
+                        ngNotify.set('Client was added');
                     });
                 };
 
@@ -92,12 +94,14 @@
                 $scope.editClient = function(client) {
                     Clients.update({ id: client.id }, client).$promise.then(function() {
                         $scope.clientsList[getClientIndex(client.id)] = client;
+                        ngNotify.set('Client was updated');
                     });
                 };
 
                 $scope.deleteClient = function(id) {
                     Clients.delete({ id: id });
                     $scope.clientsList.splice(getClientIndex(id), 1);
+                    ngNotify.set('Client was deleted');
                 };
             }
         ]);
