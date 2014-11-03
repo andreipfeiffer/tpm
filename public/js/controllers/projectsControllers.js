@@ -175,8 +175,8 @@
             '$filter',
             'ProjectsService',
             'ClientsService',
-            'ModalAlertService',
-            function($scope, $q, $routeParams, $filter, Projects, Clients, ModalAlert) {
+            'ngNotify',
+            function($scope, $q, $routeParams, $filter, Projects, Clients, ngNotify) {
 
                 $scope.formAction = 'Edit';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -207,7 +207,8 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
-                        ModalAlert.open('/projects');
+                        ngNotify.set('Your notification message goes here!');
+                        // ModalAlert.open('/projects');
                     });
                 };
 
