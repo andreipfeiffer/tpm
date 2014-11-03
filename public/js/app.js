@@ -111,8 +111,8 @@ var TPM = TPM || {};
                 theme: 'pure',
                 position: 'top',
                 duration: 1000,
-                type: 'info',
-                sticky: true
+                type: 'success',
+                sticky: false
             });
         }
     );

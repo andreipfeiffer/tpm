@@ -19,7 +19,8 @@
             'ProjectsService',
             'ClientsService',
             'screenSize',
-            function($scope, $q, $routeParams, Projects, Clients, screenSize) {
+            'ngNotify',
+            function($scope, $q, $routeParams, Projects, Clients, screenSize, ngNotify) {
 
                 $scope.filterStatus = '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
@@ -84,6 +85,7 @@
                 $scope.deleteProject = function(id) {
                     Projects.delete({ id: id });
                     $scope.projectsList.splice(getProjectIndex(id), 1);
+                    ngNotify.set('Project was deleted');
                 };
 
                 $scope.setFilterStatus = function(filter) {
@@ -111,10 +113,11 @@
             '$scope',
             '$routeParams',
             '$filter',
+            '$location',
             'ProjectsService',
             'ClientsService',
-            'ModalAlertService',
-            function($scope, $routeParams, $filter, Projects, Clients, ModalAlert) {
+            'ngNotify',
+            function($scope, $routeParams, $filter, $location, Projects, Clients, ngNotify) {
 
                 $scope.formAction = 'Add';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -152,7 +155,8 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.save($scope.project).$promise.then(function() {
-                        $scope.modal = ModalAlert.open('/projects');
+                        ngNotify.set('Project was added');
+                        $location.path('/projects');
                     });
                 };
 
@@ -173,10 +177,11 @@
             '$q',
             '$routeParams',
             '$filter',
+            '$location',
             'ProjectsService',
             'ClientsService',
             'ngNotify',
-            function($scope, $q, $routeParams, $filter, Projects, Clients, ngNotify) {
+            function($scope, $q, $routeParams, $filter, $location, Projects, Clients, ngNotify) {
 
                 $scope.formAction = 'Edit';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -207,8 +212,8 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
-                        ngNotify.set('Your notification message goes here!');
-                        // ModalAlert.open('/projects');
+                        ngNotify.set('Project was updated');
+                        $location.path('/projects');
                     });
                 };
 

@@ -156,3 +156,7 @@ h1,
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.ngn {
+	z-index: 2000;
+}
