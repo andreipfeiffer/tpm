@@ -50,7 +50,7 @@
                         <b>{{project.name}}</b><br>
                         {{project.clientName}}
                     </td>
-                    <td class="text-capitalize">{{project.status}}</td>
+                    <td ng-show="!showActions" class="text-capitalize">{{project.status}}</td>
                     <td ng-show="!showActions" class="hidden-xs b-one-line">
                         {{project.remainingText}}<br>
                         <small class="text-muted">{{project.dateEstimatedFormatted}}</small>
@@ -59,7 +59,7 @@
                         {{project.remainingDays}}<span class="hidden-xs"> left</span><br>
                         <small class="text-muted">{{project.days}}<span class="hidden-xs"> estimated</span></small>
                     </td>
-                    <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 3 : 1 }}">
+                    <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 4 : 1 }}">
                         <div class="btn-group b-one-line" ng-show="!isEnabledToggleActions || showActions">
                             <a href="#projects/{{project.id}}" class="btn btn-default">
                                 <span class="glyphicon glyphicon-list-alt"></span>
