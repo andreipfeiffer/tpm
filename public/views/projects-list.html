@@ -61,7 +61,7 @@
                     <td ng-show="!showActions" class="hidden-xs b-one-line">
                         {{project.days}} estimated
                         <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
-                            <br>{{project.remainingDays}}<span class="hidden-xs"> left</span>
+                            <br>{{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
                         </small>
                     </td>
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 4 : 1 }}">
