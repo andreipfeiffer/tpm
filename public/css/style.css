@@ -177,3 +177,11 @@ h1,
 	.cell-border--danger {
 		border-color: #EC5454;
 	}
+
+.btn-group {
+	font-size: 0;
+}
+.btn-group .btn {
+	display: inline-block;
+	float: none;
+}
