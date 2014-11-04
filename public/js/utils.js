@@ -25,19 +25,20 @@ TPM.utils = (function() {
         },
 
         getRemainingTime: function(_deadline) {
-            var result = {},
-                today = moment(),
+            var today = moment(),
                 weekendDays = this.getWeekendDays( _deadline ),
                 // deadline always starts at 00:00
                 // so we add 19 hours, to set the deadline to 7:00 PM that day
-                deadline = moment(_deadline).add('hours', 19),
-                timeLeft = moment.duration(deadline.diff(today), 'ms');
+                deadline = moment(_deadline).add('hours', 19);
 
-            result.weekendDays = weekendDays;
-            result.textTotal = timeLeft.humanize(true);
-            result.daysWork = timeLeft.subtract(weekendDays, 'days').asDays();
+            this.setTodayHour(today);
+            var timeLeft = moment.duration(deadline.diff(today), 'ms');
 
-            return result;
+            return {
+                weekendDays : weekendDays,
+                textTotal   : timeLeft.humanize(true),
+                daysWork    : timeLeft.subtract(weekendDays, 'days').asDays()
+            };
         },
 
         getWeekendDays: function(_deadline) {
@@ -57,6 +58,20 @@ TPM.utils = (function() {
             }
 
             return nr;
+        },
+
+        /**
+         * If the current day passed 14:00 o'clock, consider the day "finished",
+         * otherwise, consider still available.
+         *
+         * @param  {Object Moment}   today   current day object
+         */
+        setTodayHour: function(today) {
+            var h = 10;
+            if (today.hour() > 14) {
+                h = 19;
+            }
+            today.hour(h);
         }
     };
 
