@@ -15,6 +15,7 @@ var TPM = TPM || {};
         'TPM.Services',
         'TPM.Interceptors',
         'TPM.Filters',
+        'TPM.Factories',
 
         'ui.bootstrap',
         'ui.validate',
