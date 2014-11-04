@@ -16,13 +16,14 @@
             '$scope',
             '$q',
             '$routeParams',
+            'tpmCache',
             'ProjectsService',
             'ClientsService',
             'screenSize',
             'ngNotify',
-            function($scope, $q, $routeParams, Projects, Clients, screenSize, ngNotify) {
+            function($scope, $q, $routeParams, tpmCache, Projects, Clients, screenSize, ngNotify) {
 
-                $scope.filterStatus = '';
+                $scope.filterStatus = tpmCache.get('filterStatus') || '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
                 $scope.isLoading = true;
@@ -90,6 +91,7 @@
 
                 $scope.setFilterStatus = function(filter) {
                     $scope.filterStatus = filter;
+                    tpmCache.put('filterStatus', filter);
                 };
             }
         ])
