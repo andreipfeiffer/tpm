@@ -28,24 +28,6 @@
             );
         }])
 
-        .service('ModalAlertService', function($modal, $location) {
-
-            var modalInstance;
-
-            this.open = function (location) {
-                modalInstance = $modal.open({
-                    templateUrl: 'views/modal-alert.html'
-                });
-                modalInstance.result.then(function () {
-                    // close callback
-                },function () {
-                    // dismiss callback
-                    $location.path( location );
-                });
-                return modalInstance;
-            };
-        })
-
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {
