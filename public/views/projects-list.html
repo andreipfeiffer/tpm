@@ -51,13 +51,17 @@
                         {{project.clientName}}
                     </td>
                     <td ng-show="!showActions" class="text-capitalize">{{project.status}}</td>
-                    <td ng-show="!showActions" class="hidden-xs b-one-line">
-                        {{project.remainingText}}<br>
-                        <small class="text-muted">{{project.dateEstimatedFormatted}}</small>
-                    </td>
                     <td ng-show="!showActions" class="b-one-line">
-                        {{project.remainingDays}}<span class="hidden-xs"> left</span><br>
-                        <small class="text-muted">{{project.days}}<span class="hidden-xs"> estimated</span></small>
+                        {{project.dateEstimatedFormatted}}
+                        <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
+                            <br>{{project.remainingText}}
+                        </small>
+                    </td>
+                    <td ng-show="!showActions" class="hidden-xs b-one-line">
+                        {{project.days}} estimated
+                        <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
+                            <br>{{project.remainingDays}}<span class="hidden-xs"> left</span>
+                        </small>
                     </td>
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 4 : 1 }}">
                         <div class="btn-group b-one-line" ng-show="!isEnabledToggleActions || showActions">
