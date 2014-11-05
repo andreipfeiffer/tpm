@@ -9,6 +9,7 @@ var TPM = TPM || {};
         'ngTouch',
 
         'TPM.AuthControllers',
+        'TPM.HeaderControllers',
         'TPM.ProjectsControllers',
         'TPM.ClientsControllers',
 
