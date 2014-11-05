@@ -16,10 +16,10 @@
             </div>
             <div class="col-sm-4 form-group">
                 <div class="input-group" ng-if="showQuickClient">
-                    <input type="text" ng-model="project.newClientName" ng-if="isNewClient" ng-show="isNewClient" class="form-control" placeholder="New client name">
+                    <input type="text" ng-model="project.newClientName" ng-if="isNewClient" ng-show="isNewClient" class="form-control input-lg" placeholder="New client name">
                     <client-select></client-select>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="toggleClientSelect()">
+                        <button class="btn btn-default btn-lg" type="button" ng-click="toggleClientSelect()">
                             <span class="glyphicon glyphicon-th-large" ng-show="isNewClient"></span>
                             <span class="glyphicon glyphicon-plus" ng-hide="isNewClient"></span>
                         </button>
