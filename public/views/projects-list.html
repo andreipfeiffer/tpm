@@ -92,7 +92,7 @@
             </tbody>
         </table>
 
-        <p class="alert alert-warning text-center" ng-show="!isLoading && !(projectsList | filter: filterStatus).length">The are no Projects to display</p>
+        <p class="alert alert-warning text-center" ng-show="!isLoading && !(projectsList | filter: filterStatus).length">The are no <b>{{filterStatus}}</b> projects to display</p>
         <p class="b-loading center-block" ng-show="isLoading"></p>
     </section>
 
