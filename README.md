@@ -19,7 +19,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 ## Short term To-dos
 
 * Separate tokens table
-* Set client name for projects from server
 * Notify if work days + current date = deadline (-2, -5, etc)
 * Display "urgent" projects number + filtering
 * Projects "finished" but not "payed", that passed X days

@@ -65,7 +65,6 @@
                     angular.forEach( arr, function(project) {
 
                         // set clients name
-                        // @todo set on the server !!!
                         if ( !project.idClient ) {
                             project.clientName = '-';
                         } else {
