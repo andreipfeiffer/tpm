@@ -43,8 +43,8 @@
                     class="cell-border"
                     ng-repeat="project in projectsList | orderBy:'remainingDays' | filterByProjectStatus:filterStatus"
                     ng-class="{
-                        'cell-border--danger': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= project.days),
-                        'cell-border--warning': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= (project.days + 2))
+                        'cell-border--danger': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < 0),
+                        'cell-border--warning': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= project.days)
                     }"
                 >
                     <td>
