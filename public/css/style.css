@@ -2,6 +2,10 @@ body {
 	padding-top: 70px;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], .ng-cloak {
+	display: none !important;
+}
+
 .app-footer {
 	margin: 5em 0 2em 0;
 }

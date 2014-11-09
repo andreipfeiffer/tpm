@@ -18,7 +18,7 @@ html(class='no-js', lang='en', ng-app='tpm')
     body
         .container
 
-            nav.navbar.navbar-default.navbar-fixed-top(ng-if='isAuth', role='navigation')
+            nav.navbar.navbar-default.navbar-fixed-top.ng-cloak(ng-if='isAuth', role='navigation')
                 //- Brand and toggle get grouped for better mobile display
                 .navbar-header
                     button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar')
