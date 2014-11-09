@@ -1,54 +1,60 @@
+<div class="text-center">
+    <a href="./" class="login__logo">
+        <img src="images/tpm-logo.svg" alt="tPM">
+    </a>
+</div>
+
 <div class="row">
-    <form method="post" class="b-login col-sm-6 col-sm-offset-3" ng-submit="login()">
 
-        <div class="b-login__logo">
-            <img src="images/tpm-logo.svg" alt="tPM">
-        </div>
+    <form method="post" class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4" ng-submit="login()">
 
-        <div class="b-login__form">
-            <div class="form-group">
-                <!-- <label>Email address:</label> -->
+        <div class="form-group">
+            <!-- <label>Email address:</label> -->
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-user"></span>
+                </span>
                 <input type="text" placeholder="Email address" class="form-control" ng-model="credentials.username">
             </div>
+        </div>
 
-            <div class="form-group">
-                <!-- <label>Password:</label> -->
+        <div class="form-group">
+            <!-- <label>Password:</label> -->
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-lock"></span>
+                </span>
                 <input type="password" placeholder="Password" class="form-control" ng-model="credentials.password">
             </div>
-
-            <div class="form-group clearfix">
-                <a href="#" class="btn btn-link pull-left"
-                    popover-placement="right"
-                    popover-trigger="mouseenter"
-                    popover="Password recovery is currently unavailable"
-                >Forgot Password?</a>
-                <!-- <div class="checkbox pull-left">
-                    <label>
-                        <input type="checkbox"> Remember Me
-                    </label>
-                </div> -->
-
-                <button type="submit" class="btn btn-primary pull-right col-md-5">Login</button>
-
-            </div>
-
-            <div class="alert alert-danger fade in" ng-show="errorMessage.length">
-                <strong>Ohh shoot!</strong><br>
-                {{errorMessage}}
-            </div>
-
-            <hr>
-
-            <div class="clearfix">
-                <span class="btn disabled">New member?</span>
-                <a href="" type="submit"
-                    class="btn btn-default pull-right col-md-5"
-                    popover-placement="left"
-                    popover-trigger="mouseenter"
-                    popover="Creating new accounts is currently unavailable"
-                >Create Account</a>
-            </div>
         </div>
+
+        <div class="alert alert-danger fade in" ng-show="errorMessage.length">
+            <strong>Ohh shoot!</strong><br>
+            {{errorMessage}}
+        </div>
+
+        <div class="form-group clearfix">
+            <button type="submit" class="btn btn-primary col-xs-12">Login</button>
+        </div>
+
+        <hr>
+
+        <div class="form-group text-center">
+            <a href="#"
+                popover-placement="top"
+                popover-trigger="mouseenter"
+                popover="Password recovery will be available in future releases"
+            >Recover password</a>
+        </div>
+
+        <div class="clearfix">
+            <a href="#" class="btn btn-default col-xs-8 col-xs-offset-2"
+                popover-placement="top"
+                popover-trigger="mouseenter"
+                popover="Creating new accounts is currently unavailable"
+            >Create Account</a>
+        </div>
+
     </form>
 
 </div>
