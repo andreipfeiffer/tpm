@@ -28,6 +28,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 ## Future Goals
 
+* Google Calendar integration
 * Use knex as SQL builder
 * Websockets messaging
 * Full server unit-tests
