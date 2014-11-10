@@ -1,4 +1,4 @@
-# tpm - Tiny Project Manager
+# tPM - tiny Project Manager
 
 Personal app that uses the MEAN stack concept, except that "M" is from MySQL, not Mongo.
 
