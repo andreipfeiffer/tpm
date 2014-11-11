@@ -73,18 +73,12 @@ h1,
 
 
 .login__logo {
-	margin: 0 auto 1em auto;
+	margin: 0 auto 2em auto;
 	display: inline-block;
 }
 	.login__logo img {
 		height: 2em;
 	}
-
-@media (min-width: 768px) {
-	.login__logo {
-		margin-bottom: 2em;
-	}
-}
 
 .table > tbody > tr > td {
 	vertical-align: middle;
