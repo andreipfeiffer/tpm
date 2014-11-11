@@ -15,7 +15,8 @@
         "express-session": "1.7.2",
         "mysql": "2.0.x",
         "passport": "0.1.17",
-        "passport-local": "0.1.6"
+        "passport-local": "0.1.6",
+        "passport-oauth": "1.0.0"
     },
     "devDependencies": {
         "should": "4.0.4",

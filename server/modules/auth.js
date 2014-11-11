@@ -47,8 +47,15 @@ module.exports = function(connection) {
         });
     };
 
-    var findUserByToken = function(token, callback) {
-        connection.query('select * from `users` where `authToken`="' + token + '" and `isDeleted`="0"', function (err, user) {
+    var findUserByToken = function(token, sessionID, callback) {
+        connection.query('select * from `users` where `authToken`="' + token + '" and `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
+            var result = user ? user[0] : null;
+            callback(err, result);
+        });
+    };
+
+    var findUserBySession = function(sessionID, callback) {
+        connection.query('select * from `users` where `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
             var result = user ? user[0] : null;
             callback(err, result);
         });
@@ -108,7 +115,7 @@ module.exports = function(connection) {
                 };
 
                 // update token in database
-                connection.query('update `users` set `authToken`="' + newAuthToken + '" where `id`="' + user.id + '"', function () {
+                connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
                     res.status(200).json(loggedData);
                 });
 
@@ -122,10 +129,10 @@ module.exports = function(connection) {
     };
 
     // @note: Need to protect all API calls (other than login/logout) with this check
-    var ensureAuthenticated = function(req, res, next) {
+    var ensureTokenAuthenticated = function(req, res, next) {
         var token = req.headers.authorization;
 
-        findUserByToken(token, function(err, user) {
+        findUserByToken(token, req.sessionID, function(err, user) {
             if (err) { return res.status(401).end(); }
             if (!user) { return res.status(401).end(); }
 
@@ -138,12 +145,35 @@ module.exports = function(connection) {
 
     };
 
+    var ensureSessionAuthenticated = function(req, res, next) {
+        findUserBySession(req.sessionID, function(err, user) {
+            if (err) { return res.status(401).end(); }
+            if (!user) { return res.status(401).end(); }
+            req.user = user;
+            return next();
+        });
+    };
+
+    var setGoogleOAuthToken = function(sessionID, token, done) {
+        findUserBySession(sessionID, function(err, user) {
+            if (user) {
+                connection.query('update `users` set `googleOAuthToken`="' + token + '" where `id`="' + user.id + '"', function () {
+                    done(null, user);
+                });
+            } else {
+                done(err, false);
+            }
+        });
+    };
+
     return {
         login: login,
         logout: logout,
         localStrategyAuth: localStrategyAuth,
-        ensureAuthenticated: ensureAuthenticated,
+        ensureTokenAuthenticated: ensureTokenAuthenticated,
+        ensureSessionAuthenticated: ensureSessionAuthenticated,
         serializeUser: serializeUser,
-        deserializeUser: deserializeUser
+        deserializeUser: deserializeUser,
+        setGoogleOAuthToken: setGoogleOAuthToken
     };
 };

@@ -84,8 +84,39 @@ var auth  = require('./server/modules/auth')( connection ),
 
 // setup passport auth (before routes, after express session)
 passport.use(auth.localStrategyAuth);
+
+
+
+var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+
+passport.use('google',
+    new OAuth2Strategy({
+        authorizationURL: 'https://accounts.google.com/o/oauth2/auth',
+        tokenURL: 'https://accounts.google.com/o/oauth2/token',
+        clientID: '884230170474-hnregfn60k074bobre6qje7vhgr9ahe5.apps.googleusercontent.com',
+        clientSecret: 'e3KrQBubKpeNHidGFCIp9Y0Y',
+        callbackURL: 'http://localhost:3000/oauth2callback',
+        passReqToCallback: true
+    },
+    function(req, accessToken, refreshToken, profile, done) {
+        auth.setGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
+            done(err, user);
+        });
+    }
+));
+
 passport.serializeUser(auth.serializeUser);
 passport.deserializeUser(auth.deserializeUser);
+
+app.get('/auth/google',
+    auth.ensureSessionAuthenticated,
+    passport.authenticate('google', { scope: ['email', 'https://www.googleapis.com/auth/calendar'] })
+);
+app.get('/oauth2callback',
+    auth.ensureSessionAuthenticated,
+    passport.authenticate('google', { successRedirect: '/',
+                                        failureRedirect: '/login' }));
+
 
 
 // Projects routes
@@ -103,23 +134,23 @@ app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 
 app.route('/projects')
-    .get(auth.ensureAuthenticated, projects.getAll)
-    .post(auth.ensureAuthenticated, projects.add);
+    .get(auth.ensureTokenAuthenticated, projects.getAll)
+    .post(auth.ensureTokenAuthenticated, projects.add);
 
 app.route('/projects/:id')
-    .get(auth.ensureAuthenticated, projects.getById)
-    .put(auth.ensureAuthenticated, projects.update)
-    .delete(auth.ensureAuthenticated, projects.remove);
+    .get(auth.ensureTokenAuthenticated, projects.getById)
+    .put(auth.ensureTokenAuthenticated, projects.update)
+    .delete(auth.ensureTokenAuthenticated, projects.remove);
 
 // Clients routes
 app.route('/clients')
-    .get(auth.ensureAuthenticated, clients.getAll)
-    .post(auth.ensureAuthenticated, clients.add);
+    .get(auth.ensureTokenAuthenticated, clients.getAll)
+    .post(auth.ensureTokenAuthenticated, clients.add);
 
 app.route('/clients/:id')
-    .get(auth.ensureAuthenticated, clients.getById)
-    .put(auth.ensureAuthenticated, clients.update)
-    .delete(auth.ensureAuthenticated, clients.remove);
+    .get(auth.ensureTokenAuthenticated, clients.getById)
+    .put(auth.ensureTokenAuthenticated, clients.update)
+    .delete(auth.ensureTokenAuthenticated, clients.remove);
 
 
 function start(port) {
