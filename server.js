@@ -88,6 +88,10 @@ passport.use(auth.localStrategyAuth);
 
 
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+var google = require('googleapis');
+var OAuth2 = google.auth.OAuth2;
+var calendar = google.calendar('v3');
+var oauth2Client = new OAuth2();
 
 passport.use('google',
     new OAuth2Strategy({
@@ -99,7 +103,12 @@ passport.use('google',
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
+        console.log(req.headers.authorization);
         auth.setGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
+            oauth2Client.setCredentials({
+                access_token: accessToken
+            });
+            google.options({ auth: oauth2Client });
             done(err, user);
         });
     }
@@ -110,12 +119,32 @@ passport.deserializeUser(auth.deserializeUser);
 
 app.get('/auth/google',
     auth.ensureSessionAuthenticated,
-    passport.authenticate('google', { scope: ['email', 'https://www.googleapis.com/auth/calendar'] })
+    passport.authenticate('google', { scope: [
+        'profile',
+        'email',
+        'https://www.googleapis.com/auth/calendar']
+    })
 );
 app.get('/oauth2callback',
     auth.ensureSessionAuthenticated,
-    passport.authenticate('google', { successRedirect: '/',
-                                        failureRedirect: '/login' }));
+    passport.authenticate('google', {
+        successRedirect: '/',
+        failureRedirect: '/login'
+    })
+);
+app.get('/cal',
+    auth.ensureSessionAuthenticated,
+    function(req, res) {
+        calendar.calendarList.list({}, function(err, response) {
+            if (err) {
+                console.log(err)
+                res.send(err);
+            };
+            console.log(response);
+            res.send(response);
+        });
+    }
+);
 
 
 
