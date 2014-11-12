@@ -99,14 +99,14 @@ passport.use('google',
         tokenURL: 'https://accounts.google.com/o/oauth2/token',
         clientID: '884230170474-hnregfn60k074bobre6qje7vhgr9ahe5.apps.googleusercontent.com',
         clientSecret: 'e3KrQBubKpeNHidGFCIp9Y0Y',
-        callbackURL: 'http://localhost:3000/oauth2callback',
+        callbackURL: '/oauth2callback',
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
         console.log(req.headers.authorization);
         auth.setGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
             oauth2Client.setCredentials({
-                access_token: accessToken
+                'access_token': accessToken
             });
             google.options({ auth: oauth2Client });
             done(err, user);
@@ -137,9 +137,9 @@ app.get('/cal',
     function(req, res) {
         calendar.calendarList.list({}, function(err, response) {
             if (err) {
-                console.log(err)
+                console.log(err);
                 res.send(err);
-            };
+            }
             console.log(response);
             res.send(response);
         });
