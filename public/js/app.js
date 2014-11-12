@@ -26,7 +26,6 @@ var TPM = TPM || {};
 
     TPM.routesList = {
 
-        // auth
         '/login': {
             templateUrl: 'views/login.html',
             controller: 'LoginController',
@@ -38,13 +37,11 @@ var TPM = TPM || {};
             requireLogin: true
         },
 
-        // errors
         '/error500': {
             templateUrl: 'views/error5xx.html',
             requireLogin: false
         },
 
-        // projects
         '/projects': {
             templateUrl: 'views/projects-list.html',
             controller: 'ProjectsListController',
@@ -66,7 +63,6 @@ var TPM = TPM || {};
             requireLogin: true
         },
 
-        // clients
         '/clients': {
             templateUrl: 'views/clients-list.html',
             controller: 'ClientsListController',
