@@ -36,6 +36,8 @@ html(class='no-js', lang='en', ng-app='tpm')
                             a.btn.btn-link(href='#projects') Projects
                         li(ng-class='{ active: isActive("clients")}')
                             a.btn.btn-link(href='#clients') Clients
+                        li(ng-class='{ active: isActive("settings")}')
+                            a.btn.btn-link(href='#settings') Settings
                     .nav.navbar-nav.navbar-right
                         a.btn.btn-default.navbar-btn(href='#logout') Logout
 
@@ -70,6 +72,7 @@ html(class='no-js', lang='en', ng-app='tpm')
             script(src='js/controllers/headerControllers.js')
             script(src='js/controllers/projectsControllers.js')
             script(src='js/controllers/clientsControllers.js')
+            script(src='js/controllers/settingsControllers.js')
             script(src='js/services.js')
             script(src='js/interceptors.js')
             script(src='js/directives.js')
