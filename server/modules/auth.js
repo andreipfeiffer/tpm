@@ -124,8 +124,10 @@ module.exports = function(connection) {
     };
 
     var logout = function(req, res) {
-        req.logout();
-        return res.status(200).end();
+        connection.query('update `users` set `authToken`="", `sessionID`="" where `id`="' + req.user.id + '"', function () {
+            req.logout();
+            return res.status(200).end();
+        });
     };
 
     // @note: Need to protect all API calls (other than login/logout) with this check
