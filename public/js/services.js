@@ -28,6 +28,18 @@
             );
         }])
 
+        .factory('SettingsService', ['$resource', function($resource) {
+            return $resource(
+                TPM.apiUrl + 'settings/:type',
+                {
+                    type: '@type'
+                },
+                {
+                    'update': { method:'PUT' }
+                }
+            );
+        }])
+
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {

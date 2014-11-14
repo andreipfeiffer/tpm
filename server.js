@@ -80,35 +80,34 @@ require('./server/modules/db')( connection );
 
 var auth  = require('./server/modules/auth')( connection ),
     clients = require('./server/modules/clients')( connection ),
-    projects = require('./server/modules/projects')( connection );
+    projects = require('./server/modules/projects')( connection ),
+    settings = require('./server/modules/settings')( connection );
 
 // setup passport auth (before routes, after express session)
 passport.use(auth.localStrategyAuth);
 
 
 
-var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var calendar = google.calendar('v3');
 var oauth2Client = new OAuth2();
 
+google.options({ auth: oauth2Client });
+
 passport.use('google',
-    new OAuth2Strategy({
-        authorizationURL: 'https://accounts.google.com/o/oauth2/auth',
-        tokenURL: 'https://accounts.google.com/o/oauth2/token',
-        clientID: '884230170474-hnregfn60k074bobre6qje7vhgr9ahe5.apps.googleusercontent.com',
-        clientSecret: 'e3KrQBubKpeNHidGFCIp9Y0Y',
+    new GoogleStrategy({
+        clientID: '884230170474-ndnan3kql7s5dd7rg7o5botd92d2fitl.apps.googleusercontent.com',
+        clientSecret: '7ulfAHdrB6NGPuplrUGh8eYq',
         callbackURL: '/oauth2callback',
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
-        console.log(req.headers.authorization);
-        auth.setGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
+        auth.storeGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
             oauth2Client.setCredentials({
                 'access_token': accessToken
             });
-            google.options({ auth: oauth2Client });
             done(err, user);
         });
     }
@@ -120,32 +119,36 @@ passport.deserializeUser(auth.deserializeUser);
 app.get('/auth/google',
     auth.ensureSessionAuthenticated,
     passport.authenticate('google', { scope: [
-        'profile',
-        'email',
-        'https://www.googleapis.com/auth/calendar']
-    })
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/calendar'
+    ]})
 );
 app.get('/oauth2callback',
     auth.ensureSessionAuthenticated,
-    passport.authenticate('google', {
-        successRedirect: '/',
-        failureRedirect: '/login'
-    })
+    function(req, res, next) {
+        passport.authenticate('google', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) { return res.redirect('/login'); }
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect('/#settings');
+            });
+        })(req, res, next)
+    }
 );
 app.get('/cal',
     auth.ensureSessionAuthenticated,
     function(req, res) {
         calendar.calendarList.list({}, function(err, response) {
             if (err) {
-                console.log(err);
-                res.send(err);
+                res.status(err.code).send({ error: err.message });
+                return;
             }
-            console.log(response);
             res.send(response);
         });
     }
 );
-
 
 
 // Projects routes
@@ -171,7 +174,6 @@ app.route('/projects/:id')
     .put(auth.ensureTokenAuthenticated, projects.update)
     .delete(auth.ensureTokenAuthenticated, projects.remove);
 
-// Clients routes
 app.route('/clients')
     .get(auth.ensureTokenAuthenticated, clients.getAll)
     .post(auth.ensureTokenAuthenticated, clients.add);
@@ -180,6 +182,12 @@ app.route('/clients/:id')
     .get(auth.ensureTokenAuthenticated, clients.getById)
     .put(auth.ensureTokenAuthenticated, clients.update)
     .delete(auth.ensureTokenAuthenticated, clients.remove);
+
+app.route('/settings')
+    .get(auth.ensureTokenAuthenticated, settings.getAll);
+
+app.route('/settings/:type')
+    .delete(auth.ensureTokenAuthenticated, settings.revokeAcces);
 
 
 function start(port) {

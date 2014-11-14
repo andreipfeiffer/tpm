@@ -7,6 +7,7 @@
     <hr>
     <br>
 
-    <a href="/auth/google">Syncronize with Google Calendar</a>
+    <a href="/auth/google" ng-hide="settings.googleToken">Syncronize with Google Calendar</a>
+    <a href="" ng-show="settings.googleToken" ng-click="revokeGoogleAccess()">Revoke Google Calendar access</a>
 
 </section>

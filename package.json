@@ -16,8 +16,9 @@
         "mysql": "2.0.x",
         "passport": "0.1.17",
         "passport-local": "0.1.6",
-        "passport-oauth": "1.0.0",
-        "googleapis": "1.0.20"
+        "passport-google-oauth": "0.1.5",
+        "googleapis": "1.0.20",
+        "request": "2.48.0"
     },
     "devDependencies": {
         "should": "4.0.4",

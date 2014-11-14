@@ -156,7 +156,7 @@ module.exports = function(connection) {
         });
     };
 
-    var setGoogleOAuthToken = function(sessionID, token, done) {
+    var storeGoogleOAuthToken = function(sessionID, token, done) {
         findUserBySession(sessionID, function(err, user) {
             if (user) {
                 connection.query('update `users` set `googleOAuthToken`="' + token + '" where `id`="' + user.id + '"', function () {
@@ -176,6 +176,6 @@ module.exports = function(connection) {
         ensureSessionAuthenticated: ensureSessionAuthenticated,
         serializeUser: serializeUser,
         deserializeUser: deserializeUser,
-        setGoogleOAuthToken: setGoogleOAuthToken
+        storeGoogleOAuthToken: storeGoogleOAuthToken
     };
 };
