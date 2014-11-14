@@ -20,7 +20,7 @@
 
                 $scope.revokeGoogleAccess = function() {
                     Settings.delete({ type: 'google' });
-                }
+                };
             }
         ]);
 

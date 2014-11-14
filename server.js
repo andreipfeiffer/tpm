@@ -127,14 +127,14 @@ app.get('/auth/google',
 app.get('/oauth2callback',
     auth.ensureSessionAuthenticated,
     function(req, res, next) {
-        passport.authenticate('google', function(err, user, info) {
+        passport.authenticate('google', function(err, user/*, info*/) {
             if (err) { return next(err); }
             if (!user) { return res.redirect('/login'); }
             req.login(user, function(err) {
                 if (err) { return next(err); }
                 return res.redirect('/#settings');
             });
-        })(req, res, next)
+        })(req, res, next);
     }
 );
 app.get('/cal',
