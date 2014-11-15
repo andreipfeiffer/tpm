@@ -98,8 +98,8 @@ google.options({ auth: oauth2Client });
 
 passport.use('google',
     new GoogleStrategy({
-        clientID: '884230170474-ndnan3kql7s5dd7rg7o5botd92d2fitl.apps.googleusercontent.com',
-        clientSecret: '7ulfAHdrB6NGPuplrUGh8eYq',
+        clientID: config.google.clientID,
+        clientSecret: config.google.clientSecret,
         callbackURL: '/auth/google/callback',
         passReqToCallback: true
     },
