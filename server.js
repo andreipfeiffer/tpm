@@ -10,8 +10,7 @@ var express = require('express'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
-    config  = require('./server/config'),
-    pack = require('./package.json');
+    config  = require('./server/config');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -78,117 +77,15 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 require('./server/modules/db')( connection );
 
 
-var auth  = require('./server/modules/auth')( connection ),
-    clients = require('./server/modules/clients')( connection ),
-    projects = require('./server/modules/projects')( connection ),
-    settings = require('./server/modules/settings')( connection );
+var auth  = require('./server/modules/auth')( connection );
 
 // setup passport auth (before routes, after express session)
 passport.use(auth.localStrategyAuth);
 
-
-
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var google = require('googleapis');
-var OAuth2 = google.auth.OAuth2;
-var calendar = google.calendar('v3');
-var oauth2Client = new OAuth2();
-
-google.options({ auth: oauth2Client });
-
-passport.use('google',
-    new GoogleStrategy({
-        clientID: config.google.clientID,
-        clientSecret: config.google.clientSecret,
-        callbackURL: '/auth/google/callback',
-        passReqToCallback: true
-    },
-    function(req, accessToken, refreshToken, profile, done) {
-        auth.storeGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
-            oauth2Client.setCredentials({
-                'access_token': accessToken
-            });
-            done(err, user);
-        });
-    }
-));
-
 passport.serializeUser(auth.serializeUser);
 passport.deserializeUser(auth.deserializeUser);
 
-app.get('/auth/google',
-    auth.ensureSessionAuthenticated,
-    passport.authenticate('google', { scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/calendar'
-    ]})
-);
-app.get('/auth/google/callback',
-    auth.ensureSessionAuthenticated,
-    function(req, res, next) {
-        passport.authenticate('google', function(err, user/*, info*/) {
-            if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.redirect('/#settings');
-            });
-        })(req, res, next);
-    }
-);
-app.get('/cal',
-    auth.ensureSessionAuthenticated,
-    function(req, res) {
-        calendar.calendarList.list({}, function(err, response) {
-            if (err) {
-                res.status(err.code).send({ error: err.message });
-                return;
-            }
-            res.send(response);
-        });
-    }
-);
-
-
-// Projects routes
-// @todo move routes reparately
-
-app.get('/', function(req, res) {
-    res.render('index', {
-        title: pack.name,
-        description: pack.description,
-        version: pack.version
-    });
-});
-
-app.post('/login', auth.login);
-app.get('/logout', auth.logout);
-
-app.route('/projects')
-    .get(auth.ensureTokenAuthenticated, projects.getAll)
-    .post(auth.ensureTokenAuthenticated, projects.add);
-
-app.route('/projects/:id')
-    .get(auth.ensureTokenAuthenticated, projects.getById)
-    .put(auth.ensureTokenAuthenticated, projects.update)
-    .delete(auth.ensureTokenAuthenticated, projects.remove);
-
-app.route('/clients')
-    .get(auth.ensureTokenAuthenticated, clients.getAll)
-    .post(auth.ensureTokenAuthenticated, clients.add);
-
-app.route('/clients/:id')
-    .get(auth.ensureTokenAuthenticated, clients.getById)
-    .put(auth.ensureTokenAuthenticated, clients.update)
-    .delete(auth.ensureTokenAuthenticated, clients.remove);
-
-app.route('/settings')
-    .get(auth.ensureTokenAuthenticated, settings.getAll);
-
-app.route('/settings/:type')
-    .delete(auth.ensureTokenAuthenticated, settings.revokeAcces);
-
+require('./server/routes')(app, connection, passport);
 
 function start(port) {
     app.listen(port);
