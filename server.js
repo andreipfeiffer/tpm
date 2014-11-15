@@ -100,7 +100,7 @@ passport.use('google',
     new GoogleStrategy({
         clientID: '884230170474-ndnan3kql7s5dd7rg7o5botd92d2fitl.apps.googleusercontent.com',
         clientSecret: '7ulfAHdrB6NGPuplrUGh8eYq',
-        callbackURL: '/oauth2callback',
+        callbackURL: '/auth/google/callback',
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
@@ -124,7 +124,7 @@ app.get('/auth/google',
         'https://www.googleapis.com/auth/calendar'
     ]})
 );
-app.get('/oauth2callback',
+app.get('/auth/google/callback',
     auth.ensureSessionAuthenticated,
     function(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {

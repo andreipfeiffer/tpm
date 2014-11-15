@@ -11,15 +11,23 @@
             function($scope, /*ngNotify, */Settings) {
 
                 $scope.isLoading = true;
+                $scope.isLoadingGoogle = false;
 
                 Settings.get().$promise.then(function(data) {
                     $scope.settings = data;
                     $scope.isLoading = false;
-                    console.log(data);
                 });
 
+                $scope.getGoogleAccess = function() {
+                    $scope.isLoadingGoogle = true;
+                };
+
                 $scope.revokeGoogleAccess = function() {
-                    Settings.delete({ type: 'google' });
+                    $scope.isLoadingGoogle = true;
+                    Settings.delete({ type: 'google' }).$promise.then(function() {
+                        $scope.settings.googleToken = false;
+                        $scope.isLoadingGoogle = false;
+                    });
                 };
             }
         ]);

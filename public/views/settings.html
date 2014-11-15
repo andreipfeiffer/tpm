@@ -7,7 +7,18 @@
     <hr>
     <br>
 
-    <a href="/auth/google" ng-hide="settings.googleToken">Syncronize with Google Calendar</a>
-    <a href="" ng-show="settings.googleToken" ng-click="revokeGoogleAccess()">Revoke Google Calendar access</a>
+    <a href="/auth/google" class="btn btn-primary"
+        ng-hide="settings.googleToken"
+        ng-click="getGoogleAccess()"
+        ng-disabled="isLoadingGoogle">
+        Syncronize with Google Calendar
+    </a>
+
+    <button type="button" class="btn btn-default"
+        ng-show="settings.googleToken"
+        ng-click="revokeGoogleAccess()"
+        ng-disabled="isLoadingGoogle">
+        Revoke Google Calendar access
+    </button>
 
 </section>
