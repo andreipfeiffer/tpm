@@ -9,7 +9,6 @@ module.exports = function(connection) {
         oauth2Client = new OAuth2(),
         config = require('../config'),
         auth = require('./auth')( connection );
-    // var calendar = google.calendar('v3');
 
     var callback = function(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -43,12 +42,5 @@ module.exports = function(connection) {
 
     return {
         callback: callback
-        // logout: logout,
-        // localStrategyAuth: localStrategyAuth,
-        // ensureTokenAuthenticated: ensureTokenAuthenticated,
-        // ensureSessionAuthenticated: ensureSessionAuthenticated,
-        // serializeUser: serializeUser,
-        // deserializeUser: deserializeUser,
-        // storeGoogleOAuthToken: storeGoogleOAuthToken
     };
 };

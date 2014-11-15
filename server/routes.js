@@ -58,17 +58,4 @@ module.exports = function(app, connection, passport) {
         authGoogle.callback
     );
 
-    /*app.get('/cal',
-        auth.ensureSessionAuthenticated,
-        function(req, res) {
-            calendar.calendarList.list({}, function(err, response) {
-                if (err) {
-                    res.status(err.code).send({ error: err.message });
-                    return;
-                }
-                res.send(response);
-            });
-        }
-    );*/
-
 };

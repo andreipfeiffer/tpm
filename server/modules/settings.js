@@ -3,6 +3,8 @@ module.exports = function(connection) {
     'use strict';
 
     var request = require('request');
+        // google = require('googleapis'),
+        // calendar = google.calendar('v3');
 
     var getGoogleToken = function(idUser, callback) {
         var q;
@@ -14,6 +16,16 @@ module.exports = function(connection) {
             callback(err, docs[0].googleOAuthToken);
         });
     };
+
+    // var getCalendars = function(req, res) {
+    //     calendar.calendarList.list({}, function(err, response) {
+    //         if (err) {
+    //             res.status(err.code).send({ error: err.message });
+    //             return;
+    //         }
+    //         res.send(response);
+    //     });
+    // };
 
     return {
         getAll: function(req, res) {
