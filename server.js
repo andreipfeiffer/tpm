@@ -81,11 +81,12 @@ var auth  = require('./server/modules/auth')( connection );
 
 // setup passport auth (before routes, after express session)
 passport.use(auth.localStrategyAuth);
-
 passport.serializeUser(auth.serializeUser);
 passport.deserializeUser(auth.deserializeUser);
 
+// load routes
 require('./server/routes')(app, connection, passport);
+
 
 function start(port) {
     app.listen(port);
