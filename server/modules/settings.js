@@ -6,13 +6,6 @@ module.exports = function(connection) {
         authGoogle  = require('./authGoogle')( connection ),
         calendar = authGoogle.google.calendar('v3');
 
-    var getGoogleTokens = function(idUser, callback) {
-        connection.query('select `googleOAuthToken`,`googleOAuthRefreshToken` from `users` where `id`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
-            if (err) { callback(null, err); }
-            callback(err, docs[0].googleOAuthToken, docs[0].googleOAuthRefreshToken);
-        });
-    };
-
     var getCalendars = function(req, res, callback) {
         calendar.calendarList.list({}, function(err, response) {
             if (err) { callback(err, response); return; }
@@ -21,13 +14,11 @@ module.exports = function(connection) {
     };
 
     return {
-        getGoogleTokens: getGoogleTokens,
-
         getAll: function(req, res) {
             var userLogged = req.user,
                 result = {};
 
-            getGoogleTokens(userLogged.id, function(err, token/*, refreshToken*/) {
+            authGoogle.getTokens(userLogged.id, function(err, token/*, refreshToken*/) {
                 if (err) { return res.status(503).send({ error: 'Database error'}); }
 
                 result.googleToken = !!token.length;

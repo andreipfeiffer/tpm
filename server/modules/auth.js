@@ -117,7 +117,7 @@ module.exports = function(connection) {
 
                 // update token in database
                 connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
-                    settings.getGoogleTokens(user.id, function(err, token, refreshToken) {
+                    authGoogle.getTokens(user.id, function(err, token, refreshToken) {
                         if (err) { return res.status(503).send({ error: 'Database error'}); }
 
                         if (token.length) {

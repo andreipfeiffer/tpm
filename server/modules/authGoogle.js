@@ -52,6 +52,13 @@ module.exports = function(connection) {
         });
     };
 
+    var getTokens = function(idUser, callback) {
+        connection.query('select `googleOAuthToken`,`googleOAuthRefreshToken` from `users` where `id`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
+            if (err) { callback(null, err); }
+            callback(err, docs[0].googleOAuthToken, docs[0].googleOAuthRefreshToken);
+        });
+    };
+
     passport.use('google',
         new GoogleStrategy({
             clientID: config.google.clientID,
@@ -74,6 +81,7 @@ module.exports = function(connection) {
         callback: callback,
         oauth2Client: oauth2Client,
         google: google,
-        setTokens: setTokens
+        setTokens: setTokens,
+        getTokens: getTokens
     };
 };
