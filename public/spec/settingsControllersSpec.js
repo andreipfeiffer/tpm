@@ -6,7 +6,7 @@
 
         beforeEach(module('tpm'));
 
-        describe('SettingsController', function() {
+        describe('SettingsController without Google Access', function() {
             var scope, ctrl, $httpBackend;
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
@@ -41,6 +41,37 @@
                 $httpBackend.flush();
 
                 expect(scope.settings.googleToken).toBeFalsy();
+            });
+
+        });
+
+
+        describe('SettingsController with Google Access', function() {
+            var scope, ctrl, $httpBackend,
+                calendarsList = {
+                    items: [
+                        { id: 1 },
+                        { id: 2 },
+                        { id: 3 }
+                    ]
+                };
+
+            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+                $httpBackend = _$httpBackend_;
+                $httpBackend.expectGET(TPM.apiUrl + 'settings').respond({
+                    googleToken: true,
+                    calendars: calendarsList,
+                    selectedCalendar: 1
+                });
+
+                scope = $rootScope.$new();
+                ctrl = $controller('SettingsController', {$scope: scope});
+            }));
+
+
+            it('should have the selectedCalendar set', function() {
+                $httpBackend.flush();
+                expect(scope.selectedCalendar).toEqual(calendarsList.items[0]);
             });
 
         });
