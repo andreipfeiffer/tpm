@@ -14,7 +14,7 @@ module.exports = function(connection) {
             config.google.redirectURL
         );
 
-    var callback = function(req, res, next) {
+    var redirectCallback = function(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
             if (err) { return next(err); }
             if (!user) { return res.redirect('/login'); }
@@ -75,7 +75,7 @@ module.exports = function(connection) {
     ));
 
     return {
-        callback: callback,
+        callback: redirectCallback,
         google: google,
         setTokens: setTokens,
         getTokens: getTokens
