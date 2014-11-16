@@ -53,7 +53,7 @@ module.exports = function(connection) {
 
                 request.get('https://accounts.google.com/o/oauth2/revoke?token='+docs[0].googleOAuthToken, function (err, resGoogle, body) {
                     if (!err) {
-                        connection.query('update `users` set `googleOAuthToken`="", `googleOAuthRefreshToken`="" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
+                        connection.query('update `users` set `googleOAuthToken`="", `googleOAuthRefreshToken`="", `googleSelectedCalendar`="" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
                             if (err) { return res.status(503).send({ error: 'Database error: '}); }
 
                             res.send(body);
