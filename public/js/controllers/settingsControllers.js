@@ -43,8 +43,6 @@
                     var calendar = $scope.settings.calendars.items.filter(function(item) {
                         return item.id === id;
                     });
-                    console.log(id);
-                    console.log(calendar);
                     return calendar[0];
                 }
             }
