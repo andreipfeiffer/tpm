@@ -76,7 +76,6 @@ module.exports = function(connection) {
 
     return {
         callback: callback,
-        oauth2Client: oauth2Client,
         google: google,
         setTokens: setTokens,
         getTokens: getTokens
