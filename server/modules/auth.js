@@ -4,8 +4,9 @@ module.exports = function(connection) {
 
     var crypto = require('crypto'),
         passport = require('passport'),
-        LocalStrategy = require('passport-local').Strategy;
-
+        LocalStrategy = require('passport-local').Strategy,
+        settings = require('./settings')( connection ),
+        authGoogle  = require('./authGoogle')( connection );
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -110,13 +111,24 @@ module.exports = function(connection) {
 
                 var newAuthToken = md5(String( new Date().getTime() )),
                     loggedData = {
-                    authToken: newAuthToken,
-                    authUserId: user.id
-                };
+                        authToken: newAuthToken,
+                        authUserId: user.id
+                    };
 
                 // update token in database
                 connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
-                    res.status(200).json(loggedData);
+                    settings.getGoogleTokens(user.id, function(err, token, refreshToken) {
+                        if (err) { return res.status(503).send({ error: 'Database error'}); }
+
+                        if (token.length) {
+                            authGoogle.setTokens(token, refreshToken);
+                            loggedData.googleToken = token;
+                        }
+                        console.log('login');
+                        console.log(authGoogle.oauth2Client);
+
+                        res.status(200).json(loggedData);
+                    });
                 });
 
             });
@@ -156,18 +168,6 @@ module.exports = function(connection) {
         });
     };
 
-    var storeGoogleOAuthToken = function(sessionID, token, done) {
-        findUserBySession(sessionID, function(err, user) {
-            if (user) {
-                connection.query('update `users` set `googleOAuthToken`="' + token + '" where `id`="' + user.id + '"', function () {
-                    done(null, user);
-                });
-            } else {
-                done(err, false);
-            }
-        });
-    };
-
     return {
         login: login,
         logout: logout,
@@ -175,7 +175,6 @@ module.exports = function(connection) {
         ensureTokenAuthenticated: ensureTokenAuthenticated,
         ensureSessionAuthenticated: ensureSessionAuthenticated,
         serializeUser: serializeUser,
-        deserializeUser: deserializeUser,
-        storeGoogleOAuthToken: storeGoogleOAuthToken
+        deserializeUser: deserializeUser
     };
 };

@@ -4,11 +4,15 @@ module.exports = function(connection) {
 
     var passport = require('passport'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+        // auth = require('./auth')( connection ),
+        config = require('../config'),
         google = require('googleapis'),
         OAuth2 = google.auth.OAuth2,
-        oauth2Client = new OAuth2(),
-        config = require('../config'),
-        auth = require('./auth')( connection );
+        oauth2Client = new OAuth2(
+            config.google.clientID,
+            config.google.clientSecret,
+            config.google.redirectURL
+        );
 
     var callback = function(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -21,26 +25,55 @@ module.exports = function(connection) {
         })(req, res, next);
     };
 
-    google.options({ auth: oauth2Client });
+    var findUserBySession = function(sessionID, callback) {
+        connection.query('select * from `users` where `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
+            var result = user ? user[0] : null;
+            callback(err, result);
+        });
+    };
+
+    var storeGoogleOAuthToken = function(sessionID, token, refreshToken, done) {
+        findUserBySession(sessionID, function(err, user) {
+            if (user) {
+                connection.query('update `users` set `googleOAuthToken`="' + token + '", `googleOAuthRefreshToken`="' + refreshToken + '" where `id`="' + user.id + '"', function () {
+                    done(null, user);
+                });
+            } else {
+                done(err, false);
+            }
+        });
+    };
+
+    var setTokens = function(token, refreshToken) {
+        google.options({ auth: oauth2Client });
+        oauth2Client.setCredentials({
+            'access_token': token,
+            'refresh_token': refreshToken
+        });
+    };
 
     passport.use('google',
         new GoogleStrategy({
             clientID: config.google.clientID,
             clientSecret: config.google.clientSecret,
-            callbackURL: '/auth/google/callback',
+            callbackURL: config.google.redirectURL,
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
-            auth.storeGoogleOAuthToken(req.sessionID, accessToken, function(err, user) {
-                oauth2Client.setCredentials({
-                    'access_token': accessToken
-                });
+            console.log(refreshToken);
+            storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, function(err, user) {
+                setTokens(accessToken, refreshToken);
+                console.log('authGoogle');
+                console.log(oauth2Client);
                 done(err, user);
             });
         }
     ));
 
     return {
-        callback: callback
+        callback: callback,
+        oauth2Client: oauth2Client,
+        google: google,
+        setTokens: setTokens
     };
 };

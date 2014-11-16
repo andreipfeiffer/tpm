@@ -76,14 +76,6 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 // verify database structure
 require('./server/modules/db')( connection );
 
-
-var auth  = require('./server/modules/auth')( connection );
-
-// setup passport auth (before routes, after express session)
-passport.use(auth.localStrategyAuth);
-passport.serializeUser(auth.serializeUser);
-passport.deserializeUser(auth.deserializeUser);
-
 // load routes
 require('./server/routes')(app, connection, passport);
 

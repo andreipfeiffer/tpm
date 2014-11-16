@@ -3,11 +3,16 @@ module.exports = function(app, connection, passport) {
     'use strict';
 
     var auth  = require('./modules/auth')( connection ),
-        authGoogle  = require('./modules/authGoogle')( connection, passport ),
+        authGoogle  = require('./modules/authGoogle')( connection ),
         clients = require('./modules/clients')( connection ),
         projects = require('./modules/projects')( connection ),
         settings = require('./modules/settings')( connection ),
         pack = require('../package.json');
+
+    // setup passport auth (before routes, after express session)
+    passport.use(auth.localStrategyAuth);
+    passport.serializeUser(auth.serializeUser);
+    passport.deserializeUser(auth.deserializeUser);
 
     app.get('/', function(req, res) {
         res.render('index', {
@@ -46,11 +51,14 @@ module.exports = function(app, connection, passport) {
 
     app.get('/auth/google',
         auth.ensureSessionAuthenticated,
-        passport.authenticate('google', { scope: [
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/calendar'
-        ]})
+        passport.authenticate('google', {
+            scope: [
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/calendar'
+            ],
+            accessType: 'offline'
+        })
     );
 
     app.get('/auth/google/callback',

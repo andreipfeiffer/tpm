@@ -2,41 +2,48 @@ module.exports = function(connection) {
 
     'use strict';
 
-    var request = require('request');
-        // google = require('googleapis'),
-        // calendar = google.calendar('v3');
+    var request = require('request'),
+        authGoogle  = require('./authGoogle')( connection ),
+        calendar = authGoogle.google.calendar('v3');
 
-    var getGoogleToken = function(idUser, callback) {
-        var q;
-
-        q = 'select `googleOAuthToken` from `users` where `id`="' + idUser + '" and `isDeleted`="0"';
-
-        connection.query(q, function(err, docs) {
+    var getGoogleTokens = function(idUser, callback) {
+        connection.query('select `googleOAuthToken`,`googleOAuthRefreshToken` from `users` where `id`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
             if (err) { callback(null, err); }
-            callback(err, docs[0].googleOAuthToken);
+            callback(err, docs[0].googleOAuthToken, docs[0].googleOAuthRefreshToken);
         });
     };
 
-    // var getCalendars = function(req, res) {
-    //     calendar.calendarList.list({}, function(err, response) {
-    //         if (err) {
-    //             res.status(err.code).send({ error: err.message });
-    //             return;
-    //         }
-    //         res.send(response);
-    //     });
-    // };
+    var getCalendars = function(req, res, callback) {
+        calendar.calendarList.list({}, function(err, response) {
+            if (err) { callback(err, response); return; }
+            callback(null, response);
+        });
+    };
 
     return {
+        getGoogleTokens: getGoogleTokens,
+
         getAll: function(req, res) {
             var userLogged = req.user,
                 result = {};
 
-            getGoogleToken(userLogged.id, function(err, token) {
+            getGoogleTokens(userLogged.id, function(err, token, refreshToken) {
                 if (err) { return res.status(503).send({ error: 'Database error'}); }
 
                 result.googleToken = !!token.length;
-                res.send(result);
+
+                if (!result.googleToken) {
+                    return res.send(result);
+                }
+
+                getCalendars(req, res, function(err, calendars) {
+                    console.log(err);
+                    console.log(calendars);
+                    if (err) { return res.status(400).send({ error: 'Cannot retrieve calendar list'}); }
+
+                    result.calendars = calendars;
+                    res.send(result);
+                })
             });
         },
 
@@ -51,7 +58,7 @@ module.exports = function(connection) {
 
                 request.get('https://accounts.google.com/o/oauth2/revoke?token='+docs[0].googleOAuthToken, function (err, resGoogle, body) {
                     if (!err) {
-                        connection.query('update `users` set `googleOAuthToken`="" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
+                        connection.query('update `users` set `googleOAuthToken`="", `googleOAuthRefreshToken`="" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
                             if (err) { return res.status(503).send({ error: 'Database error: '}); }
 
                             res.send(body);
