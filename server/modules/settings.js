@@ -27,7 +27,7 @@ module.exports = function(connection) {
             var userLogged = req.user,
                 result = {};
 
-            getGoogleTokens(userLogged.id, function(err, token, refreshToken) {
+            getGoogleTokens(userLogged.id, function(err, token/*, refreshToken*/) {
                 if (err) { return res.status(503).send({ error: 'Database error'}); }
 
                 result.googleToken = !!token.length;
@@ -43,7 +43,7 @@ module.exports = function(connection) {
 
                     result.calendars = calendars;
                     res.send(result);
-                })
+                });
             });
         },
 
