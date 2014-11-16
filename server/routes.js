@@ -2,18 +2,13 @@ module.exports = function(app, connection) {
 
     'use strict';
 
-    var passport = require('passport'),
-        auth  = require('./modules/auth')( connection ),
+    var auth  = require('./modules/auth')( connection ),
         authGoogle  = require('./modules/authGoogle')( connection ),
+        passport = require('passport'),
         clients = require('./modules/clients')( connection ),
         projects = require('./modules/projects')( connection ),
         settings = require('./modules/settings')( connection ),
         pack = require('../package.json');
-
-    // setup passport auth (before routes, after express session)
-    passport.use(auth.localStrategyAuth);
-    passport.serializeUser(auth.serializeUser);
-    passport.deserializeUser(auth.deserializeUser);
 
     app.get('/', function(req, res) {
         res.render('index', {

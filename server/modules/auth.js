@@ -165,13 +165,15 @@ module.exports = function(connection) {
         });
     };
 
+    // setup passport auth (before routes, after express session)
+    passport.use(localStrategyAuth);
+    passport.serializeUser(serializeUser);
+    passport.deserializeUser(deserializeUser);
+
     return {
         login: login,
         logout: logout,
-        localStrategyAuth: localStrategyAuth,
         ensureTokenAuthenticated: ensureTokenAuthenticated,
-        ensureSessionAuthenticated: ensureSessionAuthenticated,
-        serializeUser: serializeUser,
-        deserializeUser: deserializeUser
+        ensureSessionAuthenticated: ensureSessionAuthenticated
     };
 };
