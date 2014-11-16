@@ -40,9 +40,16 @@
                 };
 
                 function getSelectedCalendar(id) {
-                    var calendar = $scope.settings.calendars.items.filter(function(item) {
+                    var calendar;
+
+                    if ( !$scope.settings.calendars || !$scope.settings.calendars.items ) {
+                        return {};
+                    }
+
+                    calendar = $scope.settings.calendars.items.filter(function(item) {
                         return item.id === id;
                     });
+
                     return calendar[0];
                 }
             }
