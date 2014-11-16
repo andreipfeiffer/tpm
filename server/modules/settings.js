@@ -27,11 +27,17 @@ module.exports = function(connection) {
                     return res.send(result);
                 }
 
-                getCalendars(req, res, function(err, calendars) {
-                    if (err) { return res.status(400).send({ error: 'Cannot retrieve calendar list'}); }
+                connection.query('select `googleSelectedCalendar` from `users` where `id`="' + userLogged.id + '" and `isDeleted`="0"', function(err, docs) {
+                    if (err) { return res.status(503).send({ error: 'Database error: '}); }
 
-                    result.calendars = calendars;
-                    res.send(result);
+                    result.selectedCalendar = docs[0].googleSelectedCalendar;
+
+                    getCalendars(req, res, function(err, calendars) {
+                        if (err) { return res.status(400).send({ error: 'Cannot retrieve calendar list'}); }
+
+                        result.calendars = calendars;
+                        res.send(result);
+                    });
                 });
             });
         },
@@ -57,6 +63,15 @@ module.exports = function(connection) {
                     }
                 });
 
+            });
+        },
+
+        setCalendar: function(req, res) {
+            var userLogged = req.user;
+            connection.query('update `users` set `googleSelectedCalendar`="'+req.params.calendarId+'" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
+                if (err) { return res.status(503).send({ error: 'Database error: '}); }
+
+                res.send(true);
             });
         }
     };

@@ -30,9 +30,10 @@
 
         .factory('SettingsService', ['$resource', function($resource) {
             return $resource(
-                TPM.apiUrl + 'settings/:type',
+                TPM.apiUrl + 'settings/:type/:field',
                 {
-                    type: '@type'
+                    type: '@type',
+                    field: '@field'
                 },
                 {
                     'update': { method:'PUT' }

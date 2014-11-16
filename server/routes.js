@@ -45,6 +45,9 @@ module.exports = function(app, connection) {
     app.route('/settings/:type')
         .delete(auth.ensureTokenAuthenticated, settings.revokeAcces);
 
+    app.route('/settings/google/:calendarId')
+        .put(auth.ensureTokenAuthenticated, settings.setCalendar);
+
     app.get('/auth/google',
         auth.ensureSessionAuthenticated,
         passport.authenticate('google', {
