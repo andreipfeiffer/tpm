@@ -5,7 +5,6 @@ module.exports = function(connection) {
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        settings = require('./settings')( connection ),
         authGoogle  = require('./authGoogle')( connection );
 
     // private encryption & validation methods
@@ -124,8 +123,6 @@ module.exports = function(connection) {
                             authGoogle.setTokens(token, refreshToken);
                             loggedData.googleToken = token;
                         }
-                        console.log('login');
-                        console.log(authGoogle.oauth2Client);
 
                         res.status(200).json(loggedData);
                     });

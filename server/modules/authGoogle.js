@@ -67,11 +67,8 @@ module.exports = function(connection) {
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
-            console.log(refreshToken);
             storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, function(err, user) {
                 setTokens(accessToken, refreshToken);
-                console.log('authGoogle');
-                console.log(oauth2Client);
                 done(err, user);
             });
         }

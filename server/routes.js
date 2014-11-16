@@ -1,8 +1,9 @@
-module.exports = function(app, connection, passport) {
+module.exports = function(app, connection) {
 
     'use strict';
 
-    var auth  = require('./modules/auth')( connection ),
+    var passport = require('passport'),
+        auth  = require('./modules/auth')( connection ),
         authGoogle  = require('./modules/authGoogle')( connection ),
         clients = require('./modules/clients')( connection ),
         projects = require('./modules/projects')( connection ),

@@ -28,8 +28,6 @@ module.exports = function(connection) {
                 }
 
                 getCalendars(req, res, function(err, calendars) {
-                    console.log(err);
-                    console.log(calendars);
                     if (err) { return res.status(400).send({ error: 'Cannot retrieve calendar list'}); }
 
                     result.calendars = calendars;

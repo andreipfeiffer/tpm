@@ -77,7 +77,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 require('./server/modules/db')( connection );
 
 // load routes
-require('./server/routes')(app, connection, passport);
+require('./server/routes')(app, connection);
 
 
 function start(port) {
