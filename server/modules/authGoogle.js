@@ -14,7 +14,7 @@ module.exports = function(connection, knex) {
             config.google.redirectURL
         );
 
-    var redirectCallback = function(req, res, next) {
+    function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
             if (err) { return next(err); }
             if (!user) { return res.redirect('/login'); }
@@ -23,32 +23,33 @@ module.exports = function(connection, knex) {
                 return res.redirect('/#settings');
             });
         })(req, res, next);
-    };
+    }
 
-    var findUserBySession = function(sessionID, callback) {
-        connection.query('select * from `users` where `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
-            var result = user ? user[0] : null;
-            callback(err, result);
-        });
-    };
+    function findUserBySession(sessionID, callback) {
+        return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
+    }
 
-    var storeGoogleOAuthToken = function(sessionID, token, refreshToken, done) {
-        findUserBySession(sessionID, function(err, user) {
+    function storeGoogleOAuthToken(sessionID, token, refreshToken, done) {
+        findUserBySession(sessionID).then(function(data) {
+            var user = data[0];
             // refreshToken is provided only on first authentication
             // so we update only if provided
             var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
 
             if (user) {
-                connection.query('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"', function () {
-                    done(null, user);
-                });
+                knex.raw('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"')
+                    .then(function() {
+                        done(null, user);
+                    });
             } else {
                 done(err, false);
             }
+        }).catch(function(e) {
+            return res.status(503).send({ error: 'Database error: ' + e.code});
         });
-    };
+    }
 
-    var setTokens = function(accessToken, refreshToken) {
+    function setTokens(accessToken, refreshToken) {
         var tokens = {
             'access_token': accessToken
         };
@@ -59,7 +60,7 @@ module.exports = function(connection, knex) {
 
         oauth2Client.setCredentials(tokens);
         google.options({ auth: oauth2Client });
-    };
+    }
 
     function getTokens(idUser) {
         return knex('users')
@@ -70,14 +71,17 @@ module.exports = function(connection, knex) {
             });
     }
 
-    var refreshToken = function(userId, callback) {
+    function refreshToken(userId, callback) {
         oauth2Client.refreshAccessToken(function(err, tokens) {
             setTokens(tokens['access_token'], tokens['refresh_token']);
-            connection.query('update `users` set `googleOAuthToken`="' + tokens['access_token'] + '" where `id`="' + userId + '"', function () {
-                callback(tokens['access_token']);
-            });
+            knex('users')
+                .where({ id: userId })
+                .update({ googleOAuthToken: tokens['access_token'] })
+                .then(function() {
+                    callback(tokens['access_token']);
+                });
         });
-    };
+    }
 
     passport.use('google',
         new GoogleStrategy({
