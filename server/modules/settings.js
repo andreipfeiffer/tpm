@@ -6,12 +6,16 @@ module.exports = function(connection, knex) {
         authGoogle  = require('./authGoogle')( connection, knex ),
         calendar = authGoogle.google.calendar('v3');
 
-    var getCalendars = function(req, res, callback) {
+    function getCalendars(req, res, callback) {
         calendar.calendarList.list({}, function(err, response) {
             if (err) { callback(err, response); return; }
             callback(null, response);
         });
-    };
+    }
+
+    function getSelectedCalendar(idUser) {
+        return knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: idUser });
+    }
 
     return {
         getAll: function(req, res) {
@@ -25,10 +29,8 @@ module.exports = function(connection, knex) {
                     return res.send(result);
                 }
 
-                connection.query('select `googleSelectedCalendar` from `users` where `id`="' + userLogged.id + '" and `isDeleted`="0"', function(err, docs) {
-                    if (err) { return res.status(503).send({ error: 'Database error: '}); }
-
-                    result.selectedCalendar = docs[0].googleSelectedCalendar;
+                getSelectedCalendar(userLogged.id).then(function(data) {
+                    result.selectedCalendar = data[0].googleCalendar;
 
                     getCalendars(req, res, function(err, calendars) {
                         if (err) {
@@ -44,11 +46,6 @@ module.exports = function(connection, knex) {
                 });
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
-
-            authGoogle.getTokens(userLogged.id, function(err, token/*, refreshToken*/) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-
             });
         },
 
@@ -78,11 +75,18 @@ module.exports = function(connection, knex) {
 
         setCalendar: function(req, res) {
             var userLogged = req.user;
-            connection.query('update `users` set `googleSelectedCalendar`="'+req.params.calendarId+'" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
-                if (err) { return res.status(503).send({ error: 'Database error: '}); }
 
-                res.send(true);
-            });
+            knex('users')
+                .where({ id: userLogged.id })
+                .update({
+                    googleSelectedCalendar: req.params.calendarId
+                })
+                .then(function() {
+                    res.send(true);
+                })
+                .catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         }
     };
 

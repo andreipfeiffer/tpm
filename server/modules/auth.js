@@ -140,13 +140,6 @@ module.exports = function(connection, knex) {
                 }).catch(function(e) {
                     return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
-
-
-
-
-                // connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
-                // });
-
             });
         })(req, res, next);
     };
