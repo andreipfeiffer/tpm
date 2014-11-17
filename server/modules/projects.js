@@ -1,46 +1,58 @@
-module.exports = function(connection) {
+module.exports = function(connection, knex) {
 
     'use strict';
 
     var table = 'projects';
 
-    var getById = function(id, idUser, callback) {
-        connection.query('select * from `' + table + '` where `id`="' + id + '" and `idUser`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
-            callback(err, docs);
-        });
+    function getProjectById(id, idUser) {
+        return knex('projects')
+            .select()
+            .where({
+                'id': id,
+                'idUser': idUser,
+                'isDeleted': '0'
+            });
+    }
+
+    function getAllProjects(idUser) {
+        return knex('projects')
+            .select()
+            .where({
+                'idUser': idUser,
+                'isDeleted': '0'
+            });
+    }
+
+    function logStatusChange(idUser, idProject, status) {
+        return knex('projects_status_log')
+            .insert({
+                idUser: idUser,
+                idProject: idProject,
+                status: status
+            });
     };
 
-    var insertStatusChange = function(params, forced, callback) {
-        var sql = '';
-
-        connection.query('select `status` from `' + table + '` where `id`="' + params.idProject + '" and `idUser`="' + params.idUser + '"', function(err, docs) {
-
-            // make a log entry only if the status has changed
-            if (forced || docs[0].status !== params.status) {
-
-                sql += 'insert into `projects_status_log` ';
-                sql += '(`idUser`, `idProject`, `status`) values ';
-                sql += '( "' + params.idUser + '"';
-                sql += ', "' + params.idProject + '"';
-                sql += ', "' + params.status + '" )';
-
-                connection.query(sql, function(err) {
-                    callback(err);
-                });
-            } else {
-                callback(err);
-            }
-        });
-
+    function addNewClient(idUser, idProject, name) {
+        return knex('clients')
+            .insert({
+                idUser: idUser,
+                name: name
+            })
+            .then(function(clients) {
+                return knex('projects')
+                    .where({'id': idProject, 'idUser': idUser})
+                    .update({idClient: clients[0]});
+            });
     };
 
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
-            connection.query('select `' + table + '`.* from `' + table + '` WHERE `' + table + '`.idUser="' + userLogged.id + '" and `isDeleted`="0"', function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
 
-                res.send(docs);
+            getAllProjects(userLogged.id).then(function(data) {
+                return res.send(data);
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
 
@@ -48,120 +60,111 @@ module.exports = function(connection) {
             var id = req.params.id,
                 userLogged = req.user;
 
-            getById(id, userLogged.id, function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-                if (!docs.length) { return res.status(410).send({ error: 'Record not found'}); }
-
-                res.send(docs[0]);
+            getProjectById(id, userLogged.id).then(function(data) {
+                if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
+                return res.send(data[0]);
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
 
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
-                sql = '',
-                dataStatusChange = {};
+                previousStatus;
 
-            sql += 'update `' + table + '` set ';
-            sql += '`name`= "' + req.body.name + '", ';
-            sql += '`idClient`= "' + req.body.idClient + '", ';
-            sql += '`status`= "' + req.body.status + '", ';
-            sql += '`days`= "' + req.body.days + '", ';
-            sql += '`priceEstimated`= "' + req.body.priceEstimated + '", ';
-            sql += '`priceFinal`= "' + req.body.priceFinal + '", ';
-            sql += '`dateAdded`= "' + req.body.dateAdded + '", ';
-            sql += '`dateEstimated`= "' + req.body.dateEstimated + '", ';
-            sql += '`description`= "' + req.body.description + '" ';
-            sql += ' where `id`="' + id + '" AND `idUser`="' + userLogged.id + '"';
+            var editProject = knex('projects')
+                .where({
+                    'id': id,
+                    'idUser': userLogged.id,
+                    'isDeleted': '0'
+                })
+                .update({
+                    name: req.body.name,
+                    idClient: req.body.idClient,
+                    status: req.body.status,
+                    days: req.body.days,
+                    priceEstimated: req.body.priceEstimated,
+                    priceFinal: req.body.priceFinal,
+                    dateAdded: req.body.dateAdded,
+                    dateEstimated: req.body.dateEstimated,
+                    description: req.body.description
+                });
 
-            dataStatusChange = {
-                idUser: userLogged.id,
-                idProject: id,
-                status: req.body.status
-            };
+            getProjectById(id, userLogged.id).then(function(data) {
 
-            insertStatusChange(dataStatusChange, false, function(err) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
+                previousStatus = data[0].status;
 
-                connection.query(sql, function(err) {
-                    if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                    res.send(true);
+                editProject.then(function(data) {
+                    if (previousStatus !== req.body.status) {
+                        logStatusChange(userLogged.id, id, req.body.status).then(function() {
+                            return res.send(true);
+                        });
+                    } else {
+                        return res.send(true);
+                    }
+                })
+                .catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
             });
-
         },
 
         add: function(req, res) {
             var data = req.body,
                 userLogged = req.user,
-                dataStatusChange = {};
+                newProject = {},
+                newProjectData = {
+                    idUser: userLogged.id,
+                    idClient: data.idClient,
+                    name: data.name,
+                    status: data.status,
+                    days: data.days,
+                    priceEstimated: data.priceEstimated,
+                    priceFinal: data.priceFinal,
+                    dateAdded: data.dateAdded,
+                    dateEstimated: data.dateEstimated,
+                    description: data.description
+                };
 
-            function addNewProject() {
-                var sql = '';
+            var addNewProject = knex('projects').insert(newProjectData);
 
-                sql += 'insert into `' + table + '` ';
-                sql += '(`idUser`, `idClient`, `name`, `status`, `days`, `priceEstimated`, `priceFinal`, `dateAdded`, `dateEstimated`, `description`) values ';
-                sql += '("' + userLogged.id + '", "' + data.idClient + '", "' + data.name + '", "' + data.status + '", "' + data.days + '", "' + data.priceEstimated + '", "' + data.priceFinal + '", "' + data.dateAdded + '", "' + data.dateEstimated + '", "' + data.description + '")';
-
-                connection.query(sql, function(err, newItem) {
-                    if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                    getById(newItem.insertId, userLogged.id, function(err, docs) {
-                        if (err) { return res.status(503).send({ error: 'Database error'}); }
-                        if (!docs.length) { return res.status(410).send({ error: 'Record not found'}); }
-
-                        dataStatusChange = {
-                            idUser: userLogged.id,
-                            idProject: newItem.insertId,
-                            status: data.status
-                        };
-
-                        insertStatusChange(dataStatusChange, true, function(err) {
-                            if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                            res.status(201).send(docs[0]);
-                        });
+            addNewProject.then(function(newProjectId) {
+                return getProjectById(newProjectId, userLogged.id);
+            }).then(function(project) {
+                newProject = project[0];
+                return logStatusChange(userLogged.id, newProject.id, req.body.status);
+            }).then(function() {
+                if ( data.newClientName.length ) {
+                    return addNewClient(userLogged.id, newProject.id, data.newClientName ).then(function() {
+                        return res.status(201).send(newProject);
                     });
-                });
-            }
-
-            if ( data.newClientName.length ) {
-                // insert new client first, to get the ID
-                connection.query('insert into `clients` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.newClientName + '")', function(err, newItem) {
-                    if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                    data.idClient = newItem.insertId;
-                    addNewProject();
-                });
-            } else {
-                addNewProject();
-            }
-
+                } else {
+                    return res.status(201).send(newProject);
+                }
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
         },
 
         remove: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user,
-                sql = '';
+                userLogged = req.user;
 
-            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '" and `isDeleted`="0"', function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
+            var softDeleteProject = knex('projects')
+                .where({
+                    'id': id,
+                    'idUser': userLogged.id,
+                    'isDeleted': '0'
+                })
+                .update({
+                    'isDeleted': '1'
+                });
 
-                if ( docs.length === 0 ) {
-                    return res.status(404).send({ error: 'id "' + id + '" was not found'});
-                } else {
-
-                    sql += 'update `' + table + '` set ';
-                    sql += '`isDeleted`= "1" ';
-                    sql += ' where `id`="' + id + '" and `idUser`="' + userLogged.id + '" and `isDeleted`="0"';
-
-                    connection.query(sql, function(err) {
-                        if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                        res.status(204).end();
-                    });
-                }
+            softDeleteProject.then(function() {
+                return res.status(204).end();
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         }
     };

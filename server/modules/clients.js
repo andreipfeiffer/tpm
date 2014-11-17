@@ -39,7 +39,7 @@ module.exports = function(knex) {
                 userLogged = req.user;
 
             getClientById(id, userLogged.id).then(function(data) {
-                if (!data.length) { return res.status(410).send({ error: 'Record not found'}); }
+                if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
                 return res.send(data[0]);
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
