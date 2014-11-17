@@ -35,16 +35,12 @@ module.exports = function(knex) {
             // so we update only if provided
             var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
 
-            if (user) {
-                knex.raw('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"')
-                    .then(function() {
-                        done(null, user);
-                    });
-            } else {
-                done(err, false);
-            }
+            return knex.raw('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"')
+                .then(function() {
+                    done(null, user);
+                });
         }).catch(function(e) {
-            return res.status(503).send({ error: 'Database error: ' + e.code});
+            done(err, false);
         });
     }
 
