@@ -1,14 +1,14 @@
-module.exports = function(connection) {
+module.exports = function(connection, knex) {
 
     'use strict';
 
     var table = 'clients',
-        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0")';
+        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0") as nrProjects';
 
     var getById = function(id, idUser, callback) {
         var qClients;
 
-        qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '" and `isDeleted`="0"';
+        qClients = 'select `' + table + '`.*, ' + qProjects + ' from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '" and `isDeleted`="0"';
 
         connection.query(qClients, function(err, docs) {
             callback(err, docs);
@@ -17,15 +17,19 @@ module.exports = function(connection) {
 
     return {
         getAll: function(req, res) {
-            var userLogged = req.user,
-                qClients;
+            var userLogged = req.user;
 
-            qClients = 'select `' + table + '`.*, ' + qProjects + ' as nrProjects from `' + table + '` where `idUser`="' + userLogged.id + '" and `isDeleted`="0"';
+            var getClients = knex('clients')
+                .select('*', knex.raw(qProjects))
+                .where({
+                    'idUser': userLogged.id,
+                    'isDeleted': '0'
+                });
 
-            connection.query(qClients, function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                res.send(docs);
+            getClients.then(function(data) {
+                return res.send(data);
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
 

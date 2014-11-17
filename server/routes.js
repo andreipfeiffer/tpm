@@ -1,11 +1,11 @@
-module.exports = function(app, connection) {
+module.exports = function(app, connection, knex) {
 
     'use strict';
 
     var auth  = require('./modules/auth')( connection ),
         authGoogle  = require('./modules/authGoogle')( connection ),
         passport = require('passport'),
-        clients = require('./modules/clients')( connection ),
+        clients = require('./modules/clients')( connection, knex ),
         projects = require('./modules/projects')( connection ),
         settings = require('./modules/settings')( connection ),
         pack = require('../package.json');

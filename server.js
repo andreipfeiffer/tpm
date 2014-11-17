@@ -39,6 +39,16 @@ var allowCrossDomain = function(req, res, next) {
 var app = express(),
     env = process.env.NODE_ENV || 'development';
 
+var knex = require('knex')({
+    client: 'mysql',
+    connection: {
+        host     : config.mysql.host,
+        user     : config.mysql.user,
+        password : config.mysql.password,
+        database : config.mysql.database
+    }
+});
+
 var connection = mysql.createConnection({
     host     : config.mysql.host,
     user     : config.mysql.user,
@@ -77,7 +87,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 require('./server/modules/db')( connection );
 
 // load routes
-require('./server/routes')(app, connection);
+require('./server/routes')(app, connection, knex);
 
 
 function start(port) {
