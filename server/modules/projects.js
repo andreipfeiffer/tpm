@@ -2,8 +2,6 @@ module.exports = function(connection, knex) {
 
     'use strict';
 
-    var table = 'projects';
-
     function getProjectById(id, idUser) {
         return knex('projects')
             .select()
@@ -30,7 +28,7 @@ module.exports = function(connection, knex) {
                 idProject: idProject,
                 status: status
             });
-    };
+    }
 
     function addNewClient(idUser, idProject, name) {
         return knex('clients')
@@ -43,7 +41,7 @@ module.exports = function(connection, knex) {
                     .where({'id': idProject, 'idUser': idUser})
                     .update({idClient: clients[0]});
             });
-    };
+    }
 
     return {
         getAll: function(req, res) {
@@ -95,7 +93,7 @@ module.exports = function(connection, knex) {
 
                 previousStatus = data[0].status;
 
-                editProject.then(function(data) {
+                editProject.then(function() {
                     if (previousStatus !== req.body.status) {
                         logStatusChange(userLogged.id, id, req.body.status).then(function() {
                             return res.send(true);
