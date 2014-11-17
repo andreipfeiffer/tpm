@@ -1,4 +1,4 @@
-module.exports = function(connection) {
+module.exports = function(connection, knex) {
 
     'use strict';
 
@@ -61,12 +61,14 @@ module.exports = function(connection) {
         google.options({ auth: oauth2Client });
     };
 
-    var getTokens = function(idUser, callback) {
-        connection.query('select `googleOAuthToken`,`googleOAuthRefreshToken` from `users` where `id`="' + idUser + '" and `isDeleted`="0"', function(err, docs) {
-            if (err) { callback(null, err); }
-            callback(err, docs[0].googleOAuthToken, docs[0].googleOAuthRefreshToken);
-        });
-    };
+    function getTokens(idUser) {
+        return knex('users')
+            .select('googleOAuthToken as accessToken', 'googleOAuthRefreshToken as refreshToken')
+            .where({
+                id: idUser,
+                isDeleted: '0'
+            });
+    }
 
     var refreshToken = function(userId, callback) {
         oauth2Client.refreshAccessToken(function(err, tokens) {

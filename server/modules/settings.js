@@ -1,9 +1,9 @@
-module.exports = function(connection) {
+module.exports = function(connection, knex) {
 
     'use strict';
 
     var request = require('request'),
-        authGoogle  = require('./authGoogle')( connection ),
+        authGoogle  = require('./authGoogle')( connection, knex ),
         calendar = authGoogle.google.calendar('v3');
 
     var getCalendars = function(req, res, callback) {
@@ -18,10 +18,8 @@ module.exports = function(connection) {
             var userLogged = req.user,
                 result = {};
 
-            authGoogle.getTokens(userLogged.id, function(err, token/*, refreshToken*/) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                result.googleToken = !!token.length;
+            authGoogle.getTokens(userLogged.id).then(function(tokens) {
+                result.googleToken = !!tokens[0].accessToken.length;
 
                 if (!result.googleToken) {
                     return res.send(result);
@@ -44,6 +42,13 @@ module.exports = function(connection) {
                         res.send(result);
                     });
                 });
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
+
+            authGoogle.getTokens(userLogged.id, function(err, token/*, refreshToken*/) {
+                if (err) { return res.status(503).send({ error: 'Database error'}); }
+
             });
         },
 

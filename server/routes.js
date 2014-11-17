@@ -2,12 +2,12 @@ module.exports = function(app, connection, knex) {
 
     'use strict';
 
-    var auth  = require('./modules/auth')( connection ),
-        authGoogle  = require('./modules/authGoogle')( connection ),
+    var auth  = require('./modules/auth')( connection, knex ),
+        authGoogle  = require('./modules/authGoogle')( connection, knex ),
         passport = require('passport'),
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
-        settings = require('./modules/settings')( connection ),
+        settings = require('./modules/settings')( connection, knex ),
         pack = require('../package.json');
 
     app.get('/', function(req, res) {

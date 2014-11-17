@@ -1,11 +1,11 @@
-module.exports = function(connection) {
+module.exports = function(connection, knex) {
 
     'use strict';
 
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        authGoogle  = require('./authGoogle')( connection );
+        authGoogle  = require('./authGoogle')( connection, knex );
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -115,20 +115,37 @@ module.exports = function(connection) {
                     };
 
                 // update token in database
-                connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
-                    authGoogle.getTokens(user.id, function(err, token, refreshToken) {
-                        if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                        if (token.length) {
-                            authGoogle.setTokens(token, refreshToken);
-                            authGoogle.refreshToken(user.id, function(newToken) {
-                                loggedData.googleToken = newToken;
-                            });
-                        }
-
-                        res.status(200).json(loggedData);
+                var updateAuthData = knex('users')
+                    .where({
+                        'id': user.id
+                    })
+                    .update({
+                        authToken: newAuthToken,
+                        sessionID: req.sessionID
                     });
+
+                updateAuthData.then(function() {
+                    return authGoogle.getTokens(user.id);
+                }).then(function(data) {
+                    if (data[0].accessToken.length) {
+                        authGoogle.setTokens(data[0].accessToken, data[0].refreshToken);
+                        authGoogle.refreshToken(user.id, function(newToken) {
+                            loggedData.googleToken = newToken;
+                            return res.status(200).json(loggedData);
+                        });
+                    } else {
+                        return res.status(200).json(loggedData);
+                    }
+
+                }).catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
+
+
+
+
+                // connection.query('update `users` set `authToken`="' + newAuthToken + '", `sessionID`="' + req.sessionID + '" where `id`="' + user.id + '"', function () {
+                // });
 
             });
         })(req, res, next);
