@@ -3,7 +3,7 @@ module.exports = function(connection, knex) {
     'use strict';
 
     var request = require('request'),
-        authGoogle  = require('./authGoogle')( connection, knex ),
+        authGoogle  = require('./authGoogle')( knex ),
         calendar = authGoogle.google.calendar('v3');
 
     function getCalendars(req, res, callback) {

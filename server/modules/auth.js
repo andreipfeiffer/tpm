@@ -5,7 +5,7 @@ module.exports = function(connection, knex) {
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        authGoogle  = require('./authGoogle')( connection, knex );
+        authGoogle  = require('./authGoogle')( knex );
 
     // private encryption & validation methods
     // var generateSalt = function() {

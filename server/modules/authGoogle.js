@@ -1,10 +1,9 @@
-module.exports = function(connection, knex) {
+module.exports = function(knex) {
 
     'use strict';
 
     var passport = require('passport'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-        // auth = require('./auth')( connection ),
         config = require('../config'),
         google = require('googleapis'),
         OAuth2 = google.auth.OAuth2,

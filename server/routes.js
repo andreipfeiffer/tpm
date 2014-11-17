@@ -3,7 +3,7 @@ module.exports = function(app, connection, knex) {
     'use strict';
 
     var auth  = require('./modules/auth')( connection, knex ),
-        authGoogle  = require('./modules/authGoogle')( connection, knex ),
+        authGoogle  = require('./modules/authGoogle')( knex ),
         passport = require('passport'),
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
