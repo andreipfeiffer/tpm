@@ -18,48 +18,36 @@ module.exports = function(connection, knex) {
     //     return salt;
     // };
 
-    var md5 = function(str) {
+    function md5(str) {
         return crypto.createHash('md5').update(str).digest('hex');
-    };
+    }
 
     // var saltAndHash = function(pass, callback) {
     //     var salt = generateSalt();
     //     callback(salt + md5(pass + salt));
     // };
 
-    var validatePassword = function(plainPass, hashedPass) {
+    function validatePassword(plainPass, hashedPass) {
         var salt = hashedPass.substr(0, 10);
         var validHash = salt + md5(plainPass + salt);
         return (hashedPass === validHash);
-    };
+    }
 
-    var findUserById = function(id, callback) {
-        connection.query('select * from `users` where `id`="' + id + '" and `isDeleted`="0"', function (err, user) {
-            var result = user ? user[0] : null;
-            callback(err, result);
-        });
-    };
+    function findUserById(id) {
+        return knex('users').select().where({ id: id, isDeleted: '0' });
+    }
 
-    var findUserByUsername = function(username, callback) {
-        connection.query('select * from `users` where `email`="' + username + '" and `isDeleted`="0"', function (err, user) {
-            var result = user ? user[0] : null;
-            callback(err, result);
-        });
-    };
+    function findUserByUsername(username) {
+        return knex('users').select().where({ email: username, isDeleted: '0' });
+    }
 
-    var findUserByToken = function(token, sessionID, callback) {
-        connection.query('select * from `users` where `authToken`="' + token + '" and `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
-            var result = user ? user[0] : null;
-            callback(err, result);
-        });
-    };
+    function findUserByToken(token, sessionID) {
+        return knex('users').select().where({ authToken: token, sessionID: sessionID, isDeleted: '0' });
+    }
 
-    var findUserBySession = function(sessionID, callback) {
-        connection.query('select * from `users` where `sessionID`="' + sessionID + '" and `isDeleted`="0"', function (err, user) {
-            var result = user ? user[0] : null;
-            callback(err, result);
-        });
-    };
+    function findUserBySession(sessionID) {
+        return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
+    }
 
     // used for initial username/password authentication
     var localStrategyAuth = new LocalStrategy(
@@ -67,7 +55,9 @@ module.exports = function(connection, knex) {
             // saltAndHash(password, function(resp) {
             //     console.log(resp);
             // });
-            findUserByUsername(username, function(err, user) {
+
+            findUserByUsername(username).then(function(data) {
+                var user = data[0];
                 // console.log(user);
                 if (!user) {
                     done(null, false, { message: 'Incorrect username.' });
@@ -76,25 +66,29 @@ module.exports = function(connection, knex) {
                 } else {
                     return done(null, user);
                 }
+            }).catch(function(e) {
+                done(null, false, { message: 'Database error.' });
             });
         }
     );
 
-    var serializeUser = function(user, done) {
+    function serializeUser(user, done) {
         done(null, user.id);
-    };
+    }
 
-    var deserializeUser = function(id, done) {
-        findUserById(id, function(err, user) {
+    function deserializeUser(id, done) {
+        findUserById(id).then(function(user) {
             if (user) {
                 done(null, user);
             } else {
                 done(null, false);
             }
+        }).catch(function(e) {
+            done(null, false);
         });
-    };
+    }
 
-    var login = function(req, res, next) {
+    function login(req, res, next) {
         return passport.authenticate('local', function(err, user) {
             if (err) {
                 return next(err);
@@ -130,7 +124,7 @@ module.exports = function(connection, knex) {
                     if (data[0].accessToken.length) {
                         authGoogle.setTokens(data[0].accessToken, data[0].refreshToken);
                         authGoogle.refreshToken(user.id, function(newToken) {
-                            loggedData.googleToken = newToken;
+                            // loggedData.googleToken = newToken;
                             return res.status(200).json(loggedData);
                         });
                     } else {
@@ -142,40 +136,48 @@ module.exports = function(connection, knex) {
                 });
             });
         })(req, res, next);
-    };
+    }
 
-    var logout = function(req, res) {
-        connection.query('update `users` set `authToken`="", `sessionID`="" where `id`="' + req.user.id + '"', function () {
-            req.logout();
-            return res.status(200).end();
-        });
-    };
+    function logout(req, res) {
+        knex('users')
+            .where({ id: req.user.id })
+            .update({ authToken: '', sessionID: '' })
+            .then(function() {
+                req.logout();
+                return res.status(200).end();
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
+    }
 
-    // @note: Need to protect all API calls (other than login/logout) with this check
-    var ensureTokenAuthenticated = function(req, res, next) {
+    function ensureTokenAuthenticated(req, res, next) {
         var token = req.headers.authorization;
 
-        findUserByToken(token, req.sessionID, function(err, user) {
-            if (err) { return res.status(401).end(); }
+        findUserByToken(token, req.sessionID).then(function(data) {
+            var user = data[0];
             if (!user) { return res.status(401).end(); }
-
-            // @todo refresh token ?!
 
             // add the logged user's data in the request, so the "next()" method can access it
             req.user = user;
             return next();
+        }).catch(function(e) {
+            return res.status(503).send({ error: 'Database error: ' + e.code});
         });
+    }
 
-    };
+    function ensureSessionAuthenticated(req, res, next) {
+        findUserByToken(req.sessionID).then(function(data) {
+            var user = data[0];
 
-    var ensureSessionAuthenticated = function(req, res, next) {
-        findUserBySession(req.sessionID, function(err, user) {
-            if (err) { return res.status(401).end(); }
             if (!user) { return res.status(401).end(); }
+
+            // add the logged user's data in the request, so the "next()" method can access it
             req.user = user;
             return next();
+        }).catch(function(e) {
+            return res.status(503).send({ error: 'Database error: ' + e.code});
         });
-    };
+    }
 
     // setup passport auth (before routes, after express session)
     passport.use(localStrategyAuth);
