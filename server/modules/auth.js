@@ -1,4 +1,4 @@
-module.exports = function(connection, knex) {
+module.exports = function(knex) {
 
     'use strict';
 
@@ -66,7 +66,7 @@ module.exports = function(connection, knex) {
                 } else {
                     return done(null, user);
                 }
-            }).catch(function(e) {
+            }).catch(function(/*e*/) {
                 done(null, false, { message: 'Database error.' });
             });
         }
@@ -83,7 +83,7 @@ module.exports = function(connection, knex) {
             } else {
                 done(null, false);
             }
-        }).catch(function(e) {
+        }).catch(function(/*e*/) {
             done(null, false);
         });
     }
@@ -123,7 +123,7 @@ module.exports = function(connection, knex) {
                 }).then(function(data) {
                     if (data[0].accessToken.length) {
                         authGoogle.setTokens(data[0].accessToken, data[0].refreshToken);
-                        authGoogle.refreshToken(user.id, function(newToken) {
+                        authGoogle.refreshToken(user.id, function(/*newToken*/) {
                             // loggedData.googleToken = newToken;
                             return res.status(200).json(loggedData);
                         });
@@ -166,7 +166,7 @@ module.exports = function(connection, knex) {
     }
 
     function ensureSessionAuthenticated(req, res, next) {
-        findUserByToken(req.sessionID).then(function(data) {
+        findUserBySession(req.sessionID).then(function(data) {
             var user = data[0];
 
             if (!user) { return res.status(401).end(); }
