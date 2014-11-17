@@ -1,4 +1,4 @@
-module.exports = function(connection, knex) {
+module.exports = function(knex) {
 
     'use strict';
 
