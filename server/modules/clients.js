@@ -3,30 +3,32 @@ module.exports = function(connection, knex) {
     'use strict';
 
     var table = 'clients',
-        qProjects = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0") as nrProjects';
+        projectsCount = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0") as nrProjects';
 
-    var getById = function(id, idUser, callback) {
-        var qClients;
+    function getClientById(id, idUser) {
+        return knex('clients')
+            .select('*', knex.raw(projectsCount))
+            .where({
+                'id': id,
+                'idUser': idUser,
+                'isDeleted': '0'
+            });
+    }
 
-        qClients = 'select `' + table + '`.*, ' + qProjects + ' from `' + table + '` where `id`="' + id + '" AND `idUser`="' + idUser + '" and `isDeleted`="0"';
-
-        connection.query(qClients, function(err, docs) {
-            callback(err, docs);
-        });
-    };
+    function getAllClients(idUser) {
+        return knex('clients')
+            .select('*', knex.raw(projectsCount))
+            .where({
+                'idUser': idUser,
+                'isDeleted': '0'
+            });
+    }
 
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
 
-            var getClients = knex('clients')
-                .select('*', knex.raw(qProjects))
-                .where({
-                    'idUser': userLogged.id,
-                    'isDeleted': '0'
-                });
-
-            getClients.then(function(data) {
+            getAllClients(userLogged.id).then(function(data) {
                 return res.send(data);
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
@@ -37,11 +39,11 @@ module.exports = function(connection, knex) {
             var id = req.params.id,
                 userLogged = req.user;
 
-            getById(id, userLogged.id, function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-                if (!docs.length) { return res.status(410).send({ error: 'Record not found'}); }
-
-                res.send(docs[0]);
+            getClientById(id, userLogged.id).then(function(data) {
+                if (!data.length) { return res.status(410).send({ error: 'Record not found'}); }
+                return res.send(data[0]);
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
 
@@ -49,10 +51,21 @@ module.exports = function(connection, knex) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
-            connection.query('update `' + table + '` set `name`="' + req.body.name + '", `description`="' + req.body.description + '" where `id`="' + id + '" AND `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
+            var editClient = knex('clients')
+                .where({
+                    'id': id,
+                    'idUser': userLogged.id,
+                    'isDeleted': '0'
+                })
+                .update({
+                    name: req.body.name,
+                    description: req.body.description
+                });
 
-                res.send(true);
+            editClient.then(function() {
+                return res.send(true);
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
 
@@ -60,36 +73,42 @@ module.exports = function(connection, knex) {
             var data = req.body,
                 userLogged = req.user;
 
-            connection.query('insert into `' + table + '` (`idUser`, `name`) values ("' + userLogged.id + '", "' + data.name + '")', function(err, newItem) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                getById(newItem.insertId, userLogged.id, function(err, docs) {
-                    if (err) { return res.status(503).send({ error: 'Database error'}); }
-                    if (!docs.length) { return res.status(410).send({ error: 'Record not found'}); }
-
-                    res.status(201).send(docs[0]);
+            var addNewClient = knex('clients')
+                .insert({
+                    idUser: userLogged.id,
+                    name: data.name
                 });
-            });
 
+            addNewClient
+                .then(function(data) {
+                    return getClientById(data[0], userLogged.id);
+                })
+                .then(function(data) {
+                    return res.status(201).send(data[0]);
+                })
+                .catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         },
 
         remove: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
-            connection.query('select `id` from `' + table + '` where `idUser`="' + userLogged.id + '" AND `id`="' + id + '" and `isDeleted`="0"', function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error'}); }
+            var softDeleteClient = knex('clients')
+                .where({
+                    'id': id,
+                    'idUser': userLogged.id,
+                    'isDeleted': '0'
+                })
+                .update({
+                    'isDeleted': '1'
+                });
 
-                if ( docs.length === 0 ) {
-                    return res.status(404).send({ error: 'id "' + id + '" was not found'});
-                } else {
-
-                    connection.query('update `' + table + '` set `isDeleted`="1" where `id`="' + id + '" and `idUser`="' + userLogged.id + '" and `isDeleted`="0"', function(err) {
-                        if (err) { return res.status(503).send({ error: 'Database error'}); }
-
-                        res.status(204).end();
-                    });
-                }
+            softDeleteClient.then(function() {
+                return res.status(204).end();
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         }
     };
