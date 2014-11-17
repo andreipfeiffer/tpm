@@ -6,7 +6,7 @@ module.exports = function(app, connection, knex) {
         authGoogle  = require('./modules/authGoogle')( connection ),
         passport = require('passport'),
         clients = require('./modules/clients')( knex ),
-        projects = require('./modules/projects')( connection, knex ),
+        projects = require('./modules/projects')( knex ),
         settings = require('./modules/settings')( connection ),
         pack = require('../package.json');
 
