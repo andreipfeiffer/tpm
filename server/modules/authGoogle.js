@@ -24,7 +24,7 @@ module.exports = function(knex) {
         })(req, res, next);
     }
 
-    function findUserBySession(sessionID, callback) {
+    function findUserBySession(sessionID) {
         return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
     }
 
@@ -40,7 +40,7 @@ module.exports = function(knex) {
                     done(null, user);
                 });
         }).catch(function(e) {
-            done(err, false);
+            done(e, false);
         });
     }
 
