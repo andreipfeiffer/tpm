@@ -43,7 +43,7 @@ module.exports = function(app, connection, knex) {
         .get(auth.ensureTokenAuthenticated, settings.getAll);
 
     app.route('/settings/:type')
-        .delete(auth.ensureTokenAuthenticated, settings.revokeAcces);
+        .delete(auth.ensureTokenAuthenticated, settings.revokeAccess);
 
     app.route('/settings/google/:calendarId')
         .put(auth.ensureTokenAuthenticated, settings.setCalendar);

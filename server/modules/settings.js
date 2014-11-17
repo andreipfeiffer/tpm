@@ -49,28 +49,31 @@ module.exports = function(connection, knex) {
             });
         },
 
-        revokeAcces: function(req, res) {
-            var userLogged = req.user,
-                q;
+        revokeAccess: function(req, res) {
+            var userLogged = req.user;
 
-            q = 'select `googleOAuthToken` from `users` where `id`="' + userLogged.id + '" and `isDeleted`="0"';
+            knex('users')
+                .select('googleOAuthToken as accessToken')
+                .where({ id: userLogged.id, isDeleted: '0' })
+                .then(function(data) {
+                    request.get('https://accounts.google.com/o/oauth2/revoke?token=' + data[0].accessToken, function (err, resGoogle, body) {
+                        if (err) { return res.send(err); }
 
-            connection.query(q, function(err, docs) {
-                if (err) { return res.status(503).send({ error: 'Database error: '}); }
-
-                request.get('https://accounts.google.com/o/oauth2/revoke?token='+docs[0].googleOAuthToken, function (err, resGoogle, body) {
-                    if (!err) {
-                        connection.query('update `users` set `googleOAuthToken`="", `googleOAuthRefreshToken`="", `googleSelectedCalendar`="" where `id`="' + userLogged.id + '"', function(err/*, docs*/) {
-                            if (err) { return res.status(503).send({ error: 'Database error: '}); }
-
-                            res.send(body);
-                        });
-                    } else {
-                        res.send(err);
-                    }
+                        return knex('users')
+                            .where({ id: userLogged.id })
+                            .update({
+                                googleOAuthToken: '',
+                                googleOAuthRefreshToken: '',
+                                googleSelectedCalendar: ''
+                            })
+                            .then(function() {
+                                return res.send(body);
+                            });
+                    });
+                })
+                .catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
-
-            });
         },
 
         setCalendar: function(req, res) {
