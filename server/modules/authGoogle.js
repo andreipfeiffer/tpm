@@ -34,8 +34,12 @@ module.exports = function(connection) {
 
     var storeGoogleOAuthToken = function(sessionID, token, refreshToken, done) {
         findUserBySession(sessionID, function(err, user) {
+            // refreshToken is provided only on first authentication
+            // so we update only if provided
+            var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
+
             if (user) {
-                connection.query('update `users` set `googleOAuthToken`="' + token + '", `googleOAuthRefreshToken`="' + refreshToken + '" where `id`="' + user.id + '"', function () {
+                connection.query('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + '" where `id`="' + user.id + '"', function () {
                     done(null, user);
                 });
             } else {
@@ -44,10 +48,10 @@ module.exports = function(connection) {
         });
     };
 
-    var setTokens = function(token, refreshToken) {
+    var setTokens = function(accessToken, refreshToken) {
         google.options({ auth: oauth2Client });
         oauth2Client.setCredentials({
-            'access_token': token,
+            'access_token': accessToken,
             'refresh_token': refreshToken
         });
     };

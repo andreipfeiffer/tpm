@@ -33,7 +33,12 @@ module.exports = function(connection) {
                     result.selectedCalendar = docs[0].googleSelectedCalendar;
 
                     getCalendars(req, res, function(err, calendars) {
-                        if (err) { return res.status(400).send({ error: 'Cannot retrieve calendar list'}); }
+                        if (err) {
+                            // @TODO need to revoke access, and ask for re-login
+                            // because credentials might be broken
+                            result.calendars = {};
+                            // return res.status(400).send({ error: err.message});
+                        }
 
                         result.calendars = calendars;
                         res.send(result);
