@@ -1,4 +1,4 @@
-module.exports = function(app, connection, knex) {
+module.exports = function(app, knex) {
 
     'use strict';
 
@@ -7,7 +7,7 @@ module.exports = function(app, connection, knex) {
         passport = require('passport'),
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
-        settings = require('./modules/settings')( connection, knex ),
+        settings = require('./modules/settings')( knex ),
         pack = require('../package.json');
 
     app.get('/', function(req, res) {

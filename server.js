@@ -87,7 +87,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 require('./server/modules/db')( connection );
 
 // load routes
-require('./server/routes')(app, connection, knex);
+require('./server/routes')(app, knex);
 
 
 function start(port) {
