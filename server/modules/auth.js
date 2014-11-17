@@ -121,7 +121,9 @@ module.exports = function(connection) {
 
                         if (token.length) {
                             authGoogle.setTokens(token, refreshToken);
-                            loggedData.googleToken = token;
+                            authGoogle.refreshToken(user.id, function(newToken) {
+                                loggedData.googleToken = token;
+                            });
                         }
 
                         res.status(200).json(loggedData);

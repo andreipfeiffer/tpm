@@ -39,7 +39,7 @@ module.exports = function(connection) {
             var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
 
             if (user) {
-                connection.query('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + '" where `id`="' + user.id + '"', function () {
+                connection.query('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"', function () {
                     done(null, user);
                 });
             } else {
@@ -49,11 +49,16 @@ module.exports = function(connection) {
     };
 
     var setTokens = function(accessToken, refreshToken) {
+        var tokens = {
+            'access_token': accessToken
+        };
+
+        if ( refreshToken ) {
+            tokens['refresh_token'] = refreshToken;
+        }
+
+        oauth2Client.setCredentials(tokens);
         google.options({ auth: oauth2Client });
-        oauth2Client.setCredentials({
-            'access_token': accessToken,
-            'refresh_token': refreshToken
-        });
     };
 
     var getTokens = function(idUser, callback) {
@@ -62,6 +67,15 @@ module.exports = function(connection) {
             callback(err, docs[0].googleOAuthToken, docs[0].googleOAuthRefreshToken);
         });
     };
+
+    var refreshToken = function(userId, callback) {
+        oauth2Client.refreshAccessToken(function(err, tokens) {
+            setTokens(tokens.access_token, tokens.refresh_token);
+            connection.query('update `users` set `googleOAuthToken`="' + tokens.access_token + '" where `id`="' + userId + '"', function () {
+                callback(tokens.access_token);
+            });
+        });
+    }
 
     passport.use('google',
         new GoogleStrategy({
@@ -82,6 +96,7 @@ module.exports = function(connection) {
         callback: redirectCallback,
         google: google,
         setTokens: setTokens,
-        getTokens: getTokens
+        getTokens: getTokens,
+        refreshToken: refreshToken
     };
 };

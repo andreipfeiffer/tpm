@@ -36,8 +36,8 @@ module.exports = function(connection) {
                         if (err) {
                             // @TODO need to revoke access, and ask for re-login
                             // because credentials might be broken
-                            result.calendars = {};
-                            // return res.status(400).send({ error: err.message});
+                            // result.calendars = {};
+                            return res.status(400).send({ error: err.message});
                         }
 
                         result.calendars = calendars;
