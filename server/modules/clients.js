@@ -2,8 +2,7 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var table = 'clients',
-        projectsCount = '(select COUNT(*) from `projects` where idClient = `' + table + '`.id and `isDeleted`="0") as nrProjects';
+    var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
     function getClientById(id, idUser) {
         return knex('clients')
