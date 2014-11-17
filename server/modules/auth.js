@@ -122,7 +122,7 @@ module.exports = function(connection) {
                         if (token.length) {
                             authGoogle.setTokens(token, refreshToken);
                             authGoogle.refreshToken(user.id, function(newToken) {
-                                loggedData.googleToken = token;
+                                loggedData.googleToken = newToken;
                             });
                         }
 

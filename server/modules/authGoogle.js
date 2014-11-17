@@ -70,12 +70,12 @@ module.exports = function(connection) {
 
     var refreshToken = function(userId, callback) {
         oauth2Client.refreshAccessToken(function(err, tokens) {
-            setTokens(tokens.access_token, tokens.refresh_token);
-            connection.query('update `users` set `googleOAuthToken`="' + tokens.access_token + '" where `id`="' + userId + '"', function () {
-                callback(tokens.access_token);
+            setTokens(tokens['access_token'], tokens['refresh_token']);
+            connection.query('update `users` set `googleOAuthToken`="' + tokens['access_token'] + '" where `id`="' + userId + '"', function () {
+                callback(tokens['access_token']);
             });
         });
-    }
+    };
 
     passport.use('google',
         new GoogleStrategy({
