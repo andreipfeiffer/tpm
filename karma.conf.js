@@ -25,7 +25,7 @@ module.exports = function(config) {
             '../bower_components/angular-ui-utils/ui-utils.min.js',
             '../bower_components/angular-touch/angular-touch.min.js',
             '../bower_components/angular-media-queries/match-media.js',
-            '../bower_components/ng-notify/dist/ng-notify.min.js',
+            '../bower_components/ng-notify-drew/src/scripts/ng-notify.js',
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
