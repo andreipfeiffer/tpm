@@ -36,7 +36,7 @@
                 $httpBackend.flush();
                 scope.settings.googleToken = false;
 
-                $httpBackend.expectDELETE(TPM.apiUrl + 'settings/google').respond(200);
+                $httpBackend.expectDELETE(TPM.apiUrl + 'auth/google').respond(205);
                 scope.revokeGoogleAccess();
                 $httpBackend.flush();
 

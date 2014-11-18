@@ -35,7 +35,7 @@
                 $scope.revokeGoogleAccess = function() {
                     $scope.isLoadingGoogle = true;
 
-                    $http.delete('/auth/google').success(function () {
+                    $http.delete(TPM.apiUrl + 'auth/google').success(function () {
                         $scope.settings.googleToken = false;
                         $scope.isLoadingGoogle = false;
                     });
