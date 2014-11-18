@@ -121,9 +121,9 @@ module.exports = function(knex) {
                 updateAuthData.then(function() {
                     return authGoogle.getTokens(user.id);
                 }).then(function(data) {
-                    if (data[0].accessToken.length) {
+                    if (data[0].accessToken.length && data[0].refreshToken.length) {
                         authGoogle.setTokens(data[0].accessToken, data[0].refreshToken);
-                        authGoogle.refreshToken(user.id, function(/*newToken*/) {
+                        authGoogle.refreshAccessToken(user.id, function(/*newToken*/) {
                             // loggedData.googleToken = newToken;
                             return res.status(200).json(loggedData);
                         });

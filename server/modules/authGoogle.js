@@ -17,7 +17,7 @@ module.exports = function(knex) {
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
             if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
+            if (!user) { return res.redirect('/#settings'); }
             req.login(user, function(err) {
                 if (err) { return next(err); }
                 return res.redirect('/#settings');
@@ -46,15 +46,8 @@ module.exports = function(knex) {
     }
 
     function setTokens(accessToken, refreshToken) {
-        var tokens = {
-            'access_token': accessToken
-        };
-
-        if ( refreshToken ) {
-            tokens['refresh_token'] = refreshToken;
-        }
-
-        oauth2Client.setCredentials(tokens);
+        accessToken && (oauth2Client.credentials['access_token'] = accessToken);
+        refreshToken && (oauth2Client.credentials['refresh_token'] = refreshToken);
         google.options({ auth: oauth2Client });
     }
 
@@ -67,9 +60,8 @@ module.exports = function(knex) {
             });
     }
 
-    function refreshToken(userId, callback) {
+    function refreshAccessToken(userId, callback) {
         oauth2Client.refreshAccessToken(function(err, tokens) {
-            setTokens(tokens['access_token'], tokens['refresh_token']);
             knex('users')
                 .where({ id: userId })
                 .update({ googleOAuthToken: tokens['access_token'] })
@@ -77,6 +69,16 @@ module.exports = function(knex) {
                     callback(tokens['access_token']);
                 });
         });
+    }
+
+    function clearTokens(userId) {
+        return knex('users')
+            .where({ id: userId })
+            .update({
+                googleOAuthToken: '',
+                googleOAuthRefreshToken: '',
+                googleSelectedCalendar: ''
+            });
     }
 
     passport.use('google',
@@ -99,33 +101,21 @@ module.exports = function(knex) {
         google: google,
         setTokens: setTokens,
         getTokens: getTokens,
-        refreshToken: refreshToken,
-
+        refreshAccessToken: refreshAccessToken,
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            knex('users')
-                .select('googleOAuthToken as accessToken')
-                .where({ id: userLogged.id, isDeleted: '0' })
-                .then(function(data) {
-                    request.get('https://accounts.google.com/o/oauth2/revoke?token=' + data[0].accessToken, function (err, resGoogle, body) {
-                        if (err) { return res.send(err); }
+            getTokens(userLogged.id).then(function(data) {
+                oauth2Client.revokeToken(data[0].accessToken, function (err, resGoogle, body) {
+                    if (err) { return res.send(err); }
 
-                        return knex('users')
-                            .where({ id: userLogged.id })
-                            .update({
-                                googleOAuthToken: '',
-                                googleOAuthRefreshToken: '',
-                                googleSelectedCalendar: ''
-                            })
-                            .then(function() {
-                                return res.send(body);
-                            });
+                    return clearTokens(userLogged.id).then(function() {
+                        return res.status(205).end();
                     });
-                })
-                .catch(function(e) {
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
+            }).catch(function(e) {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
         }
     };
 };
