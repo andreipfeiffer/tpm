@@ -115,7 +115,7 @@ var TPM = TPM || {};
             ngNotify.config({
                 theme: 'pure',
                 position: 'top',
-                duration: 1000,
+                duration: 2000,
                 type: 'success',
                 sticky: false
             });
