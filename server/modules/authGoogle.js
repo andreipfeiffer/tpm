@@ -105,7 +105,7 @@ module.exports = function(knex) {
             var userLogged = req.user;
 
             getTokens(userLogged.id).then(function(data) {
-                oauth2Client.revokeToken(data[0].accessToken, function (err, resGoogle, body) {
+                oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
                     if (err) { return res.send(err); }
 
                     return clearTokens(userLogged.id).then(function() {
