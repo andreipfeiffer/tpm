@@ -18,7 +18,6 @@
         "passport-local": "0.1.6",
         "passport-google-oauth": "0.1.5",
         "googleapis": "1.0.20",
-        "request": "2.48.0",
         "knex": "0.7.3"
     },
     "devDependencies": {

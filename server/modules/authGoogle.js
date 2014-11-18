@@ -3,7 +3,6 @@ module.exports = function(knex) {
     'use strict';
 
     var passport = require('passport'),
-        request = require('request'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../config'),
         google = require('googleapis'),
