@@ -6,9 +6,10 @@
 
         .controller('SettingsController', [
             '$scope',
+            '$http',
             // 'ngNotify',
             'SettingsService',
-            function($scope, /*ngNotify, */Settings) {
+            function($scope, $http, /*ngNotify, */Settings) {
 
                 $scope.isLoading = true;
                 $scope.isLoadingGoogle = false;
@@ -33,7 +34,8 @@
 
                 $scope.revokeGoogleAccess = function() {
                     $scope.isLoadingGoogle = true;
-                    Settings.delete({ type: 'google' }).$promise.then(function() {
+
+                    $http.delete('/auth/google').success(function () {
                         $scope.settings.googleToken = false;
                         $scope.isLoadingGoogle = false;
                     });

@@ -2,8 +2,7 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var request = require('request'),
-        authGoogle  = require('./authGoogle')( knex ),
+    var authGoogle  = require('./authGoogle')( knex ),
         calendar = authGoogle.google.calendar('v3');
 
     function getCalendars(req, res, callback) {
@@ -47,33 +46,6 @@ module.exports = function(knex) {
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
-        },
-
-        revokeAccess: function(req, res) {
-            var userLogged = req.user;
-
-            knex('users')
-                .select('googleOAuthToken as accessToken')
-                .where({ id: userLogged.id, isDeleted: '0' })
-                .then(function(data) {
-                    request.get('https://accounts.google.com/o/oauth2/revoke?token=' + data[0].accessToken, function (err, resGoogle, body) {
-                        if (err) { return res.send(err); }
-
-                        return knex('users')
-                            .where({ id: userLogged.id })
-                            .update({
-                                googleOAuthToken: '',
-                                googleOAuthRefreshToken: '',
-                                googleSelectedCalendar: ''
-                            })
-                            .then(function() {
-                                return res.send(body);
-                            });
-                    });
-                })
-                .catch(function(e) {
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
-                });
         },
 
         setCalendar: function(req, res) {

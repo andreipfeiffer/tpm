@@ -3,6 +3,7 @@ module.exports = function(knex) {
     'use strict';
 
     var passport = require('passport'),
+        request = require('request'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../config'),
         google = require('googleapis'),
@@ -98,6 +99,33 @@ module.exports = function(knex) {
         google: google,
         setTokens: setTokens,
         getTokens: getTokens,
-        refreshToken: refreshToken
+        refreshToken: refreshToken,
+
+        revokeAccess: function(req, res) {
+            var userLogged = req.user;
+
+            knex('users')
+                .select('googleOAuthToken as accessToken')
+                .where({ id: userLogged.id, isDeleted: '0' })
+                .then(function(data) {
+                    request.get('https://accounts.google.com/o/oauth2/revoke?token=' + data[0].accessToken, function (err, resGoogle, body) {
+                        if (err) { return res.send(err); }
+
+                        return knex('users')
+                            .where({ id: userLogged.id })
+                            .update({
+                                googleOAuthToken: '',
+                                googleOAuthRefreshToken: '',
+                                googleSelectedCalendar: ''
+                            })
+                            .then(function() {
+                                return res.send(body);
+                            });
+                    });
+                })
+                .catch(function(e) {
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
+        }
     };
 };

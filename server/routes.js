@@ -42,23 +42,19 @@ module.exports = function(app, knex) {
     app.route('/settings')
         .get(auth.ensureTokenAuthenticated, settings.getAll);
 
-    app.route('/settings/:type')
-        .delete(auth.ensureTokenAuthenticated, settings.revokeAccess);
-
     app.route('/settings/google/:calendarId')
         .put(auth.ensureTokenAuthenticated, settings.setCalendar);
 
-    app.get('/auth/google',
-        auth.ensureSessionAuthenticated,
-        passport.authenticate('google', {
+    app.route('/auth/google')
+        .get(auth.ensureSessionAuthenticated, passport.authenticate('google', {
             scope: [
                 'https://www.googleapis.com/auth/userinfo.profile',
                 'https://www.googleapis.com/auth/userinfo.email',
                 'https://www.googleapis.com/auth/calendar'
             ],
             accessType: 'offline'
-        })
-    );
+        }))
+        .delete(auth.ensureTokenAuthenticated, authGoogle.revokeAccess);
 
     app.get('/auth/google/callback',
         auth.ensureSessionAuthenticated,
