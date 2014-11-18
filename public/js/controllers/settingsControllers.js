@@ -7,9 +7,9 @@
         .controller('SettingsController', [
             '$scope',
             '$http',
-            // 'ngNotify',
+            'ngNotify',
             'SettingsService',
-            function($scope, $http, /*ngNotify, */Settings) {
+            function($scope, $http, ngNotify, Settings) {
 
                 $scope.isLoading = true;
                 $scope.isLoadingGoogle = false;
@@ -38,6 +38,7 @@
                     $http.delete(TPM.apiUrl + 'auth/google').success(function () {
                         $scope.settings.googleToken = false;
                         $scope.isLoadingGoogle = false;
+                        ngNotify.set('Your Google Calendar is not syncronized anymore');
                     });
                 };
 
