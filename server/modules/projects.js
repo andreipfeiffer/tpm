@@ -2,6 +2,8 @@ module.exports = function(knex) {
 
     'use strict';
 
+    var googleCalendar = require('./calendarGoogle')( knex );
+
     function getProjectById(id, idUser) {
         return knex('projects')
             .select()
@@ -90,9 +92,9 @@ module.exports = function(knex) {
                 });
 
             getProjectById(id, userLogged.id).then(function(data) {
-
                 previousStatus = data[0].status;
-
+                return googleCalendar.updateEvent(userLogged.id, data[0].googleEventId, req.body);
+            }).then(function() {
                 editProject.then(function() {
                     if (previousStatus !== req.body.status) {
                         logStatusChange(userLogged.id, id, req.body.status).then(function() {
@@ -125,9 +127,12 @@ module.exports = function(knex) {
                     description: data.description
                 };
 
-            var addNewProject = knex('projects').insert(newProjectData);
-
-            addNewProject.then(function(newProjectId) {
+            googleCalendar.addEvent(userLogged.id, newProjectData).then(function(eventId) {
+                if (eventId) {
+                    newProjectData.googleEventId = eventId;
+                }
+                return knex('projects').insert(newProjectData);
+            }).then(function(newProjectId) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
@@ -140,9 +145,9 @@ module.exports = function(knex) {
                 } else {
                     return res.status(201).send(newProject);
                 }
-            }).catch(function(e) {
+            })/*.catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            })*/;
         },
 
         remove: function(req, res) {

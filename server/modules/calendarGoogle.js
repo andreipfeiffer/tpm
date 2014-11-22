@@ -28,9 +28,85 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function getProjectData(userId, projectData, eventId) {
+        var d = deferred(),
+            params = {};
+
+        getSelectedCalendarId(userId).then(function(calendarId) {
+            if (!calendarId.length) {
+                return d.resolve(false);
+            }
+
+            params = {
+                calendarId: calendarId,
+                resource: {
+                    summary: projectData.name,
+                    start: {
+                        date: projectData.dateEstimated
+                    },
+                    end: {
+                        date: projectData.dateEstimated
+                    }
+                }
+            };
+
+            if (typeof eventId !== 'undefined') {
+                params.eventId = eventId;
+            }
+
+            d.resolve(params);
+        });
+
+        return d.promise;
+    }
+
+    function addEvent(userId, projectData) {
+        var d = deferred();
+
+        getProjectData(userId, projectData).then(function(params) {
+            if (!params) {
+                return d.resolve(false);
+            }
+
+            calendar.events.insert(params, function(err, response) {
+                if (err) {
+                    return d.reject(err);
+                }
+                d.resolve(response.id);
+            });
+        });
+
+        return d.promise;
+    }
+
+    function updateEvent(userId, eventId, projectData) {
+        var d = deferred();
+
+        if (!eventId.length) {
+            return d.resolve(false);
+        }
+
+        getProjectData(userId, projectData, eventId).then(function(params) {
+            if (!params) {
+                return d.resolve(false);
+            }
+
+            calendar.events.patch(params, function(err, response) {
+                if (err) {
+                    return d.reject(err);
+                }
+
+                d.resolve(response.id);
+            });
+        });
+
+        return d.promise;
+    }
+
     return {
         getSelectedCalendarId: getSelectedCalendarId,
         getCalendars: getCalendars,
-        addEvent: addEvent
+        addEvent: addEvent,
+        updateEvent: updateEvent
     };
 };
