@@ -27,7 +27,7 @@ module.exports = function(knex) {
                     googleCalendar.getCalendars().then(function(calendars) {
                         result.calendars = calendars;
                         return res.send(result);
-                    }, function() {
+                    }, function(err) {
                         return res.status(400).send({ error: err.message});
                     });
                 });

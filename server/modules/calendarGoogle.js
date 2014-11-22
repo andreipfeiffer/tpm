@@ -4,18 +4,18 @@ module.exports = function(knex) {
 
     var authGoogle  = require('./authGoogle')( knex ),
         calendar = authGoogle.google.calendar('v3'),
-        Defer = require('node-promise').defer;
+        deferred = require('node-promise').defer;
 
     function getCalendars() {
-        var deferred = Defer();
+        var d = deferred();
         calendar.calendarList.list({}, function(err, response) {
             if (err) {
-                deferred.reject(err);
+                d.reject(err);
             } else {
-                deferred.resolve(response);
+                d.resolve(response);
             }
         });
-        return deferred.promise;
+        return d.promise;
     }
 
     return {
