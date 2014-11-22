@@ -103,10 +103,40 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function deleteEvent(userId, eventId) {
+        var d = deferred();
+
+        if (!eventId.trim().length) {
+            return d.resolve(false);
+        }
+
+        getSelectedCalendarId(userId).then(function(calendarId) {
+            if (!calendarId.length) {
+                return d.resolve(false);
+            }
+
+            var params = {
+                calendarId: calendarId,
+                eventId: eventId
+            };
+
+            calendar.events.delete(params, function(err, response) {
+                if (err) {
+                    return d.reject(err);
+                }
+
+                d.resolve(response);
+            });
+        });
+
+        return d.promise;
+    }
+
     return {
         getSelectedCalendarId: getSelectedCalendarId,
         getCalendars: getCalendars,
         addEvent: addEvent,
-        updateEvent: updateEvent
+        updateEvent: updateEvent,
+        deleteEvent: deleteEvent
     };
 };

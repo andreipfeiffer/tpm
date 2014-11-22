@@ -161,10 +161,15 @@ module.exports = function(knex) {
                     'isDeleted': '0'
                 })
                 .update({
-                    'isDeleted': '1'
+                    'isDeleted': '1',
+                    'googleEventId': ''
                 });
 
-            softDeleteProject.then(function() {
+            getProjectById(id, userLogged.id).then(function(data) {
+                return googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId);
+            }).then(function() {
+                return softDeleteProject;
+            }).then(function() {
                 return res.status(204).end();
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
