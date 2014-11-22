@@ -5,10 +5,6 @@ module.exports = function(knex) {
     var authGoogle = require('./authGoogle')( knex ),
         googleCalendar = require('./calendarGoogle')( knex );
 
-    function getSelectedCalendar(idUser) {
-        return knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: idUser });
-    }
-
     return {
         getAll: function(req, res) {
             var userLogged = req.user,
@@ -21,8 +17,8 @@ module.exports = function(knex) {
                     return res.send(result);
                 }
 
-                getSelectedCalendar(userLogged.id).then(function(data) {
-                    result.selectedCalendar = data[0].googleCalendar;
+                googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
+                    result.selectedCalendar = id;
 
                     googleCalendar.getCalendars().then(function(calendars) {
                         result.calendars = calendars;

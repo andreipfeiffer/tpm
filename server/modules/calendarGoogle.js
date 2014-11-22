@@ -6,6 +6,16 @@ module.exports = function(knex) {
         calendar = authGoogle.google.calendar('v3'),
         deferred = require('node-promise').defer;
 
+    function getSelectedCalendarId(userId) {
+        var d = deferred();
+        knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
+            d.resolve(data[0].googleCalendar);
+        }).catch(function(err) {
+            d.reject(err);
+        });
+        return d.promise;
+    }
+
     function getCalendars() {
         var d = deferred();
         calendar.calendarList.list({}, function(err, response) {
@@ -19,6 +29,8 @@ module.exports = function(knex) {
     }
 
     return {
-        getCalendars: getCalendars
+        getSelectedCalendarId: getSelectedCalendarId,
+        getCalendars: getCalendars,
+        addEvent: addEvent
     };
 };
