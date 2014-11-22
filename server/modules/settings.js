@@ -2,15 +2,8 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var authGoogle  = require('./authGoogle')( knex ),
-        calendar = authGoogle.google.calendar('v3');
-
-    function getCalendars(req, res, callback) {
-        calendar.calendarList.list({}, function(err, response) {
-            if (err) { callback(err, response); return; }
-            callback(null, response);
-        });
-    }
+    var authGoogle = require('./authGoogle')( knex ),
+        googleCalendar = require('./calendarGoogle')( knex );
 
     function getSelectedCalendar(idUser) {
         return knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: idUser });
@@ -31,16 +24,11 @@ module.exports = function(knex) {
                 getSelectedCalendar(userLogged.id).then(function(data) {
                     result.selectedCalendar = data[0].googleCalendar;
 
-                    getCalendars(req, res, function(err, calendars) {
-                        if (err) {
-                            // @TODO need to revoke access, and ask for re-login
-                            // because credentials might be broken
-                            // result.calendars = {};
-                            return res.status(400).send({ error: err.message});
-                        }
-
+                    googleCalendar.getCalendars().then(function(calendars) {
                         result.calendars = calendars;
-                        res.send(result);
+                        return res.send(result);
+                    }, function() {
+                        return res.status(400).send({ error: err.message});
                     });
                 });
             }).catch(function(e) {
