@@ -33,19 +33,24 @@ module.exports = function(knex) {
         },
 
         setCalendar: function(req, res) {
-            var userLogged = req.user;
+            var userLogged = req.user,
+                newId = req.params.calendarId;
 
-            knex('users')
-                .where({ id: userLogged.id })
-                .update({
-                    googleSelectedCalendar: req.params.calendarId
-                })
-                .then(function() {
-                    res.send(true);
-                })
-                .catch(function(e) {
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
-                });
+            googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
+                return googleCalendar.changeCalendar(userLogged.id, id, newId);
+            }).then(function() {
+                return knex('users')
+                    .where({ id: userLogged.id })
+                    .update({
+                        googleSelectedCalendar: newId
+                    })
+                    .then(function() {
+                        return res.send(true);
+                    })
+                    .catch(function(e) {
+                        return res.status(503).send({ error: 'Database error: ' + e.code});
+                    });
+            });
         }
     };
 

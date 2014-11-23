@@ -4,7 +4,8 @@ module.exports = function(knex) {
 
     var authGoogle  = require('./authGoogle')( knex ),
         calendar = authGoogle.google.calendar('v3'),
-        deferred = require('node-promise').defer;
+        promise = require('node-promise'),
+        deferred = promise.defer;
 
     function getSelectedCalendarId(userId) {
         var d = deferred();
@@ -18,7 +19,7 @@ module.exports = function(knex) {
 
     function getCalendars() {
         var d = deferred();
-        calendar.calendarList.list({}, function(err, response) {
+        calendar.calendarList.list({ minAccessRole: 'owner' }, function(err, response) {
             if (err) {
                 d.reject(err);
             } else {
@@ -132,11 +133,86 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function changeCalendar(userId, oldCalendar, newCalendar) {
+        var d = deferred();
+
+        // get all projects that have an eventId, and move them to the new calendar
+        var q = knex('projects')
+            .select()
+            .where({
+                'idUser': userId,
+                'isDeleted': '0'
+            })
+            .andWhere('googleEventId', '!=', '')
+            .andWhere('dateEstimated', '>=', getTodayDate())
+            .then(function(data) {
+                moveEventsToAnotherCalendar(data, oldCalendar, newCalendar).then(function() {
+                    d.resolve(true);
+                });
+            })
+            .catch(function(e) {
+                console.log(e);
+            });
+
+        // get all projects, with the deadline > today, that don't have an eventId, and add them to the new calendar
+
+        return d.promise;
+    }
+
+    function moveEventsToAnotherCalendar(eventsArray, oldCalendar, newCalendar) {
+        var d = deferred(),
+            requests = [];
+
+        eventsArray.forEach(function(project) {
+            requests.push(
+                moveEvent(project.googleEventId, oldCalendar, newCalendar)
+            );
+        });
+
+        promise.all( requests ).then(function() {
+            d.resolve(true);
+        });
+
+        return d.promise;
+    }
+
+    function moveEvent(id, oldCalendar, newCalendar) {
+        var d = deferred(),
+            params = {
+                calendarId: oldCalendar,
+                destination: newCalendar,
+                eventId: id
+            };
+
+        calendar.events.move(params, function(err, response) {
+            if (err) {
+                return d.reject(err);
+            }
+
+            d.resolve(response);
+        });
+
+        return d.promise;
+    }
+
+    function getTodayDate() {
+        var today = new Date(),
+            dd = today.getDate(),
+            mm = today.getMonth() + 1,
+            yyyy = today.getFullYear();
+
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+
+        return yyyy + '-'+ mm + '-'+ dd;
+    }
+
     return {
         getSelectedCalendarId: getSelectedCalendarId,
         getCalendars: getCalendars,
         addEvent: addEvent,
         updateEvent: updateEvent,
-        deleteEvent: deleteEvent
+        deleteEvent: deleteEvent,
+        changeCalendar: changeCalendar
     };
 };
