@@ -137,7 +137,7 @@ module.exports = function(knex) {
         var d = deferred();
 
         // get all projects that have an eventId, and move them to the new calendar
-        var q = knex('projects')
+        knex('projects')
             .select()
             .where({
                 'idUser': userId,
@@ -201,8 +201,8 @@ module.exports = function(knex) {
             mm = today.getMonth() + 1,
             yyyy = today.getFullYear();
 
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
+        if (dd < 10) { dd = '0' + dd; }
+        if (mm < 10) { mm = '0' + mm; }
 
         return yyyy + '-'+ mm + '-'+ dd;
     }
