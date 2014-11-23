@@ -18,8 +18,8 @@
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-success"
                         ng-click="setCalendar()"
-                        ng-disabled="isLoadingGoogle">
-                        Select Calendar
+                        ng-disabled="isLoadingGoogle || !selectedCalendar">
+                        Set Active Calendar
                     </button>
                 </div>
             </div>
