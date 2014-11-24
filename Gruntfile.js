@@ -1,4 +1,4 @@
-/*jshint scripturl: true*/
+/*jshint scripturl: true, camelcase: false*/
 
 module.exports = function(grunt) {
 
@@ -53,12 +53,22 @@ module.exports = function(grunt) {
             }
         },
 
-        mochacli: {
+        /*mochacli: {
             options: {
                 reporter: 'spec',
                 ui: 'tdd'
             },
             all: ['server/test/*Test.js']
+        },*/
+
+        mocha_istanbul: {
+            coverage: {
+                src: ['server/test/*Test.js'],
+                options: {
+                    coverageFolder: 'server/coverage',
+                    reportFormats: ['text']
+                }
+            }
         },
 
         // watch: {
@@ -68,7 +78,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'jshint', 'mochacli', 'karma'
+        'jshint', 'mocha_istanbul', 'karma'
     ]);
 
     // run this first:
