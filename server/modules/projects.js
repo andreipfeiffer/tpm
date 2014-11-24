@@ -48,52 +48,6 @@ module.exports = function(knex) {
             });
     }
 
-    function removeEventsFromProjects(userId) {
-        return knex('projects')
-            .where({
-                'idUser': userId,
-                'isDeleted': '0'
-            })
-            .andWhere('googleEventId', '!=', '')
-            .update({'googleEventId': ''})
-            .catch(function(e) {
-                console.log(e);
-            });
-    }
-
-    function removeEventsList(projects, calendarId) {
-        var requests = [];
-
-        if (projects && projects.length) {
-            projects.forEach(function(project) {
-                requests.push(
-                    removeEvent(project.googleEventId, calendarId)
-                );
-            });
-        }
-
-        return promise.all( requests );
-    }
-
-    function removeEvent(eventId, calendarId) {
-        var d = promise.defer();
-
-        var params = {
-            calendarId: calendarId,
-            eventId: eventId
-        };
-
-        calendar.events.delete(params, function(err, response) {
-            if (err) {
-                return d.reject(err);
-            }
-
-            d.resolve(response);
-        });
-
-        return d.promise;
-    }
-
     function getActiveProjects(userId) {
         return knex('projects')
             .select()
@@ -254,9 +208,9 @@ module.exports = function(knex) {
                 }
                 return d.promise;
             }).then(function(projects) {
-                return removeEventsList(projects, calendarId);
+                return calendarGoogle.removeEvents(projects, calendarId);
             }).then(function() {
-                return removeEventsFromProjects(userId);
+                return calendarGoogle.clearEvents(userId);
             }).then(function(result) {
                 d.resolve(result);
             })/*.catch(function(err) {
