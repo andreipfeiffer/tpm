@@ -121,7 +121,7 @@ module.exports = function(knex) {
 
             return promise.all( requests );
 
-        }).then(function(data) {
+        }).then(function() {
             return knex('projects')
                 .where({
                     'idUser': userId,
