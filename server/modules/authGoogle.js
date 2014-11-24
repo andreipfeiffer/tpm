@@ -6,6 +6,7 @@ module.exports = function(knex) {
         promise = require('node-promise'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../config'),
+        projects = require('./projects')( knex ),
         google = require('googleapis'),
         calendar = google.calendar('v3'),
         OAuth2 = google.auth.OAuth2,
@@ -89,84 +90,6 @@ module.exports = function(knex) {
             });
     }
 
-    function deleteEvents(userId) {
-        var d = promise.defer(),
-            calendarId;
-
-        knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
-            calendarId = data[0].googleCalendar;
-
-            if (!calendarId.length) {
-                return d.resolve(false);
-            } else {
-                return knex('projects')
-                    .select()
-                    .where({
-                        'idUser': userId,
-                        'isDeleted': '0'
-                    })
-                    .andWhere('googleEventId', '!=', '')
-                    .catch(function(e) {
-                        console.log(e);
-                    });
-            }
-        }).then(function(projects) {
-            return deleteGoogleEvents(projects, calendarId);
-        }).then(function() {
-            return removeEventsFromProjects(userId);
-        }).then(function(result) {
-            d.resolve(result);
-        }).catch(function(err) {
-            d.reject(err);
-        });
-
-        return d.promise;
-    }
-
-    function removeEventsFromProjects(userId) {
-        return knex('projects')
-            .where({
-                'idUser': userId,
-                'isDeleted': '0'
-            })
-            .andWhere('googleEventId', '!=', '')
-            .update({'googleEventId': ''})
-            .catch(function(e) {
-                console.log(e);
-            });
-    }
-
-    function deleteGoogleEvents(projects, calendarId) {
-        var requests = [];
-
-        projects.forEach(function(project) {
-            requests.push(
-                removeEvent(project.googleEventId, calendarId)
-            );
-        });
-
-        return promise.all( requests );
-    }
-
-    function removeEvent(eventId, calendarId) {
-        var d = promise.defer();
-
-        var params = {
-            calendarId: calendarId,
-            eventId: eventId
-        };
-
-        calendar.events.delete(params, function(err, response) {
-            if (err) {
-                return d.reject(err);
-            }
-
-            d.resolve(response);
-        });
-
-        return d.promise;
-    }
-
     passport.use('google',
         new GoogleStrategy({
             clientID: config.google.clientID,
@@ -191,7 +114,7 @@ module.exports = function(knex) {
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            deleteEvents(userLogged.id).then(function() {
+            projects.deleteEvents(userLogged.id).then(function() {
                 return getTokens(userLogged.id);
             }).then(function(data) {
                 oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
