@@ -133,19 +133,21 @@ module.exports = function(knex) {
         return d.promise;
     }
 
-    function changeCalendar(userId, oldCalendar, newCalendar) {
-        var d = deferred();
-
-        // get all projects that have an eventId, and move them to the new calendar
-        knex('projects')
+    function getProjectsWithEvent(userId) {
+        return knex('projects')
             .select()
             .where({
                 'idUser': userId,
                 'isDeleted': '0'
             })
             .andWhere('googleEventId', '!=', '')
-            .andWhere('dateEstimated', '>=', getTodayDate())
-            .then(function(data) {
+            .andWhere('dateEstimated', '>=', getTodayDate());
+    }
+
+    function changeCalendar(userId, oldCalendar, newCalendar) {
+        var d = deferred();
+
+            getProjectsWithEvent(userId).then(function(data) {
                 moveEventsToAnotherCalendar(data, oldCalendar, newCalendar).then(function() {
                     d.resolve(true);
                 });
