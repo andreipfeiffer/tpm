@@ -178,7 +178,7 @@ module.exports = function(knex) {
             return getProjectsWithoutEvent(userId);
         }).then(function(data) {
             return addEventsToCalendar(userId, data, newCalendar);
-        }).then(function(result) {
+        }).then(function() {
             d.resolve(true);
         });
 
