@@ -29,49 +29,56 @@ module.exports = function(knex) {
         return d.promise;
     }
 
-    function getProjectData(userId, projectData) {
+    function getProjectData(userId, projectData, calendarId) {
         var d = deferred(),
             params = {},
             eventId = projectData.googleEventId;
 
-        getSelectedCalendarId(userId).then(function(calendarId) {
-            if (!calendarId.length) {
-                return d.resolve(false);
-            }
-
-            params = {
-                calendarId: calendarId,
-                resource: {
-                    summary: projectData.name,
-                    start: {
-                        date: getDateFormat( projectData.dateEstimated )
-                    },
-                    end: {
-                        date: getDateFormat( projectData.dateEstimated )
-                    }
+        if ( typeof calendarId === 'undefined' ) {
+            getSelectedCalendarId(userId).then(function(id) {
+                if (!id.length) {
+                    return d.resolve(false);
                 }
-            };
 
-            if ( eventId && eventId.length ) {
-                params.eventId = eventId;
-            }
-
-            d.resolve(params);
-        });
+                d.resolve( getProjectDataRaw(projectData, id) );
+            });
+        } else {
+            d.resolve( getProjectDataRaw(projectData, calendarId) );
+        }
 
         return d.promise;
+    }
+
+    function getProjectDataRaw(projectData, calendarId) {
+        var params = {},
+            eventId = projectData.googleEventId;
+
+        params = {
+            calendarId: calendarId,
+            resource: {
+                summary: projectData.name,
+                start: {
+                    date: getDateFormat( projectData.dateEstimated )
+                },
+                end: {
+                    date: getDateFormat( projectData.dateEstimated )
+                }
+            }
+        };
+
+        if ( eventId && eventId.length ) {
+            params.eventId = eventId;
+        }
+
+        return params;
     }
 
     function addEvent(userId, projectData, calendarId) {
         var d = deferred();
 
-        getProjectData(userId, projectData).then(function(params) {
+        getProjectData(userId, projectData, calendarId).then(function(params) {
             if (!params) {
                 return d.resolve(false);
-            }
-
-            if (typeof calendarId !== 'undefined') {
-                params.calendarId = calendarId;
             }
 
             calendar.events.insert(params, function(err, response) {
