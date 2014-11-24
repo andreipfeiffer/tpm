@@ -3,9 +3,7 @@ module.exports = function(knex) {
     'use strict';
 
     var calendarGoogle = require('./calendarGoogle')( knex ),
-        promise = require('node-promise'),
-        google = require('googleapis'),
-        calendar = google.calendar('v3');
+        promise = require('node-promise');
 
     function getProjectById(id, idUser) {
         return knex('projects')

@@ -3,12 +3,10 @@ module.exports = function(knex) {
     'use strict';
 
     var passport = require('passport'),
-        promise = require('node-promise'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../config'),
         projects = require('./projects')( knex ),
         google = require('googleapis'),
-        calendar = google.calendar('v3'),
         OAuth2 = google.auth.OAuth2,
         oauth2Client = new OAuth2(
             config.google.clientID,
