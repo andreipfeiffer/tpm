@@ -61,7 +61,7 @@ module.exports = function(knex) {
             });
     }
 
-    function deleteGoogleEvents(projects, calendarId) {
+    function removeEventsList(projects, calendarId) {
         var requests = [];
 
         if (projects && projects.length) {
@@ -254,7 +254,7 @@ module.exports = function(knex) {
                 }
                 return d.promise;
             }).then(function(projects) {
-                return deleteGoogleEvents(projects, calendarId);
+                return removeEventsList(projects, calendarId);
             }).then(function() {
                 return removeEventsFromProjects(userId);
             }).then(function(result) {
