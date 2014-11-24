@@ -2,7 +2,7 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var googleCalendar = require('./calendarGoogle')( knex );
+    var calendarGoogle = require('./calendarGoogle')( knex );
 
     function getProjectById(id, idUser) {
         return knex('projects')
@@ -93,7 +93,7 @@ module.exports = function(knex) {
 
             getProjectById(id, userLogged.id).then(function(data) {
                 previousStatus = data[0].status;
-                return googleCalendar.updateEvent(userLogged.id, data[0].googleEventId, req.body);
+                return calendarGoogle.updateEvent(userLogged.id, data[0].googleEventId, req.body);
             }).then(function() {
                 editProject.then(function() {
                     if (previousStatus !== req.body.status) {
@@ -131,9 +131,9 @@ module.exports = function(knex) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
-                return googleCalendar.addEvent(userLogged.id, newProjectData);
+                return calendarGoogle.addEvent(userLogged.id, newProjectData);
             }).then(function(eventId) {
-                return googleCalendar.setEventId(userLogged.id, newProject.id, eventId);
+                return calendarGoogle.setEventId(userLogged.id, newProject.id, eventId);
             }).then(function() {
                 return logStatusChange(userLogged.id, newProject.id, req.body.status);
             }).then(function() {
@@ -165,7 +165,7 @@ module.exports = function(knex) {
                 });
 
             getProjectById(id, userLogged.id).then(function(data) {
-                return googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId);
+                return calendarGoogle.deleteEvent(userLogged.id, data[0].googleEventId);
             }).then(function() {
                 return softDeleteProject;
             }).then(function() {

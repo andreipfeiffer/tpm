@@ -91,8 +91,7 @@ module.exports = function(knex) {
 
     function deleteEvents(userId) {
         var d = promise.defer(),
-            calendarId,
-            requests = [];
+            calendarId;
 
         knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
             calendarId = data[0].googleCalendar;
@@ -111,27 +110,10 @@ module.exports = function(knex) {
                         console.log(e);
                     });
             }
-        }).then(function(data) {
-
-            data.forEach(function(project) {
-                requests.push(
-                    removeEvent(project.googleEventId, calendarId)
-                );
-            });
-
-            return promise.all( requests );
-
+        }).then(function(projects) {
+            return deleteGoogleEvents(projects, calendarId);
         }).then(function() {
-            return knex('projects')
-                .where({
-                    'idUser': userId,
-                    'isDeleted': '0'
-                })
-                .andWhere('googleEventId', '!=', '')
-                .update({'googleEventId': ''})
-                .catch(function(e) {
-                    console.log(e);
-                });
+            return removeEventsFromProjects(userId);
         }).then(function(result) {
             d.resolve(result);
         }).catch(function(err) {
@@ -139,6 +121,31 @@ module.exports = function(knex) {
         });
 
         return d.promise;
+    }
+
+    function removeEventsFromProjects(userId) {
+        return knex('projects')
+            .where({
+                'idUser': userId,
+                'isDeleted': '0'
+            })
+            .andWhere('googleEventId', '!=', '')
+            .update({'googleEventId': ''})
+            .catch(function(e) {
+                console.log(e);
+            });
+    }
+
+    function deleteGoogleEvents(projects, calendarId) {
+        var requests = [];
+
+        projects.forEach(function(project) {
+            requests.push(
+                removeEvent(project.googleEventId, calendarId)
+            );
+        });
+
+        return promise.all( requests );
     }
 
     function removeEvent(eventId, calendarId) {
