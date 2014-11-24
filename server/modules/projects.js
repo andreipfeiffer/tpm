@@ -48,40 +48,6 @@ module.exports = function(knex) {
             });
     }
 
-    function deleteEvents(userId) {
-        var d = promise.defer(),
-            calendarId;
-
-        knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
-            calendarId = data[0].googleCalendar;
-
-            if (!calendarId.length) {
-                return d.resolve(false);
-            } else {
-                return knex('projects')
-                    .select()
-                    .where({
-                        'idUser': userId,
-                        'isDeleted': '0'
-                    })
-                    .andWhere('googleEventId', '!=', '')
-                    .catch(function(e) {
-                        console.log(e);
-                    });
-            }
-        }).then(function(projects) {
-            return deleteGoogleEvents(projects, calendarId);
-        }).then(function() {
-            return removeEventsFromProjects(userId);
-        }).then(function(result) {
-            d.resolve(result);
-        }).catch(function(err) {
-            d.reject(err);
-        });
-
-        return d.promise;
-    }
-
     function removeEventsFromProjects(userId) {
         return knex('projects')
             .where({
@@ -98,11 +64,13 @@ module.exports = function(knex) {
     function deleteGoogleEvents(projects, calendarId) {
         var requests = [];
 
-        projects.forEach(function(project) {
-            requests.push(
-                removeEvent(project.googleEventId, calendarId)
-            );
-        });
+        if (projects && projects.length) {
+            projects.forEach(function(project) {
+                requests.push(
+                    removeEvent(project.googleEventId, calendarId)
+                );
+            });
+        }
 
         return promise.all( requests );
     }
@@ -126,8 +94,20 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function getActiveProjects(userId) {
+        return knex('projects')
+            .select()
+            .where({
+                'idUser': userId,
+                'isDeleted': '0'
+            })
+            .andWhere('googleEventId', '!=', '')
+            .catch(function(e) {
+                console.log(e);
+            });
+    }
+
     return {
-        deleteEvents: deleteEvents,
         getAll: function(req, res) {
             var userLogged = req.user;
 
@@ -255,6 +235,35 @@ module.exports = function(knex) {
             }).catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
+        },
+
+        removeEvents: function(userId) {
+            var d = promise.defer(),
+                calendarId;
+
+            calendarGoogle.getSelectedCalendarId(userId).then(function(id) {
+                var d = promise.defer();
+                calendarId = id;
+
+                if (!calendarId.length) {
+                    d.resolve(false);
+                } else {
+                    getActiveProjects(userId).then(function(projects) {
+                        d.resolve(projects);
+                    });
+                }
+                return d.promise;
+            }).then(function(projects) {
+                return deleteGoogleEvents(projects, calendarId);
+            }).then(function() {
+                return removeEventsFromProjects(userId);
+            }).then(function(result) {
+                d.resolve(result);
+            })/*.catch(function(err) {
+                d.reject(err);
+            })*/;
+
+            return d.promise;
         }
     };
 

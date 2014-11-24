@@ -114,7 +114,7 @@ module.exports = function(knex) {
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            projects.deleteEvents(userLogged.id).then(function() {
+            projects.removeEvents(userLogged.id).then(function() {
                 return getTokens(userLogged.id);
             }).then(function(data) {
                 oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
