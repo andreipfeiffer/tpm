@@ -29,9 +29,10 @@ module.exports = function(knex) {
         return d.promise;
     }
 
-    function getProjectData(userId, projectData, eventId) {
+    function getProjectData(userId, projectData) {
         var d = deferred(),
-            params = {};
+            params = {},
+            eventId = projectData.googleEventId;
 
         getSelectedCalendarId(userId).then(function(calendarId) {
             if (!calendarId.length) {
@@ -51,7 +52,7 @@ module.exports = function(knex) {
                 }
             };
 
-            if (typeof eventId !== 'undefined') {
+            if ( eventId && eventId.length ) {
                 params.eventId = eventId;
             }
 
@@ -85,13 +86,16 @@ module.exports = function(knex) {
     }
 
     function updateEvent(userId, eventId, projectData) {
-        var d = deferred();
+        var d = deferred(),
+            data = JSON.parse( JSON.stringify(projectData) );
 
-        if (!eventId.length) {
+        if ( !eventId.length ) {
             return d.resolve(false);
         }
 
-        getProjectData(userId, projectData, eventId).then(function(params) {
+        data.googleEventId = eventId;
+
+        getProjectData(userId, data).then(function(params) {
             if (!params) {
                 return d.resolve(false);
             }
@@ -168,7 +172,12 @@ module.exports = function(knex) {
     function changeCalendar(userId, oldCalendar, newCalendar) {
         var d = deferred();
 
-        if (oldCalendar === newCalendar) {
+        console.log('calendars');
+        console.log(oldCalendar);
+        console.log(newCalendar);
+
+        if (oldCalendar === newCalendar || !newCalendar.length) {
+            console.log('same calendar or empty new');
             return d.resolve(false);
         }
 
@@ -189,15 +198,18 @@ module.exports = function(knex) {
         var d = deferred(),
             requests = [];
 
+console.log(eventsArray);
+
         eventsArray.forEach(function(project) {
             requests.push(
                 addEvent(userId, project, newCalendar).then(function(eventId) {
-                    return setEventId(userId, project.id, eventId);
+                    return setEventIdOnProject(userId, project.id, eventId);
                 })
             );
         });
 
         promise.all( requests ).then(function(result) {
+            console.log(result);
             d.resolve(result);
         });
 
@@ -240,7 +252,7 @@ module.exports = function(knex) {
         return d.promise;
     }
 
-    function setEventId(idUser, idProject, idEvent) {
+    function setEventIdOnProject(idUser, idProject, idEvent) {
         var d = deferred();
 
         if ( !idEvent ) {
@@ -284,6 +296,7 @@ module.exports = function(knex) {
         addEvent: addEvent,
         updateEvent: updateEvent,
         deleteEvent: deleteEvent,
+        setEventId: setEventIdOnProject,
         changeCalendar: changeCalendar
     };
 };
