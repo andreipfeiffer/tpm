@@ -3,9 +3,11 @@ module.exports = function(knex) {
     'use strict';
 
     var passport = require('passport'),
+        promise = require('node-promise'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../config'),
         google = require('googleapis'),
+        calendar = google.calendar('v3'),
         OAuth2 = google.auth.OAuth2,
         oauth2Client = new OAuth2(
             config.google.clientID,
@@ -61,6 +63,13 @@ module.exports = function(knex) {
 
     function refreshAccessToken(userId, callback) {
         oauth2Client.refreshAccessToken(function(err, tokens) {
+            if ( !tokens ) {
+                clearTokens(userId).then(function() {
+                    callback(null);
+                });
+                return;
+            }
+
             knex('users')
                 .where({ id: userId })
                 .update({ googleOAuthToken: tokens['access_token'] })
@@ -78,6 +87,77 @@ module.exports = function(knex) {
                 googleOAuthRefreshToken: '',
                 googleSelectedCalendar: ''
             });
+    }
+
+    function deleteEvents(userId) {
+        var d = promise.defer(),
+            calendarId,
+            requests = [];
+
+        knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
+            calendarId = data[0].googleCalendar;
+
+            if (!calendarId.length) {
+                return d.resolve(false);
+            } else {
+                return knex('projects')
+                    .select()
+                    .where({
+                        'idUser': userId,
+                        'isDeleted': '0'
+                    })
+                    .andWhere('googleEventId', '!=', '')
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
+        }).then(function(data) {
+
+            data.forEach(function(project) {
+                requests.push(
+                    removeEvent(project.googleEventId, calendarId)
+                );
+            });
+
+            return promise.all( requests );
+
+        }).then(function(data) {
+            return knex('projects')
+                .where({
+                    'idUser': userId,
+                    'isDeleted': '0'
+                })
+                .andWhere('googleEventId', '!=', '')
+                .update({'googleEventId': ''})
+                .catch(function(e) {
+                    console.log(e);
+                });
+        }).then(function(result) {
+            d.resolve(result);
+        }).catch(function(err) {
+            d.reject(err);
+        });
+
+        return d.promise;
+    }
+
+    function removeEvent(eventId, calendarId) {
+        var d = promise.defer();
+
+        var params = {
+            calendarId: calendarId,
+            eventId: eventId
+        };
+
+        calendar.events.delete(params, function(err, response) {
+            if (err) {
+                return d.reject(err);
+            }
+
+            d.resolve(response);
+        });
+
+        return d.promise;
     }
 
     passport.use('google',
@@ -104,7 +184,9 @@ module.exports = function(knex) {
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            getTokens(userLogged.id).then(function(data) {
+            deleteEvents(userLogged.id).then(function() {
+                return getTokens(userLogged.id);
+            }).then(function(data) {
                 oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
                     if (err) { return res.send(err); }
 
@@ -112,9 +194,9 @@ module.exports = function(knex) {
                         return res.status(205).end();
                     });
                 });
-            }).catch(function(e) {
+            })/*.catch(function(e) {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            })*/;
         }
     };
 };

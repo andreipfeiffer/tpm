@@ -169,14 +169,18 @@ module.exports = function(knex) {
         var d = deferred();
 
         if (oldCalendar === newCalendar) {
-            d.resolve(false);
+            return d.resolve(false);
         }
 
         getProjectsWithEvent(userId).then(function(data) {
+            console.log(oldCalendar);
+            console.log(newCalendar);
+            console.log(data);
             return moveEventsToAnotherCalendar(data, oldCalendar, newCalendar);
         }).then(function() {
             return getProjectsWithoutEvent(userId);
         }).then(function(data) {
+            console.log(data);
             return addEventsToCalendar(userId, data, newCalendar);
         }).then(function() {
             d.resolve(true);
