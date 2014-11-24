@@ -2,8 +2,8 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var authGoogle  = require('./authGoogle')( knex ),
-        calendar = authGoogle.google.calendar('v3'),
+    var google = require('googleapis'),
+        calendar = google.calendar('v3'),
         promise = require('node-promise'),
         deferred = promise.defer;
 
