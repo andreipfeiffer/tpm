@@ -43,10 +43,10 @@ module.exports = function(knex) {
                 resource: {
                     summary: projectData.name,
                     start: {
-                        date: projectData.dateEstimated
+                        date: getDateFormat( projectData.dateEstimated )
                     },
                     end: {
-                        date: projectData.dateEstimated
+                        date: getDateFormat( projectData.dateEstimated )
                     }
                 }
             };
@@ -61,12 +61,16 @@ module.exports = function(knex) {
         return d.promise;
     }
 
-    function addEvent(userId, projectData) {
+    function addEvent(userId, projectData, calendarId) {
         var d = deferred();
 
         getProjectData(userId, projectData).then(function(params) {
             if (!params) {
                 return d.resolve(false);
+            }
+
+            if (typeof calendarId !== 'undefined') {
+                params.calendarId = calendarId;
             }
 
             calendar.events.insert(params, function(err, response) {
@@ -141,22 +145,61 @@ module.exports = function(knex) {
                 'isDeleted': '0'
             })
             .andWhere('googleEventId', '!=', '')
-            .andWhere('dateEstimated', '>=', getTodayDate());
+            .andWhere('dateEstimated', '>=', getTodayDate())
+            .catch(function(e) {
+                console.log(e);
+            });
+    }
+
+    function getProjectsWithoutEvent(userId) {
+        return knex('projects')
+            .select()
+            .where({
+                'idUser': userId,
+                'isDeleted': '0',
+                'googleEventId': ''
+            })
+            .andWhere('dateEstimated', '>=', getTodayDate())
+            .catch(function(e) {
+                console.log(e);
+            });
     }
 
     function changeCalendar(userId, oldCalendar, newCalendar) {
         var d = deferred();
 
-            getProjectsWithEvent(userId).then(function(data) {
-                moveEventsToAnotherCalendar(data, oldCalendar, newCalendar).then(function() {
-                    d.resolve(true);
-                });
-            })
-            .catch(function(e) {
-                console.log(e);
-            });
+        if (oldCalendar === newCalendar) {
+            d.resolve(false);
+        }
 
-        // get all projects, with the deadline > today, that don't have an eventId, and add them to the new calendar
+        getProjectsWithEvent(userId).then(function(data) {
+            return moveEventsToAnotherCalendar(data, oldCalendar, newCalendar);
+        }).then(function() {
+            return getProjectsWithoutEvent(userId);
+        }).then(function(data) {
+            return addEventsToCalendar(userId, data, newCalendar);
+        }).then(function(result) {
+            d.resolve(true);
+        });
+
+        return d.promise;
+    }
+
+    function addEventsToCalendar(userId, eventsArray, newCalendar) {
+        var d = deferred(),
+            requests = [];
+
+        eventsArray.forEach(function(project) {
+            requests.push(
+                addEvent(userId, project, newCalendar).then(function(eventId) {
+                    return setEventId(userId, project.id, eventId);
+                })
+            );
+        });
+
+        promise.all( requests ).then(function(result) {
+            d.resolve(result);
+        });
 
         return d.promise;
     }
@@ -197,8 +240,34 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function setEventId(idUser, idProject, idEvent) {
+        var d = deferred();
+
+        if ( !idEvent ) {
+            d.resolve(false);
+        } else {
+            knex('projects')
+                .where({
+                    'id': idProject,
+                    'idUser': idUser,
+                    'isDeleted': '0'
+                })
+                .update({
+                    googleEventId: idEvent
+                })
+                .then(function(result) {
+                    d.resolve(result);
+                });
+        }
+        return d.promise;
+    }
+
     function getTodayDate() {
-        var today = new Date(),
+        return getDateFormat();
+    }
+
+    function getDateFormat(date) {
+        var today = date ? new Date(date) : new Date(),
             dd = today.getDate(),
             mm = today.getMonth() + 1,
             yyyy = today.getFullYear();

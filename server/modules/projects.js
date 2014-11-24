@@ -127,15 +127,14 @@ module.exports = function(knex) {
                     description: data.description
                 };
 
-            googleCalendar.addEvent(userLogged.id, newProjectData).then(function(eventId) {
-                if (eventId) {
-                    newProjectData.googleEventId = eventId;
-                }
-                return knex('projects').insert(newProjectData);
-            }).then(function(newProjectId) {
+            knex('projects').insert(newProjectData).then(function(newProjectId) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
+                return googleCalendar.addEvent(userLogged.id, newProjectData);
+            }).then(function(eventId) {
+                return googleCalendar.setEventId(userLogged.id, newProject.id, eventId);
+            }).then(function() {
                 return logStatusChange(userLogged.id, newProject.id, req.body.status);
             }).then(function() {
                 if ( data.newClientName.length ) {
