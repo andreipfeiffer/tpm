@@ -15,6 +15,8 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Bower components management
 * Code linting
 * Travis-CI integration
+* Google Calendar integration
+* Promise-based requests
 
 ## Short term To-dos
 
@@ -26,9 +28,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 ## Future Goals
 
-* Google Calendar integration
-* Use knex as SQL builder
-* Full node Promise-based re-write
 * Websockets messaging
 * Full server unit-tests
 * Offline availability
