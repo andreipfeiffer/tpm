@@ -44,12 +44,13 @@ html(class='no-js', lang='en', ng-app='tpm')
             //- all content goes here
             div(ng-view='ng-view')
 
-            footer.app-footer
+            footer.app-footer.text-center
                 hr
-                p.text-center
+                div.hidden-xs
                     | Developed by&nbsp;
                     a(href='https://github.com/andreipfeiffer', popover-placement='top', popover-trigger='mouseenter', popover='Visit Github page') Andrei Pfeiffer
                     br
+                a(href='https://github.com/andreipfeiffer/tpm/releases')
                     samp.text-muted= 'v' + version
 
 

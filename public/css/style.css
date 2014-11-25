@@ -9,6 +9,9 @@ body {
 .app-footer {
 	margin: 5em 0 1em 0;
 }
+	.app-footer {
+		margin: 5em 0 1em 0;
+	}
 
 .navbar-default,
 .navbar-default .navbar-collapse {
