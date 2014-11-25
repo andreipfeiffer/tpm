@@ -37,7 +37,7 @@ TPM.utils = (function() {
             return {
                 weekendDays : weekendDays,
                 textTotal   : timeLeft.humanize(true),
-                daysWork    : timeLeft.subtract(weekendDays, 'days').asDays()
+                daysWork    : this.getRemainingDays(timeLeft, weekendDays)
             };
         },
 
@@ -58,6 +58,15 @@ TPM.utils = (function() {
             }
 
             return nr;
+        },
+
+        getRemainingDays: function(timeLeft, weekendDays) {
+            if (weekendDays > 0) {
+                return timeLeft.subtract(weekendDays, 'days').asDays();
+            }
+
+            // if weekendDays is -1, we don't substract
+            return timeLeft.asDays();
         },
 
         /**
