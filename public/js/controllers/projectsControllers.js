@@ -20,8 +20,8 @@
             'ProjectsService',
             'ClientsService',
             'screenSize',
-            'ngNotify',
-            function($scope, $q, $routeParams, tpmCache, Projects, Clients, screenSize, ngNotify) {
+            'feedback',
+            function($scope, $q, $routeParams, tpmCache, Projects, Clients, screenSize, feedback) {
 
                 $scope.filterStatus = tpmCache.get('filterStatus') || '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
@@ -85,7 +85,7 @@
                 $scope.deleteProject = function(id) {
                     Projects.delete({ id: id });
                     $scope.projectsList.splice(getProjectIndex(id), 1);
-                    ngNotify.set('Project was deleted');
+                    feedback.notify('Project was deleted');
                 };
 
                 $scope.setFilterStatus = function(filter) {
@@ -117,8 +117,8 @@
             '$location',
             'ProjectsService',
             'ClientsService',
-            'ngNotify',
-            function($scope, $routeParams, $filter, $location, Projects, Clients, ngNotify) {
+            'feedback',
+            function($scope, $routeParams, $filter, $location, Projects, Clients, feedback) {
 
                 $scope.formAction = 'Add';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -156,7 +156,7 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.save($scope.project).$promise.then(function() {
-                        ngNotify.set('Project was added');
+                        feedback.notify('Project was added');
                         $location.path('/projects');
                     });
                 };
@@ -181,8 +181,8 @@
             '$location',
             'ProjectsService',
             'ClientsService',
-            'ngNotify',
-            function($scope, $q, $routeParams, $filter, $location, Projects, Clients, ngNotify) {
+            'feedback',
+            function($scope, $q, $routeParams, $filter, $location, Projects, Clients, feedback) {
 
                 $scope.formAction = 'Edit';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -213,7 +213,7 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
-                        ngNotify.set('Project was updated');
+                        feedback.notify('Project was updated');
                         $location.path('/projects');
                     });
                 };

@@ -22,7 +22,7 @@ var TPM = TPM || {};
         'ui.bootstrap',
         'ui.validate',
         'matchMedia',
-        'ngNotify'
+        'feedback'
     ]);
 
     TPM.routesList = {
@@ -86,7 +86,7 @@ var TPM = TPM || {};
         $routeProvider.otherwise({redirectTo: '/login'});
 
 
-    }]).run(function($rootScope, $location, $http, SessionService, ngNotify) {
+    }]).run(function($rootScope, $location, $http, SessionService, feedback) {
 
             // simple client authentication method: https://coderwall.com/p/f6brkg
             // @note: another more complex: https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
@@ -112,9 +112,7 @@ var TPM = TPM || {};
                 dateFormat: 'yyyy-MM-dd'
             };
 
-            ngNotify.config({
-                theme: 'pure',
-                position: 'top',
+            feedback.config({
                 duration: 2000,
                 type: 'success',
                 sticky: false

@@ -8,11 +8,11 @@
             return {
                 responseError: function(rejection) {
 
-                    var notify = $injector.get('ngNotify');
+                    var feedback = $injector.get('feedback');
 
                     // server offline
                     if (rejection.status === 0) {
-                        notify.set('Server is currently offline. Please try again later.', {
+                        feedback.notify('Server is currently offline. Please try again later.', {
                             type: 'error',
                             sticky: true
                         });
