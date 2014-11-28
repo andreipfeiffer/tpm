@@ -17,6 +17,7 @@
                 }
 
                 $scope.errorMessage = '';
+                $scope.isLoading = false;
                 $scope.credentials = {
                     username: '',
                     password: ''
@@ -24,6 +25,7 @@
 
                 $scope.login = function() {
                     $scope.errorMessage = '';
+                    $scope.isLoading = true;
                     $http
                         .post(TPM.apiUrl + 'login', $scope.credentials)
                         .success(function (res) {
@@ -32,6 +34,7 @@
                         })
                         .error(function (res) {
                             $scope.errorMessage = res.error;
+                            $scope.isLoading = false;
                         });
                 };
             }
