@@ -17,6 +17,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Travis-CI integration
 * Google Calendar integration
 * Promise-based requests
+* Custom loader & notification display system
 
 ## Short term To-dos
 
@@ -27,7 +28,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 ## Future Goals
 
 * Custom bootstrap theme
-* Custom loader & notification system
 * Websockets messaging
 * Full server unit-tests
 * Offline availability
