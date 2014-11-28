@@ -8,12 +8,13 @@
 
 
         describe('LoginController', function() {
-            var scope, controller, $httpBackend, location, Session;
+            var scope, controller, $httpBackend, location, Session, feedback;
 
-            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
+            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_, _feedback_) {
                 $httpBackend = _$httpBackend_;
                 location = _$location_;
                 Session = _SessionService_;
+                feedback = _feedback_;
 
                 scope = $rootScope.$new();
                 location.path('/login');
@@ -26,8 +27,6 @@
 
 
             it('should set error message with wrong credentials', function() {
-                var expectedError = 'bad credentials';
-
                 controller('LoginController', {$scope: scope});
 
                 scope.credentials = {
@@ -35,12 +34,12 @@
                     password: 'xxx'
                 };
 
-                $httpBackend.expectPOST(TPM.apiUrl + 'login').respond(401, { 'error': expectedError });
+                $httpBackend.expectPOST(TPM.apiUrl + 'login').respond(401, { 'error': 'bad credentials' });
 
                 scope.login();
                 $httpBackend.flush();
 
-                expect(scope.errorMessage).toBe( expectedError );
+                expect(feedback.isActive()).toBeTruthy();
                 expect(location.path()).toEqual('/login');
             });
 
