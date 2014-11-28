@@ -21,9 +21,12 @@
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;
 
+                feedback.load();
+
                 Clients.query().$promise.then(function(data) {
                     $scope.clientsList = data;
                     $scope.isLoading = false;
+                    feedback.dismiss();
                 });
 
                 function getClientIndex(id) {
@@ -46,6 +49,7 @@
                 };
 
                 $scope.addNewClient = function() {
+                    feedback.load();
                     $scope.isFormNewLoading = true;
                     Clients.save( $scope.newClient ).$promise.then(function(result) {
                         $scope.isFormNewLoading = false;
@@ -92,6 +96,7 @@
                 };
 
                 $scope.editClient = function(client) {
+                    feedback.load();
                     Clients.update({ id: client.id }, client).$promise.then(function() {
                         $scope.clientsList[getClientIndex(client.id)] = client;
                         feedback.notify('Client was updated');
