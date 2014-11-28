@@ -15,7 +15,7 @@ html(class='no-js', lang='en', ng-app='tpm')
         link(rel='stylesheet', href='/bower_components/feedback/src/styles/feedback.css')
         link(rel='stylesheet', href='/css/style.css')
 
-    body
+    body(ng-class='{ "is-auth": isAuth }')
         .container
 
             nav.navbar.navbar-default.navbar-fixed-top.ng-cloak(ng-if='isAuth', role='navigation')
