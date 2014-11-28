@@ -40,6 +40,7 @@
                 $httpBackend.flush();
 
                 expect(feedback.isActive()).toBeTruthy();
+                expect(feedback.getType()).toBe('error');
                 expect(location.path()).toEqual('/login');
             });
 
