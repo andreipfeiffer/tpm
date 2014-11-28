@@ -29,7 +29,7 @@
     "angular-ui-utils": "~0.1.1",
     "angular-touch": "~1.2.21",
     "angular-media-queries": "~0.2.3",
-    "feedback": "https://github.com/andreipfeiffer/feedback.git"
+    "angular-feedback": "*"
   },
   "resolutions": {
     "angular": "~1.2.21"
