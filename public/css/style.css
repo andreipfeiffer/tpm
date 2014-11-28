@@ -145,8 +145,8 @@ h1,
 	text-overflow: ellipsis;
 }
 
-.fdb {
-	top: 45px;
+.is-auth .fdb {
+	top: 50px;
 }
 
 .table-tpm {
