@@ -30,6 +30,8 @@
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;
 
+                !feedback.isActive() && feedback.load();
+
                 $q.all([
                     Projects.query().$promise,
                     Clients.query().$promise
@@ -38,6 +40,7 @@
                     $scope.clientsList = data[1];
                     $scope.projectsList = initProjectsList( data[0] );
                     $scope.isLoading = false;
+                    feedback.isLoading() && feedback.dismiss();
 
                 });
 
@@ -147,6 +150,8 @@
                 $scope.clientsList = Clients.query();
 
                 $scope.submitForm = function() {
+                    feedback.load();
+
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
@@ -156,8 +161,8 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.save($scope.project).$promise.then(function() {
-                        feedback.notify('Project was added');
                         $location.path('/projects');
+                        feedback.notify('Project was added');
                     });
                 };
 
@@ -204,6 +209,8 @@
                 });
 
                 $scope.submitForm = function() {
+                    feedback.load();
+
                     // default value is 'null', so convert it to int
                     $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
@@ -213,8 +220,8 @@
                     $scope.formSubmit = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
-                        feedback.notify('Project was updated');
                         $location.path('/projects');
+                        feedback.notify('Project was updated');
                     });
                 };
 
