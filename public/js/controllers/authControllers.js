@@ -24,6 +24,8 @@
                     password: ''
                 };
 
+                feedback.dismiss();
+
                 $scope.login = function() {
                     $scope.isLoading = true;
                     feedback.load();
