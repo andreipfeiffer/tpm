@@ -9,7 +9,8 @@
             '$http',
             '$location',
             'SessionService',
-            function($scope, $http, $location, Session) {
+            'feedback',
+            function($scope, $http, $location, Session, feedback) {
 
                 // if user is already authenticated, redirect
                 if ( Session.getAuthToken() ) {
@@ -24,17 +25,19 @@
                 };
 
                 $scope.login = function() {
-                    $scope.errorMessage = '';
                     $scope.isLoading = true;
+                    feedback.load();
+
                     $http
                         .post(TPM.apiUrl + 'login', $scope.credentials)
                         .success(function (res) {
                             Session.setAuthToken( res.authToken );
                             $location.path('/projects');
+                            feedback.dismiss();
                         })
                         .error(function (res) {
-                            $scope.errorMessage = res.error;
                             $scope.isLoading = false;
+                            feedback.notify(res.error, { type: 'error', sticky: true });
                         });
                 };
             }
