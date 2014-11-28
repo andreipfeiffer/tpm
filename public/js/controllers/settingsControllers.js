@@ -15,10 +15,13 @@
                 $scope.isLoadingGoogle = false;
                 $scope.selectedCalendar = {};
 
+                feedback.load();
+
                 Settings.get().$promise.then(function(data) {
                     $scope.settings = data;
                     $scope.selectedCalendar = getSelectedCalendar( data.selectedCalendar );
                     $scope.isLoading = false;
+                    feedback.dismiss();
                 });
 
                 $scope.getGoogleAccess = function() {
@@ -26,14 +29,17 @@
                 };
 
                 $scope.setCalendar = function() {
+                    feedback.load();
                     $scope.isLoadingGoogle = true;
                     Settings.update({ type: 'google', field: $scope.selectedCalendar.id }).$promise.then(function() {
                         $scope.isLoadingGoogle = false;
+                        feedback.notify('Your calendar is now syncronized');
                     });
                 };
 
                 $scope.revokeGoogleAccess = function() {
                     $scope.isLoadingGoogle = true;
+                    feedback.load();
 
                     $http.delete(TPM.apiUrl + 'auth/google').success(function () {
                         $scope.settings.googleToken = false;
