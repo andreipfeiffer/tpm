@@ -1,7 +1,7 @@
 {
     "name": "tpm",
-    "description": "Tiny Project Manager",
-    "version": "0.6.1",
+    "description": "tiny Project Manager",
+    "version": "0.6.2",
     "repository": {
         "type": "git",
         "url": "https://github.com/andreipfeiffer/tpm"
