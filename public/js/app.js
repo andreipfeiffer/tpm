@@ -22,7 +22,7 @@ var TPM = TPM || {};
         'ui.bootstrap',
         'ui.validate',
         'matchMedia',
-        'angular-feedback'
+        'feedback'
     ]);
 
     TPM.routesList = {
