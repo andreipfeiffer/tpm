@@ -83,7 +83,8 @@ module.exports = function(knex) {
         },
 
         update: function(req, res) {
-            var id = parseInt( req.params.id, 10 ),
+            var self = this,
+                id = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
                 previousStatus;
 
@@ -107,7 +108,15 @@ module.exports = function(knex) {
 
             getProjectById(id, userLogged.id).then(function(data) {
                 previousStatus = data[0].status;
-                return calendarGoogle.updateEvent(userLogged.id, data[0].googleEventId, req.body);
+                if ( data[0].googleEventId.length ) {
+                    return calendarGoogle.updateEvent(userLogged.id, data[0].googleEventId, req.body);
+                } else {
+                    return calendarGoogle.getSelectedCalendarId(userLogged.id).then(function(calendarId) {
+                        return calendarGoogle.addEvent(userLogged.id, req.body, calendarId);
+                    }).then(function(newEventId) {
+                        return calendarGoogle.setEventId(userLogged.id, id, newEventId);
+                    });
+                }
             }).then(function() {
                 editProject.then(function() {
                     if (previousStatus !== req.body.status) {

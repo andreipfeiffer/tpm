@@ -104,12 +104,26 @@ module.exports = function(knex) {
                 return d.resolve(false);
             }
 
+            // @todo apparently if you patch an event, that was deleted manually
+            // from the calendar, the request returns ok
+            // although should return 404
+            // so, we cannot know if the event was updated, or ignored
+
             calendar.events.patch(params, function(err, response) {
                 if (err) {
-                    return d.reject(err);
-                }
+                    var newEventId;
 
-                d.resolve(response.id);
+                    addEvent(userId, projectData)
+                        .then(function(newId) {
+                            newEventId = newId;
+                            return setEventIdOnProject(userId, projectData.id, newEventId);
+                        })
+                        .then(function() {
+                            d.resolve(newEventId);
+                        });
+                } else {
+                    d.resolve(response.id);
+                }
             });
         });
 
@@ -251,9 +265,7 @@ module.exports = function(knex) {
     function setEventIdOnProject(idUser, idProject, idEvent) {
         var d = deferred();
 
-        if ( !idEvent ) {
-            d.resolve(false);
-        } else {
+        if ( idEvent || idEvent === '' ) {
             knex('projects')
                 .where({
                     'id': idProject,
@@ -266,6 +278,8 @@ module.exports = function(knex) {
                 .then(function(result) {
                     d.resolve(result);
                 });
+        } else {
+            d.resolve(false);
         }
         return d.promise;
     }
