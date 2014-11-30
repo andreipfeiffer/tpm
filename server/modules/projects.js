@@ -83,8 +83,7 @@ module.exports = function(knex) {
         },
 
         update: function(req, res) {
-            var self = this,
-                id = parseInt( req.params.id, 10 ),
+            var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
                 previousStatus;
 
