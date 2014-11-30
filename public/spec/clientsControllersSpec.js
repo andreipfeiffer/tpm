@@ -21,11 +21,13 @@
                 scope.clientsForm = {
                     $setPristine: function() {}
                 };
+
+                jasmine.addMatchers( TPM.customMatchers );
             }));
 
 
             it('should set the response from the API to $scope.clientsList', function() {
-                expect(scope.clientsList).toEqualDeep([]);
+                expect(scope.clientsList).toBeUndefined();
                 $httpBackend.flush();
 
                 expect(scope.clientsList).toEqualDeep( TPM.mocks.clientsList );

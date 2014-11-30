@@ -16,6 +16,8 @@
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsListController', {$scope: scope});
+
+                jasmine.addMatchers( TPM.customMatchers );
             }));
 
 
@@ -28,7 +30,7 @@
                     return filtered[0];
                 }
 
-                expect(scope.projectsList).toEqualDeep([]);
+                expect(scope.projectsList).toBeUndefined();
                 $httpBackend.flush();
 
                 expect(scope.projectsList.length).toEqual( TPM.mocks.projectsList.length );

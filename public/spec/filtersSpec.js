@@ -13,6 +13,8 @@
                 inject(function($injector){
                     filter = $injector.get('$filter')('filterByProjectStatus');
                 });
+
+                jasmine.addMatchers( TPM.customMatchers );
             });
 
             it('should return empty array, if passed value is not array', function() {
