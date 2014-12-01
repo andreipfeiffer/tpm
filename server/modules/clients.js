@@ -71,7 +71,7 @@ module.exports = function(knex) {
             });
         },
 
-        add: function(req, res) {
+        add: function(req) {
             var d = deferred();
 
             var data = req.body,

@@ -33,7 +33,7 @@ module.exports = function(app, knex) {
     app.route('/clients')
         .get(auth.ensureTokenAuthenticated, clients.getAll)
         .post(auth.ensureTokenAuthenticated, function(req, res) {
-            clients.add(req, res).then(function(r) {
+            clients.add(req).then(function(r) {
                 return res.status( r.status ).send( r.data );
             });
         });

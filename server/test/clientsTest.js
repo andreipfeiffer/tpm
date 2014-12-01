@@ -5,13 +5,9 @@
     process.env.NODE_ENV = 'test';
 
     var app = require('../../server.js'),
-        request = require('supertest'),
         httpMocks = require('node-mocks-http'),
-        config  = require('../../config/config'),
         db = require('../modules/db')( app.knex ),
-        clients = require('../modules/clients')( app.knex ),
-        port = config.port,
-        url  = 'http://localhost:' + port;
+        clients = require('../modules/clients')( app.knex );
 
     require('should');
 
@@ -39,7 +35,7 @@
                     body: {
                         // name: 'new unit test client'
                     }
-                })
+                });
 
                 req.user = { id: 1 };
 
@@ -58,7 +54,7 @@
                     body: {
                         name: name
                     }
-                })
+                });
 
                 req.user = { id: 1 };
 
