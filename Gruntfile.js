@@ -65,8 +65,8 @@ module.exports = function(grunt) {
             coverage: {
                 src: ['server/test/*Test.js'],
                 options: {
-                    coverageFolder: 'server/coverage',
-                    reportFormats: ['text']
+                    coverageFolder: 'coverage/server',
+                    reportFormats: ['text', 'html']
                 }
             }
         },

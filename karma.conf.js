@@ -48,8 +48,12 @@ module.exports = function(config) {
             'js/**/*.js': 'coverage',
         },
         coverageReporter: {
-            type : 'text',
-            dir : 'coverage/'
+            dir : '../coverage/client/',
+            reporters: [
+                { type: 'text' },
+                { type: 'html', subdir: 'html' },
+                // { type: 'lcov', subdir: 'lcov' },
+            ]
         },
 
         // test results reporter to use
