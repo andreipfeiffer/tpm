@@ -6,7 +6,7 @@ process.env.NODE_ENV = 'test';
 
 var app = require('../../server.js'),
     request = require('supertest'),
-    config  = require('../config'),
+    config  = require('../../config/config'),
     db = require('../modules/db')( app.connection ),
     port = config.port,
     url  = 'http://localhost:' + port;
