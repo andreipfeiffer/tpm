@@ -48,7 +48,7 @@ var knex = require('knex')({
 });
 
 // setup middleware based on ENV
-if ('development' === env) {
+if ('production' !== env) {
     app.use(logger('dev'));
 }
 
