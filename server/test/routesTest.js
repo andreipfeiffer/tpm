@@ -13,12 +13,6 @@ var app = require('../../server.js'),
 
 require('should');
 
-app.start(port);
-
-/*
- *  @todo break into several test files
- */
-
 describe('Routes', function() {
 
     beforeEach(function(done) {
