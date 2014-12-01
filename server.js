@@ -39,10 +39,14 @@ var allowCrossDomain = function(req, res, next) {
 var app = express(),
     env = process.env.NODE_ENV || 'development';
 
-var connection = mysql.createConnection({
-    host     : config.mysql.host,
-    user     : config.mysql.user,
-    password : config.mysql.password
+var knex = require('knex')({
+    client: 'mysql',
+    connection: {
+        host     : config.mysql.host,
+        user     : config.mysql.user,
+        password : config.mysql.password,
+        database : config.mysql.database
+    }
 });
 
 // setup middleware based on ENV
@@ -73,25 +77,6 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 // app.use(delay);
 
 
-// verify database structure
-if ('development' === env) {
-    require('./server/modules/db')( connection ).createDb();
-}
-
-var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host     : config.mysql.host,
-        user     : config.mysql.user,
-        password : config.mysql.password,
-        database : config.mysql.database
-    }
-});
-
-// load routes
-require('./server/routes')(app, knex);
-
-
 function start(port) {
     app.listen(port);
     console.log('Express server listening on port %d in %s mode', port, env);
@@ -99,6 +84,13 @@ function start(port) {
 
 exports.start = start;
 exports.app = app;
-exports.connection = connection;
+exports.knex = knex;
 
-start(config.port);
+// verify database structure
+require('./server/modules/db')( knex ).createDb(true).then(function() {
+
+    // load routes
+    require('./server/routes')(app, knex);
+
+    start(config.port);
+});

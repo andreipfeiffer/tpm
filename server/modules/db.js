@@ -1,77 +1,74 @@
-module.exports = function(connection) {
+module.exports = function(knex) {
 
-	'use strict';
+    'use strict';
 
-	var config = require('../../config/config'),
-		schema = require('../schema'),
-		promise = require('node-promise'),
-		deferred = promise.defer;
+    var config = require('../../config/config'),
+        schema = require('../schema'),
+        promise = require('node-promise'),
+        deferred = promise.defer,
+        queries = Object.keys(schema.structure);
 
-	return {
-		createDb: function() {
-			var d = deferred();
+    return {
+        createDb: function(isOnServerStart) {
+            var d = deferred(),
+                queryList = [];
 
-			// Create database, if it doesn't exist
-			connection.query('CREATE DATABASE IF NOT EXISTS ' + config.mysql.database + ' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci', function (err) {
-				if (err) {
-					throw err;
-				}
+            if ( isOnServerStart && process.env.NODE_ENV === 'test' ) {
+                d.resolve(false);
+                return d.promise;
+            }
 
-				// Select database
-				connection.query('USE ' + config.mysql.database, function (err) {
-					if (err) {
-						throw err;
-					}
+            knex.raw('CREATE DATABASE IF NOT EXISTS ' + config.mysql.database + ' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci').then(function() {
 
-					Object.keys(schema.structure).forEach(function(item, index){
+                queries.forEach(function(item, index) {
+                    queryList.push(
+                        knex.raw( schema.structure[item] ).then(function() {
+                            return knex(item).select();
+                        }).then(function(data) {
+                            if ( data.length === 0 && schema.populate[item] ) {
+                                return knex.raw( schema.populate[item] );
+                            } else {
+                                // just to return a promise
+                                return knex(item).select();
+                            }
+                        }).catch(function(err) {
+                            console.log('Error -> db.createDb() -> populate -> ' + err);
+                        })
+                    );
+                });
 
-						// Update the structure
-						connection.query(schema.structure[item], function (err) {
-							if (err) {
-								throw err;
-							}
-							// @todo temporary: insert some fixtures, if database is empty
-							connection.query('select * from `' + item + '`', function (err, docs) {
-								if (err) {
-									throw err;
-								}
-								if ( docs.length === 0 && schema.populate[item] ) {
-									connection.query(schema.populate[item], function (err) {
-										if (err) {
-											throw err;
-										}
+                promise.all( queryList ).then(function() {
+                    d.resolve(true);
+                });
 
-										(index === (Object.keys(schema.structure).length - 1)) && d.resolve(true);
-									});
-								} else {
-									(index === (Object.keys(schema.structure).length - 1)) && d.resolve(true);
-								}
-							});
-						});
-					});
+            }).catch(function(err) {
+                console.log('Error -> db.createDb() -> create db -> ' + err);
+                d.reject(err);
+            });
 
-				});
-			});
+            return d.promise;
+        },
 
-			return d.promise;
-		},
+        dropDb: function() {
+            var d = deferred(),
+                queryList = [];
 
-		dropDb: function() {
-			var d = deferred();
+            // prevent deleting in production
+            if (process.env.NODE_ENV === 'production') {
+                d.resolve(false);
+                return d.promise;
+            }
 
-			if (process.env.NODE_ENV === 'production') {
-				return d.resolve(false);
-			}
+            queries.forEach(function(item){
+                queryList.push( knex.raw('DROP TABLE ' + item) );
+            });
 
-			connection.query('DROP DATABASE ' + config.mysql.database + '', function (err) {
-				if (err) {
-					throw err;
-				}
-				d.resolve(true);
-			});
+            promise.all( queryList ).then(function() {
+                d.resolve(true);
+            });
 
-			return d.promise;
-		}
-	};
+            return d.promise;
+        }
+    };
 
 };
