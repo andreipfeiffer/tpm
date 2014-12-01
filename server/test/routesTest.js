@@ -6,11 +6,12 @@ process.env.NODE_ENV = 'test';
 
 var app = require('../../server.js'),
     request = require('supertest'),
-    should = require('should'),
     config  = require('../config'),
     db = require('../modules/db')( app.connection ),
     port = config.port,
     url  = 'http://localhost:' + port;
+
+require('should');
 
 app.start(port);
 
