@@ -95,10 +95,10 @@ describe('Routes', function() {
                 .post('/login')
                 .send(body)
                 .end(function(err, res) {
-                    done();
                     res.body.should.have.property('authUserId');
                     res.body.should.have.property('authToken');
                     res.should.have.property('status', 200);
+                    done();
                 });
         });
     });
