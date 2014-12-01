@@ -70,9 +70,7 @@ describe('Routes', function() {
         });
     });
 
-
     describe('Auth', function() {
-
         it('should not login the user with invalid credentials', function(done) {
             var body = {
                 username: 'x',
