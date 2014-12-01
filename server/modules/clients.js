@@ -4,6 +4,9 @@ module.exports = function(knex) {
 
     var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
+    var promise = require('node-promise'),
+        deferred = promise.defer;
+
     function getClientById(id, idUser) {
         return knex('clients')
             .select('*', knex.raw(projectsCount))
@@ -69,6 +72,8 @@ module.exports = function(knex) {
         },
 
         add: function(req, res) {
+            var d = deferred();
+
             var data = req.body,
                 userLogged = req.user;
 
@@ -83,11 +88,15 @@ module.exports = function(knex) {
                     return getClientById(data[0], userLogged.id);
                 })
                 .then(function(data) {
-                    return res.status(201).send(data[0]);
+                    // return res.status(201).send(data[0]);
+                    d.resolve( { status: 201, data: data[0] } );
                 })
                 .catch(function(e) {
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                    // return res.status(503).send({ error: 'Database error: ' + e.code});
+                    d.resolve( { status: 503, data: { error: 'Database error: ' + e.code} } );
                 });
+
+            return d.promise;
         },
 
         remove: function(req, res) {
