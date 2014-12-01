@@ -99,5 +99,6 @@ function start(port) {
 
 exports.start = start;
 exports.app = app;
+exports.connection = connection;
 
 start(config.port);

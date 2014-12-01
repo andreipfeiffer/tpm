@@ -2,11 +2,14 @@
 
 'use strict';
 
-require('should');
+process.env.NODE_ENV = 'test';
 
 var app = require('../../server.js'),
     request = require('supertest'),
-    port = 3030,
+    should = require('should'),
+    config  = require('../config'),
+    db = require('../modules/db')( app.connection ),
+    port = config.port,
     url  = 'http://localhost:' + port;
 
 app.start(port);
@@ -16,6 +19,18 @@ app.start(port);
  */
 
 describe('Routes', function() {
+
+    beforeEach(function(done) {
+        db.createDb().then(function() {
+            done();
+        });
+    });
+
+    afterEach(function(done) {
+        db.dropDb().then(function() {
+            done();
+        });
+    });
 
     describe('Unauthorized', function() {
         it('should return unauthorized', function(done) {
