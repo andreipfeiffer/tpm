@@ -28,10 +28,11 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 ## Future Goals
 
 * Custom bootstrap theme
-* Websockets messaging
 * Full server unit-tests
-* Offline availability
 * Build and optimize resources
+* Reports
+* Offline availability
 * Create new accounts
 * Recover password
 * Close account
+* Websockets messaging
