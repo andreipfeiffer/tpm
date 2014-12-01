@@ -10,7 +10,7 @@ var express = require('express'),
     // @todo use knex (http://knexjs.org/#Builder-insert)
     mysql   = require('mysql'),
     passport = require('passport'),
-    config  = require('./server/config');
+    config  = require('./config/config');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');

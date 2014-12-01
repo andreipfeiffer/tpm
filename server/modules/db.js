@@ -2,7 +2,7 @@ module.exports = function(connection) {
 
 	'use strict';
 
-	var config = require('../config'),
+	var config = require('../../config/config'),
 		schema = require('../schema'),
 		promise = require('node-promise'),
 		deferred = promise.defer;

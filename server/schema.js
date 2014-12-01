@@ -1,6 +1,6 @@
 /*jshint laxbreak: true*/
 
-var config = require('./config'),
+var config = require('../config/config'),
     schema = {};
 
 schema = {
