@@ -20,7 +20,7 @@ module.exports = function(knex) {
 
             knex.raw('CREATE DATABASE IF NOT EXISTS ' + config.mysql.database + ' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci').then(function() {
 
-                queries.forEach(function(item, index) {
+                queries.forEach(function(item) {
                     queryList.push(
                         knex.raw( schema.structure[item] ).then(function() {
                             return knex(item).select();

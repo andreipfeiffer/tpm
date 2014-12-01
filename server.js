@@ -7,8 +7,6 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
-    // @todo use knex (http://knexjs.org/#Builder-insert)
-    mysql   = require('mysql'),
     passport = require('passport'),
     config  = require('./config/config');
 
