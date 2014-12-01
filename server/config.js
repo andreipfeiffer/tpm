@@ -8,6 +8,9 @@ module.exports = (function(){
             // this file should not be commited to git
             return require('./config.production');
 
+        case 'test':
+            return require('./config.test');
+
         default:
             return {
                 port: (process.env.PORT || 3000),
