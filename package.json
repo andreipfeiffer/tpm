@@ -24,6 +24,7 @@
     "devDependencies": {
         "should": "4.0.4",
         "supertest": "0.13.0",
+        "node-mocks-http": "1.2.1",
         "matchdep": "0.3.0",
         "grunt": "0.4.4",
         "grunt-contrib-jshint": "0.10.0",
