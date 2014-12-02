@@ -7,13 +7,9 @@
     var server = require('../../server.js'),
         // httpMocks = require('node-mocks-http'),
         supertest = require('supertest'),
-        request = supertest(server.app),
+        // request = supertest(server.app),
         agent = supertest.agent(server.app),
-        config  = require('../../config/config'),
-        db = require('../modules/db')( server.knex ),
-        projects = require('../modules/projects')( server.knex ),
-        port = config.port,
-        url  = 'http://localhost:' + port;
+        db = require('../modules/db')( server.knex );
 
     var promise = require('node-promise'),
         deferred = promise.defer;
