@@ -58,7 +58,22 @@
                     expect( res.body ).to.have.property('idClient', 1);
                     expect( res.body ).to.have.property('name', project.name);
                     expect( res.body ).to.have.property('isDeleted', 0);
-                    expect( res ).to.have.property('status', 201);
+                    expect( res.status ).to.equal(201);
+                    done();
+                });
+        });
+
+        it('should add a new project, with a new client', function(done) {
+            var project = this.project;
+            project.newClientName = 'new client per project';
+
+            agent
+                .post('/projects')
+                .set('authorization', utils.getAuthData().authToken)
+                .send( project )
+                .end(function(err, res) {
+                    expect( res.body.idClient ).to.not.equal( project.idClient );
+                    expect( res.status ).to.equal(201);
                     done();
                 });
         });
