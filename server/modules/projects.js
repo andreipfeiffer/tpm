@@ -166,9 +166,9 @@ module.exports = function(knex) {
                 } else {
                     return res.status(201).send(newProject);
                 }
-            })/*.catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            })*/;
+            }, function(err) {
+                return res.status(503).send({ error: 'Error: ' + err.code});
+            });
         },
 
         remove: function(req, res) {
