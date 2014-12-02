@@ -81,6 +81,7 @@
                     .send(body)
                     .end(function(err, res) {
                         expect( res.body ).to.have.property('error');
+                        expect( res.status ).to.equal(401);
                         done();
                     });
             });
