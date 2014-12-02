@@ -9,9 +9,8 @@
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
-        utils = require('./utils');
-
-    require('should');
+        utils = require('./utils'),
+        expect = require('expect.js');
 
     describe('Projects', function() {
 
@@ -49,10 +48,10 @@
                 .set('authorization', utils.getAuthData().authToken)
                 .send(body)
                 .end(function(err, res) {
-                    res.body.should.have.property('id');
-                    res.body.should.have.property('name', body.name);
-                    res.body.should.have.property('isDeleted', 0);
-                    res.should.have.property('status', 201);
+                    expect( res.body ).to.have.property('id');
+                    expect( res.body ).to.have.property('name', body.name);
+                    expect( res.body ).to.have.property('isDeleted', 0);
+                    expect( res ).to.have.property('status', 201);
                     done();
                 });
         });
