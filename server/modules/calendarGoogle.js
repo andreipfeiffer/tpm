@@ -32,7 +32,7 @@ module.exports = function(knex) {
     function getProjectData(userId, projectData, calendarId) {
         var d = deferred();
 
-        if ( typeof calendarId === 'undefined' ) {
+        if ( typeof calendarId === 'undefined' || !calendarId ) {
             getSelectedCalendarId(userId).then(function(id) {
                 if (!id.length) {
                     return d.resolve(false);
