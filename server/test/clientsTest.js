@@ -30,17 +30,17 @@
                     name: 'new unit test client'
                 };
 
-            clients.add(user, body).then(function(response) {
-                expect( response.body ).to.have.property('name', body.name);
-                expect( response.status ).to.equal(201);
+            clients.add(user, body).then(function(res) {
+                expect( res.body ).to.have.property('name', body.name);
+                expect( res.status ).to.equal(201);
                 done();
             });
         });
 
         it('should not add a new client, without specified name', function(done) {
-            clients.add(user, {}).then(function(response) {
-                expect( response.body ).to.have.property('error');
-                expect( response ).to.have.property('status', 503);
+            clients.add(user, {}).then(function(res) {
+                expect( res.body ).to.have.property('error');
+                expect( res ).to.have.property('status', 503);
                 done();
             });
         });
@@ -51,25 +51,25 @@
                     description: 'client description'
                 };
 
-            clients.update(user, 1, body).then(function(response) {
-                expect( response.body ).to.be.ok();
-                expect( response.status ).to.equal(200);
+            clients.update(user, 1, body).then(function(res) {
+                expect( res.body ).to.be.ok();
+                expect( res.status ).to.equal(200);
                 done();
             });
         });
 
         it('should delete an existing client', function(done) {
-            clients.remove(user, 1).then(function(response) {
-                expect( response.status ).to.equal(204);
+            clients.remove(user, 1).then(function(res) {
+                expect( res.status ).to.equal(204);
                 done();
             });
         });
 
         it('should get all clients', function(done) {
-            clients.getAll(user).then(function(response) {
-                expect( response.body ).to.be.an('array');
-                expect( response.body ).to.have.length(2);
-                expect( response.status ).to.equal(200);
+            clients.getAll(user).then(function(res) {
+                expect( res.body ).to.be.an('array');
+                expect( res.body ).to.have.length(2);
+                expect( res.status ).to.equal(200);
                 done();
             });
         });
