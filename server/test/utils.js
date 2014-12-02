@@ -24,6 +24,10 @@ module.exports = (function(){
             return user.authData;
         },
 
+        getUserId: function() {
+            return user.authData.authUserId;
+        },
+
         authenticateUser: function(agent) {
             var d = deferred();
 

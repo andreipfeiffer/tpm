@@ -9,6 +9,7 @@
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
+        projects = require('../modules/projects')( server.knex ),
         utils = require('./utils'),
         expect = require('expect.js');
 
@@ -126,6 +127,24 @@
                     expect( res.status ).to.equal(200);
                     done();
                 });
+        });
+
+        // pretty shitty test
+        // cannot use the existing methods
+        // to add google events
+        it('should remove all events', function(done) {
+            var userId = utils.getUserId();
+
+            server.knex('users').where({ id: userId }).update({ 'googleSelectedCalendar': 'calendarName' }).then(function() {
+                return server.knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' });
+            }).then(function(data) {
+                return projects.removeEvents( userId );
+            }).then(function() {
+                return server.knex('projects').select().where({ idUser: userId });
+            }).then(function(data) {
+                expect( data[0].googleEventId ).to.equal('');
+                done();
+            });
         });
 
     });
