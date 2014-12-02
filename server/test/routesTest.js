@@ -9,9 +9,8 @@ var app = require('../../server.js'),
     config  = require('../../config/config'),
     db = require('../modules/db')( app.knex ),
     port = config.port,
-    url  = 'http://localhost:' + port;
-
-require('should');
+    url  = 'http://localhost:' + port,
+    expect = require('expect.js');
 
 describe('Routes', function() {
 
@@ -32,7 +31,7 @@ describe('Routes', function() {
             request(url)
                 .get('/projects')
                 .end(function(err, res) {
-                    res.should.have.property('status', 401);
+                    expect( res.status ).to.equal(401);
                     done();
                 });
         });
@@ -40,7 +39,7 @@ describe('Routes', function() {
             request(url)
                 .get('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.property('status', 401);
+                    expect( res.status ).to.equal(401);
                     done();
                 });
         });
@@ -48,7 +47,7 @@ describe('Routes', function() {
             request(url)
                 .put('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.property('status', 401);
+                    expect( res.status ).to.equal(401);
                     done();
                 });
         });
@@ -56,7 +55,7 @@ describe('Routes', function() {
             request(url)
                 .post('/projects')
                 .end(function(err, res) {
-                    res.should.have.property('status', 401);
+                    expect( res.status ).to.equal(401);
                     done();
                 });
         });
@@ -64,7 +63,7 @@ describe('Routes', function() {
             request(url)
                 .del('/projects/1')
                 .end(function(err, res) {
-                    res.should.have.property('status', 401);
+                    expect( res.status ).to.equal(401);
                     done();
                 });
         });
@@ -81,7 +80,7 @@ describe('Routes', function() {
                 .post('/login')
                 .send(body)
                 .end(function(err, res) {
-                    res.body.should.have.property('error');
+                    expect( res.body ).to.have.property('error');
                     done();
                 });
         });
@@ -95,9 +94,9 @@ describe('Routes', function() {
                 .post('/login')
                 .send(body)
                 .end(function(err, res) {
-                    res.body.should.have.property('authUserId');
-                    res.body.should.have.property('authToken');
-                    res.should.have.property('status', 200);
+                    expect( res.body ).to.have.property('authUserId');
+                    expect( res.body ).to.have.property('authToken');
+                    expect( res.status ).to.equal(200);
                     done();
                 });
         });
