@@ -8,49 +8,18 @@
         supertest = require('supertest'),
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
-        db = require('../modules/db')( server.knex );
-
-    var promise = require('node-promise'),
-        deferred = promise.defer;
+        db = require('../modules/db')( server.knex ),
+        utils = require('./utils');
 
     require('should');
-
-    var loggedUser = {
-        credentials: {
-            username: 'asd',
-            password: 'asdasd'
-        },
-        authData: {}
-    };
-
-    function authenticateUser() {
-        var d = deferred();
-
-        agent
-            .post('/login')
-            .send( loggedUser.credentials )
-            .end(function(err, res) {
-                if (err) {
-                    d.reject(err);
-                } else {
-                    d.resolve(res);
-                }
-            });
-
-        return d.promise;
-    }
 
     describe('Projects', function() {
 
         beforeEach(function(done) {
             db.createDb().then(function() {
-                done();
-            });
-        });
-
-        beforeEach(function(done) {
-            authenticateUser().then(function(res) {
-                loggedUser.authData = res.body;
+                return utils.authenticateUser( agent );
+            }).then(function(res) {
+                utils.setAuthData( res.body );
                 done();
             });
         });
@@ -77,7 +46,7 @@
 
             agent
                 .post('/projects')
-                .set('authorization', loggedUser.authData.authToken)
+                .set('authorization', utils.getAuthData().authToken)
                 .send(body)
                 .end(function(err, res) {
                     res.body.should.have.property('id');
