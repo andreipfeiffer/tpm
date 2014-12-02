@@ -10,6 +10,13 @@ module.exports = function(app, knex) {
         settings = require('./modules/settings')( knex ),
         pack = require('../package.json');
 
+    function getResponse(res, result) {
+        if ( !result ) {
+            return res.status( result.status ).end();
+        }
+        return res.status( result.status ).send( result.body );
+    }
+
     app.get('/', function(req, res) {
         res.render('index', {
             title: pack.name,
@@ -33,8 +40,8 @@ module.exports = function(app, knex) {
     app.route('/clients')
         .get(auth.ensureTokenAuthenticated, clients.getAll)
         .post(auth.ensureTokenAuthenticated, function(req, res) {
-            clients.add(req).then(function(r) {
-                return res.status( r.status ).send( r.data );
+            clients.add(req.user, req.body).then(function(result) {
+                return getResponse( res, result );
             });
         });
 

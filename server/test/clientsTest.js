@@ -5,10 +5,11 @@
     process.env.NODE_ENV = 'test';
 
     var app = require('../../server.js'),
-        httpMocks = require('node-mocks-http'),
         db = require('../modules/db')( app.knex ),
         clients = require('../modules/clients')( app.knex ),
         expect = require('expect.js');
+
+    var user = { id: 1 };
 
     describe('Clients', function() {
 
@@ -18,10 +19,6 @@
             });
         });
 
-        beforeEach(function() {
-            this.res = httpMocks.createResponse();
-        });
-
         afterEach(function(done) {
             db.dropDb().then(function() {
                 done();
@@ -29,31 +26,21 @@
         });
 
         it('should add a new client', function(done) {
-            var name = 'new unit test client',
-                req = httpMocks.createRequest({
-                body: {
-                    name: name
-                }
-            });
+            var user = { id: 1 },
+                body = {
+                    name: 'new unit test client'
+                };
 
-            req.user = { id: 1 };
-
-            clients.add(req, this.res).then(function(response) {
-                expect( response.data ).to.have.property('name', name);
+            clients.add(user, body).then(function(response) {
+                expect( response.body ).to.have.property('name', body.name);
                 expect( response ).to.have.property('status', 201);
                 done();
             });
         });
 
         it('should not add a new client, without specified name', function(done) {
-            var req = httpMocks.createRequest({
-                body: {}
-            });
-
-            req.user = { id: 1 };
-
-            clients.add(req, this.res).then(function(response) {
-                expect( response.data ).to.have.property('error');
+            clients.add(user, {}).then(function(response) {
+                expect( response.body ).to.have.property('error');
                 expect( response ).to.have.property('status', 503);
                 done();
             });

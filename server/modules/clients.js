@@ -71,11 +71,8 @@ module.exports = function(knex) {
             });
         },
 
-        add: function(req) {
+        add: function(userLogged, data) {
             var d = deferred();
-
-            var data = req.body,
-                userLogged = req.user;
 
             var addNewClient = knex('clients')
                 .insert({
@@ -84,16 +81,14 @@ module.exports = function(knex) {
                 });
 
             addNewClient
-                .then(function(data) {
-                    return getClientById(data[0], userLogged.id);
+                .then(function(client) {
+                    return getClientById(client[0], userLogged.id);
                 })
-                .then(function(data) {
-                    // return res.status(201).send(data[0]);
-                    d.resolve( { status: 201, data: data[0] } );
+                .then(function(client) {
+                    d.resolve( { status: 201, body: client[0] } );
                 })
                 .catch(function(e) {
-                    // return res.status(503).send({ error: 'Database error: ' + e.code});
-                    d.resolve( { status: 503, data: { error: 'Database error: ' + e.code} } );
+                    d.resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
                 });
 
             return d.promise;
