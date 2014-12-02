@@ -161,7 +161,9 @@ module.exports = function(knex) {
             }).then(function() {
                 if ( data.newClientName.length ) {
                     return addNewClient(userLogged.id, newProject.id, data.newClientName ).then(function() {
-                        return res.status(201).send(newProject);
+                        return getProjectById(newProject.id, userLogged.id);
+                    }).then(function(data) {
+                        return res.status(201).send(data[0]);
                     });
                 } else {
                     return res.status(201).send(newProject);
