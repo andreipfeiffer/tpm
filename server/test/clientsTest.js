@@ -26,14 +26,13 @@
         });
 
         it('should add a new client', function(done) {
-            var user = { id: 1 },
-                body = {
+            var body = {
                     name: 'new unit test client'
                 };
 
             clients.add(user, body).then(function(response) {
                 expect( response.body ).to.have.property('name', body.name);
-                expect( response ).to.have.property('status', 201);
+                expect( response.status ).to.equal(201);
                 done();
             });
         });
@@ -42,6 +41,19 @@
             clients.add(user, {}).then(function(response) {
                 expect( response.body ).to.have.property('error');
                 expect( response ).to.have.property('status', 503);
+                done();
+            });
+        });
+
+        it('should edit an existing client', function(done) {
+            var body = {
+                    name: 'edited name',
+                    description: 'client description'
+                };
+
+            clients.update(user, 1, body).then(function(response) {
+                expect( response.body ).to.be.ok();
+                expect( response.status ).to.equal(200);
                 done();
             });
         });

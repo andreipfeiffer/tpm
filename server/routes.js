@@ -47,7 +47,12 @@ module.exports = function(app, knex) {
 
     app.route('/clients/:id')
         .get(auth.ensureTokenAuthenticated, clients.getById)
-        .put(auth.ensureTokenAuthenticated, clients.update)
+        .put(auth.ensureTokenAuthenticated, function(req, res) {
+            var id = parseInt( req.params.id, 10 );
+            clients.update(req.user, id, req.body).then(function(result) {
+                return getResponse( res, result );
+            });
+        })
         .delete(auth.ensureTokenAuthenticated, clients.remove);
 
     app.route('/settings')

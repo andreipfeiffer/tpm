@@ -49,9 +49,8 @@ module.exports = function(knex) {
             });
         },
 
-        update: function(req, res) {
-            var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user;
+        update: function(userLogged, id, data) {
+            var d = deferred();
 
             var editClient = knex('clients')
                 .where({
@@ -60,15 +59,17 @@ module.exports = function(knex) {
                     'isDeleted': '0'
                 })
                 .update({
-                    name: req.body.name,
-                    description: req.body.description
+                    name: data.name,
+                    description: data.description
                 });
 
             editClient.then(function() {
-                return res.send(true);
+                d.resolve( { status: 200, body: true } );
             }).catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
+                d.resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
             });
+
+            return d.promise;
         },
 
         add: function(userLogged, data) {
