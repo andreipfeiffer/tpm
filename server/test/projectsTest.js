@@ -116,5 +116,17 @@
                 });
         });
 
+        it('should get all projects', function(done) {
+            agent
+                .get('/projects')
+                .set('authorization', utils.getAuthData().authToken)
+                .end(function(err, res) {
+                    expect( res.body ).to.be.an('array');
+                    expect( res.body ).to.have.length(3);
+                    expect( res.status ).to.equal(200);
+                    done();
+                });
+        });
+
     });
 })();
