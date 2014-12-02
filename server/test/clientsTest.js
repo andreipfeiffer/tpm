@@ -32,9 +32,7 @@
         describe('Add', function() {
             it('should add a new client', function(done) {
                 var req = httpMocks.createRequest({
-                    body: {
-                        // name: 'new unit test client'
-                    }
+                    body: {}
                 });
 
                 req.user = { id: 1 };
