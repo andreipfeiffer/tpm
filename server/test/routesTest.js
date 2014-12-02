@@ -26,42 +26,42 @@
             });
         });
 
-        describe('Unauthorized', function() {
-            it('should return unauthorized', function(done) {
+        describe('Unauthorized routes', function() {
+            it('should return unauthorized for GET:/clients', function(done) {
                 request(url)
-                    .get('/projects')
+                    .get('/clients')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
                         done();
                     });
             });
-            it('should return unauthorized', function(done) {
+            it('should return unauthorized for GET:/clients/1', function(done) {
                 request(url)
-                    .get('/projects/1')
+                    .get('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
                         done();
                     });
             });
-            it('should return unauthorized', function(done) {
+            it('should return unauthorized for PUT:/clients/1', function(done) {
                 request(url)
-                    .put('/projects/1')
+                    .put('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
                         done();
                     });
             });
-            it('should return unauthorized', function(done) {
+            it('should return unauthorized for POST:/clients', function(done) {
                 request(url)
-                    .post('/projects')
+                    .post('/clients')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
                         done();
                     });
             });
-            it('should return unauthorized', function(done) {
+            it('should return unauthorized for DELETE:/clients/1', function(done) {
                 request(url)
-                    .del('/projects/1')
+                    .del('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
                         done();
