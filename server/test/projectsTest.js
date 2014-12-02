@@ -5,7 +5,6 @@
     process.env.NODE_ENV = 'test';
 
     var server = require('../../server.js'),
-        // httpMocks = require('node-mocks-http'),
         supertest = require('supertest'),
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
@@ -17,10 +16,7 @@
     require('should');
 
     var loggedUser = {
-        data: {
-            id: 1
-        },
-        loginData: {
+        credentials: {
             username: 'asd',
             password: 'asdasd'
         },
@@ -32,7 +28,7 @@
 
         agent
             .post('/login')
-            .send( loggedUser.loginData )
+            .send( loggedUser.credentials )
             .end(function(err, res) {
                 if (err) {
                     d.reject(err);
