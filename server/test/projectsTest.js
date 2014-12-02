@@ -12,9 +12,26 @@
         utils = require('./utils'),
         expect = require('expect.js');
 
+    var getNewProject = function() {
+        return {
+            idClient: 1,
+            name: 'new unit test project',
+            status: '',
+            days: 5,
+            priceEstimated: 100,
+            priceFinal: 200,
+            dateAdded: '',
+            dateEstimated: '',
+            description: 'description',
+            newClientName: ''
+        };
+    };
+
     describe('Projects', function() {
 
         beforeEach(function(done) {
+            this.project = getNewProject();
+
             db.createDb().then(function() {
                 return utils.authenticateUser( agent );
             }).then(function(res) {
@@ -30,26 +47,16 @@
         });
 
         it('should add a new project', function(done) {
-            var body = {
-                idClient: 1,
-                name: 'new unit test project',
-                status: '',
-                days: 5,
-                priceEstimated: 100,
-                priceFinal: 200,
-                dateAdded: '',
-                dateEstimated: '',
-                description: 'description',
-                newClientName: ''
-            };
+            var project = this.project;
 
             agent
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
-                .send(body)
+                .send( project )
                 .end(function(err, res) {
                     expect( res.body ).to.have.property('id');
-                    expect( res.body ).to.have.property('name', body.name);
+                    expect( res.body ).to.have.property('idClient', 1);
+                    expect( res.body ).to.have.property('name', project.name);
                     expect( res.body ).to.have.property('isDeleted', 0);
                     expect( res ).to.have.property('status', 201);
                     done();
