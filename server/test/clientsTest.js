@@ -54,14 +54,24 @@
             clients.update(user, 1, body).then(function(res) {
                 expect( res.body ).to.be.ok();
                 expect( res.status ).to.equal(200);
-                done();
+
+                clients.getById(user, 1).then(function(res) {
+                    expect( res.body ).to.have.property('name', body.name);
+                    expect( res.body ).to.have.property('description', body.description);
+                    expect( res.status ).to.equal(200);
+                    done();
+                });
             });
         });
 
         it('should delete an existing client', function(done) {
             clients.remove(user, 1).then(function(res) {
                 expect( res.status ).to.equal(204);
-                done();
+
+                clients.getById(user, 1).then(function(res) {
+                    expect( res.status ).to.equal(404);
+                    done();
+                });
             });
         });
 

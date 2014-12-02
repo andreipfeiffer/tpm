@@ -39,16 +39,23 @@ module.exports = function(knex) {
             return d.promise;
         },
 
-        getById: function(req, res) {
-            var id = req.params.id,
-                userLogged = req.user;
+        getById: function(userLogged, id) {
+            var d = deferred();
+
+            // var id = req.params.id,
+            //     userLogged = req.user;
 
             getClientById(id, userLogged.id).then(function(data) {
-                if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
-                return res.send(data[0]);
+                if ( !data.length ) {
+                    d.resolve({ status: 404, body: { error: 'Record not found'} });
+                } else {
+                    d.resolve({ status: 200, body: data[0] });
+                }
             }).catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
+                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
             });
+
+            return d.promise;
         },
 
         update: function(userLogged, id, data) {

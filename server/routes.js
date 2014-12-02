@@ -50,7 +50,12 @@ module.exports = function(app, knex) {
         });
 
     app.route('/clients/:id')
-        .get(auth.ensureTokenAuthenticated, clients.getById)
+        .get(auth.ensureTokenAuthenticated, function(req, res) {
+            var id = parseInt( req.params.id );
+            clients.getById(req.user, id).then(function(result) {
+                return getResponse( res, result );
+            });
+        })
         .put(auth.ensureTokenAuthenticated, function(req, res) {
             var id = parseInt( req.params.id );
             clients.update(req.user, id, req.body).then(function(result) {
