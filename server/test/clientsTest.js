@@ -29,38 +29,34 @@
             });
         });
 
-        describe('Add', function() {
-            it('should add a new client', function(done) {
-                var req = httpMocks.createRequest({
-                    body: {}
-                });
+        it('should add a new client', function(done) {
+            var name = 'new unit test client',
+                req = httpMocks.createRequest({
+                body: {
+                    name: name
+                }
+            });
 
-                req.user = { id: 1 };
+            req.user = { id: 1 };
 
-                clients.add(req, this.res).then(function(response) {
-                    response.data.should.have.property('error');
-                    response.should.have.property('status', 503);
-                    done();
-                });
+            clients.add(req, this.res).then(function(response) {
+                response.data.should.have.property('name', name);
+                response.should.have.property('status', 201);
+                done();
             });
         });
 
-        describe('Add', function() {
-            it('should add a new client', function(done) {
-                var name = 'new unit test client',
-                    req = httpMocks.createRequest({
-                    body: {
-                        name: name
-                    }
-                });
+        it('should not add a new client, without specified name', function(done) {
+            var req = httpMocks.createRequest({
+                body: {}
+            });
 
-                req.user = { id: 1 };
+            req.user = { id: 1 };
 
-                clients.add(req, this.res).then(function(response) {
-                    response.data.should.have.property('name', name);
-                    response.should.have.property('status', 201);
-                    done();
-                });
+            clients.add(req, this.res).then(function(response) {
+                response.data.should.have.property('error');
+                response.should.have.property('status', 503);
+                done();
             });
         });
 
