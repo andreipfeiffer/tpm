@@ -78,5 +78,26 @@
                 });
         });
 
+        it('should update an existing project', function(done) {
+            var project = this.project;
+
+            agent
+                .put('/projects/1')
+                .set('authorization', utils.getAuthData().authToken)
+                .send( project )
+                .end(function(err, res) {
+                    expect( res.status ).to.equal(200);
+
+                    agent
+                        .get('/projects/1')
+                        .set('authorization', utils.getAuthData().authToken)
+                        .end(function(err, res) {
+                            expect( res.body ).to.have.property('id', 1);
+                            expect( res.body ).to.have.property('name', project.name);
+                            done();
+                        });
+                });
+        });
+
     });
 })();
