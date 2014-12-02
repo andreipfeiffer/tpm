@@ -65,5 +65,14 @@
             });
         });
 
+        it('should get all clients', function(done) {
+            clients.getAll(user).then(function(response) {
+                expect( response.body ).to.be.an('array');
+                expect( response.body ).to.have.length(2);
+                expect( response.status ).to.equal(200);
+                done();
+            });
+        });
+
     });
 })();

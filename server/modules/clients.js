@@ -27,14 +27,16 @@ module.exports = function(knex) {
     }
 
     return {
-        getAll: function(req, res) {
-            var userLogged = req.user;
+        getAll: function(userLogged) {
+            var d = deferred();
 
             getAllClients(userLogged.id).then(function(data) {
-                return res.send(data);
+                d.resolve({ status: 200, body: data });
             }).catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
+                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
             });
+
+            return d.promise;
         },
 
         getById: function(req, res) {
@@ -64,9 +66,9 @@ module.exports = function(knex) {
                 });
 
             editClient.then(function() {
-                d.resolve( { status: 200, body: true } );
+                d.resolve({ status: 200, body: true });
             }).catch(function(e) {
-                d.resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
+                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
             });
 
             return d.promise;

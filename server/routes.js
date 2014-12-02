@@ -38,7 +38,11 @@ module.exports = function(app, knex) {
         .delete(auth.ensureTokenAuthenticated, projects.remove);
 
     app.route('/clients')
-        .get(auth.ensureTokenAuthenticated, clients.getAll)
+        .get(auth.ensureTokenAuthenticated, function(req, res) {
+            clients.getAll(req.user).then(function(result) {
+                return getResponse( res, result );
+            });
+        })
         .post(auth.ensureTokenAuthenticated, function(req, res) {
             clients.add(req.user, req.body).then(function(result) {
                 return getResponse( res, result );
