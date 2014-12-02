@@ -58,5 +58,12 @@
             });
         });
 
+        it('should delete an existing client', function(done) {
+            clients.remove(user, 1).then(function(response) {
+                expect( response.status ).to.equal(204);
+                done();
+            });
+        });
+
     });
 })();

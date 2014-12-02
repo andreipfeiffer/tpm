@@ -11,7 +11,7 @@ module.exports = function(app, knex) {
         pack = require('../package.json');
 
     function getResponse(res, result) {
-        if ( !result ) {
+        if ( !result.body ) {
             return res.status( result.status ).end();
         }
         return res.status( result.status ).send( result.body );
@@ -48,12 +48,17 @@ module.exports = function(app, knex) {
     app.route('/clients/:id')
         .get(auth.ensureTokenAuthenticated, clients.getById)
         .put(auth.ensureTokenAuthenticated, function(req, res) {
-            var id = parseInt( req.params.id, 10 );
+            var id = parseInt( req.params.id );
             clients.update(req.user, id, req.body).then(function(result) {
                 return getResponse( res, result );
             });
         })
-        .delete(auth.ensureTokenAuthenticated, clients.remove);
+        .delete(auth.ensureTokenAuthenticated, function(req, res) {
+            var id = parseInt( req.params.id );
+            clients.delete(req.user, id).then(function(result) {
+                return getResponse( res, result );
+            });
+        });
 
     app.route('/settings')
         .get(auth.ensureTokenAuthenticated, settings.getAll);

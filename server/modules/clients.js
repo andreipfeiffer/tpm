@@ -95,9 +95,10 @@ module.exports = function(knex) {
             return d.promise;
         },
 
-        remove: function(req, res) {
-            var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user;
+        remove: function(userLogged, id) {
+            var d = deferred();
+            // var id = parseInt( req.params.id, 10 ),
+            //     userLogged = req.user;
 
             var softDeleteClient = knex('clients')
                 .where({
@@ -110,10 +111,12 @@ module.exports = function(knex) {
                 });
 
             softDeleteClient.then(function() {
-                return res.status(204).end();
+                d.resolve({ status: 204 });
             }).catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
+                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
             });
+
+            return d.promise;
         }
     };
 
