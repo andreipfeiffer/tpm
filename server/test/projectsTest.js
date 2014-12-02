@@ -137,7 +137,7 @@
 
             server.knex('users').where({ id: userId }).update({ 'googleSelectedCalendar': 'calendarName' }).then(function() {
                 return server.knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' });
-            }).then(function(data) {
+            }).then(function() {
                 return projects.removeEvents( userId );
             }).then(function() {
                 return server.knex('projects').select().where({ idUser: userId });
