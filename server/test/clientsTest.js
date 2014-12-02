@@ -7,9 +7,8 @@
     var app = require('../../server.js'),
         httpMocks = require('node-mocks-http'),
         db = require('../modules/db')( app.knex ),
-        clients = require('../modules/clients')( app.knex );
-
-    require('should');
+        clients = require('../modules/clients')( app.knex ),
+        expect = require('expect.js');
 
     describe('Clients', function() {
 
@@ -40,8 +39,8 @@
             req.user = { id: 1 };
 
             clients.add(req, this.res).then(function(response) {
-                response.data.should.have.property('name', name);
-                response.should.have.property('status', 201);
+                expect( response.data ).to.have.property('name', name);
+                expect( response ).to.have.property('status', 201);
                 done();
             });
         });
@@ -54,8 +53,8 @@
             req.user = { id: 1 };
 
             clients.add(req, this.res).then(function(response) {
-                response.data.should.have.property('error');
-                response.should.have.property('status', 503);
+                expect( response.data ).to.have.property('error');
+                expect( response ).to.have.property('status', 503);
                 done();
             });
         });
