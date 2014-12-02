@@ -99,5 +99,22 @@
                 });
         });
 
+        it('should delete an existing project', function(done) {
+            agent
+                .delete('/projects/1')
+                .set('authorization', utils.getAuthData().authToken)
+                .end(function(err, res) {
+                    expect( res.status ).to.equal(204);
+
+                    agent
+                        .get('/projects/1')
+                        .set('authorization', utils.getAuthData().authToken)
+                        .end(function(err, res) {
+                            expect( res.status ).to.equal(404);
+                            done();
+                        });
+                });
+        });
+
     });
 })();
