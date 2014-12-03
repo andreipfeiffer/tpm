@@ -62,11 +62,6 @@
         });
 
         it('should login the user with correct credentials', function(done) {
-            var body = {
-                username: 'asd',
-                password: 'asdasd'
-            };
-
             loginUser().then(function(res) {
                 expect( res.body ).to.have.property('authUserId');
                 expect( res.body ).to.have.property('authToken');
