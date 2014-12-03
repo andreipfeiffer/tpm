@@ -26,7 +26,7 @@ module.exports = function(app, knex) {
     });
 
     app.post('/login', auth.login);
-    app.get('/logout', auth.logout);
+    app.get('/logout', auth.ensureSessionAuthenticated, auth.logout);
 
     app.route('/projects')
         .get(auth.ensureTokenAuthenticated, projects.getAll)
