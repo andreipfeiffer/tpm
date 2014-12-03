@@ -10,7 +10,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * CRUD interfaces
 * Token authentication
 * Server unit-tests, using Mocha
-* Client unit-tests, using Jasmine
+* Client unit-tests, using Jasmine & Karma
 * Client e2e testing, using Protractor
 * Bower components management
 * Code linting
@@ -28,7 +28,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 ## Future Goals
 
 * Custom bootstrap theme
-* Full server unit-tests
 * Build and optimize resources
 * Reports
 * Offline availability
