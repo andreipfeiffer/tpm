@@ -10,6 +10,7 @@
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
         expect = require('expect.js'),
+        utils = require('./utils'),
         pack = require('../../package.json');
 
     describe('Routes', function() {
@@ -78,6 +79,64 @@
                     .del('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
+                        done();
+                    });
+            });
+        });
+
+        describe('Authorized routes after login', function() {
+
+            beforeEach(function(done) {
+                utils.authenticateUser( agent ).then(function(res) {
+                    utils.setAuthData( res.body );
+                    done();
+                });
+            });
+
+            it('should authorize GET:/clients', function(done) {
+                agent
+                    .get('/clients')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .end(function(err, res) {
+                        expect( res.status ).to.equal(200);
+                        done();
+                    });
+            });
+            it('should authorize GET:/clients/1', function(done) {
+                agent
+                    .get('/clients/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .end(function(err, res) {
+                        expect( res.status ).to.equal(200);
+                        done();
+                    });
+            });
+            it('should authorize PUT:/clients/1', function(done) {
+                agent
+                    .put('/clients/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send({ name: 'new name', description: 'desc' })
+                    .end(function(err, res) {
+                        expect( res.status ).to.equal(200);
+                        done();
+                    });
+            });
+            it('should authorize POST:/clients', function(done) {
+                agent
+                    .post('/clients')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send({ name: 'new client name' })
+                    .end(function(err, res) {
+                        expect( res.status ).to.equal(201);
+                        done();
+                    });
+            });
+            it('should authorize DELETE:/clients/1', function(done) {
+                agent
+                    .del('/clients/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .end(function(err, res) {
+                        expect( res.status ).to.equal(204);
                         done();
                     });
             });

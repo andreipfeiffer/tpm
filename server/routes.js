@@ -64,7 +64,7 @@ module.exports = function(app, knex) {
         })
         .delete(auth.ensureTokenAuthenticated, function(req, res) {
             var id = parseInt( req.params.id );
-            clients.delete(req.user, id).then(function(result) {
+            clients.remove(req.user, id).then(function(result) {
                 return getResponse( res, result );
             });
         });
