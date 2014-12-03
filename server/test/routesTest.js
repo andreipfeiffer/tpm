@@ -69,38 +69,5 @@
             });
         });
 
-        describe('Auth', function() {
-            it('should not login the user with invalid credentials', function(done) {
-                var body = {
-                    username: 'x',
-                    password: 'x'
-                };
-
-                request(url)
-                    .post('/login')
-                    .send(body)
-                    .end(function(err, res) {
-                        expect( res.body ).to.have.property('error');
-                        expect( res.status ).to.equal(401);
-                        done();
-                    });
-            });
-            it('should login the user with correct credentials', function(done) {
-                var body = {
-                    username: 'asd',
-                    password: 'asdasd'
-                };
-
-                request(url)
-                    .post('/login')
-                    .send(body)
-                    .end(function(err, res) {
-                        expect( res.body ).to.have.property('authUserId');
-                        expect( res.body ).to.have.property('authToken');
-                        expect( res.status ).to.equal(200);
-                        done();
-                    });
-            });
-        });
     });
 })();
