@@ -8,12 +8,9 @@
         supertest = require('supertest'),
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
-        agent2 = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
         expect = require('expect.js'),
-        utils = require('./utils'),
-        promise = require('node-promise'),
-        deferred = promise.defer;
+        utils = require('./utils');
 
     describe('Auth', function() {
 

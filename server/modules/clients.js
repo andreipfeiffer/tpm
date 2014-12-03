@@ -42,9 +42,6 @@ module.exports = function(knex) {
         getById: function(userLogged, id) {
             var d = deferred();
 
-            // var id = req.params.id,
-            //     userLogged = req.user;
-
             getClientById(id, userLogged.id).then(function(data) {
                 if ( !data.length ) {
                     d.resolve({ status: 404, body: { error: 'Record not found'} });
@@ -106,8 +103,6 @@ module.exports = function(knex) {
 
         remove: function(userLogged, id) {
             var d = deferred();
-            // var id = parseInt( req.params.id, 10 ),
-            //     userLogged = req.user;
 
             var softDeleteClient = knex('clients')
                 .where({
