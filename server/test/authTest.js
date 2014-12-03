@@ -4,12 +4,11 @@
 
     process.env.NODE_ENV = 'test';
 
-    var app = require('../../server.js'),
-        request = require('supertest'),
-        config  = require('../../config/config'),
-        db = require('../modules/db')( app.knex ),
-        port = config.port,
-        url  = 'http://localhost:' + port,
+    var server = require('../../server.js'),
+        supertest = require('supertest'),
+        // request = supertest(server.app),
+        agent = supertest.agent(server.app),
+        db = require('../modules/db')( server.knex ),
         expect = require('expect.js');
 
     describe('Auth', function() {
@@ -32,7 +31,7 @@
                 password: 'x'
             };
 
-            request(url)
+            agent
                 .post('/login')
                 .send(body)
                 .end(function(err, res) {
@@ -48,7 +47,7 @@
                 password: 'asdasd'
             };
 
-            request(url)
+            agent
                 .post('/login')
                 .send(body)
                 .end(function(err, res) {
