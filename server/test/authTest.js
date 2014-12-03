@@ -73,7 +73,7 @@
         it('should logout the logged user', function(done) {
             utils.authenticateUser( agent ).then(function(res) {
                 utils.setAuthData( res.body );
-                return logoutUser();
+                return utils.logoutUser( agent );
             }).then(function() {
                 agent
                     .get('/clients')
@@ -84,18 +84,6 @@
                     });
             });
         });
-
-        function logoutUser() {
-            var d = deferred();
-
-            agent
-                .get('/logout')
-                .end(function(err, res) {
-                    d.resolve(res);
-                });
-
-            return d.promise;
-        }
 
     });
 })();

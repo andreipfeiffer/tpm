@@ -43,7 +43,20 @@ module.exports = (function(){
                 });
 
             return d.promise;
+        },
+
+        logoutUser: function(agent) {
+            var d = deferred();
+
+            agent
+                .get('/logout')
+                .end(function(err, res) {
+                    d.resolve(res);
+                });
+
+            return d.promise;
         }
+
     };
 
 })();
