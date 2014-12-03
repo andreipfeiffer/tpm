@@ -4,12 +4,11 @@
 
     process.env.NODE_ENV = 'test';
 
-    var app = require('../../server.js'),
-        request = require('supertest'),
-        config  = require('../../config/config'),
-        db = require('../modules/db')( app.knex ),
-        port = config.port,
-        url  = 'http://localhost:' + port,
+    var server = require('../../server.js'),
+        supertest = require('supertest'),
+        // request = supertest(server.app),
+        agent = supertest.agent(server.app),
+        db = require('../modules/db')( server.knex ),
         expect = require('expect.js');
 
     describe('Routes', function() {
@@ -28,7 +27,7 @@
 
         describe('Unauthorized routes', function() {
             it('should return unauthorized for GET:/clients', function(done) {
-                request(url)
+                agent
                     .get('/clients')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
@@ -36,7 +35,7 @@
                     });
             });
             it('should return unauthorized for GET:/clients/1', function(done) {
-                request(url)
+                agent
                     .get('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
@@ -44,7 +43,7 @@
                     });
             });
             it('should return unauthorized for PUT:/clients/1', function(done) {
-                request(url)
+                agent
                     .put('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
@@ -52,7 +51,7 @@
                     });
             });
             it('should return unauthorized for POST:/clients', function(done) {
-                request(url)
+                agent
                     .post('/clients')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
@@ -60,7 +59,7 @@
                     });
             });
             it('should return unauthorized for DELETE:/clients/1', function(done) {
-                request(url)
+                agent
                     .del('/clients/1')
                     .end(function(err, res) {
                         expect( res.status ).to.equal(401);
