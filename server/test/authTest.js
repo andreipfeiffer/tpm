@@ -62,7 +62,7 @@
         });
 
         it('should login the user with correct credentials', function(done) {
-            loginUser().then(function(res) {
+            utils.authenticateUser( agent ).then(function(res) {
                 expect( res.body ).to.have.property('authUserId');
                 expect( res.body ).to.have.property('authToken');
                 expect( res.status ).to.equal(200);
@@ -84,24 +84,6 @@
                     });
             });
         });
-
-        function loginUser() {
-            var d = deferred();
-
-            var body = {
-                username: 'asd',
-                password: 'asdasd'
-            };
-
-            agent2
-                .post('/login')
-                .send(body)
-                .end(function(err, res) {
-                    d.resolve(res);
-                });
-
-            return d.promise;
-        }
 
         function logoutUser() {
             var d = deferred();
