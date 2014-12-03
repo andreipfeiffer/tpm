@@ -9,7 +9,8 @@
         // request = supertest(server.app),
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
-        expect = require('expect.js');
+        expect = require('expect.js'),
+        pack = require('../../package.json');
 
     describe('Routes', function() {
 
@@ -22,6 +23,20 @@
         afterEach(function(done) {
             db.dropDb().then(function() {
                 done();
+            });
+        });
+
+        describe('Authorized routes without login', function() {
+            it('should return index page', function(done) {
+                agent
+                    .get('/')
+                    .end(function(err, res) {
+                        expect( res.text ).to.have.string( pack.name );
+                        expect( res.text ).to.have.string( pack.description );
+                        expect( res.text ).to.have.string( pack.version );
+                        expect( res.status ).to.equal(200);
+                        done();
+                    });
             });
         });
 
