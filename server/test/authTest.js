@@ -29,9 +29,25 @@
             });
         });
 
-        it('should not login the user with invalid credentials', function(done) {
+        it('should not login the user with invalid username', function(done) {
             var body = {
                 username: 'x',
+                password: 'x'
+            };
+
+            agent
+                .post('/login')
+                .send(body)
+                .end(function(err, res) {
+                    expect( res.body ).to.have.property('error');
+                    expect( res.status ).to.equal(401);
+                    done();
+                });
+        });
+
+        it('should not login the user with invalid password', function(done) {
+            var body = {
+                username: 'asd',
                 password: 'x'
             };
 
