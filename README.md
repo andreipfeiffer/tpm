@@ -23,14 +23,18 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * Projects "finished" but not "payed", that passed X days
 * Handle all server errors on client: 4xx (verbosely) and 5xx (generic, silent)
+* Sort projects based on various criteria
+* Filter by Client
 
 ## Future Goals
 
 * Custom bootstrap theme
 * Build and optimize resources
 * Reports
-* Offline availability
 * Create new accounts
 * Recover password
 * Close account
+* Login with Google
+* Timeline projects display variant
+* Offline availability
 * Websockets messaging
