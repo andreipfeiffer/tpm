@@ -78,7 +78,7 @@ var TPM = TPM || {};
         }
     };
 
-    TPM.config(['$routeProvider', function($routeProvider) {
+    TPM.config(['$routeProvider', '$animateProvider', function($routeProvider, $animateProvider) {
 
         //this loads up our routes dynamically from the routes object
         for (var path in TPM.routesList) {
@@ -86,6 +86,7 @@ var TPM = TPM || {};
         }
         $routeProvider.otherwise({redirectTo: '/login'});
 
+        $animateProvider.classNameFilter(/fade-in/);
 
     }]).run(function($rootScope, $location, $http, SessionService, feedback) {
 

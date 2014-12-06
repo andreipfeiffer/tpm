@@ -173,3 +173,19 @@ h1,
 	display: inline-block;
 	float: none;
 }
+
+.fade-in.ng-enter {
+	-webkit-transition-property: opacity;
+	transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	transition-duration: 1s;
+	opacity: 0;
+}
+.fade-in.ng-enter-active {
+	opacity: 1;
+}
+.fade-in.ng-leave {
+}
+.fade-in.ng-leave-active {
+	opacity: 0;
+}
