@@ -7,6 +7,7 @@ var TPM = TPM || {};
     TPM = angular.module('tpm', [
         'ngRoute',
         'ngTouch',
+        'ngAnimate',
 
         'TPM.AuthControllers',
         'TPM.HeaderControllers',
