@@ -6,6 +6,11 @@
         "type": "git",
         "url": "https://github.com/andreipfeiffer/tpm"
     },
+    "author": {
+        "name": "Andrei Pfeiffer",
+        "email" : "andrei@upsidedown.ro",
+        "url": "https://github.com/andreipfeiffer"
+    },
     "dependencies": {
         "express": "4.x",
         "jade": "1.5.0",
@@ -31,7 +36,7 @@
         "grunt-mocha-cli": "1.9.0",
         "grunt-mocha-istanbul": "2.2.0",
         "expect.js": "0.3.1",
-        "grunt-contrib-uglify": "0.2.4",
+        "grunt-contrib-uglify": "0.6.0",
         "grunt-karma": "0.9.0",
         "karma": "0.12.28",
         "karma-chrome-launcher": "0.1.5",
@@ -40,6 +45,13 @@
         "karma-coverage": "0.2.7",
         "karma-phantomjs-launcher": "0.1.4",
         "protractor": "1.0.0-rc6",
-        "grunt-protractor-runner": "1.0.1"
+        "grunt-protractor-runner": "1.0.1",
+        "grunt-contrib-jade": "0.13.0",
+        "grunt-contrib-cssmin": "0.10.0",
+        "grunt-dom-munger": "3.4.0",
+        "grunt-contrib-concat": "0.5.0",
+        "grunt-contrib-copy": "0.7.0",
+        "grunt-contrib-clean": "0.6.0",
+        "grunt-contrib-htmlmin": "0.3.0"
     }
 }
