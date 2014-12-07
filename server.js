@@ -9,7 +9,8 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     config = require('./config/config'),
-    favicon = require('serve-favicon');
+    favicon = require('serve-favicon'),
+    serveStatic = require('serve-static');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -48,6 +49,7 @@ var knex = require('knex')({
     }
 });
 
+app.set('etag', true);
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // setup middleware based on ENV
@@ -76,6 +78,9 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+
+app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
+
 // app.use(delay);
 
 
