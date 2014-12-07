@@ -12,4 +12,4 @@ install:
 
 before_script:
     - mysql -e 'create database tpm_test;'
-    - grunt
+    - grunt build
