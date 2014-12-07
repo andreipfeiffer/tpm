@@ -8,7 +8,8 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     passport = require('passport'),
-    config  = require('./config/config');
+    config = require('./config/config'),
+    favicon = require('serve-favicon');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -46,6 +47,8 @@ var knex = require('knex')({
         database : config.mysql.database
     }
 });
+
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // setup middleware based on ENV
 if ('development' === env) {
