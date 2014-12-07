@@ -8,7 +8,7 @@ module.exports = function(app, knex) {
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
         settings = require('./modules/settings')( knex ),
-        pack = require('../package.json');
+        packageData = require('../package.json');
 
     function getResponse(res, result) {
         if ( !result.body ) {
@@ -18,11 +18,11 @@ module.exports = function(app, knex) {
     }
 
     app.get('/', function(req, res) {
-        res.render('index', {
-            title: pack.name,
-            description: pack.description,
-            version: pack.version
-        });
+        if ('production' !== process.env.NODE_ENV) {
+            res.sendfile('./dist/index.html');
+        } else {
+            res.render('index', packageData);
+        }
     });
 
     app.post('/login', auth.login);
