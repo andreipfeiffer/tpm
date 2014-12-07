@@ -30,6 +30,7 @@
 }
 @media (min-width: 768px) {
 	.navbar-fixed-top .navbar-right:last-child {
+		padding-right: 8px;
 		margin-right: 0;
 	}
 }
