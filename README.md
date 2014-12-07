@@ -18,6 +18,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Google Calendar integration
 * Promise-based requests
 * Custom loader & notification display system, with [angular-feedback](https://github.com/andreipfeiffer/angular-feedback)
+* Page transitions
 * Build script
 
 ## Short term To-dos
