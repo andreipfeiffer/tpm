@@ -14,6 +14,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Client e2e testing, using Protractor
 * Bower components management
 * Code linting
+* Semver release system
 * Travis-CI integration
 * Google Calendar integration
 * Promise-based requests
