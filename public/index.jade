@@ -23,7 +23,7 @@ html(class='no-js', lang='en', ng-app='tpm')
             nav.navbar.navbar-default.navbar-fixed-top.ng-cloak(ng-if='isAuth', role='navigation')
                 //- Brand and toggle get grouped for better mobile display
                 .navbar-header
-                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar')
+                    button#navbar-toggle.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar')
                         span.sr-only Toggle navigation
                         span.icon-bar
                         span.icon-bar
@@ -35,11 +35,11 @@ html(class='no-js', lang='en', ng-app='tpm')
                 #navbar.collapse.navbar-collapse.clearfix(ng-controller='MenuController')
                     ul.nav.navbar-nav.navbar-left
                         li(ng-class='{ active: isActive("projects")}')
-                            a.btn.btn-link(href='#projects') Projects
+                            a.btn.btn-link(href='#projects', ng-click='collapseMenu()') Projects
                         li(ng-class='{ active: isActive("clients")}')
-                            a.btn.btn-link(href='#clients') Clients
+                            a.btn.btn-link(href='#clients', ng-click='collapseMenu()') Clients
                         li(ng-class='{ active: isActive("settings")}')
-                            a.btn.btn-link(href='#settings') Settings
+                            a.btn.btn-link(href='#settings', ng-click='collapseMenu()') Settings
                     .nav.navbar-nav.navbar-right
                         a.btn.btn-default.navbar-btn(href='#logout') Logout
 
