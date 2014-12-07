@@ -130,7 +130,6 @@ module.exports = function(grunt) {
                 options: {
                     removeComments: true,
                     collapseWhitespace: true,
-                    // conservativeCollapse: true,
                     preserveLineBreaks: true
                 },
                 files: {
@@ -179,7 +178,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('build', [
-        'default',
         'clean:dist',
         'jade',
         'dom_munger',
@@ -189,7 +187,8 @@ module.exports = function(grunt) {
         'cssmin',
         'uglify',
         'copy',
-        'clean:temp'
+        'clean:temp',
+        'default'
     ]);
 
     // run this first:
