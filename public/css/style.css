@@ -175,11 +175,12 @@ h1,
 }
 
 .ng-animate-fadein.ng-enter {
-	-webkit-transition-property: opacity;
-	transition-property: opacity;
-	-webkit-transition-duration: 1s;
-	transition-duration: 1s;
-	opacity: 0;
+	-webkit-animation-name: slideIn;
+	animation-name: slideIn;
+	-webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
 }
 .ng-animate-fadein.ng-enter-active {
 	opacity: 1;
@@ -188,4 +189,27 @@ h1,
 }
 .ng-animate-fadein.ng-leave-active {
 	opacity: 0;
+}
+
+@-webkit-keyframes slideIn {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0,-1em,0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0,0,0);
+	}
+}
+@keyframes slideIn {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(0,-1em,0);
+		transform: translate3d(0,-1em,0);
+	}
+	100% {
+		opacity: 1;
+		-webkit-transform: translate3d(0,0,0);
+		transform: translate3d(0,0,0);
+	}
 }
