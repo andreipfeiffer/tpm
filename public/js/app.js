@@ -86,7 +86,7 @@ var TPM = TPM || {};
         }
         $routeProvider.otherwise({redirectTo: '/login'});
 
-        $animateProvider.classNameFilter(/ng-animate-fadein/);
+        $animateProvider.classNameFilter(/animate-slideFade/);
 
     }]).run(function($rootScope, $location, $http, SessionService, feedback) {
 

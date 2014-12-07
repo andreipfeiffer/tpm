@@ -7,7 +7,7 @@
     <hr>
     <br>
 
-    <div ng-hide="isLoading" class="ng-animate-fadein">
+    <div ng-hide="isLoading" class="animate-slideFade">
         <div class="form-group">
             <div class="col-sm-6 input-group" ng-show="settings.googleToken && settings.calendars">
                 <select class="form-control" placeholder="Select a calendar"
@@ -34,7 +34,7 @@
                 Syncronize with Google Calendar
             </a>
 
-            <button type="button" class="btn btn-warning ng-animate-fadein"
+            <button type="button" class="btn btn-warning animate-slideFade"
                 ng-show="settings.googleToken"
                 ng-click="revokeGoogleAccess()"
                 ng-disabled="isLoadingGoogle">

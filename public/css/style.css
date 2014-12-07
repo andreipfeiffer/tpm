@@ -174,7 +174,7 @@ h1,
 	float: none;
 }
 
-.ng-animate-fadein.ng-enter {
+.animate-slideFade.ng-enter {
 	-webkit-animation-name: slideIn;
 	animation-name: slideIn;
 	-webkit-animation-duration: 0.5s;
@@ -182,25 +182,25 @@ h1,
 	-webkit-animation-fill-mode: both;
 	animation-fill-mode: both;
 }
-.ng-animate-fadein.ng-enter-active {
+.animate-slideFade.ng-enter-active {
 }
-.ng-animate-fadein.ng-leave {
+.animate-slideFade.ng-leave {
 }
-.ng-animate-fadein.ng-leave-active {
+.animate-slideFade.ng-leave-active {
 }
 
-.ng-animate-fadein.ng-hide-add,
-.ng-animate-fadein.ng-hide-remove {
+.animate-slideFade.ng-hide-add,
+.animate-slideFade.ng-hide-remove {
 	-webkit-animation-duration: 0.5s;
 	animation-duration: 0.5s;
 	-webkit-animation-fill-mode: both;
 	animation-fill-mode: both;
 }
-.ng-animate-fadein.ng-hide-add-active {
+.animate-slideFade.ng-hide-add-active {
 	-webkit-animation-name: slideOut;
 	animation-name: slideOut;
 }
-.ng-animate-fadein.ng-hide-remove-active {
+.animate-slideFade.ng-hide-remove-active {
 	-webkit-animation-name: slideIn;
 	animation-name: slideIn;
 }
