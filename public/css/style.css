@@ -204,14 +204,6 @@ h1,
 	-webkit-animation-name: slideIn;
 	animation-name: slideIn;
 }
-/*.ng-animate-fadein.ng-hide-remove-active {
-	-webkit-animation-name: slideIn;
-	animation-name: slideIn;
-	-webkit-animation-duration: 0.5s;
-	animation-duration: 0.5s;
-	-webkit-animation-fill-mode: both;
-	animation-fill-mode: both;
-}*/
 
 @-webkit-keyframes slideIn {
 	0% {
