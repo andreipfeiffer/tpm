@@ -8,7 +8,8 @@ module.exports = function(app, knex) {
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
         settings = require('./modules/settings')( knex ),
-        packageData = require('../package.json');
+        packageData = require('../package.json'),
+        path = require('path');
 
     function getResponse(res, result) {
         if ( !result.body ) {
@@ -18,8 +19,8 @@ module.exports = function(app, knex) {
     }
 
     app.get('/', function(req, res) {
-        if ('production' !== process.env.NODE_ENV) {
-            res.sendfile('./dist/index.html');
+        if ('production' === process.env.NODE_ENV) {
+            res.sendFile( path.join(__dirname, '../dist', '/index.html') );
         } else {
             res.render('index', packageData);
         }
