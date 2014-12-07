@@ -9,55 +9,6 @@ body {
 .app-footer {
 	margin: 5em 0 1em 0;
 }
-	.app-footer {
-		margin: 5em 0 1em 0;
-	}
-
-.navbar-default,
-.navbar-default .navbar-collapse {
-	background-color: #f5f5f5;
-	border-color: #dddddd;
-}
-.navbar-collapse {
-	-webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-}
-.navbar-nav > li > a {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border: 0;
-}
-
-@media (max-width: 768px) {
-	.navbar-collapse .navbar-nav {
-		margin: 0;
-	}
-		.navbar-collapse .navbar-nav li {
-			float: left;
-		}
-		.navbar-left {
-			float: left;
-		}
-		.navbar-right {
-			float: right;
-		}
-	.navbar-nav > li:first-child {
-		margin-left: -15px;
-	}
-	.navbar-nav > li > a {
-		margin-right: 20px;
-		font-size: 14px;
-		text-transform: uppercase;
-		font-weight: bold;
-	}
-}
-@media (min-width: 768px) {
-	.navbar-fixed-top .navbar-right:last-child {
-		padding-right: 8px;
-		margin-right: 0;
-	}
-}
 
 
 /* page headers */
@@ -72,7 +23,6 @@ h1,
 		font-size: 36px;
 	}
 }
-
 
 
 .login__logo {
@@ -91,15 +41,6 @@ h1,
 	white-space: pre;
 }
 
-.form-control.ng-invalid.ng-dirty:not(:focus) {
-	border-color:#e9322d;
-	-webkit-box-shadow:0 0 6px #f8b9b7;
-	-moz-box-shadow:0 0 6px #f8b9b7;
-	box-shadow:0 0 6px #f8b9b7;
-}
-/*.form-control.ng-invalid.ng-dirty:focus {
-}*/
-
 
 .b-one-line {
 	white-space: nowrap;
@@ -109,107 +50,4 @@ h1,
 
 .is-auth .fdb {
 	top: 45px;
-}
-
-.table-tpm {
-	border-bottom: 2px solid #f5f5f5;
-}
-	.table.table-tpm td,
-	.table.table-tpm th {
-		border-color: #f5f5f5;
-	}
-	.cell-border {
-		border-left: 5px #f5f5f5 solid;
-	}
-	.cell-border--warning {
-		border-color: #EFD44D;
-	}
-	.cell-border--danger {
-		border-color: #EC5454;
-	}
-
-.btn-group {
-	font-size: 0;
-}
-.btn-group .btn {
-	display: inline-block;
-	float: none;
-}
-
-.animate-slideFade.ng-enter {
-	-webkit-animation-name: slideIn;
-	animation-name: slideIn;
-	-webkit-animation-duration: 0.5s;
-	animation-duration: 0.5s;
-	-webkit-animation-fill-mode: both;
-	animation-fill-mode: both;
-}
-.animate-slideFade.ng-enter-active {
-}
-.animate-slideFade.ng-leave {
-}
-.animate-slideFade.ng-leave-active {
-}
-
-.animate-slideFade.ng-hide-add,
-.animate-slideFade.ng-hide-remove {
-	-webkit-animation-duration: 0.5s;
-	animation-duration: 0.5s;
-	-webkit-animation-fill-mode: both;
-	animation-fill-mode: both;
-}
-.animate-slideFade.ng-hide-add-active {
-	-webkit-animation-name: slideOut;
-	animation-name: slideOut;
-}
-.animate-slideFade.ng-hide-remove-active {
-	-webkit-animation-name: slideIn;
-	animation-name: slideIn;
-}
-
-@-webkit-keyframes slideIn {
-	0% {
-		opacity: 0;
-		-webkit-transform: translate3d(0,-1em,0);
-	}
-	100% {
-		opacity: 1;
-		-webkit-transform: translate3d(0,0,0);
-	}
-}
-@keyframes slideIn {
-	0% {
-		opacity: 0;
-		-webkit-transform: translate3d(0,-1em,0);
-		transform: translate3d(0,-1em,0);
-	}
-	100% {
-		opacity: 1;
-		-webkit-transform: translate3d(0,0,0);
-		transform: translate3d(0,0,0);
-	}
-}
-
-
-@-webkit-keyframes slideOut {
-	0% {
-		opacity: 1;
-		-webkit-transform: translate3d(0,0,0);
-	}
-	100% {
-		opacity: 0;
-		-webkit-transform: translate3d(0,-1em,0);
-	}
-}
-@keyframes slideOut {
-	0% {
-		opacity: 1;
-		-webkit-transform: translate3d(0,0,0);
-		transform: translate3d(0,0,0);
-	}
-	100% {
-		opacity: 0;
-		-webkit-transform: translate3d(0,-1em,0);
-		transform: translate3d(0,-1em,0);
-	}
 }
