@@ -16,22 +16,13 @@
 
 @media (max-width: 768px) {
 	.navbar-collapse .navbar-nav {
-		margin: 0;
+		margin-top: 0;
+		margin-bottom: 0;
 	}
-		.navbar-collapse .navbar-nav li {
-			float: left;
-		}
-		.navbar-left {
-			float: left;
-		}
 		.navbar-right {
-			float: right;
+			text-align: center;
 		}
-	.navbar-nav > li:first-child {
-		margin-left: -15px;
-	}
 	.navbar-nav > li > a {
-		margin-right: 20px;
 		font-size: 14px;
 		text-transform: uppercase;
 		font-weight: bold;
@@ -39,7 +30,6 @@
 }
 @media (min-width: 768px) {
 	.navbar-fixed-top .navbar-right:last-child {
-		padding-right: 8px;
 		margin-right: 0;
 	}
 }
