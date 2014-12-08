@@ -28,6 +28,21 @@
         };
     };
 
+    var getNewProjectEmptyData = function() {
+        return {
+            idClient: 1,
+            name: 'new unit test project',
+            status: '',
+            days: null,
+            priceEstimated: null,
+            priceFinal: null,
+            dateAdded: '',
+            dateEstimated: '',
+            description: 'description',
+            newClientName: ''
+        };
+    };
+
     describe('Projects', function() {
 
         beforeEach(function(done) {
@@ -49,6 +64,23 @@
 
         it('should add a new project', function(done) {
             var project = this.project;
+
+            agent
+                .post('/projects')
+                .set('authorization', utils.getAuthData().authToken)
+                .send( project )
+                .end(function(err, res) {
+                    expect( res.body ).to.have.property('id');
+                    expect( res.body ).to.have.property('idClient', 1);
+                    expect( res.body ).to.have.property('name', project.name);
+                    expect( res.body ).to.have.property('isDeleted', 0);
+                    expect( res.status ).to.equal(201);
+                    done();
+                });
+        });
+
+        it('should add a new project, if days & prices are null', function(done) {
+            var project = getNewProjectEmptyData();
 
             agent
                 .post('/projects')

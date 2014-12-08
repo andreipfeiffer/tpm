@@ -141,9 +141,9 @@ module.exports = function(knex) {
                     idClient: data.idClient,
                     name: data.name,
                     status: data.status,
-                    days: data.days,
-                    priceEstimated: data.priceEstimated,
-                    priceFinal: data.priceFinal,
+                    days: parseInt(data.days) || 0,
+                    priceEstimated: parseInt(data.priceEstimated) || 0,
+                    priceFinal: parseInt(data.priceFinal) || 0,
                     dateAdded: data.dateAdded,
                     dateEstimated: data.dateEstimated,
                     description: data.description
