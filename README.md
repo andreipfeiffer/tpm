@@ -33,6 +33,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * Custom bootstrap theme
 * Reports
+* Log server errors
 * Create new accounts
 * Recover password
 * Close account
