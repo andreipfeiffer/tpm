@@ -8,7 +8,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     passport = require('passport'),
-    config = require('./config/config'),
+    config = require('./config'),
     favicon = require('serve-favicon'),
     serveStatic = require('serve-static');
 

@@ -2,7 +2,7 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var config = require('../../config/config'),
+    var config = require('../../config'),
         schema = require('../schema'),
         promise = require('node-promise'),
         deferred = promise.defer,

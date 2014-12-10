@@ -4,7 +4,7 @@ module.exports = function(knex) {
 
     var passport = require('passport'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-        config = require('../../config/config'),
+        config = require('../../config'),
         projects = require('./projects')( knex ),
         google = require('googleapis'),
         OAuth2 = google.auth.OAuth2,
