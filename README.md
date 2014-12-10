@@ -17,17 +17,17 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Semver release system
 * Travis-CI integration
 * Google Calendar integration
-* Promise-based requests
+* Full Promise-based code base
 * Custom loader & notification display system, with [angular-feedback](https://github.com/andreipfeiffer/angular-feedback)
 * Page transitions
-* Build script
+* Build script, for client
 
 ## Short term To-dos
 
+* Filter Projects by Client
+* Sort projects based on various criteria
 * Projects "finished" but not "payed", that passed X days
 * Handle all server errors on client: 4xx (verbosely) and 5xx (generic, silent)
-* Sort projects based on various criteria
-* Filter by Client
 
 ## Future Goals
 
