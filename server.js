@@ -53,7 +53,7 @@ app.set('etag', true);
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // setup middleware based on ENV
-if ('development' === env) {
+if ('test' !== env) {
     app.use(logger('dev'));
 }
 
