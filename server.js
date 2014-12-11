@@ -79,7 +79,7 @@ app.use(express.static(__dirname + '/public'));
 app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
-app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
+// app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
 
 // app.use(delay);
 
