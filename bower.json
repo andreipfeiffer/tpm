@@ -1,6 +1,7 @@
 {
-  "name": "angular-example",
-  "version": "0.0.1",
+  "name": "tpm",
+  "description": "tiny Project Manager",
+  "version": "0.6.6",
   "authors": [
     "Andrei Pfeiffer <andrei@upsidedown.ro>"
   ],
