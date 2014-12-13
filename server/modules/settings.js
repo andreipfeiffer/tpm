@@ -2,20 +2,22 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var authGoogle = require('./authGoogle')( knex ),
-        googleCalendar = require('./calendarGoogle')( knex );
+    var googleCalendar = require('./calendarGoogle')( knex ),
+        googleClient = require('./googleClient')( knex );
 
     return {
         getAll: function(req, res) {
             var userLogged = req.user,
                 result = {};
 
-            authGoogle.getTokens(userLogged.id).then(function(tokens) {
+            googleClient.getTokens(userLogged.id).then(function(tokens) {
                 result.googleToken = !!tokens[0].accessToken.length;
 
                 if (!result.googleToken) {
                     return res.send(result);
                 }
+
+                googleClient.updateTokens(req.user);
 
                 googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
                     result.selectedCalendar = id;
@@ -35,6 +37,8 @@ module.exports = function(knex) {
         setCalendar: function(req, res) {
             var userLogged = req.user,
                 newId = req.params.calendarId;
+
+            googleClient.updateTokens(req.user);
 
             googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
                 return googleCalendar.changeCalendar(userLogged.id, id, newId);
