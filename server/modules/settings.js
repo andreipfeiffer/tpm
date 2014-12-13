@@ -2,7 +2,7 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var googleCalendar = require('./calendarGoogle')( knex ),
+    var googleCalendar = require('./googleCalendar')( knex ),
         googleClient = require('./googleClient')( knex );
 
     return {
