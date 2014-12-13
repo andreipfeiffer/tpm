@@ -5,7 +5,8 @@ module.exports = function(knex) {
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        authGoogle  = require('./authGoogle')( knex );
+        authGoogle  = require('./authGoogle')( knex ),
+        googleClient = require('./googleClient')( knex );
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -119,11 +120,13 @@ module.exports = function(knex) {
                     });
 
                 updateAuthData.then(function() {
-                    return authGoogle.getTokens(user.id);
+                    return googleClient.getTokens(user.id);
                 }).then(function(data) {
-                    if (data[0].accessToken.length && data[0].refreshToken.length) {
-                        authGoogle.setTokens(data[0].accessToken, data[0].refreshToken);
-                        authGoogle.refreshAccessToken(user.id, function(/*newToken*/) {
+                    if (data[0].accessToken.length && !data[0].refreshToken.length) {
+                        authGoogle.revokeAccess(req, res);
+                    } else if (data[0].accessToken.length && data[0].refreshToken.length) {
+                        googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
+                        googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
                             // loggedData.googleToken = newToken;
                             return res.status(200).json(loggedData);
                         });
@@ -131,8 +134,9 @@ module.exports = function(knex) {
                         return res.status(200).json(loggedData);
                     }
 
-                }).catch(function(e) {
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                }).catch(function(err) {
+                    console.log(err);
+                    return res.status(503).send({ error: 'Database error: ' + err.code});
                 });
             });
         })(req, res, next);
