@@ -9,8 +9,8 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     config = require('./config'),
-    favicon = require('serve-favicon'),
-    serveStatic = require('serve-static');
+    favicon = require('serve-favicon')/*,
+    serveStatic = require('serve-static')*/;
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
