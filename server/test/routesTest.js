@@ -10,7 +10,7 @@
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
         expect = require('expect.js'),
-        utils = require('./utils'),
+        utils = require('./_utils'),
         pack = require('../../package.json');
 
     describe('Routes', function() {

@@ -10,7 +10,7 @@
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
         projects = require('../modules/projects')( server.knex ),
-        utils = require('./utils'),
+        utils = require('./_utils'),
         expect = require('expect.js');
 
     var getNewProject = function() {
