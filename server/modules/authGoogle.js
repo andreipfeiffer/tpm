@@ -6,13 +6,8 @@ module.exports = function(knex) {
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../../config'),
         projects = require('./projects')( knex ),
-        google = require('googleapis'),
-        OAuth2 = google.auth.OAuth2,
-        oauth2Client = new OAuth2(
-            config.google.clientID,
-            config.google.clientSecret,
-            config.google.redirectURL
-        );
+        utils = require('./utils')( knex ),
+        googleClient = require('./googleClient')( knex );
 
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -45,49 +40,6 @@ module.exports = function(knex) {
         });
     }
 
-    function setTokens(accessToken, refreshToken) {
-        accessToken && (oauth2Client.credentials['access_token'] = accessToken);
-        refreshToken && (oauth2Client.credentials['refresh_token'] = refreshToken);
-        google.options({ auth: oauth2Client });
-    }
-
-    function getTokens(idUser) {
-        return knex('users')
-            .select('googleOAuthToken as accessToken', 'googleOAuthRefreshToken as refreshToken')
-            .where({
-                id: idUser,
-                isDeleted: '0'
-            });
-    }
-
-    function refreshAccessToken(userId, callback) {
-        oauth2Client.refreshAccessToken(function(err, tokens) {
-            if ( !tokens ) {
-                clearTokens(userId).then(function() {
-                    callback(null);
-                });
-                return;
-            }
-
-            knex('users')
-                .where({ id: userId })
-                .update({ googleOAuthToken: tokens['access_token'] })
-                .then(function() {
-                    callback(tokens['access_token']);
-                });
-        });
-    }
-
-    function clearTokens(userId) {
-        return knex('users')
-            .where({ id: userId })
-            .update({
-                googleOAuthToken: '',
-                googleOAuthRefreshToken: '',
-                googleSelectedCalendar: ''
-            });
-    }
-
     passport.use('google',
         new GoogleStrategy({
             clientID: config.google.clientID,
@@ -96,29 +48,36 @@ module.exports = function(knex) {
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
-            storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, function(err, user) {
-                setTokens(accessToken, refreshToken);
-                done(err, user);
-            });
+            var user;
+            console.log();
+            if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
+                findUserBySession(req.sessionID).then(function(data) {
+                    user = data[0];
+                    return utils.logError( user.id, 'googleauth', { message: 'Authentication successfull, but no refresh_token returned' });
+                }).then(function() {
+                    done(null, user);
+                });
+            } else {
+                storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, function(err, user) {
+                    googleClient.setTokens(accessToken, refreshToken);
+                    done(err, user);
+                });
+            }
         }
     ));
 
     return {
         callback: redirectCallback,
-        google: google,
-        setTokens: setTokens,
-        getTokens: getTokens,
-        refreshAccessToken: refreshAccessToken,
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
             projects.removeEvents(userLogged.id).then(function() {
-                return getTokens(userLogged.id);
+                return googleClient.getTokens(userLogged.id);
             }).then(function(data) {
-                oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
+                googleClient.oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
                     if (err) { return res.send(err); }
 
-                    return clearTokens(userLogged.id).then(function() {
+                    return googleClient.clearTokens(userLogged.id).then(function() {
                         return res.status(205).end();
                     });
                 });
