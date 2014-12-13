@@ -3,7 +3,7 @@ module.exports = function(app, knex) {
     'use strict';
 
     var auth  = require('./modules/auth')( knex ),
-        authGoogle  = require('./modules/authGoogle')( knex ),
+        googleAuth  = require('./modules/googleAuth')( knex ),
         passport = require('passport'),
         clients = require('./modules/clients')( knex ),
         projects = require('./modules/projects')( knex ),
@@ -85,11 +85,11 @@ module.exports = function(app, knex) {
             ],
             accessType: 'offline'
         }))
-        .delete(auth.ensureTokenAuthenticated, authGoogle.revokeAccess);
+        .delete(auth.ensureTokenAuthenticated, googleAuth.revokeAccess);
 
     app.get('/auth/google/callback',
         auth.ensureSessionAuthenticated,
-        authGoogle.callback
+        googleAuth.callback
     );
 
 };

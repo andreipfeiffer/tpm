@@ -5,7 +5,7 @@ module.exports = function(knex) {
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        authGoogle  = require('./authGoogle')( knex ),
+        googleAuth = require('./googleAuth')( knex ),
         googleClient = require('./googleClient')( knex );
 
     // private encryption & validation methods
@@ -123,7 +123,7 @@ module.exports = function(knex) {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
-                        authGoogle.revokeAccess(req, res);
+                        googleAuth.revokeAccess(req, res);
                     } else if (data[0].accessToken.length && data[0].refreshToken.length) {
                         googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
                         googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
