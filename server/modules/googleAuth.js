@@ -49,7 +49,6 @@ module.exports = function(knex) {
         },
         function(req, accessToken, refreshToken, profile, done) {
             var user;
-            console.log();
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
                 findUserBySession(req.sessionID).then(function(data) {
                     user = data[0];

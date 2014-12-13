@@ -135,7 +135,6 @@ module.exports = function(knex) {
                     }
 
                 }).catch(function(err) {
-                    console.log(err);
                     return res.status(503).send({ error: 'Database error: ' + err.code});
                 });
             });
