@@ -105,6 +105,8 @@ module.exports = function(knex) {
                     description: req.body.description
                 });
 
+            googleClient.updateTokens(req.user);
+
             getProjectById(id, userLogged.id).then(function(data) {
                 previousStatus = data[0].status;
                 if ( data[0].googleEventId.length ) {
@@ -149,6 +151,8 @@ module.exports = function(knex) {
                     description: data.description
                 };
 
+            googleClient.updateTokens(req.user);
+
             knex('projects').insert(newProjectData).then(function(newProjectId) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
@@ -188,6 +192,8 @@ module.exports = function(knex) {
                     'googleEventId': ''
                 });
 
+            googleClient.updateTokens(req.user);
+
             getProjectById(id, userLogged.id).then(function(data) {
                 return googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId);
             }).then(function() {
@@ -202,6 +208,8 @@ module.exports = function(knex) {
         removeEvents: function(userId) {
             var d = promise.defer(),
                 calendarId;
+
+            googleClient.updateTokens(req.user);
 
             googleCalendar.getSelectedCalendarId(userId).then(function(id) {
                 var d = promise.defer();
