@@ -71,6 +71,8 @@ module.exports = function(knex) {
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
+            googleClient.updateTokens(req.user);
+
             projects.removeEvents(userLogged.id).then(function() {
                 return googleClient.getTokens(userLogged.id);
             }).then(function(data) {

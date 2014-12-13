@@ -3,6 +3,7 @@ module.exports = function(knex) {
     'use strict';
 
     var googleCalendar = require('./googleCalendar')( knex ),
+        googleClient = require('./googleClient')( knex ),
         promise = require('node-promise');
 
     function getProjectById(id, idUser) {
@@ -208,8 +209,6 @@ module.exports = function(knex) {
         removeEvents: function(userId) {
             var d = promise.defer(),
                 calendarId;
-
-            googleClient.updateTokens(req.user);
 
             googleCalendar.getSelectedCalendarId(userId).then(function(id) {
                 var d = promise.defer();
