@@ -91,4 +91,13 @@ schema.structure['projects_status_log'] = ''
     +     'KEY `status` (`status`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+schema.structure['error_log'] = ''
+    + 'CREATE TABLE IF NOT EXISTS `error_log` ('
+    +     '`idUser` smallint(5) unsigned NOT NULL,'
+    +     '`type` varchar(16) NOT NULL,'
+    +     '`content` text NOT NULL,'
+    +     '`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
+    +     'KEY `idUser` (`idUser`)'
+    + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
 module.exports = schema;
