@@ -52,7 +52,7 @@ module.exports = function(knex) {
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
                 findUserBySession(req.sessionID).then(function(data) {
                     user = data[0];
-                    return utils.logError( user.id, 'googleauth', { message: 'Authentication successfull, but no refresh_token returned' });
+                    return setAuthError(user.id);
                 }).then(function() {
                     done(null, user);
                 });
@@ -65,12 +65,24 @@ module.exports = function(knex) {
         }
     ));
 
+    function setAuthError(idUser) {
+        var log = {
+            idUser: idUser,
+            source: 'googleAuth',
+            error: { message: 'Authentication successfull, but no refresh_token returned' }
+        };
+
+        return utils.logError(log);
+    }
+
     return {
         callback: redirectCallback,
+
+        // @todo refactor: remove req/res dependencies
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            googleClient.updateTokens(req.user);
+            googleClient.updateTokens(userLogged);
 
             projects.removeEvents(userLogged.id).then(function() {
                 return googleClient.getTokens(userLogged.id);
