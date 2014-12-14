@@ -127,11 +127,9 @@ module.exports = function(knex) {
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
                         setLoginError(user.id);
-                        // setLoginError(user.id).then(function() {
-                            loggedData.googleAuthNeeded = true;
-                            // googleAuth.revokeAccess(req, res);
-                            return res.status(200).json(loggedData);
-                        // });
+                        loggedData.googleAuthNeeded = true;
+                        // googleAuth.revokeAccess(req, res);
+                        return res.status(200).json(loggedData);
                     } else if (data[0].accessToken.length && data[0].refreshToken.length) {
                         googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
                         googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
@@ -203,8 +201,6 @@ module.exports = function(knex) {
         };
 
         server.app.emit('logError', log);
-
-        // return utils.logError(log);
     }
 
     return {
