@@ -3,12 +3,13 @@ module.exports = function(knex) {
     'use strict';
 
     return {
-        logError: function(idUser, type, content) {
+        logError: function(o) {
             return knex('error_log')
                 .insert({
-                    idUser: idUser,
-                    type: type,
-                    content: JSON.stringify(content)
+                    idUser: o.idUser,
+                    source: o.source,
+                    data: o.data || '',
+                    error: JSON.stringify( o.error )
                 });
         }
     };
