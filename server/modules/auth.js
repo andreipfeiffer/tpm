@@ -6,7 +6,8 @@ module.exports = function(knex) {
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
         googleAuth = require('./googleAuth')( knex ),
-        googleClient = require('./googleClient')( knex );
+        googleClient = require('./googleClient')( knex ),
+        utils = require('./utils')( knex );
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -103,6 +104,8 @@ module.exports = function(knex) {
                     return next(err);
                 }
 
+                req.user = user;
+
                 var newAuthToken = md5(String( new Date().getTime() )),
                     loggedData = {
                         authToken: newAuthToken,
@@ -123,7 +126,11 @@ module.exports = function(knex) {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
-                        googleAuth.revokeAccess(req, res);
+                        setLoginError(user.id).then(function() {
+                            loggedData.googleAuthNeeded = true;
+                            // googleAuth.revokeAccess(req, res);
+                            return res.status(200).json(loggedData);
+                        });
                     } else if (data[0].accessToken.length && data[0].refreshToken.length) {
                         googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
                         googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
@@ -186,6 +193,16 @@ module.exports = function(knex) {
     passport.use(localStrategyAuth);
     passport.serializeUser(serializeUser);
     passport.deserializeUser(deserializeUser);
+
+    function setLoginError(idUser) {
+        var log = {
+            idUser: idUser,
+            source: 'auth.login',
+            error: { message: 'App login successfull, access_token available but no refresh_token in db' }
+        };
+
+        return utils.logError(log);
+    }
 
     return {
         login: login,
