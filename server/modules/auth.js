@@ -6,7 +6,7 @@ module.exports = function(knex) {
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
         googleClient = require('./googleClient')( knex ),
-        utils = require('./utils')( knex ),
+        utils = require('./utils'),
         server = require('../../server');
 
     // private encryption & validation methods

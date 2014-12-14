@@ -6,7 +6,7 @@ module.exports = function(knex) {
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../../config'),
         projects = require('./projects')( knex ),
-        utils = require('./utils')( knex ),
+        utils = require('./utils'),
         googleClient = require('./googleClient')( knex );
 
     function redirectCallback(req, res, next) {
