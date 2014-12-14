@@ -4,6 +4,10 @@ module.exports = function(knex) {
 
     return {
         logError: function(o) {
+
+            console.error('[tpm_error]: ' + new Date().toString());
+            console.trace(o);
+
             return knex('error_log')
                 .insert({
                     idUser: o.idUser,
