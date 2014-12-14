@@ -2,6 +2,13 @@ module.exports = function(knex) {
 
     'use strict';
 
+    var server = require('../../server');
+
+    server.app.on('logError', function(o) {
+        console.error('[tpm_error]: ' + new Date().toString());
+        console.trace(o);
+    });
+
     return {
         logError: function(o) {
 

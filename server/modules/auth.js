@@ -6,7 +6,8 @@ module.exports = function(knex) {
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
         googleClient = require('./googleClient')( knex ),
-        utils = require('./utils')( knex );
+        utils = require('./utils')( knex ),
+        server = require('../../server');
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -125,11 +126,12 @@ module.exports = function(knex) {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
-                        setLoginError(user.id).then(function() {
+                        setLoginError(user.id);
+                        // setLoginError(user.id).then(function() {
                             loggedData.googleAuthNeeded = true;
                             // googleAuth.revokeAccess(req, res);
                             return res.status(200).json(loggedData);
-                        });
+                        // });
                     } else if (data[0].accessToken.length && data[0].refreshToken.length) {
                         googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
                         googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
@@ -200,7 +202,9 @@ module.exports = function(knex) {
             error: { message: 'App login successfull, access_token available but no refresh_token in db' }
         };
 
-        return utils.logError(log);
+        server.app.emit('logError', log);
+
+        // return utils.logError(log);
     }
 
     return {
