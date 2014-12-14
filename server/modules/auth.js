@@ -5,7 +5,6 @@ module.exports = function(knex) {
     var crypto = require('crypto'),
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
-        googleAuth = require('./googleAuth')( knex ),
         googleClient = require('./googleClient')( knex ),
         utils = require('./utils')( knex );
 
