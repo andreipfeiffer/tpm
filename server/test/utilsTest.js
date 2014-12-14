@@ -6,7 +6,7 @@
 
     var app = require('../../server.js'),
         db = require('../modules/db')( app.knex ),
-        utils = require('../modules/utils')( app.knex ),
+        utils = require('../modules/utils'),
         expect = require('expect.js');
 
     xdescribe('Utils', function() {
