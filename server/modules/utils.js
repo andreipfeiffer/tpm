@@ -6,7 +6,7 @@ module.exports = (function() {
         app = server.app,
         knex = server.knex;
 
-    app.on('logError', function(o) {
+    function logError(o) {
         knex('error_log').insert({
             idUser: o.idUser,
             source: o.source,
@@ -18,5 +18,10 @@ module.exports = (function() {
         }).catch(function(err) {
             console.error(err);
         });
+    }
+
+    app.on('logError', function(o) {
+        logError(o);
     });
+
 })();
