@@ -187,8 +187,7 @@ module.exports = function(grunt) {
         'cssmin',
         'uglify',
         'copy',
-        'clean:temp',
-        'default'
+        'clean:temp'
     ]);
 
     // run this first:
