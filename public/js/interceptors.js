@@ -26,7 +26,10 @@
 
                     // Server error
                     if (parseInt(rejection.status) >= 500) {
-                        $location.path('/error500');
+                        feedback.notify('Unexpected server error\nPlease try again later, or contact the app administrator.', {
+                            type: 'error',
+                            sticky: true
+                        });
                     }
 
                     return $q.reject(rejection);

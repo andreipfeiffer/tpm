@@ -39,11 +39,6 @@ var TPM = TPM || {};
             requireLogin: true
         },
 
-        '/error500': {
-            templateUrl: 'views/error5xx.html',
-            requireLogin: false
-        },
-
         '/projects': {
             templateUrl: 'views/projects-list.html',
             controller: 'ProjectsListController',
