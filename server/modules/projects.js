@@ -4,7 +4,8 @@ module.exports = function(knex) {
 
     var googleCalendar = require('./googleCalendar')( knex ),
         googleClient = require('./googleClient')( knex ),
-        promise = require('node-promise');
+        promise = require('node-promise'),
+        server = require('../../server');
 
     function getProjectById(id, idUser) {
         return knex('projects')
@@ -67,6 +68,12 @@ module.exports = function(knex) {
             getAllProjects(userLogged.id).then(function(data) {
                 return res.send(data);
             }).catch(function(e) {
+                var log = {
+                    idUser: userLogged.id,
+                    source: 'projects.getAll',
+                    error: e
+                };
+                server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
@@ -79,6 +86,12 @@ module.exports = function(knex) {
                 if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
                 return res.send(data[0]);
             }).catch(function(e) {
+                var log = {
+                    idUser: userLogged.id,
+                    source: 'projects.getById',
+                    error: e
+                };
+                server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
@@ -130,6 +143,13 @@ module.exports = function(knex) {
                     }
                 })
                 .catch(function(e) {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.update',
+                        data: req.body,
+                        error: e
+                    };
+                    server.app.emit('logError', log);
                     return res.status(503).send({ error: 'Database error: ' + e.code});
                 });
             });
@@ -174,6 +194,13 @@ module.exports = function(knex) {
                     return res.status(201).send(newProject);
                 }
             }, function(err) {
+                var log = {
+                    idUser: userLogged.id,
+                    source: 'projects.add',
+                    data: req.body,
+                    error: err
+                };
+                server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Error: ' + err.code});
             });
         },
@@ -202,6 +229,12 @@ module.exports = function(knex) {
             }).then(function() {
                 return res.status(204).end();
             }).catch(function(e) {
+                var log = {
+                    idUser: userLogged.id,
+                    source: 'projects.remove',
+                    error: e
+                };
+                server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
         },
