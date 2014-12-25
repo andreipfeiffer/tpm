@@ -46,6 +46,18 @@
                 expect(feedback.getType()).toEqual('error');
             });
 
+            it('should display feedback message for status "0"', function() {
+
+                // load a random controller to trigger a request
+                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(0);
+                controller('ClientsListController', {$scope: scope});
+                $httpBackend.flush();
+
+                expect(feedback.isActive()).toBeTruthy();
+                expect(feedback.getType()).toEqual('error');
+                expect(feedback.getMessage()).toContain('offline');
+            });
+
         });
     });
 
