@@ -21,6 +21,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Custom loader & notification display system, with [angular-feedback](https://github.com/andreipfeiffer/angular-feedback)
 * Page transitions
 * Build script, for client
+* Log server errors
 
 ## Short term To-dos
 
@@ -33,7 +34,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * Custom bootstrap theme
 * Reports
-* Log server errors
 * Create new accounts
 * Recover password
 * Close account
