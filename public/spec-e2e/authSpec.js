@@ -33,10 +33,10 @@
         it('should display error message on wrong credentials', function() {
             setCredentials('xxx', 'yyy');
 
-            expect( $('.alert').isDisplayed() ).toBeFalsy();
+            expect( $('.fdb').isDisplayed() ).toBeFalsy();
 
             element(by.css('button[type="submit"]')).click().then(function() {
-                expect( $('.alert').isDisplayed() ).toBeTruthy();
+                expect( $('.fdb').isDisplayed() ).toBeTruthy();
             });
         });
 
