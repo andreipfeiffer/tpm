@@ -27,7 +27,8 @@
         "passport-google-oauth": "0.1.5",
         "googleapis": "1.0.21",
         "knex": "0.7.3",
-        "node-promise": "0.5.10"
+        "node-promise": "0.5.10",
+        "jsonwebtoken": "3.2.0"
     },
     "devDependencies": {
         "supertest": "0.13.0",
