@@ -20,8 +20,10 @@ schema.structure.users = ''
     +     '`googleOAuthRefreshToken` varchar(128) NOT NULL,'
     +     '`googleSelectedCalendar` varchar(128) NOT NULL,'
     +     '`dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,'
+    +     '`isLogged` tinyint(1) NOT NULL,'
     +     '`isDeleted` tinyint(1) NOT NULL,'
     +     'PRIMARY KEY (`id`),'
+    +     'KEY `isLogged` (`isLogged`),'
     +     'KEY `isDeleted` (`isDeleted`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
 

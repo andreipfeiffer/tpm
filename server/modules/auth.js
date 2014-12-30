@@ -115,7 +115,8 @@ module.exports = function(knex) {
                         'id': user.id
                     })
                     .update({
-                        sessionID: req.sessionID
+                        sessionID: req.sessionID,
+                        isLogged: 1
                     });
 
                 updateSession.then(function() {
@@ -146,7 +147,7 @@ module.exports = function(knex) {
     function logout(req, res) {
         knex('users')
             .where({ id: req.user.id })
-            .update({ sessionID: '' })
+            .update({ sessionID: '', isLogged: 0 })
             .then(function() {
                 req.logout();
                 return res.status(200).end();
@@ -162,17 +163,12 @@ module.exports = function(knex) {
         try {
             decoded = jwt.verify(token, secret);
         } catch (err) {
-            var log = {
-                source: 'auth.login',
-                error: err
-            };
-            server.app.emit('logError', log);
             return res.status(401).send({ error: err.message});
         }
 
         findUserById(decoded.id).then(function(data) {
             var user = data[0];
-            if (!user) { return res.status(401).end(); }
+            if (!user || !user.isLogged) { return res.status(401).end(); }
 
             // add the logged user's data in the request, so the "next()" method can access it
             req.user = user;
