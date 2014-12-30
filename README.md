@@ -8,7 +8,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * RESTful API
 * CRUD interfaces
-* Token authentication
+* JWT authentication
 * Server unit-tests, using Mocha & expect.js
 * Client unit-tests, using Jasmine & Karma
 * Client e2e testing, using Protractor
