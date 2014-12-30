@@ -6,7 +6,9 @@ module.exports = function(knex) {
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
         googleClient = require('./googleClient')( knex ),
-        server = require('../../server');
+        server = require('../../server'),
+        jwt = require('jsonwebtoken'),
+        secret = 'upsidedown-inseamna-Lia-si-Andrei';
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -105,7 +107,7 @@ module.exports = function(knex) {
 
                 req.user = user;
 
-                var newAuthToken = md5(String( new Date().getTime() )),
+                var newAuthToken = jwt.sign({ id: user.id }, secret),
                     loggedData = {
                         authToken: newAuthToken,
                         authUserId: user.id
@@ -159,9 +161,21 @@ module.exports = function(knex) {
     }
 
     function ensureTokenAuthenticated(req, res, next) {
-        var token = req.headers.authorization;
+        var token = req.headers.authorization,
+            decoded;
 
-        findUserByToken(token, req.sessionID).then(function(data) {
+        try {
+            decoded = jwt.verify(token, secret);
+        } catch (err) {
+            var log = {
+                source: 'auth.login',
+                error: err
+            };
+            server.app.emit('logError', log);
+            return res.status(401).send({ error: err.message});
+        }
+
+        findUserById(decoded.id).then(function(data) {
             var user = data[0];
             if (!user) { return res.status(401).end(); }
 
