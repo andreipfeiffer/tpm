@@ -44,10 +44,6 @@ module.exports = function(knex) {
         return knex('users').select().where({ email: username, isDeleted: '0' });
     }
 
-    function findUserByToken(token, sessionID) {
-        return knex('users').select().where({ authToken: token, sessionID: sessionID, isDeleted: '0' });
-    }
-
     function findUserBySession(sessionID) {
         return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
     }
@@ -113,17 +109,16 @@ module.exports = function(knex) {
                         authUserId: user.id
                     };
 
-                // update token in database
-                var updateAuthData = knex('users')
+                // save session in database
+                var updateSession = knex('users')
                     .where({
                         'id': user.id
                     })
                     .update({
-                        authToken: newAuthToken,
                         sessionID: req.sessionID
                     });
 
-                updateAuthData.then(function() {
+                updateSession.then(function() {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
@@ -151,7 +146,7 @@ module.exports = function(knex) {
     function logout(req, res) {
         knex('users')
             .where({ id: req.user.id })
-            .update({ authToken: '', sessionID: '' })
+            .update({ sessionID: '' })
             .then(function() {
                 req.logout();
                 return res.status(200).end();
