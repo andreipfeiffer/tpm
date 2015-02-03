@@ -6,7 +6,9 @@ module.exports = function(knex) {
         passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy,
         googleClient = require('./googleClient')( knex ),
-        server = require('../../server');
+        server = require('../../server'),
+        jwt = require('jsonwebtoken'),
+        secret = 'upsidedown-inseamna-Lia-si-Andrei';
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -40,10 +42,6 @@ module.exports = function(knex) {
 
     function findUserByUsername(username) {
         return knex('users').select().where({ email: username, isDeleted: '0' });
-    }
-
-    function findUserByToken(token, sessionID) {
-        return knex('users').select().where({ authToken: token, sessionID: sessionID, isDeleted: '0' });
     }
 
     function findUserBySession(sessionID) {
@@ -105,23 +103,23 @@ module.exports = function(knex) {
 
                 req.user = user;
 
-                var newAuthToken = md5(String( new Date().getTime() )),
+                var newAuthToken = jwt.sign({ id: user.id }, secret),
                     loggedData = {
                         authToken: newAuthToken,
                         authUserId: user.id
                     };
 
-                // update token in database
-                var updateAuthData = knex('users')
+                // save session in database
+                var updateSession = knex('users')
                     .where({
                         'id': user.id
                     })
                     .update({
-                        authToken: newAuthToken,
-                        sessionID: req.sessionID
+                        sessionID: req.sessionID,
+                        isLogged: 1
                     });
 
-                updateAuthData.then(function() {
+                updateSession.then(function() {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
@@ -149,7 +147,7 @@ module.exports = function(knex) {
     function logout(req, res) {
         knex('users')
             .where({ id: req.user.id })
-            .update({ authToken: '', sessionID: '' })
+            .update({ sessionID: '', isLogged: 0 })
             .then(function() {
                 req.logout();
                 return res.status(200).end();
@@ -159,11 +157,18 @@ module.exports = function(knex) {
     }
 
     function ensureTokenAuthenticated(req, res, next) {
-        var token = req.headers.authorization;
+        var token = req.headers.authorization,
+            decoded;
 
-        findUserByToken(token, req.sessionID).then(function(data) {
+        try {
+            decoded = jwt.verify(token, secret);
+        } catch (err) {
+            return res.status(401).send({ error: err.message});
+        }
+
+        findUserById(decoded.id).then(function(data) {
             var user = data[0];
-            if (!user) { return res.status(401).end(); }
+            if (!user || !user.isLogged) { return res.status(401).end(); }
 
             // add the logged user's data in the request, so the "next()" method can access it
             req.user = user;

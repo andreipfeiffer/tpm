@@ -13,6 +13,9 @@
 	padding-bottom: 15px;
 	border: 0;
 }
+.navbar-brand {
+	height: auto;
+}
 
 @media (max-width: 768px) {
 	.navbar-collapse .navbar-nav {

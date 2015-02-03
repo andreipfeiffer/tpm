@@ -8,7 +8,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * RESTful API
 * CRUD interfaces
-* Token authentication
+* JWT authentication
 * Server unit-tests, using Mocha & expect.js
 * Client unit-tests, using Jasmine & Karma
 * Client e2e testing, using Protractor
@@ -17,10 +17,11 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Semver release system
 * Travis-CI integration
 * Google Calendar integration
-* Full Promise-based code base
+* Full Promise-based code
 * Custom loader & notification display system, with [angular-feedback](https://github.com/andreipfeiffer/angular-feedback)
 * Page transitions
 * Build script, for client
+* Log server errors
 
 ## Short term To-dos
 
@@ -33,7 +34,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 * Custom bootstrap theme
 * Reports
-* Log server errors
 * Create new accounts
 * Recover password
 * Close account

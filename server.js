@@ -9,7 +9,8 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     config = require('./config'),
-    favicon = require('serve-favicon')/*,
+    favicon = require('serve-favicon'),
+    compression = require('compression')/*,
     serveStatic = require('serve-static')*/;
 
 var allowCrossDomain = function(req, res, next) {
@@ -75,6 +76,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use(express.csrf());
+
+app.use(compression());
 app.use(express.static(__dirname + '/public'));
 app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));

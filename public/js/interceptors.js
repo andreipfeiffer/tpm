@@ -8,10 +8,11 @@
             return {
                 responseError: function(rejection) {
 
-                    var feedback = $injector.get('feedback');
+                    var status = parseInt(rejection.status),
+                        feedback = $injector.get('feedback');
 
                     // server offline
-                    if (rejection.status === 0) {
+                    if (status === 0) {
                         feedback.notify('Server is currently offline. Please try again later.', {
                             type: 'error',
                             sticky: true
@@ -19,14 +20,17 @@
                     }
 
                     // Unauthorized access attempt
-                    if (rejection.status === 401 && $location.path() !== '/login') {
+                    if (status === 401 && $location.path() !== '/login') {
                         localStorage.removeItem('TPMtoken');
                         $location.path('/login');
                     }
 
                     // Server error
-                    if (parseInt(rejection.status) >= 500) {
-                        $location.path('/error500');
+                    if (status >= 500) {
+                        feedback.notify('Unexpected server error\nPlease try again later, or contact the app administrator.', {
+                            type: 'error',
+                            sticky: true
+                        });
                     }
 
                     return $q.reject(rejection);

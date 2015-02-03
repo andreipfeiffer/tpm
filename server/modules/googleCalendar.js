@@ -5,7 +5,8 @@ module.exports = function(knex) {
     var google = require('googleapis'),
         calendar = google.calendar('v3'),
         promise = require('node-promise'),
-        deferred = promise.defer;
+        deferred = promise.defer,
+        server = require('../../server');
 
     function getSelectedCalendarId(userId) {
         var d = deferred();
@@ -149,7 +150,14 @@ module.exports = function(knex) {
 
             calendar.events.delete(params, function(err, response) {
                 if (err) {
-                    return d.reject(err);
+                    // don't reject this, but fail it silently, and log it
+                    var log = {
+                        idUser: userId,
+                        source: 'googleCalendar.deleteEvent',
+                        error: err
+                    };
+                    server.app.emit('logError', log);
+                    return d.resolve(true);
                 }
 
                 d.resolve(response);
