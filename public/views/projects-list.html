@@ -10,18 +10,30 @@
 
     <section>
 
-        <form>
+        <form class="row">
 
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm"
-                    ng-class="{active: filterStatus == ''}"
-                    ng-click="setFilterStatus('')">All<span class="hidden-xs"> active projects</span></button>
-                <button type="button" class="btn btn-default btn-sm text-capitalize"
-                    ng-repeat="status in filterStatusOptions"
-                    ng-class="{active: filterStatus == status}"
-                    ng-click="setFilterStatus(status)">{{status}}</button>
-                <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
-                    ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
+            <div class="col-xs-9">
+                <div class="btn-group form-group">
+                    <button type="button" class="btn btn-default btn-sm"
+                        ng-class="{active: filterStatus == ''}"
+                        ng-click="setFilterStatus('')">All<span class="hidden-xs"> active projects</span></button>
+                    <button type="button" class="btn btn-default btn-sm text-capitalize"
+                        ng-repeat="status in filterStatusOptions"
+                        ng-class="{active: filterStatus == status}"
+                        ng-click="setFilterStatus(status)">{{status}}</button>
+                    <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
+                        ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
+                </div>
+            </div>
+
+
+            <div class="col-xs-3">
+                <select class="form-control input-sm" placeholder="Filter by client"
+                    ng-model="filterClient"
+                    ng-change="setFilterClient(client.name)"
+                    ng-options="client.name for client in clientsList">
+                    <option value="">All Clients</option>
+                </select>
             </div>
 
         </form>
@@ -41,10 +53,19 @@
             <tbody>
                 <tr
                     class="cell-border"
-                    ng-repeat="project in projectsList | orderBy:'remainingDays' | filterByProjectStatus:filterStatus"
+                    ng-repeat="
+                        project in projectsList |
+                            orderBy:'remainingDays' |
+                            filterByProjectStatus:filterStatus |
+                            filter: { clientName: filterClient.name }
+                    "
                     ng-class="{
-                        'cell-border--danger': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays < 0),
-                        'cell-border--warning': (filterActiveStatusOptions.indexOf(project.status) > -1) && (project.remainingDays <= project.days)
+                        'cell-border--danger':
+                            (filterActiveStatusOptions.indexOf(project.status) > -1) &&
+                            (project.remainingDays < 0),
+                        'cell-border--warning':
+                            (filterActiveStatusOptions.indexOf(project.status) > -1) &&
+                            (project.remainingDays <= project.days)
                     }"
                 >
                     <td>
@@ -92,7 +113,7 @@
             </tbody>
         </table>
 
-        <p class="alert alert-warning text-center" ng-show="!isLoading && !(projectsList | filter: filterStatus).length">
+        <p class="alert alert-warning text-center" ng-show="!isLoading && !(projectsList | filter: filterStatus | filter: { clientName: filterClient.name }).length">
             The are no <b>{{filterStatus}}</b> projects to display
         </p>
 
