@@ -71,3 +71,15 @@
 	display: inline-block;
 	float: none;
 }
+
+.btn-sm .badge {
+	top: 0;
+	padding: 2px 8px;
+	background-color: #e5e5e5;
+	color: inherit;
+	font-size: inherit;
+	border-radius: 8px;
+}
+.btn.active .badge {
+	background-color: #ffffff;
+}

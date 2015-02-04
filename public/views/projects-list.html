@@ -16,11 +16,17 @@
                 <div class="btn-group form-group">
                     <button type="button" class="btn btn-default btn-sm"
                         ng-class="{active: filterStatus == ''}"
-                        ng-click="setFilterStatus('')">All<span class="hidden-xs"> active projects</span></button>
+                        ng-click="setFilterStatus('')">
+                        All<span class="hidden-xs"> active projects</span>
+                        <span class="badge" ng-bind="(projectsList | filter: { status: '', clientName: filterClient.name }).length"></span>
+                    </button>
                     <button type="button" class="btn btn-default btn-sm text-capitalize"
                         ng-repeat="status in filterStatusOptions"
                         ng-class="{active: filterStatus == status}"
-                        ng-click="setFilterStatus(status)">{{status}}</button>
+                        ng-click="setFilterStatus(status)">
+                        {{status}}
+                        <span class="badge" ng-bind="(projectsList | filter: { status: status, clientName: filterClient.name }).length"></span>
+                    </button>
                     <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
                         ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
                 </div>
@@ -113,7 +119,10 @@
             </tbody>
         </table>
 
-        <p class="alert alert-warning text-center" ng-show="!isLoading && !(projectsList | filter: filterStatus | filter: { clientName: filterClient.name }).length">
+        <p class="alert alert-warning text-center" ng-show="
+            !isLoading &&
+            !(projectsList | filter: { status: filterStatus, clientName: filterClient.name }).length
+        ">
             The are no <b>{{filterStatus}}</b> projects to display
         </p>
 
