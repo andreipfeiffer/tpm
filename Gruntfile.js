@@ -23,10 +23,14 @@ module.exports = function(grunt) {
         protractor: {
             options: {
                 keepAlive: false,
-                configFile: 'protractor.conf.js',
                 noColor: false
             },
-            run: {}
+            e2e: {
+                configFile: 'protractor.conf.js'
+            },
+            bdd: {
+                configFile: 'protractor.conf.bdd.js'
+            }
         },
 
         jshint: {
@@ -195,6 +199,10 @@ module.exports = function(grunt) {
     // to update run:
     // node node_modules/protractor/bin/webdriver-manager update
     grunt.registerTask('e2e', [
-        'protractor'
+        'protractor:e2e'
+    ]);
+
+    grunt.registerTask('bdd', [
+        'protractor:bdd'
     ]);
 };
