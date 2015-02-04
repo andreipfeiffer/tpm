@@ -47,14 +47,6 @@ module.exports = function(grunt) {
             }
         },
 
-        /*mochacli: {
-            options: {
-                reporter: 'spec',
-                ui: 'tdd'
-            },
-            all: ['server/test/*Test.js']
-        },*/
-
         mocha_istanbul: {
             coverage: {
                 src: ['server/test/*Test.js'],
