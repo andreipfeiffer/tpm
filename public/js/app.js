@@ -104,7 +104,13 @@ var TPM = TPM || {};
             $http.defaults.headers.common['Authorization'] = SessionService.getAuthToken();
 
             // @todo make this read-only
-            TPM.apiUrl = ($location.host() === 'localhost') ? 'http://localhost:' + $location.port() + '/' : 'http://tpm.upsidedown.ro/';
+            var isLocalhost = false;
+            if ( $location.host() === 'localhost' || $location.host().indexOf('192.168') > -1 ) {
+                isLocalhost = true;
+            }
+
+            TPM.apiUrl = isLocalhost ? 'http://' + $location.host() + ':' + $location.port() + '/' : 'http://tpm.upsidedown.ro/';
+
             TPM.settings = {
                 dateFormat: 'yyyy-MM-dd'
             };
