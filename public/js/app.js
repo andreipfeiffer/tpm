@@ -26,7 +26,7 @@ var TPM = TPM || {};
         'feedback'
     ]);
 
-    TPM.routesList = {
+    var routes = {
 
         '/login': {
             templateUrl: 'views/login.html',
@@ -76,8 +76,8 @@ var TPM = TPM || {};
     TPM.config(['$routeProvider', '$animateProvider', function($routeProvider, $animateProvider) {
 
         //this loads up our routes dynamically from the routes object
-        for (var path in TPM.routesList) {
-            $routeProvider.when(path, TPM.routesList[path]);
+        for (var path in routes) {
+            $routeProvider.when(path, routes[path]);
         }
         $routeProvider.otherwise({redirectTo: '/login'});
 
@@ -91,9 +91,9 @@ var TPM = TPM || {};
 
                 $rootScope.isAuth = SessionService.getAuthToken();
 
-                for (var i in TPM.routesList) {
+                for (var i in routes) {
                     if (next.indexOf(i) !== -1) {
-                        if (TPM.routesList[i].requireLogin && !SessionService.getAuthToken()) {
+                        if (routes[i].requireLogin && !SessionService.getAuthToken()) {
                             $location.path('/login');
                             // event.preventDefault();
                         }
