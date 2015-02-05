@@ -71,7 +71,7 @@ app.use(cookieParser());
 app.use(session({
     secret: 'upsidedown-inseamna-Lia-si-Andrei' ,
     saveUninitialized: true,
-    resave: true
+    resave: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());

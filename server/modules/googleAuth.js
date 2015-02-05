@@ -6,8 +6,8 @@ module.exports = function(knex) {
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config = require('../../config'),
         projects = require('./projects')( knex ),
-        utils = require('./utils'),
-        googleClient = require('./googleClient')( knex );
+        googleClient = require('./googleClient')( knex ),
+        server = require('../../server');
 
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -52,8 +52,7 @@ module.exports = function(knex) {
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
                 findUserBySession(req.sessionID).then(function(data) {
                     user = data[0];
-                    return setAuthError(user.id);
-                }).then(function() {
+                    setAuthError(user.id);
                     done(null, user);
                 });
             } else {
@@ -72,7 +71,7 @@ module.exports = function(knex) {
             error: { message: 'Authentication successfull, but no refresh_token returned' }
         };
 
-        return utils.logError(log);
+        server.app.emit('logError', log);
     }
 
     return {

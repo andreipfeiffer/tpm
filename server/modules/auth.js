@@ -8,6 +8,8 @@ module.exports = function(knex) {
         googleClient = require('./googleClient')( knex ),
         server = require('../../server'),
         jwt = require('jsonwebtoken'),
+        promise = require('node-promise'),
+        deferred = promise.defer,
         secret = 'upsidedown-inseamna-Lia-si-Andrei';
 
     // private encryption & validation methods
@@ -48,6 +50,29 @@ module.exports = function(knex) {
         return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
     }
 
+    function updateSession(userId, newSessionId, oldSessionId) {
+        var d = deferred();
+
+        if ( newSessionId !== oldSessionId ) {
+            return knex('users')
+                .where({
+                    'id': userId
+                })
+                .update({
+                    sessionID: newSessionId,
+                    isLogged: 1
+                })
+                .then(function() {
+                    d.resolve(true);
+                });
+        } else {
+            d.resolve(true);
+        }
+
+        return d.promise;
+    }
+
+
     // used for initial username/password authentication
     var localStrategyAuth = new LocalStrategy(
         function(username, password, done) {
@@ -82,8 +107,8 @@ module.exports = function(knex) {
             } else {
                 done(null, false);
             }
-        }).catch(function(/*e*/) {
-            done(null, false);
+        }).catch(function(e) {
+            done(e, false);
         });
     }
 
@@ -109,17 +134,7 @@ module.exports = function(knex) {
                         authUserId: user.id
                     };
 
-                // save session in database
-                var updateSession = knex('users')
-                    .where({
-                        'id': user.id
-                    })
-                    .update({
-                        sessionID: req.sessionID,
-                        isLogged: 1
-                    });
-
-                updateSession.then(function() {
+                updateSession(user.id, req.sessionID).then(function() {
                     return googleClient.getTokens(user.id);
                 }).then(function(data) {
                     if (data[0].accessToken.length && !data[0].refreshToken.length) {
@@ -170,9 +185,14 @@ module.exports = function(knex) {
             var user = data[0];
             if (!user || !user.isLogged) { return res.status(401).end(); }
 
-            // add the logged user's data in the request, so the "next()" method can access it
-            req.user = user;
-            return next();
+            // verify session also
+            // is server is restarted, session is updated
+            updateSession(decoded.id, req.sessionID, user.sessionID).then(function() {
+                // add the logged user's data in the request, so the "next()" method can access it
+                req.user = user;
+                return next();
+            });
+
         }).catch(function(e) {
             return res.status(503).send({ error: 'Database error: ' + e.code});
         });
