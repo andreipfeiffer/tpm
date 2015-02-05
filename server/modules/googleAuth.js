@@ -50,9 +50,9 @@ module.exports = function(knex) {
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
-            console.log('session: ' + req.sessionID);
-            console.log('accessToken: ' + accessToken);
-            console.log('refreshToken: ' + refreshToken);
+            // console.log('session: ' + req.sessionID);
+            // console.log('accessToken: ' + accessToken);
+            // console.log('refreshToken: ' + refreshToken);
             var user;
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
                 findUserBySession(req.sessionID).then(function(data) {
@@ -117,7 +117,7 @@ module.exports = function(knex) {
             source: 'googleAuth',
             error: { message: 'Authentication successfull, but no refresh_token returned' }
         };
-console.log(log);
+
         server.app.emit('logError', log);
     }
 
