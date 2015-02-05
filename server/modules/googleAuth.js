@@ -85,7 +85,7 @@ module.exports = function(knex) {
         });
 
         return d.promise;
-    };
+    }
 
     function revokeAccess(userLogged) {
         var d = deferred();
