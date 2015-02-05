@@ -197,4 +197,9 @@ module.exports = function(grunt) {
     grunt.registerTask('bdd', [
         'protractor:bdd'
     ]);
+
+    grunt.registerTask('test', [
+        'default',
+        'protractor'
+    ]);
 };
