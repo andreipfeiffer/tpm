@@ -19,14 +19,14 @@
 
         it('should redirect users to /login', function() {
             browser.getLocationAbsUrl().then(function(url) {
-                expect(url.split('#')[1]).toBe('/login');
+                expect(url).toBe('/login');
             });
         });
 
         it('should redirect users to /login when accessing protected routes', function() {
             browser.setLocation('/projects');
             browser.getLocationAbsUrl().then(function(url) {
-                expect(url.split('#')[1]).toBe('/login');
+                expect(url).toBe('/login');
             });
         });
 
@@ -45,7 +45,7 @@
 
             element(by.css('button[type="submit"]')).click().then(function() {
                 browser.getLocationAbsUrl().then(function(url) {
-                    expect(url.split('#')[1]).toBe('/projects');
+                    expect(url).toBe('/projects');
                 });
             });
         });
@@ -56,7 +56,7 @@
             element(by.css('button[type="submit"]')).click().then(function() {
                 element(by.css('a[href="#logout"]')).click().then(function() {
                     browser.getLocationAbsUrl().then(function(url) {
-                        expect(url.split('#')[1]).toBe('/login');
+                        expect(url).toBe('/login');
                     });
                 });
             });
