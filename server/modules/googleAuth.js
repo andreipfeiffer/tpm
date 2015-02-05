@@ -7,7 +7,9 @@ module.exports = function(knex) {
         config = require('../../config'),
         projects = require('./projects')( knex ),
         googleClient = require('./googleClient')( knex ),
-        server = require('../../server');
+        server = require('../../server'),
+        promise = require('node-promise'),
+        deferred = promise.defer;
 
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -48,10 +50,15 @@ module.exports = function(knex) {
             passReqToCallback: true
         },
         function(req, accessToken, refreshToken, profile, done) {
+            console.log('session: ' + req.sessionID);
+            console.log('accessToken: ' + accessToken);
+            console.log('refreshToken: ' + refreshToken);
             var user;
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
                 findUserBySession(req.sessionID).then(function(data) {
                     user = data[0];
+                    return revokeToken(user.id, accessToken);
+                }).then(function() {
                     setAuthError(user.id);
                     done(null, user);
                 });
@@ -64,13 +71,53 @@ module.exports = function(knex) {
         }
     ));
 
+    function revokeToken(userId, accessToken) {
+        var d = deferred();
+
+        googleClient.oauth2Client.revokeToken(accessToken, function (err/*, resGoogle, body*/) {
+            if (err) {
+                d.reject( err );
+            } else {
+                googleClient.clearTokens(userId).then(function() {
+                    d.resolve( true );
+                });
+            }
+        });
+
+        return d.promise;
+    };
+
+    function revokeAccess(userLogged) {
+        var d = deferred();
+
+        // don't know what this is for
+        // googleClient.updateTokens(userLogged);
+
+        projects.removeEvents(userLogged.id).then(function() {
+            return googleClient.getTokens(userLogged.id);
+        }).then(function(data) {
+            revokeToken(userLogged.id, data[0].accessToken).then(
+                function() {
+                    d.resolve( true );
+                },
+                function(err) {
+                    d.reject( err );
+                }
+            );
+        })/*.catch(function(e) {
+            return res.status(503).send({ error: 'Database error: ' + e.code});
+        })*/;
+
+        return d.promise;
+    }
+
     function setAuthError(idUser) {
         var log = {
             idUser: idUser,
             source: 'googleAuth',
             error: { message: 'Authentication successfull, but no refresh_token returned' }
         };
-
+console.log(log);
         server.app.emit('logError', log);
     }
 
@@ -81,21 +128,14 @@ module.exports = function(knex) {
         revokeAccess: function(req, res) {
             var userLogged = req.user;
 
-            googleClient.updateTokens(userLogged);
-
-            projects.removeEvents(userLogged.id).then(function() {
-                return googleClient.getTokens(userLogged.id);
-            }).then(function(data) {
-                googleClient.oauth2Client.revokeToken(data[0].accessToken, function (err/*, resGoogle, body*/) {
-                    if (err) { return res.send(err); }
-
-                    return googleClient.clearTokens(userLogged.id).then(function() {
-                        return res.status(205).end();
-                    });
-                });
-            })/*.catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            })*/;
+            return revokeAccess(userLogged).then(
+                function() {
+                    return res.status(205).end();
+                },
+                function(err) {
+                    return res.status(400).send(err);
+                }
+            );
         }
     };
 };
