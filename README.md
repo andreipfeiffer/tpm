@@ -25,7 +25,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 ## Short term To-dos
 
-* Filter Projects by Client
 * Sort projects based on various criteria
 * Projects "finished" but not "payed", that passed X days
 * Handle all server errors on client: 4xx (verbosely) and 5xx (generic, silent)
