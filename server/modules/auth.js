@@ -2,15 +2,17 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var crypto = require('crypto'),
-        passport = require('passport'),
-        LocalStrategy = require('passport-local').Strategy,
-        googleClient = require('./googleClient')( knex ),
-        server = require('../../server'),
-        jwt = require('jsonwebtoken'),
-        promise = require('node-promise'),
-        deferred = promise.defer,
-        secret = 'upsidedown-inseamna-Lia-si-Andrei';
+    var crypto         = require('crypto'),
+        passport       = require('passport'),
+        LocalStrategy  = require('passport-local').Strategy,
+        googleClient   = require('./googleClient')( knex ),
+        server         = require('../../server'),
+        jwt            = require('jsonwebtoken'),
+        promise        = require('node-promise'),
+        deferred       = promise.defer,
+        secret         = 'upsidedown-inseamna-Lia-si-Andrei',
+        moment         = require('moment'),
+        maxIdleSeconds = 60 * 60;
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -42,7 +44,7 @@ module.exports = function(knex) {
         return knex('users').select().where({ id: id, isDeleted: '0' });
     }
 
-    function findUserByUsername(username) {
+    function findUserByUsername(username, timestamp) {
         return knex('users').select().where({ email: username, isDeleted: '0' });
     }
 
@@ -50,26 +52,34 @@ module.exports = function(knex) {
         return knex('users').select().where({ sessionID: sessionID, isDeleted: '0' });
     }
 
+    function getCurrentTime() {
+        return moment().format('YYYY-MM-DD HH:mm:ss');
+    }
+
+    function getIdleTime(lastActive) {
+        var now    = getCurrentTime(),
+            last   = lastActive,
+            nowTS  = moment( now ).format('X'),
+            lastTS = moment( last ).format('X');
+
+        return (nowTS - lastTS);
+    }
+
     function updateSession(userId, newSessionId, oldSessionId) {
-        var d = deferred();
+        var data = {
+                dateLastActive: getCurrentTime()
+            };
 
         if ( newSessionId !== oldSessionId ) {
-            return knex('users')
-                .where({
-                    'id': userId
-                })
-                .update({
-                    sessionID: newSessionId,
-                    isLogged: 1
-                })
-                .then(function() {
-                    d.resolve(true);
-                });
-        } else {
-            d.resolve(true);
+            data.sessionID = newSessionId;
+            data.isLogged  = 1;
         }
 
-        return d.promise;
+        return knex('users')
+            .where({
+                'id': userId
+            })
+            .update( data );
     }
 
 
@@ -130,7 +140,7 @@ module.exports = function(knex) {
 
                 var newAuthToken = jwt.sign({ id: user.id }, secret),
                     loggedData = {
-                        authToken: newAuthToken,
+                        authToken : newAuthToken,
                         authUserId: user.id
                     };
 
@@ -182,8 +192,12 @@ module.exports = function(knex) {
         }
 
         findUserById(decoded.id).then(function(data) {
-            var user = data[0];
-            if (!user || !user.isLogged) { return res.status(401).end(); }
+            var user = data[0],
+                idle = getIdleTime( user.dateLastActive );
+
+            if (!user || !user.isLogged || idle > maxIdleSeconds) {
+                return res.status(401).end();
+            }
 
             // verify session also
             // is server is restarted, session is updated
@@ -228,9 +242,9 @@ module.exports = function(knex) {
     }
 
     return {
-        login: login,
+        login : login,
         logout: logout,
-        ensureTokenAuthenticated: ensureTokenAuthenticated,
+        ensureTokenAuthenticated  : ensureTokenAuthenticated,
         ensureSessionAuthenticated: ensureSessionAuthenticated
     };
 };
