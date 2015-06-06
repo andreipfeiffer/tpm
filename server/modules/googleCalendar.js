@@ -80,10 +80,9 @@ module.exports = function(knex) {
             }
 
             calendar.events.insert(params, function(err, response) {
-                if (err) {
-                    return d.reject(err);
-                }
-                d.resolve(response.id);
+                // id error from API, don't reject, resolve with 0
+                var id = err ? 0 : response.id
+                d.resolve( id );
             });
         });
 
@@ -157,10 +156,10 @@ module.exports = function(knex) {
                         error: err
                     };
                     server.app.emit('logError', log);
-                    return d.resolve(true);
+                    return d.resolve(false);
+                } else {
+                    d.resolve(response);
                 }
-
-                d.resolve(response);
             });
         });
 
@@ -261,10 +260,10 @@ module.exports = function(knex) {
 
         calendar.events.move(params, function(err, response) {
             if (err) {
-                return d.reject(err);
+                d.resolve( false );
+            } else {
+                d.resolve(response);
             }
-
-            d.resolve(response);
         });
 
         return d.promise;
@@ -329,10 +328,10 @@ module.exports = function(knex) {
 
         calendar.events.delete(params, function(err, response) {
             if (err) {
-                return d.reject(err);
+                d.resolve(false);
+            } else {
+                d.resolve(response);
             }
-
-            d.resolve(response);
         });
 
         return d.promise;
@@ -356,13 +355,13 @@ module.exports = function(knex) {
 
     return {
         getSelectedCalendarId: getSelectedCalendarId,
-        getCalendars: getCalendars,
-        addEvent: addEvent,
-        updateEvent: updateEvent,
-        deleteEvent: deleteEvent,
-        setEventId: setEventIdOnProject,
-        removeEvents: removeEventsList,
-        clearEvents: clearEvents,
-        changeCalendar: changeCalendar
+        getCalendars         : getCalendars,
+        addEvent             : addEvent,
+        updateEvent          : updateEvent,
+        deleteEvent          : deleteEvent,
+        setEventId           : setEventIdOnProject,
+        removeEvents         : removeEventsList,
+        clearEvents          : clearEvents,
+        changeCalendar       : changeCalendar
     };
 };
