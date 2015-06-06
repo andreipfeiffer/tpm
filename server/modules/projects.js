@@ -108,15 +108,15 @@ module.exports = function(knex) {
                     'isDeleted': '0'
                 })
                 .update({
-                    name: req.body.name,
-                    idClient: req.body.idClient,
-                    status: req.body.status,
-                    days: req.body.days,
+                    name          : req.body.name,
+                    idClient      : req.body.idClient,
+                    status        : req.body.status,
+                    days          : req.body.days,
                     priceEstimated: req.body.priceEstimated,
-                    priceFinal: req.body.priceFinal,
-                    dateAdded: req.body.dateAdded,
-                    dateEstimated: req.body.dateEstimated,
-                    description: req.body.description
+                    priceFinal    : req.body.priceFinal,
+                    dateAdded     : req.body.dateAdded,
+                    dateEstimated : req.body.dateEstimated,
+                    description   : req.body.description
                 });
 
             googleClient.updateTokens(req.user);

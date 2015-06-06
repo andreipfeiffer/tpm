@@ -93,8 +93,8 @@ function start(port) {
 }
 
 exports.start = start;
-exports.app = app;
-exports.knex = knex;
+exports.app   = app;
+exports.knex  = knex;
 
 // verify database structure
 require('./server/modules/db')( knex ).createDb(true).then(function() {
