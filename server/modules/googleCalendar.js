@@ -81,7 +81,7 @@ module.exports = function(knex) {
 
             calendar.events.insert(params, function(err, response) {
                 // id error from API, don't reject, resolve with 0
-                var id = err ? 0 : response.id
+                var id = err ? 0 : response.id;
                 d.resolve( id );
             });
         });

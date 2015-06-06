@@ -8,8 +8,6 @@ module.exports = function(knex) {
         googleClient   = require('./googleClient')( knex ),
         server         = require('../../server'),
         jwt            = require('jsonwebtoken'),
-        promise        = require('node-promise'),
-        deferred       = promise.defer,
         secret         = 'upsidedown-inseamna-Lia-si-Andrei',
         moment         = require('moment'),
         maxIdleSeconds = 60 * 60;
@@ -44,7 +42,7 @@ module.exports = function(knex) {
         return knex('users').select().where({ id: id, isDeleted: '0' });
     }
 
-    function findUserByUsername(username, timestamp) {
+    function findUserByUsername(username) {
         return knex('users').select().where({ email: username, isDeleted: '0' });
     }
 
