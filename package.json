@@ -28,7 +28,8 @@
         "googleapis": "1.0.21",
         "knex": "0.7.3",
         "node-promise": "0.5.10",
-        "jsonwebtoken": "3.2.0"
+        "jsonwebtoken": "3.2.0",
+        "moment": "2.10.3"
     },
     "devDependencies": {
         "supertest": "0.13.0",
