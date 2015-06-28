@@ -111,6 +111,12 @@
                 });
         });
 
+        xit('should add the calendar event, if and status is active', function(done) {
+        });
+
+        xit('should not add the calendar event, if and status is inactive', function(done) {
+        });
+
         it('should update an existing project', function(done) {
             var project = this.project;
 
@@ -130,6 +136,18 @@
                             done();
                         });
                 });
+        });
+
+        xit('should update the calendar event, if the event exists, and status is active', function(done) {
+        });
+
+        xit('should remove the calendar event, if the event exists, and status is inactive', function(done) {
+        });
+
+        xit('should add the calendar event, if the event does not exists, and status is active', function(done) {
+        });
+
+        xit('should not add the calendar event, if the event does not exists, and status is inactive', function(done) {
         });
 
         it('should delete an existing project', function(done) {
