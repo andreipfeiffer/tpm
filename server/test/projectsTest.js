@@ -111,10 +111,10 @@
                 });
         });
 
-        xit('should add the calendar event, if and status is active', function(done) {
+        xit('should add the calendar event, if and status is active', function() {
         });
 
-        xit('should not add the calendar event, if and status is inactive', function(done) {
+        xit('should not add the calendar event, if and status is inactive', function() {
         });
 
         it('should update an existing project', function(done) {
@@ -138,16 +138,16 @@
                 });
         });
 
-        xit('should update the calendar event, if the event exists, and status is active', function(done) {
+        xit('should update the calendar event, if the event exists, and status is active', function() {
         });
 
-        xit('should remove the calendar event, if the event exists, and status is inactive', function(done) {
+        xit('should remove the calendar event, if the event exists, and status is inactive', function() {
         });
 
-        xit('should add the calendar event, if the event does not exists, and status is active', function(done) {
+        xit('should add the calendar event, if the event does not exists, and status is active', function() {
         });
 
-        xit('should not add the calendar event, if the event does not exists, and status is inactive', function(done) {
+        xit('should not add the calendar event, if the event does not exists, and status is inactive', function() {
         });
 
         it('should delete an existing project', function(done) {
