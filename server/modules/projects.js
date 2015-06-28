@@ -212,7 +212,9 @@ module.exports = function(knex) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
-                return googleCalendar.addEvent(userLogged.id, newProjectData);
+                if ( isStatusActive( data.status ) ) {
+                    return googleCalendar.addEvent(userLogged.id, newProjectData);
+                }
             }).then(function(eventId) {
                 return googleCalendar.setEventId(userLogged.id, newProject.id, eventId);
             }).then(function() {
