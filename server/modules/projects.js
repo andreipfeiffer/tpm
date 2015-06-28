@@ -159,7 +159,7 @@ module.exports = function(knex) {
                     } else {
                         return googleCalendar.updateEvent(userLogged.id, eventId, req.body);
                     }
-                } else {
+                } else if ( isStatusActive(newStatus) ) {
                     return googleCalendar.getSelectedCalendarId(userLogged.id).then(function(calendarId) {
                         return googleCalendar.addEvent(userLogged.id, req.body, calendarId);
                     }).then(function(newEventId) {
