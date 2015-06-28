@@ -2,10 +2,13 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var googleCalendar = require('./googleCalendar')( knex ),
-        googleClient = require('./googleClient')( knex ),
-        promise = require('node-promise'),
-        server = require('../../server');
+    var googleCalendar    = require('./googleCalendar')( knex ),
+        googleClient      = require('./googleClient')( knex ),
+        promise           = require('node-promise'),
+        server            = require('../../server'),
+        statusArr         = ['on hold', 'in progress', 'finished', 'paid'],
+        statusArrActive   = [statusArr[0], statusArr[1]],
+        statusArrInactive = [statusArr[2], statusArr[3]];
 
     function getProjectById(id, idUser) {
         return knex('projects')
@@ -61,6 +64,24 @@ module.exports = function(knex) {
             });
     }
 
+    function isStatusActive(status) {
+        return (statusArrActive.indexOf(status) > -1);
+    }
+
+    function isStatusInactive(status) {
+        return (statusArrInactive.indexOf(status) > -1);
+    }
+
+    function hasStatusChangedToInactive(newStatus, oldStatus) {
+        if ( newStatus === oldStatus ) {
+            return false;
+        }
+        if ( !isStatusActive( oldStatus ) || !isStatusInactive( newStatus ) ) {
+            return false;
+        }
+        return true;
+    }
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -98,33 +119,46 @@ module.exports = function(knex) {
 
         update: function(req, res) {
             var id = parseInt( req.params.id, 10 ),
-                userLogged = req.user,
-                previousStatus;
+                userLogged      = req.user,
+                isStatusChanged = false,
+                newStatus       = req.body.status,
+                oldStatus, eventId;
+
+            var editData = {
+                name          : req.body.name,
+                idClient      : req.body.idClient,
+                status        : req.body.status,
+                days          : req.body.days,
+                priceEstimated: req.body.priceEstimated,
+                priceFinal    : req.body.priceFinal,
+                dateAdded     : req.body.dateAdded,
+                dateEstimated : req.body.dateEstimated,
+                description   : req.body.description
+            };
+
 
             var editProject = knex('projects')
                 .where({
                     'id': id,
                     'idUser': userLogged.id,
                     'isDeleted': '0'
-                })
-                .update({
-                    name          : req.body.name,
-                    idClient      : req.body.idClient,
-                    status        : req.body.status,
-                    days          : req.body.days,
-                    priceEstimated: req.body.priceEstimated,
-                    priceFinal    : req.body.priceFinal,
-                    dateAdded     : req.body.dateAdded,
-                    dateEstimated : req.body.dateEstimated,
-                    description   : req.body.description
-                });
+                }).update( editData );
 
             googleClient.updateTokens(req.user);
 
             getProjectById(id, userLogged.id).then(function(data) {
-                previousStatus = data[0].status;
-                if ( data[0].googleEventId.length ) {
-                    return googleCalendar.updateEvent(userLogged.id, data[0].googleEventId, req.body);
+                eventId         = data[0].googleEventId;
+                oldStatus       = data[0].status;
+                isStatusChanged = (oldStatus !== newStatus);
+
+                if ( eventId.length ) {
+                    if ( hasStatusChangedToInactive( newStatus, oldStatus ) ) {
+                        // update the editData, so the eventId will be removed
+                        editData.googleEventId = '';
+                        return googleCalendar.deleteEvent(userLogged.id, eventId);
+                    } else {
+                        return googleCalendar.updateEvent(userLogged.id, eventId, req.body);
+                    }
                 } else {
                     return googleCalendar.getSelectedCalendarId(userLogged.id).then(function(calendarId) {
                         return googleCalendar.addEvent(userLogged.id, req.body, calendarId);
@@ -134,8 +168,8 @@ module.exports = function(knex) {
                 }
             }).then(function() {
                 editProject.then(function() {
-                    if (previousStatus !== req.body.status) {
-                        logStatusChange(userLogged.id, id, req.body.status).then(function() {
+                    if ( isStatusChanged ) {
+                        logStatusChange(userLogged.id, id, newStatus).then(function() {
                             return res.send(true);
                         });
                     } else {
