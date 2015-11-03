@@ -2,11 +2,11 @@ module.exports = function(knex) {
 
     'use strict';
 
-    var config = require('../../config'),
-        schema = require('../schema'),
-        promise = require('node-promise'),
+    var config   = require('../../config'),
+        schema   = require('../schema'),
+        promise  = require('node-promise'),
         deferred = promise.defer,
-        queries = Object.keys(schema.structure);
+        queries  = Object.keys(schema.structure);
 
     return {
         createDb: function(isOnServerStart) {

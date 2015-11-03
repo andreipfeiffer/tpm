@@ -194,16 +194,16 @@ module.exports = function(knex) {
                 userLogged = req.user,
                 newProject = {},
                 newProjectData = {
-                    idUser: userLogged.id,
-                    idClient: data.idClient,
-                    name: data.name,
-                    status: data.status,
-                    days: parseInt(data.days) || 0,
+                    idUser        : userLogged.id,
+                    idClient      : data.idClient,
+                    name          : data.name,
+                    status        : data.status,
+                    days          : parseInt(data.days) || 0,
                     priceEstimated: parseInt(data.priceEstimated) || 0,
-                    priceFinal: parseInt(data.priceFinal) || 0,
-                    dateAdded: data.dateAdded,
-                    dateEstimated: data.dateEstimated,
-                    description: data.description
+                    priceFinal    : parseInt(data.priceFinal) || 0,
+                    dateAdded     : data.dateAdded,
+                    dateEstimated : data.dateEstimated,
+                    description   : data.description
                 };
 
             googleClient.updateTokens(req.user);
@@ -233,8 +233,8 @@ module.exports = function(knex) {
                 var log = {
                     idUser: userLogged.id,
                     source: 'projects.add',
-                    data: req.body,
-                    error: err
+                    data  : req.body,
+                    error : err
                 };
                 server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Error: ' + err.code});
@@ -247,12 +247,12 @@ module.exports = function(knex) {
 
             var softDeleteProject = knex('projects')
                 .where({
-                    'id': id,
-                    'idUser': userLogged.id,
+                    'id'       : id,
+                    'idUser'   : userLogged.id,
                     'isDeleted': '0'
                 })
                 .update({
-                    'isDeleted': '1',
+                    'isDeleted'    : '1',
                     'googleEventId': ''
                 });
 
@@ -268,7 +268,7 @@ module.exports = function(knex) {
                 var log = {
                     idUser: userLogged.id,
                     source: 'projects.remove',
-                    error: e
+                    error : e
                 };
                 server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});

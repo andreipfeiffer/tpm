@@ -2,16 +2,16 @@
 
 'use strict';
 
-var express = require('express'),
-    logger = require('morgan'),
-    bodyParser = require('body-parser'),
+var express      = require('express'),
+    logger       = require('morgan'),
+    bodyParser   = require('body-parser'),
     cookieParser = require('cookie-parser'),
-    session = require('express-session'),
-    passport = require('passport'),
-    config = require('./config'),
-    favicon = require('serve-favicon'),
-    compression = require('compression')/*,
-    serveStatic = require('serve-static')*/;
+    session      = require('express-session'),
+    passport     = require('passport'),
+    config       = require('./config'),
+    favicon      = require('serve-favicon'),
+    compression  = require('compression')/*,
+    serveStatic  = require('serve-static')*/;
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
