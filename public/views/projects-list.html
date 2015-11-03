@@ -18,14 +18,14 @@
                         ng-class="{active: filterStatus == ''}"
                         ng-click="setFilterStatus('')">
                         All<span class="hidden-xs"> active projects</span>
-                        <span class="badge hidden-xs" ng-bind="(projectsList | filter: { status: '', clientName: filterClient.name }).length"></span>
+                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: '' | filterByClientName: filterClient).length"></span>
                     </button>
                     <button type="button" class="btn btn-default btn-sm text-capitalize"
                         ng-repeat="status in filterStatusOptions"
                         ng-class="{active: filterStatus == status}"
                         ng-click="setFilterStatus(status)">
                         {{status}}
-                        <span class="badge hidden-xs" ng-bind="(projectsList | filter: { status: status, clientName: filterClient.name }).length"></span>
+                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: status | filterByClientName: filterClient).length"></span>
                     </button>
                     <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
                         ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
@@ -124,7 +124,7 @@
 
         <p class="alert alert-warning text-center" ng-show="
             !isLoading &&
-            !(projectsList | filter: { status: filterStatus, clientName: filterClient.name }).length
+            !(projectsList | filter: { status: filterStatus } | filterByClientName: filterClient).length
         ">
             The are no <b>{{filterStatus}}</b> projects to display
         </p>
