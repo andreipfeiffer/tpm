@@ -15,19 +15,26 @@
                 <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" ui-validate=" '$value.trim().length >= 3' " set-focus>
             </div>
             <div class="col-sm-4 form-group">
-                <div class="input-group" ng-if="showQuickClient">
-                    <input type="text" ng-model="project.newClientName" ng-if="isNewClient" ng-show="isNewClient" class="form-control input-lg" placeholder="New client name">
-                    <client-select></client-select>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default btn-lg" type="button" ng-click="toggleClientSelect()">
-                            <span class="glyphicon glyphicon-th-large" ng-show="isNewClient"></span>
-                            <span class="glyphicon glyphicon-plus" ng-hide="isNewClient"></span>
-                        </button>
-                    </span>
-                </div>
-                <span class="help-block" ng-if="showQuickClient">Add a new client or set an existing one.</span>
+                <div style="height: 35px;">
 
-                <client-select ng-if="!showQuickClient"></client-select>
+                    <input type="text" ng-model="project.newClientName" ng-if="!project.id" ng-show="isNewClient" class="form-control" placeholder="New client name">
+
+                    <select2
+                        placeholder="No client, Personal project"
+                        ng-model="project.idClient"
+                        ng-options="client.id as client.name for client in clientsList"
+                        options="{
+                            allowClear: true
+                        }"
+                        style="width: 100%"
+                        ng-hide="isNewClient">
+                    </select2>
+                </div>
+
+                <div ng-if="!project.id">
+                    <a href="" ng-show="!isNewClient" ng-click="toggleClientSelect(1)">Add a new client</a>
+                    <a href="" ng-show="isNewClient" ng-click="toggleClientSelect(0)">Select existing client</a>
+                </div>
             </div>
         </div>
 

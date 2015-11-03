@@ -27,6 +27,8 @@ module.exports = function(config) {
             '../bower_components/angular-media-queries/match-media.js',
             '../bower_components/angular-feedback/dist/feedback.min.js',
             '../bower_components/angular-animate/angular-animate.min.js',
+            '../bower_components/select2/select2.min.js',
+            '../bower_components/angular-select2/dist/angular-select2.min.js',
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',

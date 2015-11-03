@@ -97,8 +97,12 @@
             it('should toggle client select', function() {
                 $httpBackend.flush();
 
+                expect(scope.isNewClient).toBeFalsy();
+
+                scope.toggleClientSelect( 1 );
                 expect(scope.isNewClient).toBeTruthy();
-                scope.toggleClientSelect();
+
+                scope.toggleClientSelect( 0 );
                 expect(scope.isNewClient).toBeFalsy();
             });
 
