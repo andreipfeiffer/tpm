@@ -11,6 +11,7 @@ install:
     - "bower install"
 
 before_script:
-    - mysql -e 'create database tpm_test;'
+    - mysql -e "create database IF NOT EXISTS tpm_test;"
+    - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
     - grunt build
     - grunt
