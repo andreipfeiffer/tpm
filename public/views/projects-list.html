@@ -34,12 +34,16 @@
 
 
             <div class="col-sm-3 hidden-xs">
-                <select class="form-control input-sm" placeholder="Filter by client"
+                <select2
+                    placeholder="Filter by client"
                     ng-model="filterClient"
-                    ng-change="setFilterClient(client.name)"
-                    ng-options="client.name for client in clientsList">
-                    <option value="">All Clients</option>
-                </select>
+                    ng-options="client.name as client.name for client in clientsList"
+                    options="{
+                        allowClear: true,
+                        theme     : 'classic'
+                    }"
+                    style="width: 100%">
+                </select2>
             </div>
 
         </form>
@@ -63,7 +67,7 @@
                         project in projectsList |
                             orderBy:'remainingDays' |
                             filterByProjectStatus:filterStatus |
-                            filter: { clientName: filterClient.name }
+                            filterByClientName:filterClient
                     "
                     ng-class="{
                         'cell-border--danger':

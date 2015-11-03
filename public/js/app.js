@@ -22,6 +22,7 @@ var TPM = TPM || {};
 
         'ui.bootstrap',
         'ui.validate',
+        'rt.select2',
         'matchMedia',
         'feedback'
     ]);

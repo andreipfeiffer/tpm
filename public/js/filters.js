@@ -26,6 +26,25 @@
                     })();
                 });
             };
+        })
+
+        .filter('filterByClientName', function() {
+            return function(arr, name) {
+
+                if ( !angular.isArray(arr) ) {
+                    return [];
+                }
+
+                return arr.filter(function(item) {
+                    return (function() {
+                        if ( !name ) {
+                            return true;
+                        } else {
+                            return (item.clientName === name);
+                        }
+                    })();
+                });
+            };
         });
 
 }());
