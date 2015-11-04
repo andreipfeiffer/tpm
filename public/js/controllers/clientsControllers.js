@@ -17,6 +17,7 @@
                 $scope.newClient = {
                     name: ''
                 };
+                $scope.searchClient = '';
                 $scope.isLoading = true;
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;

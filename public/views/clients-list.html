@@ -27,12 +27,12 @@
                 <tr>
                     <th class="text-uppercase"><span class="hidden-xs">Client </span>Name</th>
                     <th width="160" class="text-uppercase text-center"><span class="hidden-xs">Nr. </span>Projects</th>
-                    <th></th>
+                    <th><input type="text" ng-model="searchClient" placeholder="Filter clients" class="form-control pull-right" style="width: 50%;"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr
-                    ng-repeat="client in clientsList | orderBy:'name'"
+                    ng-repeat="client in clientsList | orderBy:'name' | filter: { name: searchClient }"
                 >
                     <td ng-dblclick="openEditDialog(client.id)">
                         <strong>{{client.name}}</strong>
