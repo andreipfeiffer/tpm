@@ -38,7 +38,11 @@
                         <strong>{{client.name}}</strong>
                         <p class="hidden-xs" ng-show="client.description.length">{{client.description}}</p>
                     </td>
-                    <td ng-show="!showActions" class="text-center">{{client.nrProjects}}</td>
+
+                    <td ng-show="!showActions" class="text-center">
+                        <a href="#projects/client/{{client.name}}">{{client.nrProjects}} projects</a>
+                    </td>
+
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 2 : 1 }}">
                         <div class="btn-group" ng-show="!isEnabledToggleActions || showActions">
                             <button type="button" class="btn btn-default" ng-click="openEditDialog(client.id)">

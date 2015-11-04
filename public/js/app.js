@@ -41,6 +41,11 @@ var TPM = TPM || {};
             requireLogin: true
         },
 
+        '/projects/client/:name': {
+            templateUrl: 'views/projects-list.html',
+            controller: 'ProjectsListController',
+            requireLogin: true
+        },
         '/projects': {
             templateUrl: 'views/projects-list.html',
             controller: 'ProjectsListController',

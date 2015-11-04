@@ -26,7 +26,8 @@
                 $scope.filterStatus = tpmCache.get('filterStatus') || '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
-                $scope.filterClient = tpmCache.get('filterClient') || '';
+                // $scope.filterClient = tpmCache.get('filterClient') || '';
+                $scope.filterClient = $routeParams.name || '';
 
                 $scope.isLoading = true;
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
