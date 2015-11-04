@@ -124,9 +124,9 @@
 
         <p class="alert alert-warning text-center" ng-show="
             !isLoading &&
-            !(projectsList | filter: { status: filterStatus } | filterByClientName: filterClient).length
+            !(projectsList | filterByProjectStatus: filterStatus | filterByClientName: filterClient).length
         ">
-            The are no <b>{{filterStatus}}</b> projects to display
+            The are no <b>{{ filterStatus === '' ? 'active' : filterStatus }}</b> projects to display
         </p>
 
     </section>

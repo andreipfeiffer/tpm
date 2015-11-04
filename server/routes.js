@@ -2,14 +2,15 @@ module.exports = function(app, knex) {
 
     'use strict';
 
-    var auth  = require('./modules/auth')( knex ),
+    var auth        = require('./modules/auth')( knex ),
         googleAuth  = require('./modules/googleAuth')( knex ),
-        passport = require('passport'),
-        clients = require('./modules/clients')( knex ),
-        projects = require('./modules/projects')( knex ),
-        settings = require('./modules/settings')( knex ),
+        passport    = require('passport'),
+        clients     = require('./modules/clients')( knex ),
+        projects    = require('./modules/projects')( knex ),
+        settings    = require('./modules/settings')( knex ),
+        reports     = require('./modules/reports')( knex ),
         packageData = require('../package.json'),
-        path = require('path');
+        path        = require('path');
 
     function getResponse(res, result) {
         if ( !result.body ) {
@@ -69,6 +70,10 @@ module.exports = function(app, knex) {
                 return getResponse( res, result );
             });
         });
+
+    app.route('/reports')
+        .get(auth.ensureTokenAuthenticated, reports.getAll);
+
 
     app.route('/settings')
         .get(auth.ensureTokenAuthenticated, settings.getAll);

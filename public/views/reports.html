@@ -1,0 +1,120 @@
+<section>
+
+    <header class="clearfix row">
+        <h1 class="pull-left col-sm-8">Reports</h1>
+    </header>
+
+    <hr>
+    <br>
+
+    <div ng-hide="isLoading">
+
+        <p>!NOTE: if a project was "finished" on a particular month, but "paid" during the next month, it will appear in the NEXT month.</p>
+        <p>!NOTE: if a project was "finished" but not "paid", it will be added on the month that it was "finished".</p>
+        <p>Finished, but Not Paid: {{ notPaid }}</p>
+
+        <section>
+            <table class="table table-hover table-tpm">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Month</th>
+                        <th width="160" class="text-uppercase">Projects</th>
+                        <th width="160" class="text-uppercase">Income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="month in projects">
+                        <td>
+                            <strong>{{month.month}}</strong>
+                        </td>
+                        <td>
+                            {{month.projects.length}}
+                        </td>
+                        <td>
+                            {{month.price}}
+                        </td>
+                        <!-- <td>
+                            <span ng-repeat="project in month.projects">{{ project.name }} | </span>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="alert alert-warning text-center" ng-show="!isLoading && !projects.length">
+                The are no Reports to display
+            </p>
+        </section>
+
+        <br><br>
+
+        <section>
+            <h2>Most income per client</h2>
+            <table class="table table-hover table-tpm">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Client</th>
+                        <th width="160" class="text-uppercase">Projects</th>
+                        <th width="160" class="text-uppercase">Income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="client in clientsByPrice | limitTo: 10">
+                        <td>
+                            <strong>{{client.name}}</strong>
+                        </td>
+                        <td>
+                            {{client.projects.length}}
+                        </td>
+                        <td>
+                            {{client.price}}
+                        </td>
+                        <!-- <td>
+                            <span ng-repeat="project in client.projects">{{ project.name }} | </span>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByPrice.length">
+                The are no Reports to display
+            </p>
+        </section>
+
+        <br><br>
+
+        <section>
+            <h2>Most projects per client</h2>
+            <table class="table table-hover table-tpm">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Client</th>
+                        <th width="160" class="text-uppercase">Projects</th>
+                        <th width="160" class="text-uppercase">Income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="client in clientsByProjects | limitTo: 10">
+                        <td>
+                            <strong>{{client.name}}</strong>
+                        </td>
+                        <td>
+                            {{client.projects.length}}
+                        </td>
+                        <td>
+                            {{client.price}}
+                        </td>
+                        <!-- <td>
+                            <span ng-repeat="project in client.projects">{{ project.name }} | </span>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByProjects.length">
+                The are no Reports to display
+            </p>
+        </section>
+
+    </div>
+
+</section>

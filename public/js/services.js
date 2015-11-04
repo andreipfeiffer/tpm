@@ -41,6 +41,12 @@
             );
         }])
 
+        .factory('ReportsService', ['$resource', function($resource) {
+            return $resource(
+                TPM.apiUrl + 'reports'
+            );
+        }])
+
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {

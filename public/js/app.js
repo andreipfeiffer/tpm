@@ -14,6 +14,7 @@ var TPM = TPM || {};
         'TPM.ProjectsControllers',
         'TPM.ClientsControllers',
         'TPM.SettingsControllers',
+        'TPM.ReportsControllers',
 
         'TPM.Services',
         'TPM.Interceptors',
@@ -64,6 +65,12 @@ var TPM = TPM || {};
         '/clients': {
             templateUrl: 'views/clients-list.html',
             controller: 'ClientsListController',
+            requireLogin: true
+        },
+
+        '/reports': {
+            templateUrl: 'views/reports.html',
+            controller: 'ReportsController',
             requireLogin: true
         },
 
