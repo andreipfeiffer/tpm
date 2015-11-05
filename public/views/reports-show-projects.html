@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Projects from {{monthData.month}}</h3>
+    <h3 class="modal-title">Projects from {{title}}</h3>
 </div>
 <div class="modal-body">
 
@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="project in monthData.projects">
+            <tr ng-repeat="project in data">
                 <td>{{$index + 1}}.</td>
                 <td><b>{{project.name}}</b></td>
                 <td>{{project.clientName}}</td>

@@ -30,20 +30,22 @@
                     feedback.dismiss();
                 });
 
-                var ModalInstanceCtrl = function ($scope, $modalInstance, monthData) {
-                    $scope.monthData = angular.extend({}, monthData);
+                var ModalInstanceCtrl = function ($scope, $modalInstance, data) {
+                    $scope.data  = angular.extend({}, data.list);
+                    $scope.title = data.title;
                 };
 
-                $scope.showProjects = function() {
-
-                    var monthData = this.month;
+                $scope.showProjects = function(title, list) {
 
                     var modalInstance = $modal.open({
                         templateUrl: 'views/reports-show-projects.html',
                         controller : ModalInstanceCtrl,
                         resolve    : {
-                            monthData: function() {
-                                return monthData;
+                            data : function() {
+                                return {
+                                    list : list,
+                                    title: title
+                                };
                             }
                         }
                     });

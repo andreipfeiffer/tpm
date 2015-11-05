@@ -24,7 +24,7 @@
                             <strong>{{month.month}}</strong>
                         </td>
                         <td>
-                            <a href="" ng-click="showProjects()">{{month.projects.length}} projects</a>
+                            <a href="" ng-click="showProjects(month.month, month.projects)">{{month.projects.length}} projects</a>
                         </td>
                         <td>
                             {{month.price}}
@@ -59,14 +59,11 @@
                             <strong>{{client.name}}</strong>
                         </td>
                         <td>
-                            {{client.projects.length}}
+                            <a href="" ng-click="showProjects(client.name, client.projects)">{{client.projects.length}} projects</a>
                         </td>
                         <td>
                             {{client.price}}
                         </td>
-                        <!-- <td>
-                            <span ng-repeat="project in client.projects">{{ project.name }} | </span>
-                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -94,14 +91,11 @@
                             <strong>{{client.name}}</strong>
                         </td>
                         <td>
-                            {{client.projects.length}}
+                            <a href="" ng-click="showProjects(client.name, client.projects)">{{client.projects.length}} projects</a>
                         </td>
                         <td>
                             {{client.price}}
                         </td>
-                        <!-- <td>
-                            <span ng-repeat="project in client.projects">{{ project.name }} | </span>
-                        </td> -->
                     </tr>
                 </tbody>
             </table>
