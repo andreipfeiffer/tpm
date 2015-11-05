@@ -133,16 +133,16 @@
                 function sortClientsByPrice(c1, c2) {
                     var price1 = parseInt( c1.price );
                     var price2 = parseInt( c2.price );
-                    if (price1 > price2) return -1;
-                    if (price1 < price2) return 1;
+                    if (price1 > price2) { return -1; }
+                    if (price1 < price2) { return 1; }
                     return 0;
                 }
 
                 function sortClientsByProjects(c1, c2) {
                     var projects1 = parseInt( c1.projects.length );
                     var projects2 = parseInt( c2.projects.length );
-                    if (projects1 > projects2) return -1;
-                    if (projects1 < projects2) return 1;
+                    if (projects1 > projects2) { return -1; }
+                    if (projects1 < projects2) { return 1; }
                     return 0;
                 }
             }
