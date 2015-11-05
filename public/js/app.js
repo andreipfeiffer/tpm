@@ -24,6 +24,7 @@ var TPM = TPM || {};
         'ui.bootstrap',
         'ui.validate',
         'rt.select2',
+        'chart.js',
         'matchMedia',
         'feedback'
     ]);
@@ -86,7 +87,7 @@ var TPM = TPM || {};
         }
     };
 
-    TPM.config(['$routeProvider', '$animateProvider', function($routeProvider, $animateProvider) {
+    TPM.config(['$routeProvider', '$animateProvider', 'ChartJsProvider', function($routeProvider, $animateProvider, ChartJs) {
 
         //this loads up our routes dynamically from the routes object
         for (var path in routes) {
@@ -95,6 +96,14 @@ var TPM = TPM || {};
         $routeProvider.otherwise({redirectTo: '/login'});
 
         $animateProvider.classNameFilter(/animate-slideFade/);
+
+        // Configure all charts
+        ChartJs.setOptions({
+            colours: ['#1eae32', '#1693f4', '#ed9c1c'],
+            responsive: true,
+            scaleLabel: "<%=value%> ron",
+            animation: false
+        });
 
     }]).run(function($rootScope, $location, $http, SessionService, feedback) {
 

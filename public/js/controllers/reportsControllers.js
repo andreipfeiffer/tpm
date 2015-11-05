@@ -14,18 +14,25 @@
 
                 $scope.isLoading = true;
                 $scope.projects  = [];
+                $scope.chart     = {
+                    data  : [
+                        [0]
+                    ],
+                    series: [],
+                    labels: ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie']
+                };
 
                 feedback.load();
 
                 Reports.query().$promise.then(function(data) {
-
-                    console.log( data );
 
                     $scope.projects          = groupByMonth( data );
                     $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
                     $scope.clientsByPrice    = groupByClient( data ).sort( sortClientsByPrice );
                     $scope.notPaid           = getNotPaid( data );
                     $scope.isLoading         = false;
+
+                    $scope.chart = getChartData( $scope.projects );
 
                     feedback.dismiss();
                 });
@@ -146,6 +153,37 @@
                     if (projects1 > projects2) { return -1; }
                     if (projects1 < projects2) { return 1; }
                     return 0;
+                }
+
+                function getChartData(months) {
+                    var _months = angular.extend([], months);
+                    var res = {
+                        data  : [],
+                        series: []
+                    };
+
+                    _months.reverse().forEach(function(month) {
+                        var year = month.monthRaw.slice(0, 4);
+
+                        if ( res.series.indexOf(year) === -1 ) {
+                            res.series.push( year );
+                            res.data.push([]);
+                        }
+
+                        res.data[ res.series.length - 1 ].push( month.price );
+                        // res.labels.push( month.month );
+                    });
+
+                    // if first "year" didn't start at January, fill with empty data
+                    for (var i = (12 - res.data[0].length); i > 0; i -= 1) {
+                        res.data[0].unshift( 0 );
+                    }
+
+                    // reverse data, so the current year is first
+                    res.data.reverse();
+                    res.series.reverse();
+
+                    return res;
                 }
             }
         ]);
