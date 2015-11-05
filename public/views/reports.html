@@ -41,8 +41,8 @@
             </p>
         </section>
 
-        <p>NOTE: if a project was "Finished" on a particular month, but "Paid" in another month, it will appear on the month that was "Paid".</p>
-        <p><b>Finished, but Not Paid: {{ notPaid }}</b></p>
+        <p class="text-danger"><b>NOTE:</b> if a project was "Finished" on a particular month, but "Paid" in another month, it will appear on the month that was "Paid".</p>
+        <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
 
         <br><br>
 
