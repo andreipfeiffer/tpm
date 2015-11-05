@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3 class="modal-title">Projects from {{monthData.month}}</h3>
+</div>
+<div class="modal-body">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="20"></th>
+                <th class="text-uppercase">Project</th>
+                <th class="text-uppercase">Client</th>
+                <th width="160" class="text-uppercase text-right">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="project in monthData.projects">
+                <td>{{$index + 1}}.</td>
+                <td><b>{{project.name}}</b></td>
+                <td>{{project.clientName}}</td>
+                <td class="text-right">{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer text-left">
+    <button class="btn btn-default" ng-click="$dismiss()">Close</button>
+</div>

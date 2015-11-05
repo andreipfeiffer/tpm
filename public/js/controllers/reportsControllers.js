@@ -6,10 +6,11 @@
 
         .controller('ReportsController', [
             '$scope',
+            '$modal',
             '$http',
             'feedback',
             'ReportsService',
-            function($scope, $http, feedback, Reports) {
+            function($scope, $modal, $http, feedback, Reports) {
 
                 $scope.isLoading = true;
                 $scope.projects  = [];
@@ -28,6 +29,27 @@
 
                     feedback.dismiss();
                 });
+
+                var ModalInstanceCtrl = function ($scope, $modalInstance, monthData) {
+                    $scope.monthData = angular.extend({}, monthData);
+                };
+
+                $scope.showProjects = function() {
+
+                    var monthData = this.month;
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/reports-show-projects.html',
+                        controller : ModalInstanceCtrl,
+                        resolve    : {
+                            monthData: function() {
+                                return monthData;
+                            }
+                        }
+                    });
+
+                    return modalInstance;
+                };
 
                 function groupByMonth(projects) {
                     var res = [];

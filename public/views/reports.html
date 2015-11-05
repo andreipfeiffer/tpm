@@ -28,14 +28,11 @@
                             <strong>{{month.month}}</strong>
                         </td>
                         <td>
-                            {{month.projects.length}}
+                            <a href="" ng-click="showProjects()">{{month.projects.length}} projects</a>
                         </td>
                         <td>
                             {{month.price}}
                         </td>
-                        <!-- <td>
-                            <span ng-repeat="project in month.projects">{{ project.name }} | </span>
-                        </td> -->
                     </tr>
                 </tbody>
             </table>
