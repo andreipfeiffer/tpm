@@ -9,10 +9,6 @@
 
     <div ng-hide="isLoading">
 
-        <p>!NOTE: if a project was "finished" on a particular month, but "paid" during the next month, it will appear in the NEXT month.</p>
-        <p>!NOTE: if a project was "finished" but not "paid", it will be added on the month that it was "finished".</p>
-        <p>Finished, but Not Paid: {{ notPaid }}</p>
-
         <section>
             <table class="table table-hover table-tpm">
                 <thead>
@@ -41,6 +37,9 @@
                 The are no Reports to display
             </p>
         </section>
+
+        <p>NOTE: if a project was "Finished" on a particular month, but "Paid" in another month, it will appear on the month that was "Paid".</p>
+        <p><b>Finished, but Not Paid: {{ notPaid }}</b></p>
 
         <br><br>
 
