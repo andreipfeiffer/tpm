@@ -68,8 +68,10 @@
                             month = res[res.length - 1];
                         }
 
-                        month['price'] += getPrice( project );
-                        month.projects.push( project );
+                        if ( project.status === 'paid' ) {
+                            month['price'] += getPrice( project );
+                            month.projects.push( project );
+                        }
                     });
 
                     return res;
