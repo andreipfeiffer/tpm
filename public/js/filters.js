@@ -28,8 +28,8 @@
             };
         })
 
-        .filter('filterByClientName', function() {
-            return function(arr, name) {
+        .filter('filterByClientId', function() {
+            return function(arr, id) {
 
                 if ( !angular.isArray(arr) ) {
                     return [];
@@ -37,10 +37,10 @@
 
                 return arr.filter(function(item) {
                     return (function() {
-                        if ( !name ) {
+                        if ( !id ) {
                             return true;
                         } else {
-                            return (item.clientName === name);
+                            return (parseInt(item.idClient) === parseInt(id));
                         }
                     })();
                 });

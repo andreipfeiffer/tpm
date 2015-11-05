@@ -18,14 +18,14 @@
                         ng-class="{active: filterStatus == ''}"
                         ng-click="setFilterStatus('')">
                         All<span class="hidden-xs"> active projects</span>
-                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: '' | filterByClientName: filterClient).length"></span>
+                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: '' | filterByClientId: filterClient).length"></span>
                     </button>
                     <button type="button" class="btn btn-default btn-sm text-capitalize"
                         ng-repeat="status in filterStatusOptions"
                         ng-class="{active: filterStatus == status}"
                         ng-click="setFilterStatus(status)">
                         {{status}}
-                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: status | filterByClientName: filterClient).length"></span>
+                        <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: status | filterByClientId: filterClient).length"></span>
                     </button>
                     <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
                         ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
@@ -37,7 +37,7 @@
                 <select2
                     placeholder="Filter by client"
                     ng-model="filterClient"
-                    ng-options="client.name as client.name for client in clientsList"
+                    ng-options="client.id as client.name for client in clientsList"
                     options="{
                         allowClear: true
                     }"
@@ -66,7 +66,7 @@
                         project in projectsList |
                             orderBy:'remainingDays' |
                             filterByProjectStatus:filterStatus |
-                            filterByClientName:filterClient
+                            filterByClientId:filterClient
                     "
                     ng-class="{
                         'cell-border--danger':
@@ -124,7 +124,7 @@
 
         <p class="alert alert-warning text-center" ng-show="
             !isLoading &&
-            !(projectsList | filterByProjectStatus: filterStatus | filterByClientName: filterClient).length
+            !(projectsList | filterByProjectStatus: filterStatus | filterByClientId: filterClient).length
         ">
             The are no <b>{{ filterStatus === '' ? 'active' : filterStatus }}</b> projects to display
         </p>
