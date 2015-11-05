@@ -22,6 +22,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Page transitions
 * Build script, for client
 * Log server errors
+* Reports section
 
 ## Short term To-dos
 
@@ -32,7 +33,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 ## Future Goals
 
 * Custom bootstrap theme
-* Reports
 * Create new accounts
 * Recover password
 * Close account
