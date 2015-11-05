@@ -1,7 +1,7 @@
 {
   "name": "tpm",
   "description": "tiny Project Manager",
-  "version": "0.6.12",
+  "version": "0.7.0",
   "authors": [
     "Andrei Pfeiffer <andrei@upsidedown.ro>"
   ],
