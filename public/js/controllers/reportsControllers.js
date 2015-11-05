@@ -176,7 +176,7 @@
 
                     // if first "year" didn't start at January, fill with empty data
                     for (var i = (12 - res.data[0].length); i > 0; i -= 1) {
-                        res.data[0].unshift( 0 );
+                        res.data[0].unshift( null );
                     }
 
                     // reverse data, so the current year is first
