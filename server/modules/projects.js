@@ -21,11 +21,19 @@ module.exports = function(knex) {
     }
 
     function getAllProjects(idUser) {
-        return knex('projects')
-            .select()
+        return knex
+            .select('*')
+            .from('projects')
+            // @todo not very solid
+            // because it will select the first occurence in 'projects_status_log'
+            // but it should select the last
+            .leftJoin('projects_status_log', function() {
+                this.on('projects.id', '=', 'projects_status_log.idProject')
+                    .andOn('projects.status', '=', 'projects_status_log.status')
+            })
             .where({
-                'idUser': idUser,
-                'isDeleted': '0'
+                'projects.idUser'   : idUser,
+                'projects.isDeleted': '0'
             });
     }
 
