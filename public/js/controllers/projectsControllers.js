@@ -86,9 +86,14 @@
                         project.dateEstimatedFormatted = moment(project.dateEstimated).format('ddd, DD MMM');
 
                         // set passed time, for inactive projects
-                        var passed = TPM.utils.getRemainingTime( project.date );
-                        project.passedText = passed.textTotal;
-                        project.passedDays = Math.abs( Math.round( passed.daysWork ) );
+                        if (
+                            project.date &&
+                            $scope.filterInactiveStatusOptions.indexOf( project.status ) > -1
+                        ) {
+                            var passed = TPM.utils.getRemainingTime( project.date );
+                            project.passedText = passed.textTotal;
+                            project.passedDays = Math.abs( Math.round( passed.daysWork ) );
+                        }
                     });
 
                     return arr;
