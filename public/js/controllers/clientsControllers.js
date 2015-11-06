@@ -6,7 +6,7 @@
 
         .controller('ClientsListController', [
             '$scope',
-            '$modal',
+            '$uibModal',
             'ClientsService',
             'screenSize',
             'feedback',

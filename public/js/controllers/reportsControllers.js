@@ -6,7 +6,7 @@
 
         .controller('ReportsController', [
             '$scope',
-            '$modal',
+            '$uibModal',
             '$http',
             'feedback',
             'ReportsService',
@@ -98,7 +98,7 @@
                         if ( !month ) {
                             res.push({
                                 price   : 0,
-                                month   : moment(project.month + '-01').format('MMMM YYYY'),
+                                month   : moment(project.month + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
                                 monthRaw: project.month,
                                 projects: []
                             });
