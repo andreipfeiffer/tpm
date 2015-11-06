@@ -1,7 +1,7 @@
 <section>
 
     <header class="clearfix row">
-        <h1 class="pull-left col-sm-8">Reports</h1>
+        <h1 class="pull-left col-sm-8">Income per month</h1>
     </header>
 
     <hr>
@@ -41,13 +41,14 @@
             </p>
         </section>
 
-        <p class="text-danger"><b>NOTE:</b> if a project was "Finished" on a particular month, but "Paid" in another month, it will appear on the month that was "Paid".</p>
+        <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
         <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
 
         <br><br>
 
         <section>
-            <h2>Most income per client</h2>
+            <h1>Most income per client</h1>
+            <br>
             <table class="table table-hover table-tpm">
                 <thead>
                     <tr>
@@ -79,7 +80,8 @@
         <br><br>
 
         <section>
-            <h2>Most projects per client</h2>
+            <h1>Most projects per client</h1>
+            <br>
             <table class="table table-hover table-tpm">
                 <thead>
                     <tr>
