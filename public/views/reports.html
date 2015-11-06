@@ -27,7 +27,7 @@
                             <strong>{{month.month}}</strong>
                         </td>
                         <td>
-                            <a href="" ng-click="showProjects(month.month, month.projects)">{{month.projects.length}} projects</a>
+                            <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
                         </td>
                         <td>
                             {{month.price}}
@@ -63,7 +63,7 @@
                             <strong>{{client.name}}</strong>
                         </td>
                         <td>
-                            <a href="" ng-click="showProjects(client.name, client.projects)">{{client.projects.length}} projects</a>
+                            <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                         </td>
                         <td>
                             {{client.price}}
@@ -96,7 +96,7 @@
                             <strong>{{client.name}}</strong>
                         </td>
                         <td>
-                            <a href="" ng-click="showProjects(client.name, client.projects)">{{client.projects.length}} projects</a>
+                            <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                         </td>
                         <td>
                             {{client.price}}
@@ -110,6 +110,17 @@
             </p>
         </section>
 
+        <br><br>
+
+        <section>
+            <h1>Price changed during project</h1>
+            <hr>
+            <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
+            <br>
+            <canvas id="doughnut" class="chart chart-doughnut" height="80"
+                chart-data="chartPrice.data" chart-labels="chartPrice.labels" chart-click="showProjectsByPriceChange">
+            </canvas>
+        </section>
     </div>
 
 </section>

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Projects from {{title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
 
@@ -9,7 +9,8 @@
                 <th width="20"></th>
                 <th class="text-uppercase">Project</th>
                 <th class="text-uppercase">Client</th>
-                <th width="160" class="text-uppercase text-right">Price</th>
+                <th width="160" class="text-uppercase text-right" ng-if="!detailedPrice">Price</th>
+                <th width="160" class="text-uppercase text-right" ng-if="detailedPrice">Final - Est.</th>
             </tr>
         </thead>
         <tbody>
@@ -17,7 +18,11 @@
                 <td>{{$index + 1}}.</td>
                 <td><b>{{project.name}}</b></td>
                 <td>{{project.clientName}}</td>
-                <td class="text-right">{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</td>
+
+                <td class="text-right" ng-if="!detailedPrice">{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</td>
+                <td class="text-right" ng-if="detailedPrice">
+                    {{ project.priceFinal }} - {{ project.priceEstimated }} = <b class="text-danger">{{ project.priceFinal - project.priceEstimated }}</b>
+                </td>
             </tr>
         </tbody>
     </table>

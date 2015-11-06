@@ -26,23 +26,26 @@
 
                 Reports.query().$promise.then(function(data) {
 
+                    $scope.projectsData      = data;
                     $scope.projects          = groupByMonth( data );
                     $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
                     $scope.clientsByPrice    = groupByClient( data ).sort( sortClientsByPrice );
                     $scope.notPaid           = getNotPaid( data );
                     $scope.isLoading         = false;
 
-                    $scope.chart = getChartData( $scope.projects );
+                    $scope.chart      = getChartData( $scope.projects );
+                    $scope.chartPrice = getPriceChartData( data );
 
                     feedback.dismiss();
                 });
 
                 var ModalInstanceCtrl = function ($scope, $modalInstance, data) {
-                    $scope.data  = angular.extend({}, data.list);
-                    $scope.title = data.title;
+                    $scope.data          = angular.extend({}, data.list);
+                    $scope.title         = data.title;
+                    $scope.detailedPrice = data.detailedPrice;
                 };
 
-                $scope.showProjects = function(title, list) {
+                $scope.showProjects = function(title, list, detailedPrice) {
 
                     var modalInstance = $modal.open({
                         templateUrl: 'views/reports-show-projects.html',
@@ -50,14 +53,40 @@
                         resolve    : {
                             data : function() {
                                 return {
-                                    list : list,
-                                    title: title
+                                    list         : list,
+                                    title        : title,
+                                    detailedPrice: detailedPrice
                                 };
                             }
                         }
                     });
 
                     return modalInstance;
+                };
+
+                $scope.showProjectsByPriceChange = function(point) {
+                    var data = point[0],
+                        priceChange, projectsList, detailedPrice;
+
+                    if ( !data ) { return; }
+
+                    var labelIndex = $scope.chartPrice.labels.indexOf( data.label );
+                    if ( labelIndex > -1 ) {
+                        // magic number here
+                        // the labels are set in the same order
+                        // as the type param of the getProjectsByPriceChange()
+                        // all we need is to extract 1, so we get to -1, 0, 1
+                        // instead of 0, 1, 2
+                        priceChange   = labelIndex - 1;
+                        projectsList  = getProjectsByPriceChange( priceChange );
+                        detailedPrice = (priceChange === 0) ? false : true;
+
+                        $scope.showProjects(
+                            'Projects with ' + data.label.toLowerCase(),
+                            projectsList,
+                            detailedPrice
+                        );
+                    }
                 };
 
                 function groupByMonth(projects) {
@@ -185,6 +214,43 @@
 
                     return res;
                 }
+
+                function getPriceChartData() {
+                    return {
+                        data  : [
+                            getProjectsByPriceChange( -1 ).length,
+                            getProjectsByPriceChange( 0 ).length,
+                            getProjectsByPriceChange( 1 ).length
+                        ],
+                        labels: ['Price lowered', 'Price not changed', 'Price raised']
+                    };
+                }
+
+                function getProjectsByPriceChange(type) {
+                    // type = -1; // price was lowered
+                    // type =  1; // price was raised
+                    // type =  0; // price was not changed
+
+                    return $scope.projectsData.filter(function(project) {
+                        var priceEstimated = parseInt( project.priceEstimated ),
+                            priceFinal     = parseInt( project.priceFinal );
+
+                        if ( project.status !== 'paid' ) {
+                            return false;
+                        }
+
+                        if ( type === 0 ) {
+                            return ( priceEstimated === priceFinal || priceFinal === 0 || priceEstimated === 0 );
+                        }
+                        if ( type === 1 ) {
+                            return ( priceEstimated < priceFinal && priceEstimated > 0 );
+                        }
+                        if ( type === -1 ) {
+                            return ( priceEstimated > priceFinal && priceFinal > 0 )
+                        }
+                    });
+                }
+
             }
         ]);
 
