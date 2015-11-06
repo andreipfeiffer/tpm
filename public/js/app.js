@@ -99,9 +99,11 @@ var TPM = TPM || {};
 
         // Configure all charts
         ChartJs.setOptions({
-            colours   : ['#1eae32', '#1693f4', '#ed9c1c'],
             responsive: true,
             animation : false
+        });
+        ChartJs.setOptions('Line', {
+            colours   : ['#1eae32', '#1693f4', '#ed9c1c'],
         });
 
     }]).run(function($rootScope, $location, $http, SessionService, feedback) {
