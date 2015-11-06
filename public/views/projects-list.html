@@ -71,18 +71,34 @@
                     "
                     ng-class="{
                         'cell-border--danger':
-                            (filterActiveStatusOptions.indexOf(project.status) > -1) &&
-                            (project.remainingDays < 0),
+                            (
+                                filterActiveStatusOptions.indexOf(project.status) > -1 &&
+                                project.remainingDays < 0
+                            ) || (
+                                project.status == 'finished' &&
+                                project.passedDays > 21
+                            ),
                         'cell-border--warning':
-                            (filterActiveStatusOptions.indexOf(project.status) > -1) &&
-                            (project.remainingDays <= project.days)
+                            (
+                                filterActiveStatusOptions.indexOf(project.status) > -1 &&
+                                project.remainingDays <= project.days
+                            ) || (
+                                project.status == 'finished' &&
+                                project.passedDays > 7
+                            )
                     }"
                 >
                     <td>
                         <b>{{project.name}}</b><br>
                         {{project.clientName}}
                     </td>
-                    <td ng-show="!showActions" class="text-capitalize">{{project.status}}</td>
+                    <td ng-show="!showActions" class="text-capitalize">
+                        {{project.status}}
+                        <small class="text-muted" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) > -1">
+                            <br>{{project.passedText}}
+                        </small>
+                        
+                    </td>
                     <td class="b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
                         {{project.dateEstimatedFormatted}}
                         <small class="text-muted">

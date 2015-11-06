@@ -78,12 +78,17 @@
                             project.clientName = getClientById( project.idClient ).name;
                         }
 
-                        // set remaining time
+                        // set remaining time, for active projects
                         var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
                         project.remainingDays = Math.round( remaining.daysWork );
                         project.remainingText = remaining.textTotal;
                         project.remainingWeekendDays = remaining.weekendDays;
                         project.dateEstimatedFormatted = moment(project.dateEstimated).format('ddd, DD MMM');
+
+                        // set passed time, for inactive projects
+                        var passed = TPM.utils.getRemainingTime( project.date );
+                        project.passedText = passed.textTotal;
+                        project.passedDays = Math.abs( Math.round( passed.daysWork ) );
                     });
 
                     return arr;
