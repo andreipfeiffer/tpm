@@ -29,7 +29,7 @@ module.exports = function(knex) {
             // but it should select the last
             .leftJoin('projects_status_log', function() {
                 this.on('projects.id', '=', 'projects_status_log.idProject')
-                    .andOn('projects.status', '=', 'projects_status_log.status')
+                    .andOn('projects.status', '=', 'projects_status_log.status');
             })
             .where({
                 'projects.idUser'   : idUser,
