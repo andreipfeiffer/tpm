@@ -28,8 +28,10 @@ module.exports = function() {
     });
 
     this.Then(/^I should be redirected to "([^"]*)" page$/, function (page, next) {
-        expect( browser.getLocationAbsUrl() ).to.eventually.equal('/' + page);
-        next();
+        browser.getLocationAbsUrl().then(function(url) {
+            expect( url ).to.equal('/' + page);
+            next();
+        });
     });
 
     this.When(/^I enter incorrect credentials$/, function (next) {
