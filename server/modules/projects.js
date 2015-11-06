@@ -131,7 +131,8 @@ module.exports = function(knex) {
                 days          : req.body.days,
                 priceEstimated: req.body.priceEstimated,
                 priceFinal    : req.body.priceFinal,
-                dateAdded     : req.body.dateAdded,
+                // the dateAdded should be set only when added, not on edit
+                // dateAdded     : req.body.dateAdded,
                 dateEstimated : req.body.dateEstimated,
                 description   : req.body.description
             };
