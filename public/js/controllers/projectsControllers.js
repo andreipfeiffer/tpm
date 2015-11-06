@@ -104,6 +104,14 @@
                     $scope.filterStatus = filter;
                     tpmCache.put('filterStatus', filter);
                 };
+
+                $scope.orderCriteria = function() {
+                    if ( $scope.filterInactiveStatusOptions.indexOf( $scope.filterStatus ) > -1 ) {
+                        return 'passedDays';
+                    }
+
+                    return 'remainingDays';
+                };
             }
         ])
 

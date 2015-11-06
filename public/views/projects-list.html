@@ -65,9 +65,9 @@
                     class="cell-border"
                     ng-repeat="
                         project in projectsList |
-                            orderBy:'remainingDays' |
+                            orderBy              : orderCriteria() |
                             filterByProjectStatus:filterStatus |
-                            filterByClientId:filterClient
+                            filterByClientId     :filterClient
                     "
                     ng-class="{
                         'cell-border--danger':
