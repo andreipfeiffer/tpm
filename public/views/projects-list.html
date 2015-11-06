@@ -56,6 +56,7 @@
                     <th width="160" class="text-uppercase">Status</th>
                     <th width="110" class="text-uppercase">Deadline</th>
                     <th width="160" class="hidden-xs text-uppercase">Work Days</th>
+                    <th width="100" class="hidden-xs hidden-sm text-uppercase">Price</th>
                     <th></th>
                 </tr>
             </thead>
@@ -93,6 +94,9 @@
                         <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
                             <br>{{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
                         </small>
+                    </td>
+                    <td ng-show="!showActions" class="hidden-xs hidden-sm b-one-line">
+                        {{project.priceFinal > 0 ? project.priceFinal : project.priceEstimated}}
                     </td>
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 4 : 1 }}">
                         <div class="btn-group b-one-line" ng-show="!isEnabledToggleActions || showActions">
