@@ -9,9 +9,9 @@
 
     <div ng-hide="isLoading">
 
-        <tabset>
+        <uib-tabset>
 
-            <tab heading="Income per month">
+            <uib-tab heading="Income per month">
                 <section>
                     <br><br>
                     <h2>Income per month</h2>
@@ -53,9 +53,9 @@
                     <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
                     <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
                 </section>
-            </tab>
+            </uib-tab>
 
-            <tab heading="Price evolution per project">
+            <uib-tab heading="Price evolution per project">
                 <section>
                     <br><br>
                     <h2>Price evolution per project</h2>
@@ -68,9 +68,9 @@
                         chart-click="showProjectsByPriceChange">
                     </canvas>
                 </section>
-            </tab>
+            </uib-tab>
 
-            <tab heading="Most income per client">
+            <uib-tab heading="Most income per client">
                 <section>
                     <br><br>
                     <h2>Most income per client</h2>
@@ -102,9 +102,9 @@
                         The are no Reports to display
                     </p>
                 </section>
-            </tab>
+            </uib-tab>
 
-            <tab heading="Most projects per client">
+            <uib-tab heading="Most projects per client">
                 <section>
                     <br><br>
                     <h2>Most projects per client</h2>
@@ -136,9 +136,9 @@
                         The are no Reports to display
                     </p>
                 </section>
-            </tab>
+            </uib-tab>
 
-        </tabset>
+        </uib-tabset>
 
     </div>
 
