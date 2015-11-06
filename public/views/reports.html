@@ -1,7 +1,7 @@
 <section>
 
     <header class="clearfix row">
-        <h1 class="pull-left col-sm-8">Income per month</h1>
+        <h1 class="pull-left col-sm-8">Reports</h1>
     </header>
 
     <hr>
@@ -9,124 +9,137 @@
 
     <div ng-hide="isLoading">
 
-        <canvas height="70" id="line" class="chart chart-line"
-            chart-data="chartMonth.data"
-            chart-labels="chartMonth.labels"
-            chart-series="chartMonth.series"
-            chart-legend="true">
-        </canvas>
+        <tabset>
 
-        <section>
-            <table class="table table-hover table-tpm">
-                <thead>
-                    <tr>
-                        <th class="text-uppercase">Month</th>
-                        <th width="160" class="text-uppercase">Projects</th>
-                        <th width="160" class="text-uppercase">Income</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="month in months">
-                        <td>
-                            <strong>{{month.month}}</strong>
-                        </td>
-                        <td>
-                            <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
-                        </td>
-                        <td>
-                            {{month.price}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <tab heading="Income per month">
+                <section>
+                    <br><br>
+                    <h2>Income per month</h2>
+                    <br>
+                    <canvas height="70" id="line" class="chart chart-line"
+                        chart-data="chartMonth.data"
+                        chart-labels="chartMonth.labels"
+                        chart-series="chartMonth.series"
+                        chart-legend="true">
+                    </canvas>
 
-            <p class="alert alert-warning text-center" ng-show="!isLoading && !projects.length">
-                The are no Reports to display
-            </p>
-        </section>
+                    <table class="table table-hover table-tpm">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase">Month</th>
+                                <th width="160" class="text-uppercase">Projects</th>
+                                <th width="160" class="text-uppercase">Income</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="month in months">
+                                <td>
+                                    <strong>{{month.month}}</strong>
+                                </td>
+                                <td>
+                                    <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
+                                </td>
+                                <td>
+                                    {{month.price}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-        <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
-        <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
+                    <p class="alert alert-warning text-center" ng-show="!isLoading && !projects.length">
+                        The are no Reports to display
+                    </p>
 
-        <br><br>
+                    <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
+                    <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
+                </section>
+            </tab>
 
-        <section>
-            <h1>Most income per client</h1>
-            <br>
-            <table class="table table-hover table-tpm">
-                <thead>
-                    <tr>
-                        <th class="text-uppercase">Client</th>
-                        <th width="160" class="text-uppercase">Projects</th>
-                        <th width="160" class="text-uppercase">Income</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="client in clientsByPrice | limitTo: 10">
-                        <td>
-                            <strong>{{client.name}}</strong>
-                        </td>
-                        <td>
-                            <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
-                        </td>
-                        <td>
-                            {{client.price}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <tab heading="Price evolution per project">
+                <section>
+                    <br><br>
+                    <h2>Price evolution per project</h2>
+                    <br>
+                    <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
+                    <br>
+                    <canvas id="doughnut" class="chart chart-doughnut" height="80"
+                        chart-data="chartPrice.data"
+                        chart-labels="chartPrice.labels"
+                        chart-click="showProjectsByPriceChange">
+                    </canvas>
+                </section>
+            </tab>
 
-            <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByPrice.length">
-                The are no Reports to display
-            </p>
-        </section>
+            <tab heading="Most income per client">
+                <section>
+                    <br><br>
+                    <h2>Most income per client</h2>
+                    <br>
+                    <table class="table table-hover table-tpm">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase">Client</th>
+                                <th width="160" class="text-uppercase">Projects</th>
+                                <th width="160" class="text-uppercase">Income</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="client in clientsByPrice | limitTo: 10">
+                                <td>
+                                    <strong>{{client.name}}</strong>
+                                </td>
+                                <td>
+                                    <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
+                                </td>
+                                <td>
+                                    {{client.price}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-        <br><br>
+                    <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByPrice.length">
+                        The are no Reports to display
+                    </p>
+                </section>
+            </tab>
 
-        <section>
-            <h1>Most projects per client</h1>
-            <br>
-            <table class="table table-hover table-tpm">
-                <thead>
-                    <tr>
-                        <th class="text-uppercase">Client</th>
-                        <th width="160" class="text-uppercase">Projects</th>
-                        <th width="160" class="text-uppercase">Income</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="client in clientsByProjects | limitTo: 10">
-                        <td>
-                            <strong>{{client.name}}</strong>
-                        </td>
-                        <td>
-                            <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
-                        </td>
-                        <td>
-                            {{client.price}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <tab heading="Most projects per client">
+                <section>
+                    <br><br>
+                    <h2>Most projects per client</h2>
+                    <br>
+                    <table class="table table-hover table-tpm">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase">Client</th>
+                                <th width="160" class="text-uppercase">Projects</th>
+                                <th width="160" class="text-uppercase">Income</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="client in clientsByProjects | limitTo: 10">
+                                <td>
+                                    <strong>{{client.name}}</strong>
+                                </td>
+                                <td>
+                                    <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
+                                </td>
+                                <td>
+                                    {{client.price}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByProjects.length">
-                The are no Reports to display
-            </p>
-        </section>
+                    <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByProjects.length">
+                        The are no Reports to display
+                    </p>
+                </section>
+            </tab>
 
-        <br><br>
+        </tabset>
 
-        <section>
-            <h1>Price evolution per project</h1>
-            <hr>
-            <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
-            <br>
-            <canvas id="doughnut" class="chart chart-doughnut" height="80"
-                chart-data="chartPrice.data"
-                chart-labels="chartPrice.labels"
-                chart-click="showProjectsByPriceChange">
-            </canvas>
-        </section>
     </div>
 
 </section>
