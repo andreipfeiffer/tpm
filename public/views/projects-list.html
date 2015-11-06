@@ -53,9 +53,9 @@
             <thead>
                 <tr>
                     <th width="50%" class="text-uppercase"><span class="hidden-xs">Project </span>Name</th>
-                    <th class="text-uppercase">Status</th>
-                    <th width="100" class="hidden-xs text-uppercase">Deadline</th>
-                    <th width="160" class="text-uppercase"><span class="hidden-xs">Work</span> Days</th>
+                    <th width="160" class="text-uppercase">Status</th>
+                    <th width="110" class="text-uppercase">Deadline</th>
+                    <th width="160" class="hidden-xs text-uppercase">Work Days</th>
                     <th></th>
                 </tr>
             </thead>
@@ -84,7 +84,7 @@
                     <td ng-show="!showActions" class="text-capitalize">{{project.status}}</td>
                     <td ng-show="!showActions" class="b-one-line">
                         {{project.dateEstimatedFormatted}}
-                        <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
+                        <small class="text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
                             <br>{{project.remainingText}}
                         </small>
                     </td>
