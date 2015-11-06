@@ -138,16 +138,16 @@
 
                 // project model
                 $scope.project = {
-                    name: '',
-                    idClient: 0,
-                    newClientName: '',
+                    name          : '',
+                    idClient      : 0,
+                    newClientName : '',
                     priceEstimated: '',
-                    priceFinal: '',
-                    days: '',
-                    status: TPM.utils.statusList[0],
-                    dateEstimated: '',
-                    dateAdded: '',
-                    description: ''
+                    priceFinal    : '',
+                    days          : '',
+                    status        : TPM.utils.statusList[0],
+                    dateEstimated : '',
+                    dateAdded     : '',
+                    description   : ''
                 };
 
                 $scope.clientsList = Clients.query();
@@ -192,21 +192,21 @@
             'feedback',
             function($scope, $q, $routeParams, $filter, $location, Projects, Clients, feedback) {
 
-                $scope.formAction = 'Edit';
-                $scope.formSubmit = $scope.formAction + ' project';
-                $scope.dateSettings = dateSettings;
+                $scope.formAction            = 'Edit';
+                $scope.formSubmit            = $scope.formAction + ' project';
+                $scope.dateSettings          = dateSettings;
                 $scope.selectedDateEstimated = new Date();
-                $scope.isDatePickerOpened = false;
-                $scope.statusList = TPM.utils.statusList;
-                $scope.isLoading = false;
+                $scope.isDatePickerOpened    = false;
+                $scope.statusList            = TPM.utils.statusList;
+                $scope.isLoading             = false;
 
                 $q.all([
                     Projects.get({ id: $routeParams.id }).$promise,
                     Clients.query().$promise
                 ]).then(function(data) {
 
-                    $scope.project = data[0];
-                    $scope.clientsList = data[1];
+                    $scope.project               = data[0];
+                    $scope.clientsList           = data[1];
                     $scope.selectedDateEstimated = $scope.project.dateEstimated;
 
                 });
@@ -215,12 +215,12 @@
                     feedback.load();
 
                     // default value is 'null', so convert it to int
-                    $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
+                    $scope.project.idClient      = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
-                    $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
-                    $scope.isLoading = true;
-                    $scope.formSubmit = 'Please wait ...';
+                    $scope.project.dateAdded     = $filter('date')(new Date(), TPM.settings.dateFormat);
+                    $scope.isLoading             = true;
+                    $scope.formSubmit            = 'Please wait ...';
 
                     Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(function() {
                         $location.path('/projects');
