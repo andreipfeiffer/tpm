@@ -246,7 +246,7 @@
                             return ( priceEstimated < priceFinal && priceEstimated > 0 );
                         }
                         if ( type === -1 ) {
-                            return ( priceEstimated > priceFinal && priceFinal > 0 )
+                            return ( priceEstimated > priceFinal && priceFinal > 0 );
                         }
                     });
                 }
