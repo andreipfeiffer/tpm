@@ -24,12 +24,6 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Log server errors
 * Reports section
 
-## Short term To-dos
-
-* Sort projects based on various criteria
-* Projects "finished" but not "payed", that passed X days
-* Handle all server errors on client: 4xx (verbosely) and 5xx (generic, silent)
-
 ## Future Goals
 
 * Custom bootstrap theme
