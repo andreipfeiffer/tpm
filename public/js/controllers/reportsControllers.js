@@ -12,9 +12,9 @@
             'ReportsService',
             function($scope, $modal, $http, feedback, Reports) {
 
-                $scope.isLoading = true;
-                $scope.projects  = [];
-                $scope.chart     = {
+                $scope.isLoading  = true;
+                $scope.projects   = [];
+                $scope.chartMonth = {
                     data  : [
                         [0]
                     ],
@@ -26,14 +26,14 @@
 
                 Reports.query().$promise.then(function(data) {
 
-                    $scope.projectsData      = data;
-                    $scope.projects          = groupByMonth( data );
+                    $scope.projects          = data;
+                    $scope.months            = groupByMonth( data );
                     $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
                     $scope.clientsByPrice    = groupByClient( data ).sort( sortClientsByPrice );
                     $scope.notPaid           = getNotPaid( data );
                     $scope.isLoading         = false;
 
-                    $scope.chart      = getChartData( $scope.projects );
+                    $scope.chartMonth = getChartData( $scope.months );
                     $scope.chartPrice = getPriceChartData( data );
 
                     feedback.dismiss();
@@ -231,7 +231,7 @@
                     // type =  1; // price was raised
                     // type =  0; // price was not changed
 
-                    return $scope.projectsData.filter(function(project) {
+                    return $scope.projects.filter(function(project) {
                         var priceEstimated = parseInt( project.priceEstimated ),
                             priceFinal     = parseInt( project.priceFinal );
 

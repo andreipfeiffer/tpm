@@ -9,8 +9,12 @@
 
     <div ng-hide="isLoading">
 
-        <canvas height="70" id="line" class="chart chart-line" chart-data="chart.data" chart-labels="chart.labels"  chart-series="chart.series" 
-    chart-legend="true"></canvas>
+        <canvas height="70" id="line" class="chart chart-line"
+            chart-data="chartMonth.data"
+            chart-labels="chartMonth.labels"
+            chart-series="chartMonth.series"
+            chart-legend="true">
+        </canvas>
 
         <section>
             <table class="table table-hover table-tpm">
@@ -22,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="month in projects">
+                    <tr ng-repeat="month in months">
                         <td>
                             <strong>{{month.month}}</strong>
                         </td>
@@ -118,7 +122,9 @@
             <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
             <br>
             <canvas id="doughnut" class="chart chart-doughnut" height="80"
-                chart-data="chartPrice.data" chart-labels="chartPrice.labels" chart-click="showProjectsByPriceChange">
+                chart-data="chartPrice.data"
+                chart-labels="chartPrice.labels"
+                chart-click="showProjectsByPriceChange">
             </canvas>
         </section>
     </div>
