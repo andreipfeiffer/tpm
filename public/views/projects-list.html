@@ -54,8 +54,8 @@
                 <tr>
                     <th width="50%" class="text-uppercase"><span class="hidden-xs">Project </span>Name</th>
                     <th width="160" class="text-uppercase">Status</th>
-                    <th width="110" class="text-uppercase">Deadline</th>
-                    <th width="160" class="hidden-xs text-uppercase">Work Days</th>
+                    <th width="110" class="text-uppercase" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) == -1">Deadline</th>
+                    <th width="160" class="hidden-xs text-uppercase" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) == -1">Work Days</th>
                     <th width="100" class="hidden-xs hidden-sm text-uppercase">Price</th>
                     <th></th>
                 </tr>
@@ -83,15 +83,15 @@
                         {{project.clientName}}
                     </td>
                     <td ng-show="!showActions" class="text-capitalize">{{project.status}}</td>
-                    <td ng-show="!showActions" class="b-one-line">
+                    <td class="b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
                         {{project.dateEstimatedFormatted}}
-                        <small class="text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
+                        <small class="text-muted">
                             <br>{{project.remainingText}}
                         </small>
                     </td>
-                    <td ng-show="!showActions" class="hidden-xs b-one-line">
+                    <td class="hidden-xs b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
                         {{project.days}} estimated
-                        <small class="hidden-xs text-muted" ng-show="filterActiveStatusOptions.indexOf(project.status) > -1">
+                        <small class="hidden-xs text-muted">
                             <br>{{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
                         </small>
                     </td>

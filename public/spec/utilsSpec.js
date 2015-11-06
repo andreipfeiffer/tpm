@@ -61,6 +61,17 @@
 
         });
 
+        describe('getInactiveStatusList', function() {
+
+            it('should return an array with the inactive statuses only', function() {
+                var arr = TPM.utils.getInactiveStatusList();
+                expect( arr.length ).toBe(2);
+                expect( arr[0] ).toEqual('finished');
+                expect( arr[1] ).toEqual('paid');
+            });
+
+        });
+
         describe('getWeekendDays', function() {
 
             it('should return the number of weekend days between 2 dates', function() {

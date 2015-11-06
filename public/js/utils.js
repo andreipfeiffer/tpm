@@ -24,6 +24,13 @@ TPM.utils = (function() {
             ];
         },
 
+        getInactiveStatusList: function() {
+            return [
+                this.statusList[2],
+                this.statusList[3]
+            ];
+        },
+
         getRemainingTime: function(_deadline) {
             var today = moment(),
                 weekendDays = this.getWeekendDays( _deadline ),
