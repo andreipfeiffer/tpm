@@ -6,7 +6,7 @@
 
         .controller('ClientsListController', [
             '$scope',
-            '$uibModal',
+            '$modal',
             'ClientsService',
             'screenSize',
             'feedback',
@@ -61,13 +61,13 @@
                     });
                 };
 
-                var ModalInstanceCtrl = function ($scope, $uibModalInstance, client) {
+                var ModalInstanceCtrl = function ($scope, $modalInstance, client) {
 
                     $scope.client = angular.extend({}, client);
 
                     // method called directly from template
                     // $scope.submit = function () {
-                    //     $uibModalInstance .close($scope.client);
+                    //     $modalInstance .close($scope.client);
                     // };
                 };
 
