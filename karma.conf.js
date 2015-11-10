@@ -22,7 +22,7 @@ module.exports = function(config) {
             '../bower_components/angular-bootstrap/ui-bootstrap.min.js',
             '../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
             '../bower_components/moment/min/moment.min.js',
-            '../bower_components/angular-ui-utils/ui-utils.min.js',
+            '../bower_components/angular-ui-validate/dist/validate.js',
             '../bower_components/angular-touch/angular-touch.min.js',
             '../bower_components/angular-media-queries/match-media.js',
             '../bower_components/angular-feedback/dist/feedback.min.js',

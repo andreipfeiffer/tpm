@@ -37,7 +37,7 @@
                 <select2
                     placeholder="Filter by client"
                     ng-model="filterClient"
-                    ng-options="client.id as client.name for client in clientsList"
+                    s2-options="client.id as client.name for client in clientsList"
                     options="{
                         allowClear: true
                     }"
