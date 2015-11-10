@@ -46,12 +46,12 @@
                 <label class="control-label" for="projectPriceFinal">Deadline:</label>
                 <div class="input-group">
                     <input type="text" class="form-control"
-                        ng-model           = "selectedDateEstimated"
-                        datepicker-popup   = "{{dateSettings.dateFormat}}"
-                        datepicker-options = "dateSettings.dateOptions"
-                        date-disabled      = "disabled(date, mode)"
-                        is-open            = "isDatePickerOpened"
-                        close-text         = "Close"
+                        ng-model             = "selectedDateEstimated"
+                        uib-datepicker-popup = "{{dateSettings.dateFormat}}"
+                        datepicker-options   = "dateSettings.dateOptions"
+                        date-disabled        = "disabled(date, mode)"
+                        is-open              = "isDatePickerOpened"
+                        close-text           = "Close"
                     />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>

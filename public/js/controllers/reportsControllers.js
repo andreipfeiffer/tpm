@@ -6,7 +6,7 @@
 
         .controller('ReportsController', [
             '$scope',
-            '$modal',
+            '$uibModal',
             '$http',
             'feedback',
             'ReportsService',
@@ -39,7 +39,7 @@
                     feedback.dismiss();
                 });
 
-                var ModalInstanceCtrl = function ($scope, $modalInstance, data) {
+                var ModalInstanceCtrl = function ($scope, $uibModalInstance, data) {
                     $scope.data          = angular.extend({}, data.list);
                     $scope.title         = data.title;
                     $scope.detailedPrice = data.detailedPrice;

@@ -36,7 +36,7 @@ TPM.utils = (function() {
                 weekendDays = this.getWeekendDays( _deadline ),
                 // deadline always starts at 00:00
                 // so we add 19 hours, to set the deadline to 7:00 PM that day
-                deadline = moment(_deadline).add('hours', 19);
+                deadline = moment(_deadline).add(19, 'hours');
 
             this.setTodayHour(today);
             var timeLeft = moment.duration(deadline.diff(today), 'ms');
@@ -61,7 +61,7 @@ TPM.utils = (function() {
                 if ( dateStart.day() === 6 || dateStart.day() === 0 ) {
                     nr += 1;
                 }
-                dateStart.add('days', 1);
+                dateStart.add(1, 'days');
             }
 
             return nr;

@@ -22,7 +22,7 @@
         };
     });
 
-    TPM.directive('clickConfirm', ['$modal', '$parse', function($modal, $parse) {
+    TPM.directive('clickConfirm', ['$uibModal', '$parse', function($modal, $parse) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
