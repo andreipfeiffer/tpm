@@ -23,6 +23,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Build script, for client
 * Log server errors
 * Reports section
+* App Status section, using websockets
 
 ## Future Goals
 
@@ -33,4 +34,3 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Login with Google
 * Timeline projects display variant
 * Offline availability
-* Websockets messaging
