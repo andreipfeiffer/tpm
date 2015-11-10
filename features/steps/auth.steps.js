@@ -51,8 +51,15 @@ module.exports = function() {
     });
 
     this.Then(/^an error message should display$/, function (next) {
-        expect( $('.fdb-error').isDisplayed() ).to.eventually.equal(true);
+        expect( $('.fdb-error').isDisplayed() ).to.eventually.equal( true );
         next();
+    });
+
+    this.Then(/^the message should read "([^"]*)"$/, function (message, next) {
+        $('.fdb').getText().then(function(text) {
+            expect( text ).to.equal( message );
+            next();
+        });
     });
 
 };

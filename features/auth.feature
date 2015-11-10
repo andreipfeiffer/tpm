@@ -15,6 +15,7 @@ Feature: User authentication
         When I enter incorrect credentials
             And I submit the login form
         Then an error message should display
+            And the message should read "Bad username or password"
 
     Scenario: Logout
         Given I am logged in
