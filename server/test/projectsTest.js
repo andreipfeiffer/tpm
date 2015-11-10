@@ -4,44 +4,44 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server = require('../../server.js'),
-        supertest = require('supertest'),
+    var server     = require('../../server.js'),
+        supertest  = require('supertest'),
         // request = supertest(server.app),
-        agent = supertest.agent(server.app),
-        db = require('../modules/db')( server.knex ),
-        projects = require('../modules/projects')( server.knex ),
-        status = require('../modules/status'),
-        utils = require('./_utils'),
-        expect = require('expect.js'),
-        sinon = require('sinon');
+        agent      = supertest.agent(server.app),
+        db         = require('../modules/db')( server.knex ),
+        projects   = require('../modules/projects')( server.knex ),
+        status     = require('../modules/status'),
+        utils      = require('./_utils'),
+        expect     = require('expect.js'),
+        sinon      = require('sinon');
 
     var getNewProject = function() {
         return {
-            idClient: 1,
-            name: 'new unit test project',
-            status: '',
-            days: 5,
+            idClient      : 1,
+            name          : 'new unit test project',
+            status        : '',
+            days          : 5,
             priceEstimated: 100,
-            priceFinal: 200,
-            dateAdded: '',
-            dateEstimated: '',
-            description: 'description',
-            newClientName: ''
+            priceFinal    : 200,
+            dateAdded     : '',
+            dateEstimated : '',
+            description   : 'description',
+            newClientName : ''
         };
     };
 
     var getNewProjectEmptyData = function() {
         return {
-            idClient: 1,
-            name: 'new unit test project',
-            status: '',
-            days: null,
+            idClient      : 1,
+            name          : 'new unit test project',
+            status        : '',
+            days          : null,
             priceEstimated: null,
-            priceFinal: null,
-            dateAdded: '',
-            dateEstimated: '',
-            description: 'description',
-            newClientName: ''
+            priceFinal    : null,
+            dateAdded     : '',
+            dateEstimated : '',
+            description   : 'description',
+            newClientName : ''
         };
     };
 
