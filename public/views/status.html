@@ -1,0 +1,35 @@
+<section>
+
+    <header class="clearfix row">
+        <h1 class="pull-left col-sm-8">App Status</h1>
+    </header>
+
+    <hr>
+    <br>
+
+    <div ng-hide="isLoading" class="animate-slideFade">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="badge">{{ status.users }}</span>
+                        Total users
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge">{{ status.projects }}</span>
+                        Total projects
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge">{{ status.income }}</span>
+                        Total income
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>

@@ -23,6 +23,12 @@ html(class='no-js', lang='en', ng-app='tpm')
     body(ng-class='{ "is-auth": isAuth }')
         .container
 
+            //- logo displayed for non-auth pages, to get back to login
+            div.text-center(ng-if='!isAuth')
+                a.login__logo(href='#login')
+                    img(src='./images/tpm-logo.svg', alt='tPM', height='28')
+
+            //- logged in navbar
             nav.navbar.navbar-default.navbar-fixed-top.ng-cloak(ng-if='isAuth', role='navigation')
                 //- Brand and toggle get grouped for better mobile display
                 .navbar-header
@@ -31,11 +37,13 @@ html(class='no-js', lang='en', ng-app='tpm')
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
+
                     a.navbar-brand(href='#dashboard')
                         img(src='./images/tpm-logo.svg', alt='tPM', height='100%')
 
+
                 //- Collect the nav links, forms, and other content for toggling
-                #navbar.collapse.navbar-collapse.clearfix(ng-controller='MenuController')
+                #navbar.collapse.navbar-collapse.clearfix(ng-if='isAuth', ng-controller='MenuController')
                     ul.nav.navbar-nav.navbar-left
                         li(ng-class='{ active: isActive("projects")}')
                             a.btn.btn-link(href='#projects', ng-click='collapseMenu()') Projects
@@ -55,10 +63,15 @@ html(class='no-js', lang='en', ng-app='tpm')
                 hr
                 div.hidden-xs
                     | Developed by&nbsp;
-                    a(href='https://github.com/andreipfeiffer', popover-placement='top', popover-trigger='mouseenter', uib-popover='Visit Github page') Andrei Pfeiffer
+                    a(href='https://github.com/andreipfeiffer', popover-placement='top', popover-trigger='mouseenter', popover='Visit Github page') Andrei Pfeiffer
                     br
                 a(href='https://github.com/andreipfeiffer/tpm/releases')
-                    samp.text-muted= 'v' + version
+                    samp
+                        small.text-muted= 'v' + version
+                | &nbsp;&nbsp;|&nbsp;&nbsp;
+                a(href='#status')
+                    samp
+                        small.text-muted= 'app status'
 
 
     script(src='bower_components/jquery/dist/jquery.min.js')
@@ -78,6 +91,8 @@ html(class='no-js', lang='en', ng-app='tpm')
     script(src='bower_components/angular-select2/dist/angular-select2.min.js')
     script(src='bower_components/Chart.js/Chart.min.js')
     script(src='bower_components/angular-chart.js/dist/angular-chart.min.js')
+    script(src='bower_components/socket.io-client/socket.io.js')
+    script(src='bower_components/angular-socket-io/socket.js')
 
     script(src='js/app.js')
     script(src='js/utils.js')
@@ -87,6 +102,7 @@ html(class='no-js', lang='en', ng-app='tpm')
     script(src='js/controllers/clientsControllers.js')
     script(src='js/controllers/settingsControllers.js')
     script(src='js/controllers/reportsControllers.js')
+    script(src='js/controllers/statusControllers.js')
     script(src='js/services.js')
     script(src='js/interceptors.js')
     script(src='js/directives.js')

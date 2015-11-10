@@ -10,6 +10,10 @@ var express      = require('express'),
     passport     = require('passport'),
     config       = require('./config'),
     favicon      = require('serve-favicon'),
+    app          = require('express')(),
+    server       = require('http').Server( app ),
+    io           = require('socket.io')( server ),
+    
     compression  = require('compression')/*,
     serveStatic  = require('serve-static')*/;
 
@@ -37,8 +41,7 @@ var allowCrossDomain = function(req, res, next) {
 };*/
 
 // Application initialization
-var app = express(),
-    env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'development';
 
 var knex = require('knex')({
     client: 'mysql',
@@ -88,19 +91,22 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 
 function start(port) {
-    app.listen(port);
+    server.listen( port );
     console.log('Express server listening on port %d in %s mode', port, env);
 }
 
 exports.start = start;
 exports.app   = app;
 exports.knex  = knex;
+exports.io    = io;
 
 // verify database structure
 require('./server/modules/db')( knex ).createDb(true).then(function() {
 
     // load routes
     require('./server/routes')(app, knex);
+
+    require('./server/modules/status').init();
 
     start(config.port);
 });

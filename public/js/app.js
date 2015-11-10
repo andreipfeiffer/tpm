@@ -15,6 +15,7 @@ var TPM = TPM || {};
         'TPM.ClientsControllers',
         'TPM.SettingsControllers',
         'TPM.ReportsControllers',
+        'TPM.StatusControllers',
 
         'TPM.Services',
         'TPM.Interceptors',
@@ -25,6 +26,7 @@ var TPM = TPM || {};
         'ui.validate',
         'rt.select2',
         'chart.js',
+        'btford.socket-io',
         'matchMedia',
         'feedback'
     ]);
@@ -84,6 +86,12 @@ var TPM = TPM || {};
             templateUrl: 'views/settings.html',
             controller: 'SettingsController',
             requireLogin: true
+        },
+
+        '/status': {
+            templateUrl: 'views/status.html',
+            controller: 'StatusController',
+            requireLogin: false
         }
     };
 

@@ -6,6 +6,7 @@ module.exports = function(knex) {
         googleClient      = require('./googleClient')( knex ),
         promise           = require('node-promise'),
         server            = require('../../server'),
+        status            = require('./status'),
         statusArr         = ['on hold', 'in progress', 'finished', 'paid'],
         statusArrActive   = [statusArr[0], statusArr[1]],
         statusArrInactive = [statusArr[2], statusArr[3]];
@@ -178,6 +179,9 @@ module.exports = function(knex) {
             }).then(function() {
                 editProject.then(function() {
                     if ( isStatusChanged ) {
+                        // emit websocket event
+                        status.updateIncome();
+
                         logStatusChange(userLogged.id, id, newStatus).then(function() {
                             return res.send(true);
                         });
@@ -218,6 +222,8 @@ module.exports = function(knex) {
             googleClient.updateTokens(req.user);
 
             knex('projects').insert(newProjectData).then(function(newProjectId) {
+                // emit websocket event
+                status.updateProjects();
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
@@ -272,6 +278,8 @@ module.exports = function(knex) {
             }).then(function() {
                 return softDeleteProject;
             }).then(function() {
+                  // emit websocket event
+                status.updateProjects();
                 return res.status(204).end();
             }).catch(function(e) {
                 var log = {

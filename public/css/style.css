@@ -29,6 +29,9 @@ h1,
 	margin: 0 auto 2em auto;
 	display: inline-block;
 }
+.login__logo:hover {
+	opacity: 0.5;
+}
 	.login__logo img {
 		height: 2em;
 	}
