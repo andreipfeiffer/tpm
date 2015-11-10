@@ -31,6 +31,8 @@ module.exports = function(config) {
             '../bower_components/angular-select2/dist/angular-select2.min.js',
             '../bower_components/Chart.js/Chart.min.js',
             '../bower_components/angular-chart.js/dist/angular-chart.min.js',
+            '../bower_components/socket.io-client/socket.io.js',
+            '../bower_components/angular-socket-io/socket.js',
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
