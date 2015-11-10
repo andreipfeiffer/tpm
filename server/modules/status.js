@@ -62,27 +62,25 @@ module.exports = (function() {
 
     return {
         init: function() {
+            var self = this;
+
             io.on('connection', function (_socket) {
 
                 // store a reference to the socket object
                 socket = _socket;
 
                 socket.on('status.get', function (/*data*/) {
-                    var nrUsers    = 0,
-                        nrProjects = 0;
-
-                    getTotalUsers().then(function(nr) {
-                        nrUsers = nr;
-                        return getTotalProjects();
-                    }).then(function(nr) {
-                        nrProjects = nr;
-                        return getTotalIncome();
-                    }).then(function(income) {
-                        socket.emit('status.data', { users: nrUsers, projects: nrProjects, income: income });
-                    });
-
+                    self.updateUsers();
+                    self.updateProjects();
+                    self.updateIncome();
                 });
 
+            });
+        },
+
+        updateUsers: function() {
+            getTotalUsers().then(function(nr) {
+                socket.emit('status.data', { users: nr });
             });
         },
 
