@@ -97,7 +97,7 @@
             <textarea id="projectDescription" ng-model="project.description" class="form-control" rows="5"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary" ng-disabled="isLoading || projectsForm.$invalid">{{formSubmit}}</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="isLoading || (!project.id && projectsForm.$invalid)">{{formSubmit}}</button>
         <a href="#projects" class="btn btn-default">Cancel</a>
     </form>
 
