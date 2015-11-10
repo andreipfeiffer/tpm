@@ -24,6 +24,12 @@ module.exports = function() {
             });
         };
 
+        this.clickLogin = function(cb) {
+            element(by.css('button[type="submit"]')).click().then(function() {
+                cb();
+            });
+        };
+
         next();
     };
 

@@ -11,6 +11,15 @@ module.exports = function() {
         // next();
     });
 
+    this.Given(/^I am logged in$/, function (next) {
+        var self = this;
+        this.logout(function() {
+            browser.get('/#/login');
+            self.setCredentials('asd', 'asdasd');
+            self.clickLogin( next );
+        });
+    });
+
     this.Given(/^I am on the "([^"]*)" page$/, function (page, next) {
         browser.get('/#/' + page);
         next();
@@ -22,9 +31,16 @@ module.exports = function() {
     });
 
     this.When(/^I submit the login form$/, function (next) {
-        element(by.css('button[type="submit"]')).click().then(function() {
-            next();
-        });
+        this.clickLogin( next );
+    });
+
+    this.When(/^I logout$/, function (next) {
+        this.logout( next );
+    });
+
+    this.When(/^I enter incorrect credentials$/, function (next) {
+        this.setCredentials('xxx', 'yyy');
+        next();
     });
 
     this.Then(/^I should be redirected to "([^"]*)" page$/, function (page, next) {
@@ -32,11 +48,6 @@ module.exports = function() {
             expect( url ).to.equal('/' + page);
             next();
         });
-    });
-
-    this.When(/^I enter incorrect credentials$/, function (next) {
-        this.setCredentials('xxx', 'yyy');
-        next();
     });
 
     this.Then(/^an error message should display$/, function (next) {

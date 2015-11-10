@@ -15,3 +15,8 @@ Feature: User authentication
         When I enter incorrect credentials
             And I submit the login form
         Then an error message should display
+
+    Scenario: Logout
+        Given I am logged in
+        When I logout
+        Then I should be redirected to "login" page
