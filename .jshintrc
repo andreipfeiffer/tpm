@@ -29,6 +29,7 @@
         "angular": true,
         "localStorage": true,
         "moment": true,
+        "io": true,
 
         // defaults
         "console": true,

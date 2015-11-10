@@ -67,10 +67,9 @@ module.exports = (function() {
                 // store a reference to the socket object
                 socket = _socket;
 
-                socket.on('status.get', function (data) {
+                socket.on('status.get', function (/*data*/) {
                     var nrUsers    = 0,
-                        nrProjects = 0,
-                        income     = 0;
+                        nrProjects = 0;
 
                     getTotalUsers().then(function(nr) {
                         nrUsers = nr;
