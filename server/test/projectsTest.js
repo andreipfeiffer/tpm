@@ -10,8 +10,10 @@
         agent = supertest.agent(server.app),
         db = require('../modules/db')( server.knex ),
         projects = require('../modules/projects')( server.knex ),
+        status = require('../modules/status'),
         utils = require('./_utils'),
-        expect = require('expect.js');
+        expect = require('expect.js'),
+        sinon = require('sinon');
 
     var getNewProject = function() {
         return {
@@ -48,6 +50,9 @@
         beforeEach(function(done) {
             this.project = getNewProject();
 
+            sinon.stub(status, 'updateIncome').returns();
+            sinon.stub(status, 'updateProjects').returns();
+
             db.createDb().then(function() {
                 return utils.authenticateUser( agent );
             }).then(function(res) {
@@ -57,6 +62,10 @@
         });
 
         afterEach(function(done) {
+
+            status.updateIncome.restore();
+            status.updateProjects.restore();
+
             db.dropDb().then(function() {
                 done();
             });
