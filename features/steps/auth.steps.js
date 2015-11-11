@@ -12,7 +12,8 @@ module.exports = function() {
     });
 
     this.Given(/^I am not logged in$/, function (next) {
-        this.logout( next );
+        browser.get('/#/login');
+        next();
     });
 
     this.Given(/^I am logged in$/, function (next) {
