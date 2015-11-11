@@ -4,33 +4,58 @@ module.exports = function(knex) {
 
     var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
-    var promise = require('node-promise'),
+    var promise  = require('node-promise'),
         deferred = promise.defer;
+
+    function getEmptyClient(nrProjects) {
+        return {
+            id         : 0,
+            name       : '-',
+            nrProjects : nrProjects,
+            description: 'Personal projects'
+        };
+    }
 
     function getClientById(id, idUser) {
         return knex('clients')
-            .select('*', knex.raw(projectsCount))
+            .select('id', 'name', 'description', knex.raw(projectsCount))
             .where({
-                'id': id,
-                'idUser': idUser,
+                'id'       : id,
+                'idUser'   : idUser,
                 'isDeleted': '0'
             });
     }
 
     function getAllClients(idUser) {
         return knex('clients')
-            .select('*', knex.raw(projectsCount))
+            .select('id', 'name', 'description', knex.raw(projectsCount))
             .where({
-                'idUser': idUser,
+                'idUser'   : idUser,
                 'isDeleted': '0'
+            });
+    }
+
+    function getProjectsWithoutClient(idUser) {
+        return knex('projects')
+            .select('id')
+            .where({
+                'idUser'   : idUser,
+                'isDeleted': '0',
+                'idClient' : '0'
             });
     }
 
     return {
         getAll: function(userLogged) {
-            var d = deferred();
+            var d = deferred(),
+                noClient;
 
-            getAllClients(userLogged.id).then(function(data) {
+            getProjectsWithoutClient( userLogged.id ).then(function(projectsNoClient) {
+                noClient = projectsNoClient;
+                return getAllClients( userLogged.id );
+            }).then(function(data) {
+                // add the empty client data at the beginning
+                data.unshift( getEmptyClient( noClient.length ) );
                 d.resolve({ status: 200, body: data });
             }).catch(function(e) {
                 d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
@@ -60,12 +85,12 @@ module.exports = function(knex) {
 
             var editClient = knex('clients')
                 .where({
-                    'id': id,
-                    'idUser': userLogged.id,
+                    'id'       : id,
+                    'idUser'   : userLogged.id,
                     'isDeleted': '0'
                 })
                 .update({
-                    name: data.name,
+                    name       : data.name,
                     description: data.description
                 });
 
@@ -84,7 +109,7 @@ module.exports = function(knex) {
             var addNewClient = knex('clients')
                 .insert({
                     idUser: userLogged.id,
-                    name: data.name
+                    name  : data.name
                 });
 
             addNewClient
@@ -106,8 +131,8 @@ module.exports = function(knex) {
 
             var softDeleteClient = knex('clients')
                 .where({
-                    'id': id,
-                    'idUser': userLogged.id,
+                    'id'       : id,
+                    'idUser'   : userLogged.id,
                     'isDeleted': '0'
                 })
                 .update({

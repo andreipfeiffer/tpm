@@ -37,7 +37,9 @@
 
                 return arr.filter(function(item) {
                     return (function() {
-                        if ( !id ) {
+                        // default value, when no filter is seleted, the value is ""
+                        // when the filter is cleared, the value is null
+                        if ( id === null || id === '' ) {
                             return true;
                         } else {
                             return (parseInt(item.idClient) === parseInt(id));
