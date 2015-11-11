@@ -79,7 +79,7 @@
                         }
 
                         // set remaining time, for active projects
-                        var remaining = TPM.utils.getRemainingTime( project.dateEstimated );
+                        var remaining = TPM.utils.getRemainingWorkTime( project.dateEstimated );
                         project.remainingDays = Math.round( remaining.daysWork );
                         project.remainingText = remaining.textTotal;
                         project.remainingWeekendDays = remaining.weekendDays;
@@ -128,7 +128,7 @@
                 Projects.get({ id: $routeParams.id }).$promise.then(function(data) {
                     $scope.project = data;
                     // set remaining time
-                    var remaining = TPM.utils.getRemainingTime( data.dateEstimated );
+                    var remaining = TPM.utils.getRemainingWorkTime( data.dateEstimated );
                     $scope.project.remainingDays = remaining.days;
                     $scope.project.remainingText = remaining.text;
                 });

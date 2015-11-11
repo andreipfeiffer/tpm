@@ -31,12 +31,12 @@ TPM.utils = (function() {
             ];
         },
 
-        getRemainingTime: function(_deadline) {
-            var today = moment(),
+        getRemainingWorkTime: function(_deadline) {
+            var today       = moment(),
                 weekendDays = this.getWeekendDays( _deadline ),
                 // deadline always starts at 00:00
                 // so we add 19 hours, to set the deadline to 7:00 PM that day
-                deadline = moment(_deadline).add(19, 'hours');
+                deadline    = moment(_deadline).add(19, 'hours');
 
             this.setTodayHour(today);
             var timeLeft = moment.duration(deadline.diff(today), 'ms');
@@ -48,10 +48,23 @@ TPM.utils = (function() {
             };
         },
 
+        getRemainingTime: function(_deadline) {
+            var today       = moment(),
+                weekendDays = this.getWeekendDays( _deadline ),
+                deadline    = moment(_deadline);
+
+            var timeLeft = moment.duration(deadline.diff(today), 'ms');
+
+            return {
+                textTotal: timeLeft.humanize(true),
+                daysWork : this.getRemainingDays(timeLeft, weekendDays)
+            };
+        },
+
         getWeekendDays: function(_deadline) {
             var nr = 0,
                 dateStart = moment(),
-                dateEnd = moment(_deadline);
+                dateEnd   = moment(_deadline);
 
             if ( dateStart.isAfter(dateEnd, 'day') ) {
                 return -1;
