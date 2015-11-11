@@ -80,19 +80,19 @@ module.exports = (function() {
 
         updateUsers: function() {
             getTotalUsers().then(function(nr) {
-                socket.emit('status.data', { users: nr });
+                socket && socket.emit('status.data', { users: nr });
             });
         },
 
         updateProjects: function() {
             getTotalProjects().then(function(nr) {
-                socket.emit('status.data', { projects: nr });
+                socket && socket.emit('status.data', { projects: nr });
             });
         },
 
         updateIncome: function() {
             getTotalIncome().then(function(income) {
-                socket.emit('status.data', { income: income });
+                socket && socket.emit('status.data', { income: income });
             });
         }
     };
