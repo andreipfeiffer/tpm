@@ -95,6 +95,10 @@
                     projects.forEach(function(project) {
                         var month = getCurrentMonth(res, project.month);
 
+                        if ( project.status !== 'paid' ) {
+                            return;
+                        }
+
                         if ( !month ) {
                             res.push({
                                 price   : 0,
@@ -106,10 +110,8 @@
                             month = res[res.length - 1];
                         }
 
-                        if ( project.status === 'paid' ) {
-                            month['price'] += getPrice( project );
-                            month.projects.push( project );
-                        }
+                        month['price'] += getPrice( project );
+                        month.projects.push( project );
                     });
 
                     return res;
@@ -120,6 +122,10 @@
 
                     projects.forEach(function(project) {
                         var client = getCurrentClient(res, project.idClient);
+
+                        if ( project.status !== 'paid' ) {
+                            return;
+                        }
 
                         if ( !client ) {
                             res.push({
@@ -185,11 +191,16 @@
                 }
 
                 function getChartData(months) {
-                    var _months = angular.extend([], months);
                     var res = {
                         data  : [],
                         series: []
                     };
+
+                    if ( !months.length ) {
+                        return res;
+                    }
+
+                    var _months = angular.extend([], months);
 
                     _months.reverse().forEach(function(month) {
                         var year = month.monthRaw.slice(0, 4);

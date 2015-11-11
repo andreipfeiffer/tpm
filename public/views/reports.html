@@ -16,42 +16,47 @@
                     <br><br>
                     <h2>Income per month</h2>
                     <br>
-                    <canvas height="70" id="line" class="chart chart-line"
-                        chart-data="chartMonth.data"
-                        chart-labels="chartMonth.labels"
-                        chart-series="chartMonth.series"
-                        chart-legend="true">
-                    </canvas>
 
-                    <table class="table table-hover table-tpm">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase">Month</th>
-                                <th width="160" class="text-uppercase">Projects</th>
-                                <th width="160" class="text-uppercase">Income</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="month in months">
-                                <td>
-                                    <strong>{{month.month}}</strong>
-                                </td>
-                                <td>
-                                    <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
-                                </td>
-                                <td>
-                                    {{month.price}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div ng-show="!isLoading && months.length">
 
-                    <p class="alert alert-warning text-center" ng-show="!isLoading && !projects.length">
-                        The are no Reports to display
+                        <canvas height="70" id="line" class="chart chart-line"
+                            ng-show="months.length > 1"
+                            chart-data="chartMonth.data"
+                            chart-labels="chartMonth.labels"
+                            chart-series="chartMonth.series"
+                            chart-legend="true">
+                        </canvas>
+
+                        <table class="table table-hover table-tpm">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase">Month</th>
+                                    <th width="160" class="text-uppercase">Projects</th>
+                                    <th width="160" class="text-uppercase">Income</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="month in months">
+                                    <td>
+                                        <strong>{{month.month}}</strong>
+                                    </td>
+                                    <td>
+                                        <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
+                                    </td>
+                                    <td>
+                                        {{month.price}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
+                        <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
+                    </div>
+
+                    <p class="alert alert-warning text-center" ng-show="!isLoading && !months.length">
+                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
                     </p>
-
-                    <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
-                    <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
                 </section>
             </uib-tab>
 
@@ -60,13 +65,20 @@
                     <br><br>
                     <h2>Price evolution per project</h2>
                     <br>
-                    <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
-                    <br>
-                    <canvas id="doughnut" class="chart chart-doughnut" height="80"
-                        chart-data="chartPrice.data"
-                        chart-labels="chartPrice.labels"
-                        chart-click="showProjectsByPriceChange">
-                    </canvas>
+                    
+                    <div ng-show="!isLoading && chartPrice.data.length">
+                        <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
+                        <br>
+                        <canvas id="doughnut" class="chart chart-doughnut" height="80"
+                            chart-data="chartPrice.data"
+                            chart-labels="chartPrice.labels"
+                            chart-click="showProjectsByPriceChange">
+                        </canvas>
+                    </div>
+
+                    <p class="alert alert-warning text-center" ng-show="!isLoading && !chartPrice.data.length">
+                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
+                    </p>
                 </section>
             </uib-tab>
 
@@ -75,7 +87,7 @@
                     <br><br>
                     <h2>Most income per client</h2>
                     <br>
-                    <table class="table table-hover table-tpm">
+                    <table class="table table-hover table-tpm" ng-show="!isLoading && clientsByPrice.length">
                         <thead>
                             <tr>
                                 <th class="text-uppercase">Client</th>
@@ -99,7 +111,7 @@
                     </table>
 
                     <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByPrice.length">
-                        The are no Reports to display
+                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
                     </p>
                 </section>
             </uib-tab>
@@ -109,7 +121,7 @@
                     <br><br>
                     <h2>Most projects per client</h2>
                     <br>
-                    <table class="table table-hover table-tpm">
+                    <table class="table table-hover table-tpm" ng-show="!isLoading && clientsByProjects.length">
                         <thead>
                             <tr>
                                 <th class="text-uppercase">Client</th>
@@ -133,7 +145,7 @@
                     </table>
 
                     <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByProjects.length">
-                        The are no Reports to display
+                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
                     </p>
                 </section>
             </uib-tab>
