@@ -6,18 +6,19 @@ var chai     = require('chai'),
 
 module.exports = function() {
 
+    // logout the user after each scenario, so we always start from login
+    this.After(function (scenario, next) {
+        this.logout( next );
+    });
+
     this.Given(/^I am not logged in$/, function (next) {
         this.logout( next );
-        // next();
     });
 
     this.Given(/^I am logged in$/, function (next) {
-        var self = this;
-        this.logout(function() {
-            browser.get('/#/login');
-            self.setCredentials('asd', 'asdasd');
-            self.clickLogin( next );
-        });
+        browser.get('/#/login');
+        this.setCredentials('asd', 'asdasd');
+        this.clickLogin( next );
     });
 
     this.When(/^I enter correct credentials$/, function (next) {
