@@ -107,6 +107,18 @@
 
         });
 
+        describe('getPassedTime', function() {
+
+            it('should return a property containing the humanized text of the passed period', function() {
+                var passedDate = moment().subtract(5, 'minutes'),
+                    passed     = TPM.utils.getPassedTime( passedDate );
+
+                expect( passed.textTotal ).toBeDefined();
+                expect( passed.textTotal ).toEqual('5 minutes ago');
+            });
+
+        });
+
     });
 
 })();
