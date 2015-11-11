@@ -92,6 +92,13 @@ schema.structure['projects_status_log'] = ''
     +     'KEY `status` (`status`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+schema.populate['projects_status_log'] = ''
+    + 'INSERT INTO `' + config.mysql.database + '`.`projects_status_log` (`idUser`, `idProject`, `status`, `date`) VALUES'
+    + '  (1, 1, \'on hold\', \'2014-07-23 16:58:56\')'
+    + ', (1, 2, \'in progress\', \'2014-08-23 17:58:56\')'
+    + ', (1, 3, \'on hold\', \'2014-09-23 18:58:56\')'
+    + ', (2, 4, \'on hold\', \'2014-09-26 19:58:56\');';
+
 schema.structure['error_log'] = ''
     + 'CREATE TABLE IF NOT EXISTS `error_log` ('
     +     '`idUser` smallint(5) unsigned NOT NULL,'
