@@ -227,12 +227,18 @@
                 }
 
                 function getPriceChartData() {
+                    var data = [],
+                        priceLowered    = getProjectsByPriceChange( -1 ).length,
+                        priceNotChanged = getProjectsByPriceChange( 0 ).length,
+                        priceRaised     = getProjectsByPriceChange( 1 ).length;
+
+                    // populate data only if we have some data
+                    if ( priceLowered || priceNotChanged || priceRaised ) {
+                        data = [priceLowered, priceNotChanged, priceRaised];
+                    }
+
                     return {
-                        data  : [
-                            getProjectsByPriceChange( -1 ).length,
-                            getProjectsByPriceChange( 0 ).length,
-                            getProjectsByPriceChange( 1 ).length
-                        ],
+                        data  : data,
                         labels: ['Price lowered', 'Price not changed', 'Price raised']
                     };
                 }
