@@ -44,7 +44,7 @@
                     </td>
 
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 2 : 1 }}">
-                        <div class="btn-group" ng-show="!isEnabledToggleActions || showActions">
+                        <div class="btn-group" ng-if="client.id" ng-show="!isEnabledToggleActions || showActions">
                             <button type="button" class="btn btn-default" ng-click="openEditDialog(client.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>

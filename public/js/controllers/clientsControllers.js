@@ -72,6 +72,9 @@
                 };
 
                 $scope.openEditDialog = function(id) {
+                    if ( !id ) {
+                        return;
+                    }
                     var modalInstance = $modal.open({
                         templateUrl: 'views/clients-edit-modal.html',
                         controller: ModalInstanceCtrl,
