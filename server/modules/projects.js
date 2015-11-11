@@ -45,9 +45,9 @@ module.exports = function(knex) {
     function logStatusChange(idUser, idProject, status) {
         return knex('projects_status_log')
             .insert({
-                idUser: idUser,
+                idUser   : idUser,
                 idProject: idProject,
-                status: status
+                status   : status
             });
     }
 
@@ -55,7 +55,7 @@ module.exports = function(knex) {
         return knex('clients')
             .insert({
                 idUser: idUser,
-                name: name
+                name  : name
             })
             .then(function(clients) {
                 return knex('projects')
@@ -68,7 +68,7 @@ module.exports = function(knex) {
         return knex('projects')
             .select()
             .where({
-                'idUser': userId,
+                'idUser'   : userId,
                 'isDeleted': '0'
             })
             .andWhere('googleEventId', '!=', '')
@@ -105,7 +105,7 @@ module.exports = function(knex) {
                 var log = {
                     idUser: userLogged.id,
                     source: 'projects.getAll',
-                    error: e
+                    error : e
                 };
                 server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});
@@ -123,7 +123,7 @@ module.exports = function(knex) {
                 var log = {
                     idUser: userLogged.id,
                     source: 'projects.getById',
-                    error: e
+                    error : e
                 };
                 server.app.emit('logError', log);
                 return res.status(503).send({ error: 'Database error: ' + e.code});
