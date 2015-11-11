@@ -148,7 +148,7 @@
                 function getNotPaid(projects) {
                     var val = 0;
                     projects.forEach(function(project) {
-                        if ( project.status !== 'paid' ) {
+                        if ( project.status === 'finished' ) {
                             val += getPrice(project);
                         }
                     });
