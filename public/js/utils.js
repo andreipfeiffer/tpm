@@ -48,7 +48,7 @@ TPM.utils = (function() {
             };
         },
 
-        getRemainingTime: function(_deadline) {
+        getPassedTime: function(_deadline) {
             var today       = moment(),
                 weekendDays = this.getWeekendDays( _deadline ),
                 deadline    = moment(_deadline);

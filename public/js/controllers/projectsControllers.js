@@ -90,7 +90,7 @@
                             project.date &&
                             $scope.filterInactiveStatusOptions.indexOf( project.status ) > -1
                         ) {
-                            var passed = TPM.utils.getRemainingTime( project.date );
+                            var passed = TPM.utils.getPassedTime( project.date );
                             project.passedText = passed.textTotal;
                             project.passedDays = Math.abs( Math.round( passed.daysWork ) );
                         }
