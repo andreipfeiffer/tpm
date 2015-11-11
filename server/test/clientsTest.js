@@ -76,9 +76,12 @@
         });
 
         it('should get all clients', function(done) {
+            var expectedNr = 2;
             clients.getAll(user).then(function(res) {
                 expect( res.body ).to.be.an('array');
-                expect( res.body ).to.have.length(2);
+                // there is an extra client added by default, the "no client" client
+                expect( res.body ).to.have.length( expectedNr + 1 );
+                expect( res.body[0].id ).to.equal( 0 );
                 expect( res.status ).to.equal(200);
                 done();
             });
