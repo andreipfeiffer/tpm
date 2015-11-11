@@ -22,20 +22,24 @@ module.exports = function(knex) {
     }
 
     function getAllProjects(idUser) {
-        return knex
-            .select('*')
-            .from('projects')
-            // @todo not very solid
-            // because it will select the first occurence in 'projects_status_log'
-            // but it should select the last
-            .leftJoin('projects_status_log', function() {
-                this.on('projects.id', '=', 'projects_status_log.idProject')
-                    .andOn('projects.status', '=', 'projects_status_log.status');
-            })
-            .where({
-                'projects.idUser'   : idUser,
-                'projects.isDeleted': '0'
-            });
+
+        var q = '';
+
+        q += 'SELECT';
+        q += ' projects.*, status_log.date';
+
+        q += ' FROM projects';
+
+        q += ' LEFT JOIN (SELECT date, idProject, status FROM projects_status_log ORDER BY date DESC)';
+        q += ' AS status_log';
+        q += ' ON projects.id = status_log.idProject';
+        q += ' AND projects.status = status_log.status';
+
+        q += ' WHERE projects.idUser = ' + idUser;
+        q += ' AND projects.isDeleted = 0';
+        q += ' GROUP BY status_log.idProject';
+
+        return knex.raw( q );
     }
 
     function logStatusChange(idUser, idProject, status) {
@@ -96,7 +100,7 @@ module.exports = function(knex) {
             var userLogged = req.user;
 
             getAllProjects(userLogged.id).then(function(data) {
-                return res.send(data);
+                return res.send( data[0] );
             }).catch(function(e) {
                 var log = {
                     idUser: userLogged.id,
