@@ -17,7 +17,7 @@
                     <h2>Income per month</h2>
                     <br>
 
-                    <div ng-show="!isLoading && months.length">
+                    <div ng-if="months.length">
 
                         <canvas height="70" id="line" class="chart chart-line"
                             ng-show="months.length > 1"
@@ -50,8 +50,28 @@
                             </tbody>
                         </table>
 
-                        <p class="text-danger"><b>NOTE:</b> projects are always included on the month in which they were <b>Paid</b>.</p>
-                        <h4 ng-if="notPaid > 0"><span class="label label-danger">Projects "finished", but not "paid": {{ notPaid }}</span></h4>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading"><b>NOTES:</b></div>
+                                    <div class="panel-body">
+                                        Projects are always included on the month in which they were <b>Paid</b>.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="panel panel-danger" ng-if="notPaid > 0">
+                                    <div class="panel-heading"><b>PROJECTS NOT PAID:</b></div>
+                                    <div class="panel-body">
+                                        There are Projects "finished", but not "paid": <b>{{ notPaid }} RON</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <p class="alert alert-warning text-center" ng-show="!isLoading && !months.length">
@@ -66,7 +86,7 @@
                     <h2>Price evolution per project</h2>
                     <br>
                     
-                    <div ng-show="!isLoading && chartPrice.data.length">
+                    <div ng-if="chartPrice.data.length">
                         <p><b>NOTE:</b> Projects that have either the <b>Estimated</b> or <b>Final</b> price not set (or set to "0") are considered <b>"Not Changed"</b>.</p>
                         <br>
                         <canvas id="doughnut" class="chart chart-doughnut" height="80"
