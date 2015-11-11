@@ -131,7 +131,7 @@
                             res.push({
                                 price   : 0,
                                 id      : project.idClient,
-                                name    : project.clientName,
+                                name    : getClientName( project ),
                                 projects: []
                             });
 
@@ -160,6 +160,10 @@
                         return project.priceFinal;
                     }
                     return project.priceEstimated;
+                }
+
+                function getClientName(project) {
+                    return project.clientName || 'Personal projects';
                 }
 
                 function getCurrentMonth(res, month) {
