@@ -27,6 +27,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 
 ## Future Goals
 
+* Custom currency per user
 * Custom bootstrap theme
 * Create new accounts
 * Recover password
