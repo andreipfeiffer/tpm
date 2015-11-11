@@ -7,7 +7,7 @@ module.exports = function(knex) {
         promise           = require('node-promise'),
         server            = require('../../server'),
         status            = require('./status'),
-        statusArr         = ['on hold', 'in progress', 'finished', 'paid'],
+        statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
         statusArrActive   = [statusArr[0], statusArr[1]],
         statusArrInactive = [statusArr[2], statusArr[3]];
 

@@ -15,7 +15,7 @@ TPM.utils = (function() {
             return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
         },
 
-        statusList: ['on hold','in progress','finished','paid'],
+        statusList: ['on hold','in progress','finished','paid','cancelled'],
 
         getActiveStatusList: function() {
             return [
@@ -27,7 +27,8 @@ TPM.utils = (function() {
         getInactiveStatusList: function() {
             return [
                 this.statusList[2],
-                this.statusList[3]
+                this.statusList[3],
+                this.statusList[4]
             ];
         },
 
