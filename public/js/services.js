@@ -48,23 +48,25 @@
         }])
 
         .service('SettingsUser', function($http) {
+            var defaults = {
+                currency: TPM.utils.currencyList[0]
+            };
 
             this.fetch = function() {
                 return $http.get(TPM.apiUrl + 'settings/user');
             };
 
             this.set = function(data) {
-                var defaults = {
-                    currency: TPM.utils.currencyList[0]
-                };
-
                 var _settings = angular.extend( {}, defaults, data );
-
                 localStorage.setItem('TPMsettings', JSON.stringify( _settings ));
             };
 
             this.get = function() {
-                return JSON.parse( localStorage.getItem('TPMsettings') );
+                var settings = JSON.parse( localStorage.getItem('TPMsettings') );
+                if ( !settings ) {
+                    settings = angular.extend( {}, defaults );
+                }
+                return settings;
             };
 
             this.remove = function() {
