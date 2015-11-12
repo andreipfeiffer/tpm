@@ -109,4 +109,11 @@ schema.structure['error_log'] = ''
     +     'KEY `idUser` (`idUser`)'
     + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
 
+schema.structure.settings = ''
+    + 'CREATE TABLE IF NOT EXISTS `settings` ('
+    +     '`idUser` smallint(5) unsigned NOT NULL,'
+    +     '`currency` varchar(10) NOT NULL DEFAULT "ron",'
+    +     'KEY `idUser` (`idUser`)'
+    + ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
 module.exports = schema;
