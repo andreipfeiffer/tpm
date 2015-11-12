@@ -148,9 +148,10 @@ var TPM = TPM || {};
 
             feedback.config({
                 duration: 2000,
-                type: 'success',
-                sticky: false
+                type    : 'success',
+                sticky  : false
             });
+
         }
     );
 
