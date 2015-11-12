@@ -12,9 +12,9 @@
 
             beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_, _feedback_) {
                 $httpBackend = _$httpBackend_;
-                location = _$location_;
-                Session = _SessionService_;
-                feedback = _feedback_;
+                location     = _$location_;
+                Session      = _SessionService_;
+                feedback     = _feedback_;
 
                 scope = $rootScope.$new();
                 controller = $controller;

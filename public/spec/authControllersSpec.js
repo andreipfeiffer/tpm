@@ -12,11 +12,11 @@
 
             beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_, _feedback_) {
                 $httpBackend = _$httpBackend_;
-                location = _$location_;
-                Session = _SessionService_;
-                feedback = _feedback_;
+                location     = _$location_;
+                Session      = _SessionService_;
+                feedback     = _feedback_;
+                scope        = $rootScope.$new();
 
-                scope = $rootScope.$new();
                 location.path('/login');
                 controller = $controller;
             }));
@@ -83,10 +83,10 @@
 
             beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
                 $httpBackend = _$httpBackend_;
-                location = _$location_;
-                Session = _SessionService_;
+                location     = _$location_;
+                Session      = _SessionService_;
+                scope        = $rootScope.$new();
 
-                scope = $rootScope.$new();
                 // authenticate the user
                 Session.setAuthToken( token );
 
@@ -114,10 +114,9 @@
             var scope, location, rootScope;
 
             beforeEach(inject(function(_$location_, $rootScope) {
-                location = _$location_;
+                location  = _$location_;
                 rootScope = $rootScope;
-
-                scope = rootScope.$new();
+                scope     = rootScope.$new();
             }));
 
 

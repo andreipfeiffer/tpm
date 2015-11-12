@@ -11,8 +11,8 @@
 
             beforeEach(inject(function($rootScope, $controller, $location) {
                 location = $location;
-                scope = $rootScope.$new();
-                ctrl = $controller('MenuController', {$scope: scope});
+                scope    = $rootScope.$new();
+                ctrl     = $controller('MenuController', {$scope: scope});
             }));
 
 

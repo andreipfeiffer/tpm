@@ -4,13 +4,13 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server = require('../../server.js'),
-        supertest = require('supertest'),
+    var server     = require('../../server.js'),
+        supertest  = require('supertest'),
         // request = supertest(server.app),
-        agent = supertest.agent(server.app),
-        db = require('../modules/db')( server.knex ),
-        expect = require('expect.js'),
-        utils = require('./_utils');
+        agent      = supertest.agent(server.app),
+        db         = require('../modules/db')( server.knex ),
+        expect     = require('expect.js'),
+        utils      = require('./_utils');
 
     describe('Auth', function() {
 

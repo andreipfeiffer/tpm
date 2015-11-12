@@ -4,10 +4,10 @@
 
     process.env.NODE_ENV = 'test';
 
-    var app = require('../../server.js'),
-        db = require('../modules/db')( app.knex ),
+    var app     = require('../../server.js'),
+        db      = require('../modules/db')( app.knex ),
         clients = require('../modules/clients')( app.knex ),
-        expect = require('expect.js');
+        expect  = require('expect.js');
 
     var user = { id: 1 };
 

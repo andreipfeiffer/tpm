@@ -28,14 +28,14 @@
         var message = 'Are you sure?';
 
         beforeEach(inject(function($rootScope, $compile, $timeout) {
-            scope = $rootScope.$new();
-            compile = $compile;
+            scope     = $rootScope.$new();
+            compile   = $compile;
             rootScope = $rootScope;
-            timeout = $timeout;
+            timeout   = $timeout;
+            
+            element   = '<a href="" click-confirm="" click-confirm-message="' + message + '"></a>';
+            element   = $compile(element)(scope);
 
-            element = '<a href="" click-confirm="" click-confirm-message="' + message + '"></a>';
-
-            element = $compile(element)(scope);
             scope.$digest();
         }));
 
