@@ -55,7 +55,7 @@
 
             this.set = function(data) {
                 var defaults = {
-                    currency: 'ron'
+                    currency: TPM.utils.currencyList[0]
                 };
 
                 var _settings = angular.extend( {}, defaults, data );

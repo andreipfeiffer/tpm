@@ -15,7 +15,8 @@ TPM.utils = (function() {
             return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
         },
 
-        statusList: ['on hold','in progress','finished','paid','cancelled'],
+        statusList  : ['on hold','in progress','finished','paid','cancelled'],
+        currencyList: ['RON', 'EUR'],
 
         getActiveStatusList: function() {
             return [

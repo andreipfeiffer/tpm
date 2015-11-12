@@ -9,11 +9,17 @@
             '$http',
             'feedback',
             'SettingsService',
-            function($scope, $http, feedback, Settings) {
+            'SettingsUser',
+            function($scope, $http, feedback, Settings, SettingsUser) {
 
                 $scope.isLoading = true;
                 $scope.isLoadingGoogle = false;
                 $scope.selectedCalendar = {};
+
+                $scope.user = {
+                    data        : SettingsUser.get(),
+                    currencyList: TPM.utils.currencyList
+                };
 
                 feedback.load();
 
@@ -45,6 +51,17 @@
                         $scope.settings.googleToken = false;
                         $scope.isLoadingGoogle = false;
                         feedback.notify('Your Google Calendar is not syncronized anymore');
+                    });
+                };
+
+                $scope.saveUserSettings = function() {
+                    var settings = $scope.user.data;
+
+                    feedback.load();
+
+                    Settings.update({ type: 'user' }, settings).$promise.then(function() {
+                        SettingsUser.set( settings );
+                        feedback.notify('Your settings are saved');
                     });
                 };
 

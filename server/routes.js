@@ -79,7 +79,8 @@ module.exports = function(app, knex) {
         .get(auth.ensureTokenAuthenticated, settings.getGoogle);
 
     app.route('/settings/user')
-        .get(auth.ensureTokenAuthenticated, settings.getUser);
+        .get(auth.ensureTokenAuthenticated, settings.getUser)
+        .put(auth.ensureTokenAuthenticated, settings.setUser);
 
     app.route('/settings/google/:calendarId')
         .put(auth.ensureTokenAuthenticated, settings.setGoogle);

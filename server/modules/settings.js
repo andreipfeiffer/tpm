@@ -3,12 +3,37 @@ module.exports = function(knex) {
     'use strict';
 
     var googleCalendar = require('./googleCalendar')( knex ),
-        googleClient   = require('./googleClient')( knex );
+        googleClient   = require('./googleClient')( knex ),
+        extend         = require('util')._extend;
 
     function getUserSettings(idUser) {
         return knex('settings')
             .select('currency')
             .where({ 'idUser': idUser });
+    }
+
+    function updateUserSettings(idUser, settings) {
+        return knex('settings')
+            .where({ 'idUser': idUser })
+            .update( settings );
+    }
+
+    function insertUserSettings(idUser, settings) {
+        var data = extend({
+            'idUser': idUser
+        }, settings);
+
+        return knex('settings').insert( data );
+    }
+
+    function setUserSettings(idUser, data) {
+        return getUserSettings( idUser ).then(function(s) {
+            if ( s.length ) {
+                return updateUserSettings(idUser, data);
+            } else {
+                return insertUserSettings(idUser, data);
+            }
+        });
     }
 
     return {
@@ -68,6 +93,15 @@ module.exports = function(knex) {
 
             getUserSettings( userLogged.id ).then(function( settings ) {
                 return res.send( settings[0] );
+            });
+        },
+
+        setUser: function(req, res) {
+            var userLogged = req.user,
+                data       = req.body;
+
+            setUserSettings( userLogged.id, data ).then(function() {
+                return res.send(true);
             });
         }
     };

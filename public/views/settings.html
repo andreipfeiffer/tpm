@@ -7,40 +7,76 @@
     <hr>
     <br>
 
-    <div ng-hide="isLoading" class="animate-slideFade">
-        <div class="form-group">
-            <div class="col-sm-6 input-group" ng-show="settings.googleToken && settings.calendars">
-                <select class="form-control" placeholder="Select a calendar"
-                    ng-model="selectedCalendar"
-                    ng-options="calendar.summary for calendar in settings.calendars.items">
-                    <option value="">Select calendar</option>
-                </select>
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-success"
-                        ng-click="setCalendar()"
-                        ng-disabled="isLoadingGoogle || !selectedCalendar">
-                        Set Active Calendar
-                    </button>
+    <div ng-hide="isLoading" class="row">
+
+        <div class="col-sm-6">
+            <form class="form-horizontal">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Customize your interface</div>
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Currency</label>
+                            <div class="col-sm-8">
+                                <select ng-model="user.data.currency" ng-options="currency.toUpperCase() for currency in user.currencyList" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <button type="button" class="btn btn-primary"
+                                    ng-click="saveUserSettings()">
+                                    Save Settings
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Synchronize your Calendar</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="input-group" ng-show="settings.googleToken && settings.calendars">
+                            <select class="form-control" placeholder="Select a calendar"
+                                ng-model="selectedCalendar"
+                                ng-options="calendar.summary for calendar in settings.calendars.items">
+                                <option value="">Select calendar</option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success"
+                                    ng-click="setCalendar()"
+                                    ng-disabled="isLoadingGoogle || !selectedCalendar">
+                                    Set Active Calendar
+                                </button>
+                            </div>
+                        </div>
+                        <p ng-bind="settings.selectedCalendar.description"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="/auth/google" class="btn btn-primary"
+                            ng-hide="settings.googleToken"
+                            ng-click="getGoogleAccess()"
+                            ng-disabled="isLoadingGoogle">
+                            Google Calendar
+                        </a>
+
+                        <button type="button" class="btn btn-warning animate-slideFade"
+                            ng-show="settings.googleToken"
+                            ng-click="revokeGoogleAccess()"
+                            ng-disabled="isLoadingGoogle">
+                            Stop Synchronizing
+                        </button>
+                    </div>
                 </div>
             </div>
-            <p ng-bind="settings.selectedCalendar.description"></p>
         </div>
 
-        <div class="form-group">
-            <a href="/auth/google" class="btn btn-primary"
-                ng-hide="settings.googleToken"
-                ng-click="getGoogleAccess()"
-                ng-disabled="isLoadingGoogle">
-                Syncronize with Google Calendar
-            </a>
-
-            <button type="button" class="btn btn-warning animate-slideFade"
-                ng-show="settings.googleToken"
-                ng-click="revokeGoogleAccess()"
-                ng-disabled="isLoadingGoogle">
-                Revoke Google Calendar access
-            </button>
-        </div>
     </div>
 
 </section>
