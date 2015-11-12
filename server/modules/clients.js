@@ -57,6 +57,16 @@ module.exports = function(knex) {
             });
     }
 
+    function unAssignClient(idClient) {
+        return knex('projects')
+            .where({
+                'idClient': idClient
+            })
+            .update({
+                'idClient': '0'
+            });
+    }
+
     return {
         getAll: function(userLogged) {
             var d = deferred(),
@@ -142,6 +152,8 @@ module.exports = function(knex) {
             var d = deferred();
 
             deleteClient(id, userLogged.id).then(function() {
+                return unAssignClient( id );
+            }).then(function() {
                 d.resolve({ status: 204 });
             }).catch(function(e) {
                 d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
