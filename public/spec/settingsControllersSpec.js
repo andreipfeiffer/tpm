@@ -11,7 +11,7 @@
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'settings').respond({
+                $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
                     googleToken: false
                 });
 
@@ -58,7 +58,7 @@
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'settings').respond({
+                $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
                     googleToken: true,
                     calendars: calendarsList,
                     selectedCalendar: 1

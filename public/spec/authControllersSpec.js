@@ -55,6 +55,7 @@
                 };
 
                 $httpBackend.expectPOST(TPM.apiUrl + 'login').respond(200, { 'authToken': token });
+                $httpBackend.expectGET(TPM.apiUrl + 'settings/user').respond(200);
 
                 scope.login();
                 $httpBackend.flush();

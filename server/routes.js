@@ -75,11 +75,14 @@ module.exports = function(app, knex) {
         .get(auth.ensureTokenAuthenticated, reports.getAll);
 
 
-    app.route('/settings')
-        .get(auth.ensureTokenAuthenticated, settings.getAll);
+    app.route('/settings/google')
+        .get(auth.ensureTokenAuthenticated, settings.getGoogle);
+
+    app.route('/settings/user')
+        .get(auth.ensureTokenAuthenticated, settings.getUser);
 
     app.route('/settings/google/:calendarId')
-        .put(auth.ensureTokenAuthenticated, settings.setCalendar);
+        .put(auth.ensureTokenAuthenticated, settings.setGoogle);
 
     app.route('/auth/google')
         .get(auth.ensureSessionAuthenticated, passport.authenticate('google', {

@@ -3,10 +3,16 @@ module.exports = function(knex) {
     'use strict';
 
     var googleCalendar = require('./googleCalendar')( knex ),
-        googleClient = require('./googleClient')( knex );
+        googleClient   = require('./googleClient')( knex );
+
+    function getUserSettings(idUser) {
+        return knex('settings')
+            .select('currency')
+            .where({ 'idUser': idUser });
+    }
 
     return {
-        getAll: function(req, res) {
+        getGoogle: function(req, res) {
             var userLogged = req.user,
                 result = {};
 
@@ -26,7 +32,7 @@ module.exports = function(knex) {
                         result.calendars = calendars;
                         return res.send(result);
                     }, function(err) {
-                        return res.status(400).send({ error: err.message});
+                        return res.status(400).send({ error: err.message });
                     });
                 });
             }).catch(function(e) {
@@ -34,7 +40,7 @@ module.exports = function(knex) {
             });
         },
 
-        setCalendar: function(req, res) {
+        setGoogle: function(req, res) {
             var userLogged = req.user,
                 newId = req.params.calendarId;
 
@@ -54,6 +60,14 @@ module.exports = function(knex) {
                     .catch(function(e) {
                         return res.status(503).send({ error: 'Database error: ' + e.code});
                     });
+            });
+        },
+
+        getUser: function(req, res) {
+            var userLogged = req.user;
+
+            getUserSettings( userLogged.id ).then(function( settings ) {
+                return res.send( settings[0] );
             });
         }
     };

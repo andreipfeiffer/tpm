@@ -9,8 +9,9 @@
             '$http',
             '$location',
             'SessionService',
+            'SettingsUser',
             'feedback',
-            function($scope, $http, $location, Session, feedback) {
+            function($scope, $http, $location, Session, SettingsUser, feedback) {
 
                 // if user is already authenticated, redirect
                 if ( Session.getAuthToken() ) {
@@ -34,8 +35,13 @@
                         .post(TPM.apiUrl + 'login', $scope.credentials)
                         .success(function (res) {
                             Session.setAuthToken( res.authToken );
-                            $location.path('/projects');
-                            feedback.dismiss();
+
+                            SettingsUser.fetch().success(function (settings) {
+                                SettingsUser.set( settings );
+                                $location.path('/projects');
+                                feedback.dismiss();
+                            });
+
                         })
                         .error(function (res) {
                             $scope.isLoading = false;
@@ -49,11 +55,13 @@
             '$http',
             '$location',
             'SessionService',
-            function($http, $location, Session) {
+            'SettingsUser',
+            function($http, $location, Session, SettingsUser) {
 
                 $http
                     .get(TPM.apiUrl + 'logout')
                     .success(function () {
+                        SettingsUser.remove();
                         Session.removeAuthToken();
                         $location.path('/login');
                     });

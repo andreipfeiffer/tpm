@@ -47,6 +47,31 @@
             );
         }])
 
+        .service('SettingsUser', function($http) {
+
+            this.fetch = function() {
+                return $http.get(TPM.apiUrl + 'settings/user');
+            };
+
+            this.set = function(data) {
+                var defaults = {
+                    currency: 'ron'
+                };
+
+                var _settings = angular.extend( {}, defaults, data );
+
+                localStorage.setItem('TPMsettings', JSON.stringify( _settings ));
+            };
+
+            this.get = function() {
+                return JSON.parse( localStorage.getItem('TPMsettings') );
+            };
+
+            this.remove = function() {
+                return localStorage.removeItem('TPMsettings');
+            };
+        })
+
         .service('SessionService', function($http) {
 
             this.setAuthToken = function(token) {

@@ -17,7 +17,7 @@
 
                 feedback.load();
 
-                Settings.get().$promise.then(function(data) {
+                Settings.get({ type: 'google' }).$promise.then(function(data) {
                     $scope.settings = data;
                     $scope.selectedCalendar = getSelectedCalendar( data.selectedCalendar );
                     $scope.isLoading = false;
