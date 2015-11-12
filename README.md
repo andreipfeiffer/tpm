@@ -9,9 +9,9 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * RESTful API
 * CRUD interfaces
 * JWT authentication
-* Server unit-tests, using Mocha & expect.js
-* Client unit-tests, using Jasmine & Karma
-* Client e2e testing, using Protractor
+* Server integration tests, using Mocha & expect.js
+* Client unit tests, using Jasmine & Karma
+* Client e2e tests, using Cucumber & Protractor
 * Bower components management
 * Code linting
 * Semver release system
