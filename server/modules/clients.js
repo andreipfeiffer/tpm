@@ -45,6 +45,18 @@ module.exports = function(knex) {
             });
     }
 
+    function deleteClient(idClient, idUser) {
+        return knex('clients')
+            .where({
+                'id'       : idClient,
+                'idUser'   : idUser,
+                'isDeleted': '0'
+            })
+            .update({
+                'isDeleted': '1'
+            });
+    }
+
     return {
         getAll: function(userLogged) {
             var d = deferred(),
@@ -129,17 +141,7 @@ module.exports = function(knex) {
         remove: function(userLogged, id) {
             var d = deferred();
 
-            var softDeleteClient = knex('clients')
-                .where({
-                    'id'       : id,
-                    'idUser'   : userLogged.id,
-                    'isDeleted': '0'
-                })
-                .update({
-                    'isDeleted': '1'
-                });
-
-            softDeleteClient.then(function() {
+            deleteClient(id, userLogged.id).then(function() {
                 d.resolve({ status: 204 });
             }).catch(function(e) {
                 d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
