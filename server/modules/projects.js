@@ -9,7 +9,7 @@ module.exports = function(knex) {
         status            = require('./status'),
         statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
         statusArrActive   = [statusArr[0], statusArr[1]],
-        statusArrInactive = [statusArr[2], statusArr[3]];
+        statusArrInactive = [statusArr[2], statusArr[3], statusArr[4]];
 
     function getProjectById(id, idUser) {
         return knex('projects')

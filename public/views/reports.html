@@ -32,7 +32,7 @@
                                 <tr>
                                     <th class="text-uppercase">Month</th>
                                     <th width="160" class="text-uppercase">Projects</th>
-                                    <th width="160" class="text-uppercase">Income</th>
+                                    <th width="160" class="text-uppercase text-right">Income</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,8 +43,8 @@
                                     <td>
                                         <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
                                     </td>
-                                    <td>
-                                        {{month.price}}
+                                    <td class="text-right">
+                                        <b>{{month.price}}</b> {{ currency }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -67,7 +67,7 @@
                                 <div class="panel panel-warning" ng-if="notPaid > 0">
                                     <div class="panel-heading"><b>PROJECTS NOT PAID:</b></div>
                                     <div class="panel-body">
-                                        There are Projects "finished", but not "paid": <b>{{ notPaid }} RON</b>
+                                        There are Projects "finished", but not "paid": <b>{{ notPaid }} {{ currency }}</b>
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                             <tr>
                                 <th class="text-uppercase">Client</th>
                                 <th width="160" class="text-uppercase">Projects</th>
-                                <th width="160" class="text-uppercase">Income</th>
+                                <th width="160" class="text-uppercase text-right">Income</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,8 +131,8 @@
                                 <td>
                                     <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                                 </td>
-                                <td>
-                                    {{client.price}}
+                                <td class="text-right">
+                                    <b>{{ client.price }}</b> {{ currency }}
                                 </td>
                             </tr>
                         </tbody>
@@ -154,7 +154,7 @@
                             <tr>
                                 <th class="text-uppercase">Client</th>
                                 <th width="160" class="text-uppercase">Projects</th>
-                                <th width="160" class="text-uppercase">Income</th>
+                                <th width="160" class="text-uppercase text-right">Income</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,8 +165,8 @@
                                 <td>
                                     <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                                 </td>
-                                <td>
-                                    {{client.price}}
+                                <td class="text-right">
+                                    <b>{{ client.price }}</b> {{ currency }}
                                 </td>
                             </tr>
                         </tbody>

@@ -19,9 +19,10 @@
             'tpmCache',
             'ProjectsService',
             'ClientsService',
+            'SettingsUser',
             'screenSize',
             'feedback',
-            function($scope, $q, $routeParams, tpmCache, Projects, Clients, screenSize, feedback) {
+            function($scope, $q, $routeParams, tpmCache, Projects, Clients, SettingsUser, screenSize, feedback) {
 
                 $scope.filterStatus = tpmCache.get('filterStatus') || '';
                 $scope.filterStatusOptions = TPM.utils.statusList;
@@ -29,6 +30,7 @@
                 $scope.filterInactiveStatusOptions = TPM.utils.getInactiveStatusList();
                 // $scope.filterClient = tpmCache.get('filterClient') || '';
                 $scope.filterClient = $routeParams.id || '';
+                $scope.currency = SettingsUser.get().currency;
 
                 $scope.isLoading = true;
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
@@ -77,6 +79,8 @@
                         } else {
                             project.clientName = getClientById( project.idClient ).name;
                         }
+
+                        project.price = project.priceFinal > 0 ? project.priceFinal : project.priceEstimated;
 
                         // set remaining time, for active projects
                         var remaining = TPM.utils.getRemainingWorkTime( project.dateEstimated );
@@ -142,8 +146,9 @@
             '$location',
             'ProjectsService',
             'ClientsService',
+            'SettingsUser',
             'feedback',
-            function($scope, $routeParams, $filter, $location, Projects, Clients, feedback) {
+            function($scope, $routeParams, $filter, $location, Projects, Clients, SettingsUser, feedback) {
 
                 $scope.formAction = 'Add';
                 $scope.formSubmit = $scope.formAction + ' project';
@@ -153,6 +158,7 @@
                 $scope.statusList = TPM.utils.statusList;
                 $scope.isNewClient = false;
                 $scope.isLoading = false;
+                $scope.currency = SettingsUser.get().currency;
 
                 // project model
                 $scope.project = {
@@ -207,8 +213,9 @@
             '$location',
             'ProjectsService',
             'ClientsService',
+            'SettingsUser',
             'feedback',
-            function($scope, $q, $routeParams, $filter, $location, Projects, Clients, feedback) {
+            function($scope, $q, $routeParams, $filter, $location, Projects, Clients, SettingsUser, feedback) {
 
                 $scope.formAction            = 'Edit';
                 $scope.formSubmit            = $scope.formAction + ' project';
@@ -217,6 +224,7 @@
                 $scope.isDatePickerOpened    = false;
                 $scope.statusList            = TPM.utils.statusList;
                 $scope.isLoading             = false;
+                $scope.currency              = SettingsUser.get().currency;
 
                 $q.all([
                     Projects.get({ id: $routeParams.id }).$promise,

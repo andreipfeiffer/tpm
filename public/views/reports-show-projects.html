@@ -19,9 +19,14 @@
                 <td><b>{{project.name}}</b></td>
                 <td>{{project.clientName || 'Personal project'}}</td>
 
-                <td class="text-right" ng-if="!detailedPrice">{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</td>
-                <td class="text-right" ng-if="detailedPrice">
-                    {{ project.priceFinal }} - {{ project.priceEstimated }} = <b class="text-danger">{{ project.priceFinal - project.priceEstimated }}</b>
+                <td class="text-right" ng-if="!detailedPrice">
+                    <b>{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</b>
+                    {{ currency }}
+                </td>
+                <td class="text-right b-one-line" ng-if="detailedPrice">
+                    {{ project.priceFinal }} - {{ project.priceEstimated }} =
+                    <b class="text-danger">{{ project.priceFinal - project.priceEstimated }}</b>
+                    {{ currency }}
                 </td>
             </tr>
         </tbody>

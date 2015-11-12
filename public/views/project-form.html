@@ -70,7 +70,7 @@
                 <label class="control-label" for="projectPriceEstimated">Est<span class="hidden-xs">imated</span> price:</label>
                 <div class="input-group">
                     <input id="projectPriceEstimated" class="form-control" ng-model="project.priceEstimated" type="number">
-                    <div class="input-group-addon">RON</div>
+                    <div class="input-group-addon">{{ currency }}</div>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
                 <label class="control-label" for="projectPriceFinal">Final price:</label>
                 <div class="input-group">
                     <input id="projectPriceFinal" class="form-control" ng-model="project.priceFinal" type="number">
-                    <div class="input-group-addon">RON</div>
+                    <div class="input-group-addon">{{ currency }}</div>
                 </div>
             </div>
 

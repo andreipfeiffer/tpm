@@ -10,8 +10,10 @@
             '$http',
             'feedback',
             'ReportsService',
-            function($scope, $modal, $http, feedback, Reports) {
+            'SettingsUser',
+            function($scope, $modal, $http, feedback, Reports, SettingsUser) {
 
+                $scope.currency   = SettingsUser.get().currency;
                 $scope.isLoading  = true;
                 $scope.projects   = [];
                 $scope.chartMonth = {
@@ -27,14 +29,18 @@
                 Reports.query().$promise.then(function(data) {
 
                     $scope.projects          = data;
-                    $scope.months            = groupByMonth( data );
                     $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
                     $scope.clientsByPrice    = groupByClient( data ).sort( sortClientsByPrice );
                     $scope.notPaid           = getNotPaid( data );
                     $scope.isLoading         = false;
 
-                    $scope.chartMonth = getChartData( $scope.months );
-                    $scope.chartPrice = getPriceChartData( data );
+                    // setup chart data for month report
+                    $scope.months            = groupByMonth( data );
+                    var chartMonthsData      = getMonthsChartData( $scope.months );
+                    $scope.chartMonth.data   = chartMonthsData.data;
+                    $scope.chartMonth.series = chartMonthsData.series;
+
+                    $scope.chartPrice        = getPriceChartData( data );
 
                     feedback.dismiss();
                 });
@@ -43,6 +49,7 @@
                     $scope.data          = angular.extend({}, data.list);
                     $scope.title         = data.title;
                     $scope.detailedPrice = data.detailedPrice;
+                    $scope.currency      = data.currency;
                 };
 
                 $scope.showProjects = function(title, list, detailedPrice) {
@@ -55,6 +62,7 @@
                                 return {
                                     list         : list,
                                     title        : title,
+                                    currency     : $scope.currency,
                                     detailedPrice: detailedPrice
                                 };
                             }
@@ -93,11 +101,12 @@
                     var res = [];
 
                     projects.forEach(function(project) {
-                        var month = getCurrentMonth(res, project.month);
 
                         if ( project.status !== 'paid' ) {
                             return;
                         }
+
+                        var month = getCurrentMonth(res, project.month);
 
                         if ( !month ) {
                             res.push({
@@ -194,7 +203,7 @@
                     return 0;
                 }
 
-                function getChartData(months) {
+                function getMonthsChartData(months) {
                     var res = {
                         data  : [],
                         series: []

@@ -114,7 +114,8 @@
                         </small>
                     </td>
                     <td ng-show="!showActions" class="hidden-xs hidden-sm b-one-line">
-                        {{project.priceFinal > 0 ? project.priceFinal : project.priceEstimated}}
+                        <b>{{project.price}}</b>
+                        {{currency}}
                     </td>
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 4 : 1 }}">
                         <div class="btn-group b-one-line" ng-show="!isEnabledToggleActions || showActions">
