@@ -208,11 +208,11 @@ module.exports = function(knex) {
                         editData.googleEventId = '';
                         return googleCalendar.deleteEvent(userLogged.id, eventId);
                     } else {
-                        return googleCalendar.updateEvent(userLogged.id, eventId, req.body);
+                        return googleCalendar.updateEvent(userLogged.id, eventId, editData);
                     }
                 } else if ( isStatusActive(newStatus) ) {
                     return googleCalendar.getSelectedCalendarId(userLogged.id).then(function(calendarId) {
-                        return googleCalendar.addEvent(userLogged.id, req.body, calendarId);
+                        return googleCalendar.addEvent(userLogged.id, editData, calendarId);
                     }).then(function(newEventId) {
                         return googleCalendar.setEventId(userLogged.id, id, newEventId);
                     });
@@ -260,7 +260,7 @@ module.exports = function(knex) {
                 return getProjectById(newProjectId, userLogged.id);
             }).then(function(project) {
                 newProject = project[0];
-                if ( isStatusActive( data.status ) ) {
+                if ( isStatusActive( newProjectData.status ) ) {
                     return googleCalendar.addEvent(userLogged.id, newProjectData);
                 }
             }).then(function(eventId) {
