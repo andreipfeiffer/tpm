@@ -65,13 +65,7 @@
                 };
 
                 var ModalInstanceCtrl = function ($scope, $uibModalInstance, client) {
-
                     $scope.client = angular.extend({}, client);
-
-                    // method called directly from template
-                    // $scope.submit = function () {
-                    //     $uibModalInstance .close($scope.client);
-                    // };
                 };
 
                 $scope.openEditDialog = function(id) {
