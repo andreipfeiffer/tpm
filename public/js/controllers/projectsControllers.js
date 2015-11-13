@@ -28,7 +28,6 @@
                 $scope.filterStatusOptions = TPM.utils.statusList;
                 $scope.filterActiveStatusOptions = TPM.utils.getActiveStatusList();
                 $scope.filterInactiveStatusOptions = TPM.utils.getInactiveStatusList();
-                // $scope.filterClient = tpmCache.get('filterClient') || '';
                 $scope.filterClient = $routeParams.id || '';
                 $scope.currency = SettingsUser.get().currency;
 

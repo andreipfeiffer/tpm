@@ -24,7 +24,6 @@ var TPM = TPM || {};
 
         'ui.bootstrap',
         'ui.validate',
-        'rt.select2',
         'chart.js',
         'btford.socket-io',
         'matchMedia',
