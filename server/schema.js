@@ -77,8 +77,8 @@ schema.structure.projects = ''
 schema.populate.projects = ''
     + 'INSERT INTO `' + config.mysql.database + '`.`projects` (`id`, `idUser`, `idClient`, `name`, `status`, `dateAdded`, `dateEstimated`) VALUES'
     + '  (1, 1, 1, \'Pufosenie roz\', \'on hold\', \'2014-07-23\', \'2014-12-30\')'
-    + ', (2, 1, 0, \'Album foto\', \'in progress\', \'2014-07-23\', \'2014-09-12\')'
-    + ', (3, 1, 2, \'Bratari\', \'on hold\', \'2014-07-23\', \'2014-12-31\')'
+    + ', (2, 1, 0, \'Album foto\', \'paid\', \'2014-07-23\', \'2014-09-12\')'
+    + ', (3, 1, 2, \'Bratari\', \'finished\', \'2014-07-23\', \'2014-12-31\')'
     + ', (4, 2, 3, \'Proiect alt user\', \'on hold\', \'2014-07-23\', \'2014-12-30\');';
 
 schema.structure['projects_status_log'] = ''
@@ -95,8 +95,15 @@ schema.structure['projects_status_log'] = ''
 schema.populate['projects_status_log'] = ''
     + 'INSERT INTO `' + config.mysql.database + '`.`projects_status_log` (`idUser`, `idProject`, `status`, `date`) VALUES'
     + '  (1, 1, \'on hold\', \'2014-07-23 16:58:56\')'
+
     + ', (1, 2, \'in progress\', \'2014-08-23 17:58:56\')'
-    + ', (1, 3, \'on hold\', \'2014-09-23 18:58:56\')'
+    + ', (1, 2, \'finished\',    \'2014-12-23 17:58:56\')'
+    + ', (1, 2, \'paid\',        \'2015-01-23 17:58:56\')'
+
+    + ', (1, 3, \'on hold\',  \'2014-09-23 18:58:56\')'
+    + ', (1, 3, \'paid\',     \'2014-10-23 18:58:56\')'
+    + ', (1, 3, \'finished\', \'2014-11-23 18:58:56\')'
+
     + ', (2, 4, \'on hold\', \'2014-09-26 19:58:56\');';
 
 schema.structure['error_log'] = ''
