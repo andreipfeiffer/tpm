@@ -25,10 +25,9 @@
                 <label class="control-label" for="clientName">Set a client:</label>
                 <div ng-class="{ 'input-group': project.clientName.length }">
                     <input type="text" id="clientName" autocomplete="off"
-                        ng-model            = "project.clientName"
-                        placeholder         = "No Client"
-                        uib-typeahead       = "client.name for client in clientsList | filter:$viewValue | limitTo:8"
-                        typeahead-on-select = "selectClient($item, $model, $label)"
+                        ng-model      = "project.clientName"
+                        placeholder   = "No Client"
+                        uib-typeahead = "client.name for client in clientsList | filter:$viewValue | limitTo:8"
                     class="form-control input-lg">
 
                     <span ng-show="project.clientName.length" class="input-group-btn">
