@@ -9,10 +9,10 @@
             '$uibModal',
             'ClientsService',
             'ProjectsClientService',
-            'SettingsUser',
+            'ProjectsModal',
             'screenSize',
             'feedback',
-            function($scope, $modal, Clients, ProjectsClient, SettingsUser, screenSize, feedback) {
+            function($scope, $modal, Clients, ProjectsClient, ProjectsModal, screenSize, feedback) {
 
                 $scope.isFormNewDisplayed = false;
                 $scope.isFormNewLoading = false;
@@ -23,7 +23,6 @@
                 $scope.isLoading = true;
                 $scope.isEnabledToggleActions = screenSize.is('xs, sm');
                 $scope.showActions = false;
-                $scope.currency = SettingsUser.get().currency;
 
                 feedback.load();
 
@@ -96,13 +95,6 @@
                     return modalInstance;
                 };
 
-                var ModalProjectsCtrl = function ($scope, $uibModalInstance, data) {
-                    $scope.data          = angular.extend({}, data.list);
-                    $scope.title         = data.title;
-                    $scope.detailedPrice = data.detailedPrice;
-                    $scope.currency      = data.currency;
-                };
-
                 $scope.showProjects = function() {
                     var clientId   = this.client.id,
                         clientName = this.client.name;
@@ -111,28 +103,9 @@
                         data.map(function(project) {
                             return project.clientName = clientName;
                         });
-                        displayProjects( 'Projects for ' + clientName, data );
+                        ProjectsModal.open( 'Projects for ' + clientName, data );
                     });
                 };
-
-                function displayProjects(title, list, detailedPrice) {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'views/reports-show-projects.html',
-                        controller : ModalProjectsCtrl,
-                        resolve    : {
-                            data : function() {
-                                return {
-                                    list         : list,
-                                    title        : title,
-                                    currency     : $scope.currency,
-                                    detailedPrice: detailedPrice
-                                };
-                            }
-                        }
-                    });
-
-                    return modalInstance;
-                }
 
                 $scope.editClient = function(client) {
                     feedback.load();

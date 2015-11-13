@@ -11,7 +11,8 @@
             'feedback',
             'ReportsService',
             'SettingsUser',
-            function($scope, $modal, $http, feedback, Reports, SettingsUser) {
+            'ProjectsModal',
+            function($scope, $modal, $http, feedback, Reports, SettingsUser, ProjectsModal) {
 
                 $scope.currency   = SettingsUser.get().currency;
                 $scope.isLoading  = true;
@@ -45,31 +46,8 @@
                     feedback.dismiss();
                 });
 
-                var ModalInstanceCtrl = function ($scope, $uibModalInstance, data) {
-                    $scope.data          = angular.extend({}, data.list);
-                    $scope.title         = data.title;
-                    $scope.detailedPrice = data.detailedPrice;
-                    $scope.currency      = data.currency;
-                };
-
                 $scope.showProjects = function(title, list, detailedPrice) {
-
-                    var modalInstance = $modal.open({
-                        templateUrl: 'views/reports-show-projects.html',
-                        controller : ModalInstanceCtrl,
-                        resolve    : {
-                            data : function() {
-                                return {
-                                    list         : list,
-                                    title        : title,
-                                    currency     : $scope.currency,
-                                    detailedPrice: detailedPrice
-                                };
-                            }
-                        }
-                    });
-
-                    return modalInstance;
+                    ProjectsModal.open( title, list, detailedPrice );
                 };
 
                 $scope.showProjectsByPriceChange = function(point) {

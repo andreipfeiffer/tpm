@@ -25,6 +25,38 @@
             );
         }])
 
+        .factory('ProjectsModal', ['$uibModal', 'SettingsUser', function($modal, SettingsUser) {
+            function ModalProjectsCtrl($scope, $uibModalInstance, data) {
+                $scope.data          = angular.extend({}, data.list);
+                $scope.title         = data.title;
+                $scope.detailedPrice = data.detailedPrice;
+                $scope.currency      = data.currency;
+            }
+
+            function open(title, list, detailedPrice) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/reports-show-projects.html',
+                    controller : ModalProjectsCtrl,
+                    resolve    : {
+                        data : function() {
+                            return {
+                                list         : list,
+                                title        : title,
+                                currency     : SettingsUser.get().currency,
+                                detailedPrice: detailedPrice
+                            };
+                        }
+                    }
+                });
+
+                return modalInstance;
+            }
+
+            return {
+                open: open
+            };
+        }])
+
         .factory('ClientsService', ['$resource', function($resource) {
             return $resource(
                 TPM.apiUrl + 'clients/:id',
