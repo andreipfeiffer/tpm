@@ -101,10 +101,10 @@ exports.knex  = knex;
 exports.io    = io;
 
 // verify database structure
-require('./server/modules/db')( knex ).createDb(true).then(function() {
+require('./server/modules/db').createDb(true).then(function() {
 
     // load routes
-    require('./server/routes')(app, knex);
+    require('./server/routes');
 
     require('./server/modules/status').init();
 

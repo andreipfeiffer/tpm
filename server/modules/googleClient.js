@@ -1,8 +1,10 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var config = require('../../config'),
+    var server = require('../../server'),
+        knex   = server.knex,
+        config = require('../../config'),
         google = require('googleapis'),
         OAuth2 = google.auth.OAuth2,
         oauth2Client = new OAuth2(
@@ -59,11 +61,11 @@ module.exports = function(knex) {
     }
 
     return {
-        oauth2Client: oauth2Client,
-        setTokens: setTokens,
-        getTokens: getTokens,
-        updateTokens: updateTokens,
-        clearTokens: clearTokens,
+        oauth2Client      : oauth2Client,
+        setTokens         : setTokens,
+        getTokens         : getTokens,
+        updateTokens      : updateTokens,
+        clearTokens       : clearTokens,
         refreshAccessToken: refreshAccessToken
     };
-};
+})();

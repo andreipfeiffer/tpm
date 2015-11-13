@@ -1,6 +1,9 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
+
+    var server = require('../../server'),
+        knex   = server.knex;
 
     function getProjectsReport(idUser) {
         var q = '';
@@ -46,4 +49,4 @@ module.exports = function(knex) {
         }
     };
 
-};
+})();

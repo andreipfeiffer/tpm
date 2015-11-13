@@ -5,7 +5,7 @@
     process.env.NODE_ENV = 'test';
 
     var app    = require('../../server.js'),
-        db     = require('../modules/db')( app.knex ),
+        db     = require('../modules/db'),
         utils  = require('../modules/utils'),
         expect = require('expect.js');
 

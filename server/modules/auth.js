@@ -1,11 +1,13 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var crypto         = require('crypto'),
+    var server         = require('../../server'),
+        knex           = server.knex,
+        crypto         = require('crypto'),
         passport       = require('passport'),
         LocalStrategy  = require('passport-local').Strategy,
-        googleClient   = require('./googleClient')( knex ),
+        googleClient   = require('./googleClient'),
         server         = require('../../server'),
         jwt            = require('jsonwebtoken'),
         secret         = 'upsidedown-inseamna-Lia-si-Andrei',
@@ -245,4 +247,4 @@ module.exports = function(knex) {
         ensureTokenAuthenticated  : ensureTokenAuthenticated,
         ensureSessionAuthenticated: ensureSessionAuthenticated
     };
-};
+})();

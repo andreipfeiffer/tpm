@@ -1,14 +1,16 @@
-module.exports = function(app, knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var auth        = require('./modules/auth')( knex ),
-        googleAuth  = require('./modules/googleAuth')( knex ),
+    var server      = require('../server'),
+        app         = server.app,
+        auth        = require('./modules/auth'),
+        googleAuth  = require('./modules/googleAuth'),
         passport    = require('passport'),
-        clients     = require('./modules/clients')( knex ),
-        projects    = require('./modules/projects')( knex ),
-        settings    = require('./modules/settings')( knex ),
-        reports     = require('./modules/reports')( knex ),
+        clients     = require('./modules/clients'),
+        projects    = require('./modules/projects'),
+        settings    = require('./modules/settings'),
+        reports     = require('./modules/reports'),
         packageData = require('../package.json'),
         path        = require('path');
 
@@ -101,4 +103,4 @@ module.exports = function(app, knex) {
         googleAuth.callback
     );
 
-};
+})();

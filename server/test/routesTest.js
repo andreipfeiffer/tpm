@@ -8,7 +8,7 @@
         supertest  = require('supertest'),
         // request = supertest(server.app),
         agent      = supertest.agent(server.app),
-        db         = require('../modules/db')( server.knex ),
+        db         = require('../modules/db'),
         expect     = require('expect.js'),
         utils      = require('./_utils'),
         pack       = require('../../package.json');

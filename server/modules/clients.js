@@ -1,10 +1,12 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
     var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
-    var promise  = require('node-promise'),
+    var server   = require('../../server'),
+        knex     = server.knex,
+        promise  = require('node-promise'),
         deferred = promise.defer;
 
     function getEmptyClient(nrProjects) {
@@ -178,4 +180,4 @@ module.exports = function(knex) {
         addNew   : addNewClient
     };
 
-};
+})();

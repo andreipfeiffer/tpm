@@ -1,15 +1,16 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var passport = require('passport'),
+    var server         = require('../../server'),
+        knex           = server.knex,
+        passport       = require('passport'),
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-        config = require('../../config'),
-        projects = require('./projects')( knex ),
-        googleClient = require('./googleClient')( knex ),
-        server = require('../../server'),
-        promise = require('node-promise'),
-        deferred = promise.defer;
+        config         = require('../../config'),
+        projects       = require('./projects'),
+        googleClient   = require('./googleClient'),
+        promise        = require('node-promise'),
+        deferred       = promise.defer;
 
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -138,4 +139,4 @@ module.exports = function(knex) {
             );
         }
     };
-};
+})();

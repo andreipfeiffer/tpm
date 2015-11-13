@@ -1,9 +1,11 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var googleCalendar = require('./googleCalendar')( knex ),
-        googleClient   = require('./googleClient')( knex ),
+    var server         = require('../../server'),
+        knex           = server.knex,
+        googleCalendar = require('./googleCalendar'),
+        googleClient   = require('./googleClient'),
         extend         = require('util')._extend;
 
     function getUserSettings(idUser) {
@@ -106,4 +108,4 @@ module.exports = function(knex) {
         }
     };
 
-};
+})();

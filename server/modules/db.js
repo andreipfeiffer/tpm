@@ -1,8 +1,10 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var config   = require('../../config'),
+    var server   = require('../../server'),
+        knex     = server.knex,
+        config   = require('../../config'),
         schema   = require('../schema'),
         promise  = require('node-promise'),
         deferred = promise.defer,
@@ -71,4 +73,4 @@ module.exports = function(knex) {
         }
     };
 
-};
+})();

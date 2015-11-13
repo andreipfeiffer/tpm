@@ -1,12 +1,13 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var google = require('googleapis'),
+    var server   = require('../../server'),
+        knex     = server.knex,
+        google   = require('googleapis'),
         calendar = google.calendar('v3'),
-        promise = require('node-promise'),
-        deferred = promise.defer,
-        server = require('../../server');
+        promise  = require('node-promise'),
+        deferred = promise.defer;
 
     function getSelectedCalendarId(userId) {
         var d = deferred();
@@ -364,4 +365,4 @@ module.exports = function(knex) {
         clearEvents          : clearEvents,
         changeCalendar       : changeCalendar
     };
-};
+})();

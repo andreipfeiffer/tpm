@@ -1,13 +1,14 @@
-module.exports = function(knex) {
+module.exports = (function() {
 
     'use strict';
 
-    var googleCalendar    = require('./googleCalendar')( knex ),
-        googleClient      = require('./googleClient')( knex ),
+    var server            = require('../../server'),
+        knex              = server.knex,
+        googleCalendar    = require('./googleCalendar'),
+        googleClient      = require('./googleClient'),
         promise           = require('node-promise'),
-        server            = require('../../server'),
         status            = require('./status'),
-        clients           = require('./clients')( knex ),
+        clients           = require('./clients'),
         statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
         statusArrActive   = [statusArr[0], statusArr[1]],
         statusArrInactive = [statusArr[2], statusArr[3], statusArr[4]];
@@ -347,4 +348,4 @@ module.exports = function(knex) {
         }
     };
 
-};
+})();
