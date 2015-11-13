@@ -26,6 +26,16 @@ module.exports = function(knex) {
             });
     }
 
+    function getClientByName(name, idUser) {
+        return knex('clients')
+            .select('id', 'name', 'description', knex.raw(projectsCount))
+            .where({
+                'name'     : name,
+                'idUser'   : idUser,
+                'isDeleted': '0'
+            });
+    }
+
     function getAllClients(idUser) {
         return knex('clients')
             .select('id', 'name', 'description', knex.raw(projectsCount))
@@ -160,7 +170,9 @@ module.exports = function(knex) {
             });
 
             return d.promise;
-        }
+        },
+
+        getByName: getClientByName
     };
 
 };

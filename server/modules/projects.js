@@ -7,6 +7,7 @@ module.exports = function(knex) {
         promise           = require('node-promise'),
         server            = require('../../server'),
         status            = require('./status'),
+        clients           = require('./clients')( knex ),
         statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
         statusArrActive   = [statusArr[0], statusArr[1]],
         statusArrInactive = [statusArr[2], statusArr[3], statusArr[4]];
@@ -123,7 +124,7 @@ module.exports = function(knex) {
     function getClientId(idUser, data) {
         var d = promise.defer();
 
-        getClientByName(idUser, data.clientName).then(function(client) {
+        clients.getByName(data.clientName, idUser).then(function(client) {
 
             if ( client.length ) {
                 // client is found, so we set its id
@@ -146,16 +147,6 @@ module.exports = function(knex) {
         });
 
         return d.promise;
-    }
-
-    function getClientByName(idUser, name) {
-        return knex('clients')
-            .select()
-            .where({
-                'idUser'   : idUser,
-                'name'     : name,
-                'isDeleted': '0'
-            });
     }
 
     return {
