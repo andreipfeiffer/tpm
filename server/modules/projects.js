@@ -13,11 +13,12 @@ module.exports = function(knex) {
 
     function getProjectById(id, idUser) {
         return knex('projects')
-            .select()
+            .select('projects.*', 'clients.name AS clientName')
+            .leftJoin('clients', 'projects.idClient', 'clients.id')
             .where({
-                'id': id,
-                'idUser': idUser,
-                'isDeleted': '0'
+                'projects.id'       : id,
+                'projects.idUser'   : idUser,
+                'projects.isDeleted': '0'
             });
     }
 
@@ -51,16 +52,11 @@ module.exports = function(knex) {
             });
     }
 
-    function addNewClient(idUser, idProject, name) {
+    function addNewClient(idUser, name) {
         return knex('clients')
             .insert({
                 idUser: idUser,
                 name  : name
-            })
-            .then(function(clients) {
-                return knex('projects')
-                    .where({'id': idProject, 'idUser': idUser})
-                    .update({idClient: clients[0]});
             });
     }
 
@@ -93,6 +89,73 @@ module.exports = function(knex) {
             return false;
         }
         return true;
+    }
+
+    function getProjectData(idUser, data) {
+        var d = promise.defer();
+
+        var projectData = {
+            idClient      : 0,
+            name          : data.name,
+            status        : data.status,
+            days          : parseInt(data.days) || 0,
+            priceEstimated: parseInt(data.priceEstimated) || 0,
+            priceFinal    : parseInt(data.priceFinal) || 0,
+            // dateAdded     : data.dateAdded,
+            dateEstimated : data.dateEstimated,
+            description   : data.description
+        };
+
+        // add fields for New Project
+        if ( !parseInt( data.id ) ) {
+            projectData.idUser    = idUser;
+            projectData.dateAdded = data.dateAdded;
+        }
+
+        getClientId(idUser, data).then(function(idClient) {
+            projectData.idClient = idClient;
+            d.resolve( projectData );
+        });
+
+        return d.promise;
+    }
+
+    function getClientId(idUser, data) {
+        var d = promise.defer();
+
+        getClientByName(idUser, data.clientName).then(function(client) {
+
+            if ( client.length ) {
+                // client is found, so we set its id
+                d.resolve( client[0].id );
+            } else {
+
+                if ( data.clientName && data.clientName.trim().length ) {
+                    // client is not found, but the clientName was filled
+                    // we add the new client, and set the new client id
+                    addNewClient(idUser, data.clientName).then(function(client) {
+                        d.resolve( client[0] );
+                    });
+                } else {
+                    // client is not found, and clientName was not filled
+                    // we set "no client"
+                    d.resolve( 0 );
+                }
+
+            }
+        });
+
+        return d.promise;
+    }
+
+    function getClientByName(idUser, name) {
+        return knex('clients')
+            .select()
+            .where({
+                'idUser'   : idUser,
+                'name'     : name,
+                'isDeleted': '0'
+            });
     }
 
     return {
@@ -135,32 +198,23 @@ module.exports = function(knex) {
                 userLogged      = req.user,
                 isStatusChanged = false,
                 newStatus       = req.body.status,
-                oldStatus, eventId;
+                oldStatus, eventId, editData;
 
-            var editData = {
-                name          : req.body.name,
-                idClient      : req.body.idClient,
-                status        : req.body.status,
-                days          : req.body.days,
-                priceEstimated: req.body.priceEstimated,
-                priceFinal    : req.body.priceFinal,
-                // the dateAdded should be set only when added, not on edit
-                // dateAdded     : req.body.dateAdded,
-                dateEstimated : req.body.dateEstimated,
-                description   : req.body.description
-            };
-
-
-            var editProject = knex('projects')
-                .where({
-                    'id': id,
-                    'idUser': userLogged.id,
-                    'isDeleted': '0'
-                }).update( editData );
+            function editProject(id, idUser, data) {
+                return knex('projects')
+                    .where({
+                        'id'       : id,
+                        'idUser'   : idUser,
+                        'isDeleted': '0'
+                    }).update( data );
+            }
 
             googleClient.updateTokens(req.user);
 
-            getProjectById(id, userLogged.id).then(function(data) {
+            getProjectData(userLogged.id, req.body).then(function(data) {
+                editData = data;
+                return getProjectById(id, userLogged.id);
+            }).then(function(data) {
                 eventId         = data[0].googleEventId;
                 oldStatus       = data[0].status;
                 isStatusChanged = (oldStatus !== newStatus);
@@ -181,7 +235,7 @@ module.exports = function(knex) {
                     });
                 }
             }).then(function() {
-                editProject.then(function() {
+                editProject( id, userLogged.id, editData ).then(function() {
                     if ( isStatusChanged ) {
                         // emit websocket event
                         status.updateIncome();
@@ -210,22 +264,14 @@ module.exports = function(knex) {
             var data = req.body,
                 userLogged = req.user,
                 newProject = {},
-                newProjectData = {
-                    idUser        : userLogged.id,
-                    idClient      : data.idClient,
-                    name          : data.name,
-                    status        : data.status,
-                    days          : parseInt(data.days) || 0,
-                    priceEstimated: parseInt(data.priceEstimated) || 0,
-                    priceFinal    : parseInt(data.priceFinal) || 0,
-                    dateAdded     : data.dateAdded,
-                    dateEstimated : data.dateEstimated,
-                    description   : data.description
-                };
+                newProjectData;
 
             googleClient.updateTokens(req.user);
 
-            knex('projects').insert(newProjectData).then(function(newProjectId) {
+            getProjectData(userLogged.id, data).then(function(data) {
+                newProjectData = data;
+                return knex('projects').insert( newProjectData );
+            }).then(function(newProjectId) {
                 // emit websocket event
                 status.updateProjects();
                 return getProjectById(newProjectId, userLogged.id);
@@ -239,15 +285,7 @@ module.exports = function(knex) {
             }).then(function() {
                 return logStatusChange(userLogged.id, newProject.id, req.body.status);
             }).then(function() {
-                if ( data.newClientName.length ) {
-                    return addNewClient(userLogged.id, newProject.id, data.newClientName ).then(function() {
-                        return getProjectById(newProject.id, userLogged.id);
-                    }).then(function(data) {
-                        return res.status(201).send(data[0]);
-                    });
-                } else {
-                    return res.status(201).send(newProject);
-                }
+                return res.status(201).send(newProject);
             }, function(err) {
                 var log = {
                     idUser: userLogged.id,

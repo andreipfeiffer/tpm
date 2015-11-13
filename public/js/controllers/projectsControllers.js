@@ -163,8 +163,7 @@
                 // project model
                 $scope.project = {
                     name          : '',
-                    idClient      : 0,
-                    newClientName : '',
+                    clientName    : '',
                     priceEstimated: '',
                     priceFinal    : '',
                     days          : '',
@@ -179,8 +178,6 @@
                 $scope.submitForm = function() {
                     feedback.load();
 
-                    // default value is 'null', so convert it to int
-                    $scope.project.idClient = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
@@ -199,8 +196,9 @@
 
                     $scope.isDatePickerOpened = true;
                 };
-                $scope.toggleClientSelect = function(val) {
-                    $scope.isNewClient = !!val;
+
+                $scope.clearClient = function() {
+                    $scope.project.clientName = '';
                 };
             }
         ])
@@ -240,8 +238,6 @@
                 $scope.submitForm = function() {
                     feedback.load();
 
-                    // default value is 'null', so convert it to int
-                    $scope.project.idClient      = TPM.utils.toInt( $scope.project.idClient );
                     // convert the dates to match the DB format
                     $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
                     $scope.project.dateAdded     = $filter('date')(new Date(), TPM.settings.dateFormat);
@@ -259,6 +255,10 @@
                     $event.stopPropagation();
 
                     $scope.isDatePickerOpened = true;
+                };
+
+                $scope.clearClient = function() {
+                    $scope.project.clientName = '';
                 };
 
             }

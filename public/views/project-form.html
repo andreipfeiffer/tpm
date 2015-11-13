@@ -11,30 +11,33 @@
     <form name="projectsForm" ng-submit="submitForm()" novalidate>
 
         <div class="row">
-            <div class="col-sm-8 form-group">
-                <input type="text" ng-model="project.name" class="form-control input-lg" placeholder="Project name" ui-validate=" '$value.trim().length >= 3' " set-focus>
+            <div class="col-sm-8">
+                <label class="control-label" for="projectName">Name your project:</label>
+                <div class="form-group">
+                    <input type="text" id="projectName"
+                        set-focus
+                        ng-model="project.name"
+                        ui-validate=" '$value.trim().length >= 3' "
+                    class="form-control input-lg" placeholder="Project Name">
+                </div>
             </div>
-            <div class="col-sm-4 form-group">
-                <div style="height: 35px;">
+            <div class="col-sm-4">
+                <label class="control-label" for="clientName">Set a client:</label>
+                <div ng-class="{ 'input-group': project.clientName.length }">
+                    <input type="text" id="clientName" autocomplete="off"
+                        ng-model            = "project.clientName"
+                        placeholder         = "No Client"
+                        uib-typeahead       = "client.name for client in clientsList | filter:$viewValue | limitTo:8"
+                        typeahead-on-select = "selectClient($item, $model, $label)"
+                    class="form-control input-lg">
 
-                    <input type="text" ng-model="project.newClientName" ng-if="!project.id" ng-show="isNewClient" class="form-control" placeholder="New client name">
-
-                    <select2
-                        placeholder="No client, Personal project"
-                        ng-model="project.idClient"
-                        s2-options="client.id as client.name for client in clientsList"
-                        options="{
-                            allowClear: true
-                        }"
-                        style="width: 100%"
-                        ng-hide="isNewClient">
-                    </select2>
+                    <span ng-show="project.clientName.length" class="input-group-btn">
+                        <button class="btn btn-lg btn-default" type="button" ng-click="clearClient()">
+                            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                        </button>
+                    </span>
                 </div>
 
-                <div ng-if="!project.id">
-                    <a href="" ng-show="!isNewClient" ng-click="toggleClientSelect(1)">Add a new client</a>
-                    <a href="" ng-show="isNewClient" ng-click="toggleClientSelect(0)">Select existing client</a>
-                </div>
             </div>
         </div>
 
