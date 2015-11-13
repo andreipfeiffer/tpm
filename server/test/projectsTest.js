@@ -5,11 +5,12 @@
     process.env.NODE_ENV = 'test';
 
     var server         = require('../../server.js'),
+        knex           = server.knex,
         supertest      = require('supertest'),
         agent          = supertest.agent(server.app),
-        db             = require('../modules/db')( server.knex ),
-        projects       = require('../modules/projects')( server.knex ),
-        googleCalendar = require('../modules/googleCalendar')( server.knex ),
+        db             = require('../modules/db'),
+        projects       = require('../modules/projects'),
+        googleCalendar = require('../modules/googleCalendar'),
         status         = require('../modules/status'),
         utils          = require('./_utils'),
         expect         = require('expect.js'),
@@ -206,12 +207,12 @@
         it('should remove all events', function(done) {
             var userId = utils.getUserId();
 
-            server.knex('users').where({ id: userId }).update({ 'googleSelectedCalendar': 'calendarName' }).then(function() {
-                return server.knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' });
+            knex('users').where({ id: userId }).update({ 'googleSelectedCalendar': 'calendarName' }).then(function() {
+                return knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' });
             }).then(function() {
                 return projects.removeEvents( userId );
             }).then(function() {
-                return server.knex('projects').select().where({ idUser: userId });
+                return knex('projects').select().where({ idUser: userId });
             }).then(function(data) {
                 expect( data[0].googleEventId ).to.equal('');
                 done();
