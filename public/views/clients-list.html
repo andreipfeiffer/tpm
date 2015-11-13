@@ -25,9 +25,23 @@
         <table class="table table-hover table-tpm">
             <thead>
                 <tr>
-                    <th class="text-uppercase"><span class="hidden-xs">Client </span>Name</th>
-                    <th width="160" class="text-uppercase text-center"><span class="hidden-xs">Nr. </span>Projects</th>
-                    <th><input type="text" ng-model="searchClient" placeholder="Filter clients" class="form-control pull-right" style="width: 50%;"></th>
+                    <th>
+                        <div ng-class="{ 'input-group': searchClient.length }" style="max-width: 20em;">
+                            <input type="text" autocomplete="off"
+                                ng-model      = "searchClient"
+                                placeholder   = "Search clients"
+                                uib-typeahead = "client.name for client in clientsList | filter: { name: $viewValue } | limitTo:8"
+                            class="form-control input-sm">
+
+                            <span ng-show="searchClient.length" class="input-group-btn">
+                                <button class="btn btn-sm btn-default" type="button" ng-click="clearClient()">
+                                    <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </th>
+                    <th class="text-uppercase text-center"></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +82,7 @@
             </tbody>
         </table>
 
-        <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsList.length">
+        <p class="alert alert-warning text-center" ng-show="!isLoading && !(clientsList | filter: { name: searchClient }).length">
             The are no Clients to display
         </p>
 
