@@ -112,6 +112,10 @@
                     $scope.clientsList.splice(getClientIndex(id), 1);
                     feedback.notify('Client was deleted');
                 };
+
+                $scope.clearSearch = function() {
+                    $scope.searchClient = '';
+                };
             }
         ]);
 
