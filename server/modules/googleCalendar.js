@@ -354,6 +354,11 @@ module.exports = (function() {
         return yyyy + '-'+ mm + '-'+ dd;
     }
 
+    function doesEventExists(eventId) {
+        console.log('doesEventExists', eventId);
+        return !!eventId.length;
+    }
+
     return {
         getSelectedCalendarId: getSelectedCalendarId,
         getCalendars         : getCalendars,
@@ -363,6 +368,7 @@ module.exports = (function() {
         setEventId           : setEventIdOnProject,
         removeEvents         : removeEventsList,
         clearEvents          : clearEvents,
-        changeCalendar       : changeCalendar
+        changeCalendar       : changeCalendar,
+        doesEventExists      : doesEventExists
     };
 })();

@@ -187,7 +187,7 @@ module.exports = (function() {
         },
 
         update: function(req, res) {
-            var id = parseInt( req.params.id, 10 ),
+            var id              = parseInt( req.params.id, 10 ),
                 userLogged      = req.user,
                 isStatusChanged = false,
                 newStatus       = req.body.status,
@@ -203,7 +203,7 @@ module.exports = (function() {
                 oldStatus       = data[0].status;
                 isStatusChanged = (oldStatus !== newStatus);
 
-                if ( eventId.length ) {
+                if ( googleCalendar.doesEventExists( eventId ) ) {
                     if ( hasStatusChangedToInactive( newStatus, oldStatus ) ) {
                         // update the editData, so the eventId will be removed
                         editData.googleEventId = '';
