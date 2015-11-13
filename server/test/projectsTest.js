@@ -221,22 +221,90 @@
 
         describe('Google Calendar integration', function() {
 
+            afterEach(function() {
+                googleCalendar.doesEventExists.restore();
+            });
+
             xit('should add the calendar event, if status is active', function() {
             });
 
             xit('should not add the calendar event, if status is inactive', function() {
             });
 
-            xit('should update the calendar event, if the event exists, and status is active', function() {
+            it('should update the calendar event, if the event exists, and status is active', function(done) {
+                var project = getProjectChanged();
+                project.status = 'in progress';
+
+                sinon.stub( googleCalendar, 'doesEventExists' ).returns( true );
+                var spy = sinon.spy( googleCalendar, 'updateEvent' );
+
+                agent
+                    .put('/projects/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send( project )
+                    .end(function(/*err, res*/) {
+                        expect( spy.calledOnce ).to.equal( true );
+
+                        spy.restore();
+                        done();
+                    });
             });
 
-            xit('should remove the calendar event, if the event exists, and status is inactive', function() {
+            it('should remove the calendar event, if the event exists, and status is inactive', function(done) {
+                var project = getProjectChanged();
+                project.status = 'paid';
+
+                sinon.stub( googleCalendar, 'doesEventExists' ).returns( true );
+                var spy = sinon.spy( googleCalendar, 'deleteEvent' );
+
+                agent
+                    .put('/projects/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send( project )
+                    .end(function(/*err, res*/) {
+                        expect( spy.calledOnce ).to.equal( true );
+
+                        spy.restore();
+                        done();
+                    });
             });
 
-            xit('should add the calendar event, if the event does not exists, and status is active', function() {
+            it('should add the calendar event, if the event does not exists, and status is active', function(done) {
+                var project = getProjectChanged();
+                project.status = 'in progress';
+
+                sinon.stub( googleCalendar, 'doesEventExists' ).returns( false );
+                var spy = sinon.spy( googleCalendar, 'setEventId' );
+
+                agent
+                    .put('/projects/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send( project )
+                    .end(function(/*err, res*/) {
+                        expect( spy.calledOnce ).to.equal( true );
+
+                        spy.restore();
+                        done();
+                    });
             });
 
-            xit('should not add the calendar event, if the event does not exists, and status is inactive', function() {
+            it('should not add the calendar event, if the event does not exists, and status is inactive', function(done) {
+                var project = getProjectChanged();
+                project.status = 'paid';
+
+                sinon.stub( googleCalendar, 'doesEventExists' ).returns( false );
+                var spy = sinon.spy( googleCalendar, 'setEventId' );
+
+                agent
+                    .put('/projects/1')
+                    .set('authorization', utils.getAuthData().authToken)
+                    .send( project )
+                    .end(function(/*err, res*/) {
+                        expect( spy.calledOnce ).to.equal( false );
+
+                        spy.restore();
+                        done();
+                    });
             });
 
         });
