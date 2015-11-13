@@ -4,17 +4,17 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server     = require('../../server.js'),
-        supertest  = require('supertest'),
-        // request = supertest(server.app),
-        agent      = supertest.agent(server.app),
-        db         = require('../modules/db')( server.knex ),
-        projects   = require('../modules/projects')( server.knex ),
-        status     = require('../modules/status'),
-        utils      = require('./_utils'),
-        expect     = require('expect.js'),
-        sinon      = require('sinon'),
-        extend     = require('util')._extend;
+    var server         = require('../../server.js'),
+        supertest      = require('supertest'),
+        agent          = supertest.agent(server.app),
+        db             = require('../modules/db')( server.knex ),
+        projects       = require('../modules/projects')( server.knex ),
+        googleCalendar = require('../modules/googleCalendar')( server.knex ),
+        status         = require('../modules/status'),
+        utils          = require('./_utils'),
+        expect         = require('expect.js'),
+        sinon          = require('sinon'),
+        extend         = require('util')._extend;
 
     function getEmptyProject() {
         return {
@@ -36,6 +36,17 @@
             days          : 5,
             priceEstimated: 100,
             priceFinal    : 200,
+        });
+    }
+
+    function getProjectChanged() {
+        return extend(getEmptyProject(), {
+            name          : 'changed unit test project',
+            status        : 'paid',
+            days          : 6,
+            priceEstimated: 150,
+            priceFinal    : 250,
+            description   : 'changed description',
         });
     }
 
@@ -134,14 +145,8 @@
                 });
         });
 
-        xit('should add the calendar event, if and status is active', function() {
-        });
-
-        xit('should not add the calendar event, if and status is inactive', function() {
-        });
-
         it('should update an existing project', function(done) {
-            var project = getProjectWithData();
+            var project = getProjectChanged();
 
             agent
                 .put('/projects/1')
@@ -156,21 +161,14 @@
                         .end(function(err, res) {
                             expect( res.body ).to.have.property('id', 1);
                             expect( res.body ).to.have.property('name', project.name);
+                            expect( res.body ).to.have.property('status', project.status);
+                            expect( res.body ).to.have.property('priceEstimated', project.priceEstimated);
+                            expect( res.body ).to.have.property('priceFinal', project.priceFinal);
+                            expect( res.body ).to.have.property('days', project.days);
+                            expect( res.body ).to.have.property('description', project.description);
                             done();
                         });
                 });
-        });
-
-        xit('should update the calendar event, if the event exists, and status is active', function() {
-        });
-
-        xit('should remove the calendar event, if the event exists, and status is inactive', function() {
-        });
-
-        xit('should add the calendar event, if the event does not exists, and status is active', function() {
-        });
-
-        xit('should not add the calendar event, if the event does not exists, and status is inactive', function() {
         });
 
         it('should delete an existing project', function(done) {
@@ -218,6 +216,28 @@
                 expect( data[0].googleEventId ).to.equal('');
                 done();
             });
+        });
+
+        describe('Google Calendar integration', function() {
+
+            xit('should add the calendar event, if status is active', function() {
+            });
+
+            xit('should not add the calendar event, if status is inactive', function() {
+            });
+
+            xit('should update the calendar event, if the event exists, and status is active', function() {
+            });
+
+            xit('should remove the calendar event, if the event exists, and status is inactive', function() {
+            });
+
+            xit('should add the calendar event, if the event does not exists, and status is active', function() {
+            });
+
+            xit('should not add the calendar event, if the event does not exists, and status is inactive', function() {
+            });
+
         });
 
     });
