@@ -90,7 +90,7 @@ module.exports = function(knex) {
         var projectData = {
             idClient      : 0,
             name          : data.name,
-            status        : data.status,
+            status        : statusArr.indexOf( data.status ) > -1 ? data.status : statusArr[0],
             days          : parseInt(data.days) || 0,
             priceEstimated: parseInt(data.priceEstimated) || 0,
             priceFinal    : parseInt(data.priceFinal) || 0,
