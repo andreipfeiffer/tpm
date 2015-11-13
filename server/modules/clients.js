@@ -55,6 +55,14 @@ module.exports = function(knex) {
             });
     }
 
+    function addNewClient(idUser, name) {
+        return knex('clients')
+            .insert({
+                idUser: idUser,
+                name  : name
+            });
+    }
+
     function deleteClient(idClient, idUser) {
         return knex('clients')
             .where({
@@ -138,13 +146,7 @@ module.exports = function(knex) {
         add: function(userLogged, data) {
             var d = deferred();
 
-            var addNewClient = knex('clients')
-                .insert({
-                    idUser: userLogged.id,
-                    name  : data.name
-                });
-
-            addNewClient
+            addNewClient(userLogged.id, data.name)
                 .then(function(client) {
                     return getClientById(client[0], userLogged.id);
                 })
@@ -172,7 +174,8 @@ module.exports = function(knex) {
             return d.promise;
         },
 
-        getByName: getClientByName
+        getByName: getClientByName,
+        addNew   : addNewClient
     };
 
 };

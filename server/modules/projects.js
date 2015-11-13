@@ -53,14 +53,6 @@ module.exports = function(knex) {
             });
     }
 
-    function addNewClient(idUser, name) {
-        return knex('clients')
-            .insert({
-                idUser: idUser,
-                name  : name
-            });
-    }
-
     function getActiveProjects(userId) {
         return knex('projects')
             .select()
@@ -134,7 +126,7 @@ module.exports = function(knex) {
                 if ( data.clientName && data.clientName.trim().length ) {
                     // client is not found, but the clientName was filled
                     // we add the new client, and set the new client id
-                    addNewClient(idUser, data.clientName).then(function(client) {
+                    clients.addNew(idUser, data.clientName).then(function(client) {
                         d.resolve( client[0] );
                     });
                 } else {
