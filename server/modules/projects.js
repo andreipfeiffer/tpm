@@ -151,6 +151,28 @@ module.exports = (function() {
             }).update( data );
     }
 
+    function setGoogleEvent(idUser, oldData, editData) {
+        var eventId   = oldData.googleEventId,
+            oldStatus = oldData.status,
+            newStatus = editData.status;
+
+        if ( googleCalendar.doesEventExists( eventId ) ) {
+            if ( hasStatusChangedToInactive( newStatus, oldStatus ) ) {
+                // update the editData, so the eventId will be removed
+                editData.googleEventId = '';
+                return googleCalendar.deleteEvent(idUser, eventId);
+            } else {
+                return googleCalendar.updateEvent(idUser, eventId, editData);
+            }
+        } else if ( isStatusActive(newStatus) ) {
+            return googleCalendar.getSelectedCalendarId(idUser).then(function(calendarId) {
+                return googleCalendar.addEvent(idUser, editData, calendarId);
+            }).then(function(newEventId) {
+                return googleCalendar.setEventId(idUser, oldData.id, newEventId);
+            });
+        }
+    }
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -187,10 +209,9 @@ module.exports = (function() {
         },
 
         update: function(req, res) {
-            var id              = parseInt( req.params.id, 10 ),
-                userLogged      = req.user,
-                isStatusChanged = false,
-                newStatus, oldStatus, eventId, editData;
+            var id         = parseInt( req.params.id, 10 ),
+                userLogged = req.user,
+                newStatus, oldStatus, editData;
 
             googleClient.updateTokens(req.user);
 
@@ -198,29 +219,12 @@ module.exports = (function() {
                 editData  = data;
                 newStatus = editData.status;
                 return getProjectById(id, userLogged.id);
-            }).then(function(data) {
-                eventId         = data[0].googleEventId;
-                oldStatus       = data[0].status;
-                isStatusChanged = (oldStatus !== newStatus);
-
-                if ( googleCalendar.doesEventExists( eventId ) ) {
-                    if ( hasStatusChangedToInactive( newStatus, oldStatus ) ) {
-                        // update the editData, so the eventId will be removed
-                        editData.googleEventId = '';
-                        return googleCalendar.deleteEvent(userLogged.id, eventId);
-                    } else {
-                        return googleCalendar.updateEvent(userLogged.id, eventId, editData);
-                    }
-                } else if ( isStatusActive(newStatus) ) {
-                    return googleCalendar.getSelectedCalendarId(userLogged.id).then(function(calendarId) {
-                        return googleCalendar.addEvent(userLogged.id, editData, calendarId);
-                    }).then(function(newEventId) {
-                        return googleCalendar.setEventId(userLogged.id, id, newEventId);
-                    });
-                }
+            }).then(function(oldData) {
+                oldStatus = oldData.status;
+                return setGoogleEvent(userLogged.id, oldData[0], editData);
             }).then(function() {
                 editProject( id, userLogged.id, editData ).then(function() {
-                    if ( isStatusChanged ) {
+                    if ( oldStatus !== newStatus ) {
                         // emit websocket event
                         status.updateIncome();
 
