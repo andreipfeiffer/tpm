@@ -4,11 +4,24 @@
 
     process.env.NODE_ENV = 'test';
 
-    var db     = require('../modules/db'),
+    var server = require('../../server.js'),
+        knex   = server.knex,
+        app    = server.app,
+        db     = require('../modules/db'),
         utils  = require('../modules/utils'),
-        expect = require('expect.js');
+        expect = require('expect.js'),
+        sinon  = require('sinon');
 
-    xdescribe('Utils', function() {
+    function getLog() {
+        return {
+            idUser: 3,
+            source: 'utilsTest',
+            data  : { someData: 'test' },
+            error : { error: 'error object' }
+        };        
+    }
+
+    describe('Utils', function() {
 
         beforeEach(function(done) {
             db.createDb().then(function() {
@@ -22,9 +35,32 @@
             });
         });
 
+        it('should emit en error event', function() {
+
+            var log = getLog();
+            var mock = sinon.mock( utils );
+
+            mock
+                .expects('logError')
+                    .once()
+                    .withExactArgs( log );
+
+            app.emit('logError', log);
+
+            mock.verify();
+            mock.restore();
+        });
+
         it('should log a new error', function(done) {
-            utils.logError().then(function(data) {
-                expect( data ).to.equal('');
+
+            var log  = getLog(),
+                mock = sinon.mock( console );
+
+            mock.expects('trace').once();
+
+            utils.logError( log ).then(function() {
+                mock.verify();
+                mock.restore();
                 done();
             });
         });
