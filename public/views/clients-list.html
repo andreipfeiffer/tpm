@@ -54,7 +54,7 @@
                     </td>
 
                     <td ng-show="!showActions" class="text-center">
-                        <a href="#projects/client/{{client.id}}">{{client.nrProjects}} projects</a>
+                        <a href="" ng-click="showProjects()">{{client.nrProjects}} projects</a>
                     </td>
 
                     <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 2 : 1 }}">
