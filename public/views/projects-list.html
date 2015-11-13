@@ -59,7 +59,7 @@
                     <th width="160" class="text-uppercase">Status</th>
                     <th width="110" class="text-uppercase" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) == -1">Deadline</th>
                     <th width="160" class="hidden-xs text-uppercase" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) == -1">Work Days</th>
-                    <th width="100" class="hidden-xs hidden-sm text-uppercase">Price</th>
+                    <th width="100" class="hidden-xs hidden-sm text-uppercase text-right">Price</th>
                     <th></th>
                 </tr>
             </thead>
@@ -113,7 +113,7 @@
                             <br>{{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
                         </small>
                     </td>
-                    <td ng-show="!showActions" class="hidden-xs hidden-sm b-one-line">
+                    <td ng-show="!showActions" class="hidden-xs hidden-sm b-one-line text-right">
                         <b>{{project.price}}</b>
                         {{currency}}
                     </td>
