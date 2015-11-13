@@ -2,7 +2,7 @@ module.exports = (function(){
 
     'use strict';
 
-    var promise = require('node-promise'),
+    var promise  = require('node-promise'),
         deferred = promise.defer;
 
     var user = {
