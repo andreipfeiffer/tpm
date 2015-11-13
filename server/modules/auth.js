@@ -8,7 +8,6 @@ module.exports = (function() {
         passport       = require('passport'),
         LocalStrategy  = require('passport-local').Strategy,
         googleClient   = require('./googleClient'),
-        server         = require('../../server'),
         jwt            = require('jsonwebtoken'),
         secret         = 'upsidedown-inseamna-Lia-si-Andrei',
         moment         = require('moment'),

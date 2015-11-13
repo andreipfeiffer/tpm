@@ -4,8 +4,7 @@
 
     process.env.NODE_ENV = 'test';
 
-    var app     = require('../../server.js'),
-        db      = require('../modules/db'),
+    var db      = require('../modules/db'),
         clients = require('../modules/clients'),
         expect  = require('expect.js');
 
