@@ -355,7 +355,6 @@ module.exports = (function() {
     }
 
     function doesEventExists(eventId) {
-        console.log('doesEventExists', eventId);
         return !!eventId.length;
     }
 
