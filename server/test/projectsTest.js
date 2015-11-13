@@ -221,8 +221,12 @@
 
         describe('Google Calendar integration', function() {
 
+            beforeEach(function() {
+                this.stubEvent = sinon.stub( googleCalendar, 'doesEventExists' );
+            });
+
             afterEach(function() {
-                googleCalendar.doesEventExists.restore();
+                this.stubEvent.restore();
             });
 
             xit('should add the calendar event, if status is active', function() {
@@ -235,7 +239,7 @@
                 var project = getProjectChanged();
                 project.status = 'in progress';
 
-                sinon.stub( googleCalendar, 'doesEventExists' ).returns( true );
+                this.stubEvent.returns( true );
                 var spy = sinon.spy( googleCalendar, 'updateEvent' );
 
                 agent
@@ -254,7 +258,7 @@
                 var project = getProjectChanged();
                 project.status = 'paid';
 
-                sinon.stub( googleCalendar, 'doesEventExists' ).returns( true );
+                this.stubEvent.returns( true );
                 var spy = sinon.spy( googleCalendar, 'deleteEvent' );
 
                 agent
@@ -273,7 +277,7 @@
                 var project = getProjectChanged();
                 project.status = 'in progress';
 
-                sinon.stub( googleCalendar, 'doesEventExists' ).returns( false );
+                this.stubEvent.returns( false );
                 var spy = sinon.spy( googleCalendar, 'setEventId' );
 
                 agent
@@ -292,7 +296,7 @@
                 var project = getProjectChanged();
                 project.status = 'paid';
 
-                sinon.stub( googleCalendar, 'doesEventExists' ).returns( false );
+                this.stubEvent.returns( false );
                 var spy = sinon.spy( googleCalendar, 'setEventId' );
 
                 agent
