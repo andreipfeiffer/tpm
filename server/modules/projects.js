@@ -141,6 +141,15 @@ module.exports = function(knex) {
         return d.promise;
     }
 
+    function editProject(id, idUser, data) {
+        return knex('projects')
+            .where({
+                'id'       : id,
+                'idUser'   : idUser,
+                'isDeleted': '0'
+            }).update( data );
+    }
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -182,15 +191,6 @@ module.exports = function(knex) {
                 isStatusChanged = false,
                 newStatus       = req.body.status,
                 oldStatus, eventId, editData;
-
-            function editProject(id, idUser, data) {
-                return knex('projects')
-                    .where({
-                        'id'       : id,
-                        'idUser'   : idUser,
-                        'isDeleted': '0'
-                    }).update( data );
-            }
 
             googleClient.updateTokens(req.user);
 
