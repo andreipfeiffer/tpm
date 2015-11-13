@@ -41,6 +41,9 @@ module.exports = (function() {
         .put(auth.ensureTokenAuthenticated, projects.update)
         .delete(auth.ensureTokenAuthenticated, projects.remove);
 
+    app.route('/projects/client/:id')
+        .get(auth.ensureTokenAuthenticated, projects.getByClientId)
+
     app.route('/clients')
         .get(auth.ensureTokenAuthenticated, function(req, res) {
             clients.getAll(req.user).then(function(result) {

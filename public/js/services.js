@@ -16,6 +16,15 @@
             );
         }])
 
+        .factory('ProjectsClientService', ['$http', '$resource', function($http, $resource) {
+            return $resource(
+                TPM.apiUrl + 'projects/client/:id',
+                {
+                    id: '@id'
+                }
+            );
+        }])
+
         .factory('ClientsService', ['$resource', function($resource) {
             return $resource(
                 TPM.apiUrl + 'clients/:id',

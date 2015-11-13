@@ -67,6 +67,19 @@ module.exports = (function() {
             });
     }
 
+    function getProjectsByClientId(idUser, idClient) {
+        return knex('projects')
+            .select()
+            .where({
+                'idUser'   : idUser,
+                'idClient' : idClient,
+                'isDeleted': '0'
+            })
+            .catch(function(e) {
+                console.log(e);
+            });
+    }
+
     function isStatusActive(status) {
         return (statusArrActive.indexOf(status) > -1);
     }
@@ -183,6 +196,23 @@ module.exports = (function() {
                 var log = {
                     idUser: userLogged.id,
                     source: 'projects.getAll',
+                    error : e
+                };
+                server.app.emit('logError', log);
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
+        },
+
+        getByClientId: function(req, res) {
+            var idClient   = req.params.id,
+                userLogged = req.user;
+
+            getProjectsByClientId(userLogged.id, idClient).then(function(data) {
+                return res.send( data );
+            }).catch(function(e) {
+                var log = {
+                    idUser: userLogged.id,
+                    source: 'projects.getByClientId',
                     error : e
                 };
                 server.app.emit('logError', log);
