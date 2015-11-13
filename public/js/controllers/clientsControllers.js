@@ -64,7 +64,7 @@
                     });
                 };
 
-                var ModalInstanceCtrl = function ($scope, $uibModalInstance, client) {
+                var ModalEditClientCtrl = function ($scope, $uibModalInstance, client) {
                     $scope.client = angular.extend({}, client);
                 };
 
@@ -74,7 +74,7 @@
                     }
                     var modalInstance = $modal.open({
                         templateUrl: 'views/clients-edit-modal.html',
-                        controller: ModalInstanceCtrl,
+                        controller: ModalEditClientCtrl,
                         resolve: {
                             client: function () {
                                 return $scope.clientsList[getClientIndex(id)];
