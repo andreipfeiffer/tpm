@@ -190,13 +190,13 @@ module.exports = (function() {
             var id              = parseInt( req.params.id, 10 ),
                 userLogged      = req.user,
                 isStatusChanged = false,
-                newStatus       = req.body.status,
-                oldStatus, eventId, editData;
+                newStatus, oldStatus, eventId, editData;
 
             googleClient.updateTokens(req.user);
 
             getProjectData(userLogged.id, req.body).then(function(data) {
-                editData = data;
+                editData  = data;
+                newStatus = editData.status;
                 return getProjectById(id, userLogged.id);
             }).then(function(data) {
                 eventId         = data[0].googleEventId;
