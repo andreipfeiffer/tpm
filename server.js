@@ -107,6 +107,7 @@ require('./server/modules/db').createDb(true).then(function() {
     require('./server/routes');
 
     require('./server/modules/status').init();
+    require('./server/modules/utils').init();
 
     start(config.port);
 });
