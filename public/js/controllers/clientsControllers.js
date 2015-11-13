@@ -111,7 +111,7 @@
                         data.map(function(project) {
                             return project.clientName = clientName;
                         });
-                        displayProjects( 'Projects from ' + clientName, data, false );
+                        displayProjects( 'Projects for ' + clientName, data );
                     });
                 };
 
