@@ -42,7 +42,7 @@ module.exports = (function() {
         .delete(auth.ensureTokenAuthenticated, projects.remove);
 
     app.route('/projects/client/:id')
-        .get(auth.ensureTokenAuthenticated, projects.getByClientId)
+        .get(auth.ensureTokenAuthenticated, projects.getByClientId);
 
     app.route('/clients')
         .get(auth.ensureTokenAuthenticated, function(req, res) {

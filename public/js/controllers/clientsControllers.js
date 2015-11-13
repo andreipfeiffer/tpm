@@ -100,8 +100,8 @@
                         clientName = this.client.name;
 
                     ProjectsClient.query({ id: clientId }).$promise.then(function(data) {
-                        data.map(function(project) {
-                            return project.clientName = clientName;
+                        data.forEach(function(project) {
+                            project.clientName = clientName;
                         });
                         ProjectsModal.open( 'Projects for ' + clientName, data );
                     });

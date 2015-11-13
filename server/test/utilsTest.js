@@ -5,11 +5,10 @@
     process.env.NODE_ENV = 'test';
 
     var server = require('../../server.js'),
-        knex   = server.knex,
         app    = server.app,
         db     = require('../modules/db'),
         utils  = require('../modules/utils'),
-        expect = require('expect.js'),
+        // expect = require('expect.js'),
         sinon  = require('sinon');
 
     function getLog() {

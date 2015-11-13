@@ -5,11 +5,9 @@
     process.env.NODE_ENV = 'test';
 
     var server         = require('../../server.js'),
-        knex           = server.knex,
         supertest      = require('supertest'),
         agent          = supertest.agent(server.app),
         db             = require('../modules/db'),
-        reports        = require('../modules/reports'),
         utils          = require('./_utils'),
         expect         = require('expect.js');
 
