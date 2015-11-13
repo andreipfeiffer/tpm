@@ -74,8 +74,8 @@
                     }
                     var modalInstance = $modal.open({
                         templateUrl: 'views/clients-edit-modal.html',
-                        controller: ModalEditClientCtrl,
-                        resolve: {
+                        controller : ModalEditClientCtrl,
+                        resolve    : {
                             client: function () {
                                 return $scope.clientsList[getClientIndex(id)];
                             }
