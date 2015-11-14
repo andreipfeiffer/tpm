@@ -35,7 +35,7 @@
 
             function open(title, list, detailedPrice) {
                 var modalInstance = $modal.open({
-                    templateUrl: 'views/reports-show-projects.html',
+                    templateUrl: 'views/projects-list-modal.html',
                     controller : ModalProjectsCtrl,
                     resolve    : {
                         data : function() {
