@@ -16,7 +16,7 @@
                 });
 
                 scope = $rootScope.$new();
-                ctrl = $controller('SettingsController', {$scope: scope});
+                ctrl  = $controller('SettingsController', {$scope: scope});
             }));
 
 
@@ -59,13 +59,13 @@
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
-                    googleToken: true,
-                    calendars: calendarsList,
+                    googleToken     : true,
+                    calendars       : calendarsList,
                     selectedCalendar: 1
                 });
 
                 scope = $rootScope.$new();
-                ctrl = $controller('SettingsController', {$scope: scope});
+                ctrl  = $controller('SettingsController', {$scope: scope});
             }));
 
 
