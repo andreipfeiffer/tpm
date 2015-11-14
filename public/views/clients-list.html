@@ -26,7 +26,7 @@
             <thead>
                 <tr>
                     <th colspan="3">
-                        <div ng-class="{ 'input-group': searchClient.length }" style="max-width: 20em;">
+                        <div ng-class="{ 'input-group': searchClient.length }" style="max-width: 22em;">
                             <input type="text" autocomplete="off"
                                 ng-model      = "searchClient"
                                 placeholder   = "Search ..."
@@ -47,10 +47,11 @@
                     class="cell-border"
                     ng-repeat="client in clientsList | orderBy:'name' | filter: { name: searchClient }"
                     ng-class="{ 'cell-border--warning': $index == 0 }" 
+                    ng-hide="!$index && !client.nrProjects" 
                 >
                     <td ng-dblclick="openEditDialog(client.id)">
                         <strong>{{client.name.length ? client.name : 'No Client'}}</strong>
-                        <p class="hidden-xs" ng-show="client.description.length">{{client.description}}</p>
+                        <div class="hidden-xs" ng-show="client.description.length">{{client.description}}</div>
                     </td>
 
                     <td ng-show="!showActions" class="text-center">
