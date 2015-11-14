@@ -59,9 +59,6 @@
                 var client = TPM.mocks.clientsList[0];
                 $httpBackend.flush();
 
-                // called just for coverage
-                var modal = scope.openEditDialog( client.id );
-
                 var newClientData = angular.extend( {}, client );
                 newClientData.name = 'Edited client name';
 

@@ -5,7 +5,7 @@ var TPM = TPM || {};
     'use strict';
 
     TPM.customMatchers = {
-        toEqualDeep: function(util, customEqualityTesters) {
+        toEqualDeep: function(/*util, customEqualityTesters*/) {
             return {
                 compare: function(actual, expected) {
                     var result = {};

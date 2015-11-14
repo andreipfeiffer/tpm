@@ -30,6 +30,7 @@
         "localStorage": true,
         "moment": true,
         "io": true,
+        "inject": true,
 
         // defaults
         "console": true,

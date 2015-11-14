@@ -37,12 +37,13 @@ module.exports = function(grunt) {
             files: [
                 '*.js',
                 'server/**/*.js',
-                'public/js/**/*.js'
+                'public/**/*.js'
             ],
             options: {
                 jshintrc: '.jshintrc',
                 ignores: [
-                    'public/js/libs/*.js'
+                    'public/js/libs/*.js',
+                    'public/spec-e2e/*'
                 ]
             }
         },
