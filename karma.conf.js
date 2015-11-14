@@ -36,6 +36,7 @@ module.exports = function(config) {
 
             // vendor helpers
             '../bower_components/angular-mocks/angular-mocks.js',
+            '../bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
 
             // app
             'js/app.js',
