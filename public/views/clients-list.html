@@ -29,12 +29,12 @@
                         <div ng-class="{ 'input-group': searchClient.length }" style="max-width: 20em;">
                             <input type="text" autocomplete="off"
                                 ng-model      = "searchClient"
-                                placeholder   = "Search clients"
+                                placeholder   = "Search ..."
                                 uib-typeahead = "client.name for client in clientsList | filter: { name: $viewValue } | limitTo:8"
-                            class="form-control input-sm">
+                            class="form-control">
 
                             <span ng-show="searchClient.length" class="input-group-btn">
-                                <button class="btn btn-sm btn-default" type="button" ng-click="clearSearch()">
+                                <button class="btn btn-default" type="button" ng-click="clearSearch()">
                                     <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
                                 </button>
                             </span>
