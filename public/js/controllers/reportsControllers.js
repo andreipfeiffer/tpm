@@ -150,7 +150,7 @@
                 }
 
                 function getClientName(project) {
-                    return project.clientName || 'Personal projects';
+                    return project.clientName || 'No Client';
                 }
 
                 function getCurrentMonth(res, month) {

@@ -51,7 +51,7 @@
                     ng-class="{ 'cell-border--warning': $index == 0 }" 
                 >
                     <td ng-dblclick="openEditDialog(client.id)">
-                        <strong>{{client.name}}</strong>
+                        <strong>{{client.name.length ? client.name : 'No Client'}}</strong>
                         <p class="hidden-xs" ng-show="client.description.length">{{client.description}}</p>
                     </td>
 

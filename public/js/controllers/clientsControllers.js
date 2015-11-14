@@ -97,7 +97,7 @@
 
                 $scope.showProjects = function() {
                     var clientId   = this.client.id,
-                        clientName = this.client.name;
+                        clientName = this.client.name || 'No Client';
 
                     ProjectsClient.query({ id: clientId }).$promise.then(function(data) {
                         data.forEach(function(project) {

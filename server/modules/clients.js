@@ -12,9 +12,9 @@ module.exports = (function() {
     function getEmptyClient(nrProjects) {
         return {
             id         : 0,
-            name       : '-',
+            name       : '',
             nrProjects : nrProjects,
-            description: 'Personal projects'
+            description: 'Projects unassigned to a client'
         };
     }
 
