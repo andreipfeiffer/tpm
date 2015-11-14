@@ -46,7 +46,9 @@
             </thead>
             <tbody>
                 <tr
+                    class="cell-border"
                     ng-repeat="client in clientsList | orderBy:'name' | filter: { name: searchClient }"
+                    ng-class="{ 'cell-border--warning': $index == 0 }" 
                 >
                     <td ng-dblclick="openEditDialog(client.id)">
                         <strong>{{client.name}}</strong>

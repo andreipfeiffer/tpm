@@ -64,6 +64,11 @@
 		border-color: #EC5454;
 	}
 
+.table-no-header,
+.table-no-header tr:first-child td {
+	border: 0;
+}
+
 .btn-group {
 	font-size: 0;
 }
