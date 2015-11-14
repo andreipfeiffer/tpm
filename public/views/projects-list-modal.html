@@ -16,7 +16,7 @@
         <tbody>
             <tr ng-repeat="project in data">
                 <td>{{$index + 1}}.</td>
-                <td><b>{{project.name}}</b></td>
+                <td><a href="#projects/{{project.id}}/edit" ng-click="$dismiss()"><b>{{project.name}}</b></a></td>
                 <td>{{project.clientName || 'Personal project'}}</td>
 
                 <td class="text-right" ng-if="!detailedPrice">
