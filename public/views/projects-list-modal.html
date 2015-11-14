@@ -1,23 +1,15 @@
 <div class="modal-header">
+    <button class="btn btn-default pull-right" ng-click="$dismiss()">Close</button>
     <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th width="20"></th>
-                <th class="text-uppercase">Project</th>
-                <th class="text-uppercase">Client</th>
-                <th width="160" class="text-uppercase text-right" ng-if="!detailedPrice">Price</th>
-                <th width="160" class="text-uppercase text-right" ng-if="detailedPrice">Final - Est.</th>
-            </tr>
-        </thead>
+    <table class="table table-tpm table-no-header">
         <tbody>
             <tr ng-repeat="project in data">
                 <td>{{$index + 1}}.</td>
                 <td><a href="#projects/{{project.id}}/edit" ng-click="$dismiss()"><b>{{project.name}}</b></a></td>
-                <td>{{project.clientName || 'Personal project'}}</td>
+                <td>{{project.clientName || 'No Client'}}</td>
 
                 <td class="text-right" ng-if="!detailedPrice">
                     <b>{{ project.priceFinal ? project.priceFinal : project.priceEstimated }}</b>
@@ -32,7 +24,4 @@
         </tbody>
     </table>
 
-</div>
-<div class="modal-footer text-left">
-    <button class="btn btn-primary" ng-click="$dismiss()">Close</button>
 </div>
