@@ -13,10 +13,12 @@ module.exports = function() {
             // http://stackoverflow.com/questions/21259235/remove-an-item-from-localstorage-in-a-protractor-test
             // browser.executeScript('window.localStorage.setItem("TPMtoken", "");');
 
+            var myAccountButton = element( by.css('a.my-account') );
             var logoutButton = element(by.css('a[href="#logout"]'));
 
-            logoutButton.isPresent().then(function(exists) {
+            myAccountButton.isPresent().then(function(exists) {
                 if ( exists === true ) {
+                    myAccountButton.click();
                     logoutButton.click().then(function() {
                         cb();
                     });
