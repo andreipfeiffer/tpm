@@ -205,12 +205,6 @@
                     return project.clientName || 'No Client';
                 }
 
-                function getCurrentMonth(res, month) {
-                    return res.filter(function(project) {
-                        return project.monthRaw === month;
-                    })[0];
-                }
-
                 function getCurrentClient(res, idClient) {
                     return res.filter(function(project) {
                         return project.id === idClient;
