@@ -50,10 +50,20 @@ html(class='no-js', lang='en', ng-app='tpm')
                             a.btn.btn-link(href='#clients', ng-click='collapseMenu()') Clients
                         li(ng-class='{ active: isActive("reports")}')
                             a.btn.btn-link(href='#reports', ng-click='collapseMenu()') Reports
-                        li(ng-class='{ active: isActive("settings")}')
-                            a.btn.btn-link(href='#settings', ng-click='collapseMenu()') Settings
-                    .nav.navbar-nav.navbar-right
-                        a.btn.btn-default.navbar-btn(href='#logout') Logout
+
+                    ul.nav.navbar-nav.navbar-right
+                        li.dropdown
+                            a.dropdown-toggle(href="", data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                                | My Account
+                                span.caret
+                            ul.dropdown-menu
+                                li
+                                    a(href='#settings', ng-click='collapseMenu()') Settings
+                                li.disabled
+                                    a(href='') Profile
+                                li.divider(role='separator')
+                                li
+                                    a(href='#logout') Logout
 
             //- all content goes here
             div.animate-slideFade(ng-view='ng-view')
