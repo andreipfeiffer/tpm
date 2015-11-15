@@ -117,34 +117,33 @@
 
                 function groupByMonth(projectsList) {
                     var projects = getProjectsByStatus( projectsList, 'paid' ),
-                        res = [],
-                        first = getFirstMonth( projects ),
-                        last  = getLastMonth( projects ),
-                        y, m;
+                        first    = getFirstMonth( projects ),
+                        last     = getLastMonth( projects ),
+                        res      = [],
+                        year, month, monthProjects, totalPrice;
 
-                    for ( y = first.year; y <= last.year; y += 1 ) {
-                        for ( m = 1; m <= 12; m += 1 ) {
+                    for ( year = first.year; year <= last.year; year += 1 ) {
+                        for ( month = 1; month <= 12; month += 1 ) {
 
-                            if ( y === last.year && m > last.month ) {
-                                break;
-                            }
-
-                            if ( y === first.year && m < first.month ) {
-                                // console.log('null');
+                            if (
+                                // ignore months after last one
+                                ( year === last.year && month > last.month ) ||
+                                // ignore months before first one
+                                ( year === first.year && month < first.month )
+                            ) {
+                                // do nothing
                             } else {
-                                // get projects
-                                // console.log( y + '-' + m );
-
-                                var monthProjects = getPaidProjectsByMonth( projects, y, m );
-                                var total = getTotalPrice( monthProjects );
+                                monthProjects = getPaidProjectsByMonth( projects, year, month );
+                                totalPrice    = getTotalPrice( monthProjects );
 
                                 res.push({
-                                    price   : total,
-                                    month   : moment(y + '-' + m + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
-                                    monthRaw: y + '-' + m,
+                                    price   : totalPrice,
+                                    month   : moment(year + '-' + month + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
+                                    monthRaw: year + '-' + month,
                                     projects: monthProjects
                                 });
                             }
+
                         }
                     }
 
