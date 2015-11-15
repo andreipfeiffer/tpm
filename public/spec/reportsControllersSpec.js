@@ -7,15 +7,17 @@
         beforeEach(module('tpm'));
 
         describe('ReportsController', function() {
-            var scope, ctrl, $httpBackend;
+            var scope, ctrl, location, cache, $httpBackend;
 
-            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
+            beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, $location, tpmCache) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(TPM.apiUrl + 'reports').respond( TPM.mocks.reports );
                 $httpBackend.whenGET(/views\//).respond(200);
 
-                scope = $rootScope.$new();
-                ctrl  = $controller('ReportsController', {$scope: scope});
+                cache    = tpmCache;
+                location = $location;
+                scope    = $rootScope.$new();
+                ctrl     = $controller('ReportsController', {$scope: scope});
 
                 jasmine.addMatchers( TPM.customMatchers );
             }));
@@ -31,7 +33,17 @@
             it('should calculate "projects finished, not paid"', function() {
                 $httpBackend.flush();
 
-                expect( scope.notPaid ).toEqual( 320 );
+                expect( scope.notPaid.nr ).toEqual( 2 );
+                expect( scope.notPaid.value ).toEqual( 320 );
+            });
+
+            it('should gotoFinishedProjects()', function() {
+                $httpBackend.flush();
+
+                scope.gotoFinishedProjects();
+
+                expect( location.path() ).toEqual('/projects');
+                expect( cache.get('filterStatus') ).toEqual('finished');
             });
 
             it('should set data for the monthly income table', function() {

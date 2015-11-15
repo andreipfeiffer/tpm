@@ -64,10 +64,13 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <div class="panel panel-warning" ng-if="notPaid > 0">
+                                <div class="panel panel-warning" ng-if="notPaid.nr > 0">
                                     <div class="panel-heading"><b>PROJECTS NOT PAID:</b></div>
                                     <div class="panel-body">
-                                        There are Projects "finished", but not "paid": <b>{{ notPaid }} {{ currency }}</b>
+                                        There are
+                                        <a href="" ng-click="gotoFinishedProjects()">{{ notPaid.nr }} Projects</a>
+                                        "finished", but not "paid", in total of
+                                        <b>{{ notPaid.value }} {{ currency }}</b>
                                     </div>
                                 </div>
                             </div>

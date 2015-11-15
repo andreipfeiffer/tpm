@@ -8,11 +8,13 @@
             '$scope',
             '$uibModal',
             '$http',
+            '$location',
             'feedback',
+            'tpmCache',
             'ReportsService',
             'SettingsUser',
             'ProjectsModal',
-            function($scope, $modal, $http, feedback, Reports, SettingsUser, ProjectsModal) {
+            function($scope, $modal, $http, $location, feedback, tpmCache, Reports, SettingsUser, ProjectsModal) {
 
                 $scope.currency   = SettingsUser.get().currency;
                 $scope.isLoading  = true;
@@ -45,6 +47,11 @@
 
                     feedback.dismiss();
                 });
+
+                $scope.gotoFinishedProjects = function() {
+                    tpmCache.put('filterStatus', 'finished');
+                    $location.path('/projects');
+                };
 
                 $scope.showProjects = function(title, list, detailedPrice) {
                     ProjectsModal.open( title, list, detailedPrice );
@@ -133,13 +140,18 @@
                 }
 
                 function getNotPaid(projects) {
-                    var val = 0;
+                    var val = 0,
+                        nr  = 0;
                     projects.forEach(function(project) {
                         if ( project.status === 'finished' ) {
                             val += getPrice(project);
+                            nr  += 1;
                         }
                     });
-                    return val;
+                    return {
+                        value: val,
+                        nr   : nr
+                    };
                 }
 
                 function getPrice(project) {
