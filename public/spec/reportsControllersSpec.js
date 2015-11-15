@@ -49,9 +49,11 @@
             it('should set data for the monthly income table', function() {
                 $httpBackend.flush();
 
-                expect( scope.months.length ).toEqual( 2 );
-                expect( scope.months[0].month ).toEqual('January 2015');
-                expect( scope.months[1].month ).toEqual('December 2014');
+                expect( scope.months.length ).toEqual( 4 );
+                expect( scope.months[0].month ).toEqual('March 2015');
+                expect( scope.months[1].month ).toEqual('February 2015');
+                expect( scope.months[2].month ).toEqual('January 2015');
+                expect( scope.months[3].month ).toEqual('December 2014');
             });
 
             it('should set data for the monthly income chart', function() {
@@ -59,10 +61,16 @@
 
                 expect( scope.chartMonth.series ).toEqualDeep( ['2015', '2014'] );
 
-                // 2015 total
-                expect( scope.chartMonth.data[0] ).toEqualDeep( [300] );
+                // 2015
+                expect( scope.chartMonth.data[0].length ).toEqual( 3 );
+                // january
+                expect( scope.chartMonth.data[0][0] ).toEqual( 300 );
+                // february (automatically added)
+                expect( scope.chartMonth.data[0][1] ).toEqual( 0 );
+                // march
+                expect( scope.chartMonth.data[0][2] ).toEqual( 10 );
 
-                // 2014 total
+                // 2014
                 expect( scope.chartMonth.data[1].length ).toEqual( 12 );
                 // empty months filled with null
                 expect( scope.chartMonth.data[1][0] ).toBeNull();
@@ -74,7 +82,7 @@
             it('should set data for the price evolution chart', function() {
                 $httpBackend.flush();
 
-                expect( scope.chartPrice.data ).toEqualDeep( [1, 2, 1] );
+                expect( scope.chartPrice.data ).toEqualDeep( [1, 3, 1] );
             });
 
             it('should set data for "income by client"', function() {

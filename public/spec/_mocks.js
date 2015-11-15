@@ -81,11 +81,23 @@ var TPM = TPM || {};
                 'month'         : '2014-11'
             },
 
-            // '2015'
+            // 2015 march (used to test empty february)
             {
                 'id'            : 3,
-                'idClient'      : 1,
+                'idClient'      : 3,
                 'name'          : 'Proiect 3',
+                'clientName'    : 'client C',
+                'priceEstimated': 10,
+                'priceFinal'    : 10,
+                'date'          : '2015-03-12T08:51:06.000Z',
+                'status'        : 'paid',
+                'month'         : '2015-3'
+            },
+            // 2015 january
+            {
+                'id'            : 4,
+                'idClient'      : 1,
+                'name'          : 'Proiect 4',
                 'clientName'    : 'client A',
                 'priceEstimated': 0,
                 'priceFinal'    : 100,
@@ -94,9 +106,9 @@ var TPM = TPM || {};
                 'month'         : '2015-1'
             },
             {
-                'id'            : 4,
+                'id'            : 5,
                 'idClient'      : 1,
-                'name'          : 'Proiect 4',
+                'name'          : 'Proiect 5',
                 'clientName'    : 'client A',
                 'priceEstimated': 200,
                 'priceFinal'    : 0,
@@ -105,11 +117,11 @@ var TPM = TPM || {};
                 'month'         : '2015-1'
             },
 
-            // '2014'
+            // 2014 december
             {
-                'id'            : 5,
+                'id'            : 6,
                 'idClient'      : 1,
-                'name'          : 'Proiect 5',
+                'name'          : 'Proiect 6',
                 'clientName'    : 'client A',
                 'priceEstimated': 100,
                 'priceFinal'    : 200,
@@ -118,16 +130,16 @@ var TPM = TPM || {};
                 'month'         : '2014-12'
             },
             {
-                'id'            : 6,
+                'id'            : 7,
                 'idClient'      : 2,
-                'name'          : 'Proiect 6',
+                'name'          : 'Proiect 7',
                 'clientName'    : 'client B',
                 'priceEstimated': 3000,
                 'priceFinal'    : 2500,
                 'date'          : '2014-12-10T08:51:06.000Z',
                 'status'        : 'paid',
                 'month'         : '2014-12'
-            }
+            },
         ]
 
     };

@@ -82,33 +82,73 @@
                     }
                 };
 
-                function groupByMonth(projects) {
-                    var res = [];
+                function getFirstMonth(projects) {
+                    // @todo get first & last with status "paid"
+                    var res = projects[projects.length - 1].month.split('-').map( TPM.utils.toInt );
+                    return {
+                        year : res[0],
+                        month: res[1]
+                    };
+                }
 
-                    projects.forEach(function(project) {
+                function getLastMonth(projects) {
+                    // @todo get first & last with status "paid"
+                    var res = projects[0].month.split('-').map( TPM.utils.toInt );
+                    return {
+                        year : res[0],
+                        month: res[1]
+                    };
+                }
 
-                        if ( project.status !== 'paid' ) {
-                            return;
-                        }
-
-                        var month = getCurrentMonth(res, project.month);
-
-                        if ( !month ) {
-                            res.push({
-                                price   : 0,
-                                month   : moment(project.month + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
-                                monthRaw: project.month,
-                                projects: []
-                            });
-
-                            month = res[res.length - 1];
-                        }
-
-                        month['price'] += getPrice( project );
-                        month.projects.push( project );
+                function getPaidProjectsByMonth(projects, year, month) {
+                    return projects.filter(function(project) {
+                        return (
+                            project.month  === (year + '-' + month) &&
+                            project.status === 'paid'
+                        );
                     });
+                }
 
-                    return res;
+                function getTotalPrice(projects) {
+                    return projects.reduce(function(price, project) {
+                        return price + getPrice( project );
+                    }, 0);
+                }
+
+                function groupByMonth(projectsList) {
+                    var projects = getProjectsByStatus( projectsList, 'paid' ),
+                        res = [],
+                        first = getFirstMonth( projects ),
+                        last  = getLastMonth( projects ),
+                        y, m;
+
+                    for ( y = first.year; y <= last.year; y += 1 ) {
+                        for ( m = 1; m <= 12; m += 1 ) {
+
+                            if ( y === last.year && m > last.month ) {
+                                break;
+                            }
+
+                            if ( y === first.year && m < first.month ) {
+                                // console.log('null');
+                            } else {
+                                // get projects
+                                // console.log( y + '-' + m );
+
+                                var monthProjects = getPaidProjectsByMonth( projects, y, m );
+                                var total = getTotalPrice( monthProjects );
+
+                                res.push({
+                                    price   : total,
+                                    month   : moment(y + '-' + m + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
+                                    monthRaw: y + '-' + m,
+                                    projects: monthProjects
+                                });
+                            }
+                        }
+                    }
+
+                    return res.reverse();
                 }
 
                 function groupByClient(projects) {
@@ -191,6 +231,20 @@
                     if (projects1 > projects2) { return -1; }
                     if (projects1 < projects2) { return 1; }
                     return 0;
+                }
+
+                function sortProjectsByDate(p1, p2) {
+                    var date1 = parseInt( p1.date );
+                    var date2 = parseInt( p2.date );
+                    if (date1 > date2) { return -1; }
+                    if (date1 < date2) { return 1; }
+                    return 0;
+                }
+
+                function getProjectsByStatus(projects, status) {
+                    return projects.filter(function(project) {
+                        return project.status === status;
+                    });
                 }
 
                 function getMonthsChartData(months) {
