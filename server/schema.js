@@ -98,7 +98,9 @@ schema.populate['projects_status_log'] = ''
 
     + ', (1, 2, \'in progress\', \'2014-08-23 17:58:56\')'
     + ', (1, 2, \'finished\',    \'2014-12-23 17:58:56\')'
-    + ', (1, 2, \'paid\',        \'2015-01-23 17:58:56\')'
+    // because this is set to the first day of month
+    // reports should set it to the previous month
+    + ', (1, 2, \'paid\',        \'2015-02-01 17:58:56\')'
 
     + ', (1, 3, \'on hold\',  \'2014-09-23 18:58:56\')'
     + ', (1, 3, \'paid\',     \'2014-10-23 18:58:56\')'

@@ -3,7 +3,8 @@ module.exports = (function() {
     'use strict';
 
     var server = require('../../server'),
-        knex   = server.knex;
+        knex   = server.knex,
+        moment = require('moment');
 
     function getProjectsReport(idUser) {
         var q = '';
@@ -35,6 +36,16 @@ module.exports = (function() {
         return knex.raw( q );
     }
 
+    function moveFirstDayToPreviousMonth(projects) {
+        return projects.map(function(project) {
+            var date = moment( project.date );
+            if ( project.status === 'paid' && date.date() === 1 ) {
+                project.month = date.subtract(1, 'days').format('YYYY-M');
+            }
+            return project;
+        });
+    }
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -42,7 +53,7 @@ module.exports = (function() {
             getProjectsReport( userLogged.id ).then(function(data) {
                 // don't know why it returns 2 arrays
                 // (probably because of the 2 selects in the query)
-                var projects = data[0];
+                var projects = moveFirstDayToPreviousMonth( data[0] );
 
                 return res.send( projects );
             });

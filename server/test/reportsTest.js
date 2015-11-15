@@ -42,6 +42,8 @@
 
                     // first result
                     expect( res.body[0] ).to.have.property('status', 'paid');
+                    // because this project is set to the first day of month
+                    // reports should set it to the previous month
                     expect( res.body[0] ).to.have.property('month', '2015-1');
                     expect( res.body[0] ).to.have.property('idClient', 0);
                     expect( res.body[0] ).to.have.property('clientName', null);
