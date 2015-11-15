@@ -180,17 +180,10 @@
                 }
 
                 function getNotPaid(projects) {
-                    var val = 0,
-                        nr  = 0;
-                    projects.forEach(function(project) {
-                        if ( project.status === 'finished' ) {
-                            val += getPrice(project);
-                            nr  += 1;
-                        }
-                    });
+                    var list = getProjectsByStatus(projects, 'finished');
                     return {
-                        value: val,
-                        nr   : nr
+                        value: getTotalPrice( list ),
+                        nr   : list.length
                     };
                 }
 
