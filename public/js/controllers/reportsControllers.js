@@ -227,13 +227,13 @@
                     return 0;
                 }
 
-                function sortProjectsByDate(p1, p2) {
+                /*function sortProjectsByDate(p1, p2) {
                     var date1 = parseInt( p1.date );
                     var date2 = parseInt( p2.date );
                     if (date1 > date2) { return -1; }
                     if (date1 < date2) { return 1; }
                     return 0;
-                }
+                }*/
 
                 function getProjectsByStatus(projects, status) {
                     return projects.filter(function(project) {
