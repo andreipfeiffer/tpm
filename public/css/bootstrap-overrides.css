@@ -105,6 +105,7 @@
 .table-no-header,
 .table-no-header tr:first-child td {
 	border: 0;
+	background: transparent;
 }
 
 .btn-group {
