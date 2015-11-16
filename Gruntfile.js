@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         protractor: {
             options: {
                 keepAlive: false,
-                noColor: false
+                noColor  : false
             },
             e2e: {
                 configFile: 'protractor.conf.js'
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
             ],
             options: {
                 jshintrc: '.jshintrc',
-                ignores: [
+                ignores : [
                     'public/js/libs/*.js',
                     'public/spec-e2e/*'
                 ]
@@ -50,10 +50,10 @@ module.exports = function(grunt) {
 
         mocha_istanbul: {
             coverage: {
-                src: ['server/test/*Test.js'],
+                src    : ['server/test/*Test.js'],
                 options: {
                     coverageFolder: 'coverage/server',
-                    reportFormats: ['text', 'html']
+                    reportFormats : ['text', 'html']
                 }
             }
         },
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     pretty: true,
-                    data: packageData
+                    data  : packageData
                 },
                 files: {
                     'temp/index.html': ['public/index.jade']
@@ -75,16 +75,16 @@ module.exports = function(grunt) {
                 options: {
                     read: [
                         {
-                            selector: 'script',
+                            selector : 'script',
                             attribute: 'src',
-                            writeto: 'jsRefs',
-                            isPath: false
+                            writeto  : 'jsRefs',
+                            isPath   : false
                         },
                         {
-                            selector: 'link',
+                            selector : 'link',
                             attribute: 'href',
-                            writeto: 'cssRefs',
-                            isPath: false
+                            writeto  : 'cssRefs',
+                            isPath   : false
                         }
                     ],
                     remove: ['link','script'],
@@ -100,11 +100,11 @@ module.exports = function(grunt) {
 
         concat: {
             css: {
-                src: '<%= resources.css %>',
+                src : '<%= resources.css %>',
                 dest:'temp/style.css'
             },
             js: {
-                src: '<%= resources.js %>',
+                src : '<%= resources.js %>',
                 dest:'temp/script.js'
             }
         },
@@ -150,12 +150,12 @@ module.exports = function(grunt) {
 
         copy: {
             fonts: {
-                expand: true,
-                cwd: 'bower_components/bootstrap/dist/fonts/',
-                src: '**',
-                dest: 'dist/fonts/',
+                expand : true,
+                cwd    : 'bower_components/bootstrap/dist/fonts/',
+                src    : '**',
+                dest   : 'dist/fonts/',
                 flatten: true,
-                filter: 'isFile'
+                filter : 'isFile'
             }
         },
 
