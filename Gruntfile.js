@@ -6,8 +6,8 @@ module.exports = function(grunt) {
 
     var packageData = grunt.file.readJSON('package.json');
 
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
+    require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
+    require('matchdep').filter('grunt-*').forEach( grunt.loadNpmTasks );
     grunt.loadTasks('tasks');
 
     grunt.initConfig({
@@ -164,6 +164,18 @@ module.exports = function(grunt) {
             temp: ['temp']
         },
 
+        exec: {
+            checkout: {
+                cmd: function(version) {
+                    return 'git checkout ' + version;
+                }
+            },
+            npm     : 'npm install --production',
+            bower   : 'bower install --production',
+            build   : 'grunt build',
+            restart : 'sudo service upsidedown.ro.tpm restart'
+        },
+
         // watch: {
         //     files: ['src/*.js', 'spec/*.js', 'css/*.css'],
         //     tasks: ['jshint', 'csslint'],
@@ -199,4 +211,17 @@ module.exports = function(grunt) {
         'default',
         'protractor:bdd'
     ]);
+
+    grunt.registerTask('deploy', 'Deploy bulk commands', function(version) {
+        if ( version ) {
+            grunt.log.writeln('Deploying v' + version);
+            grunt.task.run('exec:checkout:' + version);
+        }
+        grunt.task.run([
+            'exec:npm',
+            'exec:bower',
+            'exec:build',
+            'exec:restart'
+        ]);
+    });
 };
