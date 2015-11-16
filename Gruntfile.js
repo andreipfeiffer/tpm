@@ -156,14 +156,6 @@ module.exports = function(grunt) {
                 dest: 'dist/fonts/',
                 flatten: true,
                 filter: 'isFile'
-            },
-            select2: {
-                expand: true,
-                cwd: 'bower_components/select2/',
-                src: '*.png',
-                dest: 'dist/css/',
-                flatten: true,
-                filter: 'isFile'
             }
         },
 
