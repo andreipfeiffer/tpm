@@ -27,23 +27,18 @@
                             chart-legend="true">
                         </canvas>
 
-                        <table class="table table-hover table-tpm">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase">Month</th>
-                                    <th width="160" class="text-uppercase">Projects</th>
-                                    <th width="160" class="text-uppercase text-right">Income</th>
-                                </tr>
-                            </thead>
+                        <br>
+
+                        <table class="table table-hover table-tpm table-no-header">
                             <tbody>
                                 <tr ng-repeat="month in months">
                                     <td>
                                         <strong>{{month.month}}</strong>
                                     </td>
-                                    <td>
+                                    <td class="text-right" width="100">
                                         <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
                                     </td>
-                                    <td class="text-right">
+                                    <td class="text-right" width="120">
                                         <b>{{month.price}}</b> {{ currency }}
                                     </td>
                                 </tr>
@@ -118,23 +113,17 @@
                     <br><br>
                     <h2>Most income per client</h2>
                     <br>
-                    <table class="table table-hover table-tpm" ng-show="!isLoading && clientsByPrice.length">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase">Client</th>
-                                <th width="160" class="text-uppercase">Projects</th>
-                                <th width="160" class="text-uppercase text-right">Income</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-hover table-tpm table-no-header" ng-show="!isLoading && clientsByPrice.length">
                         <tbody>
                             <tr ng-repeat="client in clientsByPrice | limitTo: 10">
+                                <td class="text-right" width="20">{{ $index + 1 }}.</td>
                                 <td>
                                     <strong>{{client.name}}</strong>
                                 </td>
-                                <td>
+                                <td class="text-right" width="100">
                                     <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right" width="100">
                                     <b>{{ client.price }}</b> {{ currency }}
                                 </td>
                             </tr>
@@ -152,23 +141,17 @@
                     <br><br>
                     <h2>Most projects per client</h2>
                     <br>
-                    <table class="table table-hover table-tpm" ng-show="!isLoading && clientsByProjects.length">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase">Client</th>
-                                <th width="160" class="text-uppercase">Projects</th>
-                                <th width="160" class="text-uppercase text-right">Income</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-hover table-tpm table-no-header" ng-show="!isLoading && clientsByProjects.length">
                         <tbody>
                             <tr ng-repeat="client in clientsByProjects | limitTo: 10">
+                                <td class="text-right" width="20">{{ $index + 1 }}.</td>
                                 <td>
                                     <strong>{{client.name}}</strong>
                                 </td>
-                                <td>
+                                <td class="text-right" width="100">
                                     <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right" width="100">
                                     <b>{{ client.price }}</b> {{ currency }}
                                 </td>
                             </tr>
