@@ -44,21 +44,27 @@
             </thead>
             <tbody>
                 <tr
-                    class="cell-border"
                     ng-repeat="client in clientsList | orderBy:'name' | filter: { name: searchClient }"
-                    ng-class="{ 'cell-border--warning': $index == 0 }" 
                     ng-hide="!$index && !client.nrProjects" 
                 >
-                    <td ng-dblclick="openEditDialog(client.id)">
+                    <td
+                        class="cell-border"
+                        ng-class="{ 'cell-border--warning': $index == 0 }" 
+                        ng-dblclick="openEditDialog(client.id)"
+                    >
                         <strong>{{client.name.length ? client.name : 'No Client'}}</strong>
                         <div class="hidden-xs" ng-show="client.description.length">{{client.description}}</div>
+
+                        <b class="cell-border__text" ng-if="$index == 0">
+                            No Client
+                        </b>
                     </td>
 
-                    <td ng-show="!showActions" class="text-center">
+                    <td width="120" ng-show="!showActions" class="text-center">
                         <a href="" ng-click="showProjects()">{{client.nrProjects}} projects</a>
                     </td>
 
-                    <td class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 2 : 1 }}">
+                    <td width="120" class="text-right" colspan="{{ isEnabledToggleActions && showActions ? 2 : 1 }}">
                         <div class="btn-group" ng-if="client.id" ng-show="!isEnabledToggleActions || showActions">
                             <button type="button" class="btn btn-default" ng-click="openEditDialog(client.id)">
                                 <span class="glyphicon glyphicon-pencil"></span>

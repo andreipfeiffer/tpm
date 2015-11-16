@@ -52,35 +52,27 @@
             </thead>
             <tbody>
                 <tr
-                    class="cell-border"
                     ng-repeat="
                         project in projectsList |
                             orderBy              : orderCriteria() |
                             filterByProjectStatus:filterStatus |
                             filterByClientId     :filterClient
-                    "
-                    ng-class="{
-                        'cell-border--danger':
-                            (
-                                filterActiveStatusOptions.indexOf(project.status) > -1 &&
-                                project.remainingDays < 0
-                            ) || (
-                                project.status == 'finished' &&
-                                project.passedDays > 21
-                            ),
-                        'cell-border--warning':
-                            (
-                                filterActiveStatusOptions.indexOf(project.status) > -1 &&
-                                project.remainingDays <= project.days
-                            ) || (
-                                project.status == 'finished' &&
-                                project.passedDays > 7
-                            )
-                    }"
-                >
-                    <td>
+                ">
+                    <td
+                        class="cell-border"
+                        ng-class="{
+                            'cell-border--danger' : isProjectOverdue( project ),
+                            'cell-border--warning': isProjectLate( project )
+                    }">
                         <b>{{project.name}}</b><br>
                         {{project.clientName}}
+
+                        <b class="cell-border__text" ng-if="isProjectOverdue( project )">
+                            {{ project.status == 'finished' ? project.remainingText : 'Overdue' }}
+                        </b>
+                        <b class="cell-border__text" ng-if="isProjectLate( project )">
+                            {{ project.status == 'finished' ? project.remainingText : 'Late' }}
+                        </b>
                     </td>
                     <td ng-show="!showActions" class="text-capitalize">
                         {{project.status}}

@@ -49,20 +49,58 @@
 
 .table-tpm {
 	border-bottom: 2px solid #f5f5f5;
+	border-collapse: separate;
+	overflow: hidden;
 }
-	.table.table-tpm td,
 	.table.table-tpm th {
 		border-color: #f5f5f5;
+		border-bottom-width: 1px;
 	}
-	.cell-border {
+	.table.table-tpm td {
+		/*
+		we simulate a top border using gradient
+		because collapsed border on table doesn't help
+		because wide borders are centered on the cell margin, so they get outside the table
+		so we need separate borders on table
+		but having a top border also, it displays a diagonal line on top (border triangle)
+		*/
+		border-top: 0;
+		/*background: -moz-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+		/*background: -webkit-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom, rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	}
+
+	.table.table-tpm .cell-border {
 		border-left: 5px #f5f5f5 solid;
+		position: relative;
+
+		-webkit-transition: border-left .25s;
+    	transition: border-left .25s;
 	}
-	.cell-border--warning {
-		border-color: #EFD44D;
+	.table.table-tpm .cell-border--warning {
+		border-left-color: #e9ca30;
 	}
-	.cell-border--danger {
-		border-color: #EC5454;
+	.table.table-tpm .cell-border--danger {
+		border-left-color: #EC5454;
 	}
+
+	.table.table-tpm tr:hover .cell-border--warning,
+	.table.table-tpm tr:hover .cell-border--danger {
+		border-left-width: 75px;
+	}
+		.cell-border__text {
+			box-sizing: border-box;
+			position: absolute;
+			top: 0;
+			left: -75px;
+			color: white;
+			width: 75px;
+			padding: 8px;
+			text-transform: uppercase;
+			font-size: 11px;
+			font-weight: bold;
+			line-height: 1.9em;
+		}
 
 .table-no-header,
 .table-no-header tr:first-child td {
