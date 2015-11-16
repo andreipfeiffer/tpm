@@ -126,7 +126,7 @@
                         $scope.filterActiveStatusOptions.indexOf(project.status) > -1 &&
                         project.remainingDays < 0
                     ) || (
-                        project.status == 'finished' &&
+                        project.status === 'finished' &&
                         project.passedDays > 30
                     );
                 };
@@ -136,7 +136,7 @@
                         $scope.filterActiveStatusOptions.indexOf(project.status) > -1 &&
                         project.remainingDays <= project.days && project.remainingDays >= 0
                     ) || (
-                        project.status == 'finished' &&
+                        project.status === 'finished' &&
                         project.passedDays > 7 && project.passedDays <= 21
                     );
                 };
