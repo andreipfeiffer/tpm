@@ -4,12 +4,14 @@
 
     angular.module('TPM.Interceptors', [])
 
-        .factory('authInterceptor',['$injector', '$location', '$q', function($injector, $location, $q) {
+        .factory('authInterceptor',['$injector', '$location', '$q', '$rootScope', function($injector, $location, $q, $rootScope) {
             return {
                 responseError: function(rejection) {
 
-                    var status = parseInt(rejection.status),
-                        feedback = $injector.get('feedback');
+                    var status       = parseInt(rejection.status),
+                        feedback     = $injector.get('feedback'),
+                        publicRoutes = ['/login', '/status'],
+                        location     = $location.path();
 
                     // server offline
                     if (status === 0) {
@@ -20,9 +22,19 @@
                     }
 
                     // Unauthorized access attempt
-                    if (status === 401 && $location.path() !== '/login') {
+                    if (status === 401) {
+                        // same logic as SessionService.removeAuthToken();
+                        // cannot inject the Service, because of a circular dep of $http
+                        $rootScope.isAuth = false;
                         localStorage.removeItem('TPMtoken');
-                        $location.path('/login');
+
+                        // redirect to login only if not a public route
+                        if ( publicRoutes.indexOf( location ) === -1 ) {
+                            $location.path('/login');
+                        }
+                        if ( location === '/status' ) {
+                            return $q.resolve( true );
+                        }
                     }
 
                     // Server error
