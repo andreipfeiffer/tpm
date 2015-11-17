@@ -170,7 +170,10 @@ module.exports = function(grunt) {
                     return 'git checkout ' + version;
                 }
             },
-            npm     : 'npm install --production',
+            npm     : {
+                cmd   : 'npm install --production',
+                stderr: false
+            },
             bower   : 'bower install --production',
             build   : 'grunt build',
             restart : 'sudo service upsidedown.ro.tpm restart'
