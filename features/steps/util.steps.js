@@ -11,6 +11,11 @@ module.exports = function() {
         next();
     });
 
+    this.When(/^I navigate to "([^"]*)" page$/, function (page, next) {
+        browser.get('/#/' + page);
+        next();
+    });
+
     this.Then(/^I should be redirected to "([^"]*)" page$/, function (page, next) {
         browser.getLocationAbsUrl().then(function(url) {
             expect( url ).to.equal('/' + page);
@@ -26,6 +31,13 @@ module.exports = function() {
     this.Then(/^the message should read "([^"]*)"$/, function (message, next) {
         $('.fdb').getText().then(function(text) {
             expect( text ).to.equal( message );
+            next();
+        });
+    });
+
+    this.Then(/^The menu bar should not be visible$/, function (next) {
+        element(by.css('#navbar')).isPresent().then(function(exists) {
+            expect( exists ).to.equal( false );
             next();
         });
     });

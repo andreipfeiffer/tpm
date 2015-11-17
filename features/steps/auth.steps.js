@@ -27,6 +27,11 @@ module.exports = function() {
         next();
     });
 
+    this.When(/^I enter incorrect credentials$/, function (next) {
+        this.setCredentials('xxx', 'yyy');
+        next();
+    });
+
     this.When(/^I submit the login form$/, function (next) {
         this.clickLogin( next );
     });
@@ -35,9 +40,10 @@ module.exports = function() {
         this.logout( next );
     });
 
-    this.When(/^I enter incorrect credentials$/, function (next) {
-        this.setCredentials('xxx', 'yyy');
-        next();
+    this.When(/^I get logged out$/, function (next) {
+        this.localStorage.setItem('TPMtoken', 'invalid-token').then(function() {
+            next();
+        });
     });
 
 };
