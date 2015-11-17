@@ -7,14 +7,17 @@
         beforeEach(module('tpm'));
 
         describe('StatusController', function() {
-            var scope, ctrl, websocket;
+            var scope, ctrl, websocket, $httpBackend;
 
-            beforeEach(inject(function($rootScope, $controller, _websocket_) {
+            beforeEach(inject(function($rootScope, _$httpBackend_, $controller, _websocket_) {
                 websocket = _websocket_;
                 scope     = $rootScope.$new();
 
                 // stub missing method before we instantiate the controller
                 websocket.removeAllListeners = jasmine.createSpy();
+
+                $httpBackend = _$httpBackend_;
+                $httpBackend.expectGET(TPM.apiUrl + 'status').respond( true );
 
                 ctrl = $controller('StatusController', {$scope: scope});
             }));
