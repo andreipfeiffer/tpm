@@ -6,9 +6,10 @@
 
         .controller('StatusController', [
             '$scope',
+            '$http',
             'feedback',
             'websocket',
-            function($scope, feedback, websocket) {
+            function($scope, $http, feedback, websocket) {
 
                 $scope.isLoading = true;
                 $scope.status = {
@@ -16,6 +17,8 @@
                     projects: 0,
                     income  : 0
                 };
+
+                $http.get(TPM.apiUrl + 'status');
 
                 feedback.load();
 

@@ -79,6 +79,11 @@ module.exports = (function() {
     app.route('/reports')
         .get(auth.ensureTokenAuthenticated, reports.getAll);
 
+    app.route('/status')
+        .get(auth.ensureTokenAuthenticated, function(req, res) {
+            return res.send( true );
+        });
+
 
     app.route('/settings/google')
         .get(auth.ensureTokenAuthenticated, settings.getGoogle);
