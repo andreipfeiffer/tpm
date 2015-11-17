@@ -9,10 +9,16 @@ module.exports = function() {
             element(by.model('credentials.password')).sendKeys( password );
         };
 
-        this.logout = function(cb) {
-            // http://stackoverflow.com/questions/21259235/remove-an-item-from-localstorage-in-a-protractor-test
-            // browser.executeScript('window.localStorage.setItem("TPMtoken", "");');
+        this.localStorage = {
+            getItem: function(item) {
+                return browser.executeScript("return window.localStorage.getItem('" + item + "');");
+            },
+            setItem: function(item, val) {
+                return browser.executeScript("window.localStorage.setItem('" + item + "', '" + val + "');");
+            }
+        };
 
+        this.logout = function(cb) {
             var myAccountButton = element( by.css('a.my-account') );
             var logoutButton = element(by.css('a[href="#logout"]'));
 
