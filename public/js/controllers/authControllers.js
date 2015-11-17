@@ -19,8 +19,8 @@
                 }
 
                 $scope.errorMessage = '';
-                $scope.isLoading = false;
-                $scope.credentials = {
+                $scope.isLoading    = false;
+                $scope.credentials  = {
                     username: '',
                     password: ''
                 };
