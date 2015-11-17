@@ -28,7 +28,6 @@
 
                 // @toso could have the listeners added only once, at run-time
                 websocket.on('status.data', function (data) {
-                    console.log( 'status.data', data );
                     feedback.dismiss();
                     updateData( data );
                     $scope.isLoading = false;
