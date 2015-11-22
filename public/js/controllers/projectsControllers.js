@@ -137,7 +137,7 @@
                         project.remainingDays <= project.days && project.remainingDays >= 0
                     ) || (
                         project.status === 'finished' &&
-                        project.passedDays > 7 && project.passedDays <= 21
+                        project.passedDays > 7 && project.passedDays <= 30
                     );
                 };
             }

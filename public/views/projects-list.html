@@ -68,10 +68,10 @@
                         {{project.clientName}}
 
                         <b class="cell-border__text" ng-if="isProjectOverdue( project )">
-                            {{ project.status == 'finished' ? project.remainingText : 'Overdue' }}
+                            {{ project.status == 'finished' ? project.passedText : 'Overdue' }}
                         </b>
                         <b class="cell-border__text" ng-if="isProjectLate( project )">
-                            {{ project.status == 'finished' ? project.remainingText : 'Late' }}
+                            {{ project.status == 'finished' ? project.passedText : 'Late' }}
                         </b>
                     </td>
                     <td ng-show="!showActions" class="text-capitalize">
