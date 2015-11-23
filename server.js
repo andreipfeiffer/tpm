@@ -17,7 +17,7 @@ var express      = require('express'),
     compression  = require('compression')/*,
     serveStatic  = require('serve-static')*/;
 
-var allowCrossDomain = function(req, res, next) {
+function allowCrossDomain (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -28,9 +28,9 @@ var allowCrossDomain = function(req, res, next) {
     } else {
         next();
     }
-};
+}
 
-/*var delay = function(req, res, next) {
+/*var function delay(req, res, next) {
     if ( req.url === '/projects' ) {
         setTimeout(function() {
             next();
@@ -38,11 +38,10 @@ var allowCrossDomain = function(req, res, next) {
     } else {
         next();
     }
-};*/
+}*/
 
 // Application initialization
-var env = process.env.NODE_ENV || 'development';
-
+var env  = process.env.NODE_ENV || 'development';
 var knex = require('knex')({
     client: 'mysql',
     connection: {
