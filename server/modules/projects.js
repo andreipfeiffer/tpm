@@ -6,7 +6,6 @@ module.exports = (function() {
         knex              = server.knex,
         googleCalendar    = require('./googleCalendar'),
         googleClient      = require('./googleClient'),
-        promise           = require('node-promise'),
         status            = require('./status'),
         clients           = require('./clients'),
         statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
@@ -99,7 +98,7 @@ module.exports = (function() {
     }
 
     function getProjectData(idUser, data) {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         var projectData = {
             idClient      : 0,
@@ -128,7 +127,7 @@ module.exports = (function() {
     }
 
     function getClientId(idUser, data) {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         clients.getByName(data.clientName, idUser).then(function(client) {
 
@@ -353,11 +352,11 @@ module.exports = (function() {
         },
 
         removeEvents: function(userId) {
-            var d = promise.defer(),
+            var d = Promise.defer(),
                 calendarId;
 
             googleCalendar.getSelectedCalendarId(userId).then(function(id) {
-                var d = promise.defer();
+                var d = Promise.defer();
                 calendarId = id;
 
                 if (!calendarId.length) {

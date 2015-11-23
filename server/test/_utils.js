@@ -2,9 +2,6 @@ module.exports = (function(){
 
     'use strict';
 
-    var promise  = require('node-promise'),
-        deferred = promise.defer;
-
     var user = {
         credentials: {
             username: 'asd',
@@ -29,7 +26,7 @@ module.exports = (function(){
         },
 
         authenticateUser: function(agent) {
-            var d = deferred();
+            var d = Promise.defer();
 
             agent
                 .post('/login')
@@ -46,7 +43,7 @@ module.exports = (function(){
         },
 
         logoutUser: function(agent) {
-            var d = deferred();
+            var d = Promise.defer();
 
             agent
                 .get('/logout')

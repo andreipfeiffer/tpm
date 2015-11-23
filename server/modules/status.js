@@ -5,11 +5,10 @@ module.exports = (function() {
     var server  = require('../../server'),
         knex    = server.knex,
         io      = server.io,
-        promise = require('node-promise'),
         socket;
 
     function getTotalUsers() {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         knex('users')
             .count('id as nr')
@@ -24,7 +23,7 @@ module.exports = (function() {
     }
 
     function getTotalProjects() {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         knex('projects')
             .count('id as nr')
@@ -39,7 +38,7 @@ module.exports = (function() {
     }
 
     function getTotalIncome() {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         knex('projects')
             .select('priceEstimated', 'priceFinal')

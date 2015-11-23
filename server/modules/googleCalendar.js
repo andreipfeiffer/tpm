@@ -5,12 +5,10 @@ module.exports = (function() {
     var server   = require('../../server'),
         knex     = server.knex,
         google   = require('googleapis'),
-        calendar = google.calendar('v3'),
-        promise  = require('node-promise'),
-        deferred = promise.defer;
+        calendar = google.calendar('v3');
 
     function getSelectedCalendarId(userId) {
-        var d = deferred();
+        var d = Promise.defer();
         knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
             d.resolve(data[0].googleCalendar);
         }).catch(function(err) {
@@ -20,7 +18,7 @@ module.exports = (function() {
     }
 
     function getCalendars() {
-        var d = deferred();
+        var d = Promise.defer();
         calendar.calendarList.list({ minAccessRole: 'owner' }, function(err, response) {
             if (err) {
                 d.reject(err);
@@ -32,7 +30,7 @@ module.exports = (function() {
     }
 
     function getProjectData(userId, projectData, calendarId) {
-        var d = deferred();
+        var d = Promise.defer();
 
         if ( typeof calendarId === 'undefined' || !calendarId ) {
             getSelectedCalendarId(userId).then(function(id) {
@@ -73,7 +71,7 @@ module.exports = (function() {
     }
 
     function addEvent(userId, projectData, calendarId) {
-        var d = deferred();
+        var d = Promise.defer();
 
         getProjectData(userId, projectData, calendarId).then(function(params) {
             if (!params) {
@@ -91,7 +89,7 @@ module.exports = (function() {
     }
 
     function updateEvent(userId, eventId, projectData) {
-        var d = deferred(),
+        var d = Promise.defer(),
             data = JSON.parse( JSON.stringify(projectData) );
 
         if ( !eventId.length ) {
@@ -132,7 +130,7 @@ module.exports = (function() {
     }
 
     function deleteEvent(userId, eventId) {
-        var d = deferred();
+        var d = Promise.defer();
 
         if (!eventId.trim().length) {
             return d.resolve(false);
@@ -196,7 +194,7 @@ module.exports = (function() {
     }
 
     function changeCalendar(userId, oldCalendar, newCalendar) {
-        var d = deferred();
+        var d = Promise.defer();
 
         if (oldCalendar === newCalendar || !newCalendar.length) {
             return d.resolve(false);
@@ -216,7 +214,7 @@ module.exports = (function() {
     }
 
     function addEventsToCalendar(userId, eventsArray, newCalendar) {
-        var d = deferred(),
+        var d = Promise.defer(),
             requests = [];
 
         eventsArray.forEach(function(project) {
@@ -227,7 +225,7 @@ module.exports = (function() {
             );
         });
 
-        promise.all( requests ).then(function(result) {
+        Promise.all( requests ).then(function(result) {
             d.resolve(result);
         });
 
@@ -235,7 +233,7 @@ module.exports = (function() {
     }
 
     function moveEventsToAnotherCalendar(eventsArray, oldCalendar, newCalendar) {
-        var d = deferred(),
+        var d = Promise.defer(),
             requests = [];
 
         eventsArray.forEach(function(project) {
@@ -244,7 +242,7 @@ module.exports = (function() {
             );
         });
 
-        promise.all( requests ).then(function() {
+        Promise.all( requests ).then(function() {
             d.resolve(true);
         });
 
@@ -252,7 +250,7 @@ module.exports = (function() {
     }
 
     function moveEvent(id, oldCalendar, newCalendar) {
-        var d = deferred(),
+        var d = Promise.defer(),
             params = {
                 calendarId: oldCalendar,
                 destination: newCalendar,
@@ -271,7 +269,7 @@ module.exports = (function() {
     }
 
     function setEventIdOnProject(idUser, idProject, idEvent) {
-        var d = deferred();
+        var d = Promise.defer();
 
         if ( idEvent || idEvent === '' ) {
             knex('projects')
@@ -316,11 +314,11 @@ module.exports = (function() {
             });
         }
 
-        return promise.all( requests );
+        return Promise.all( requests );
     }
 
     function removeEvent(eventId, calendarId) {
-        var d = promise.defer();
+        var d = Promise.defer();
 
         var params = {
             calendarId: calendarId,

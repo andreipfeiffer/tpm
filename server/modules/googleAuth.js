@@ -8,9 +8,7 @@ module.exports = (function() {
         GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
         config         = require('../../config'),
         projects       = require('./projects'),
-        googleClient   = require('./googleClient'),
-        promise        = require('node-promise'),
-        deferred       = promise.defer;
+        googleClient   = require('./googleClient');
 
     function redirectCallback(req, res, next) {
         passport.authenticate('google', function(err, user/*, info*/) {
@@ -73,7 +71,7 @@ module.exports = (function() {
     ));
 
     function revokeToken(userId, accessToken) {
-        var d = deferred();
+        var d = Promise.defer();
 
         googleClient.oauth2Client.revokeToken(accessToken, function (err/*, resGoogle, body*/) {
             if (err) {
@@ -89,7 +87,7 @@ module.exports = (function() {
     }
 
     function revokeAccess(userLogged) {
-        var d = deferred();
+        var d = Promise.defer();
 
         // don't know what this is for
         // googleClient.updateTokens(userLogged);

@@ -6,13 +6,11 @@ module.exports = (function() {
         knex     = server.knex,
         config   = require('../../config'),
         schema   = require('../schema'),
-        promise  = require('node-promise'),
-        deferred = promise.defer,
         queries  = Object.keys(schema.structure);
 
     return {
         createDb: function(isOnServerStart) {
-            var d = deferred(),
+            var d = Promise.defer(),
                 queryList = [];
 
             if ( isOnServerStart && process.env.NODE_ENV === 'test' ) {
@@ -39,7 +37,7 @@ module.exports = (function() {
                     );
                 });
 
-                promise.all( queryList ).then(function() {
+                Promise.all( queryList ).then(function() {
                     d.resolve(true);
                 });
 
@@ -52,7 +50,7 @@ module.exports = (function() {
         },
 
         dropDb: function() {
-            var d = deferred(),
+            var d = Promise.defer(),
                 queryList = [];
 
             // prevent deleting in production
@@ -65,7 +63,7 @@ module.exports = (function() {
                 queryList.push( knex.raw('DROP TABLE ' + item) );
             });
 
-            promise.all( queryList ).then(function() {
+            Promise.all( queryList ).then(function() {
                 d.resolve(true);
             });
 

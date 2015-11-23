@@ -4,12 +4,11 @@ module.exports = (function() {
 
     var server  = require('../../server'),
         app     = server.app,
-        knex    = server.knex,
-        promise = require('node-promise');
+        knex    = server.knex;
 
     function logError(o) {
 
-        var d     = promise.defer(),
+        var d     = Promise.defer(),
             _data = (typeof o.data !== 'undefined') ? JSON.stringify( o.data ) : '';
 
         knex('error_log').insert({

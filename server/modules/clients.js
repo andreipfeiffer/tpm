@@ -5,9 +5,7 @@ module.exports = (function() {
     var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
     var server   = require('../../server'),
-        knex     = server.knex,
-        promise  = require('node-promise'),
-        deferred = promise.defer;
+        knex     = server.knex;
 
     function getEmptyClient(nrProjects) {
         return {
@@ -89,7 +87,7 @@ module.exports = (function() {
 
     return {
         getAll: function(userLogged) {
-            var d = deferred(),
+            var d = Promise.defer(),
                 noClient;
 
             getProjectsWithoutClient( userLogged.id ).then(function(projectsNoClient) {
@@ -107,7 +105,7 @@ module.exports = (function() {
         },
 
         getById: function(userLogged, id) {
-            var d = deferred();
+            var d = Promise.defer();
 
             getClientById(id, userLogged.id).then(function(data) {
                 if ( !data.length ) {
@@ -123,7 +121,7 @@ module.exports = (function() {
         },
 
         update: function(userLogged, id, data) {
-            var d = deferred();
+            var d = Promise.defer();
 
             var editClient = knex('clients')
                 .where({
@@ -146,7 +144,7 @@ module.exports = (function() {
         },
 
         add: function(userLogged, data) {
-            var d = deferred();
+            var d = Promise.defer();
 
             addNewClient(userLogged.id, data.name)
                 .then(function(client) {
@@ -163,7 +161,7 @@ module.exports = (function() {
         },
 
         remove: function(userLogged, id) {
-            var d = deferred();
+            var d = Promise.defer();
 
             deleteClient(id, userLogged.id).then(function() {
                 return unAssignClient( id );
