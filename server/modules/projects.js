@@ -185,6 +185,19 @@ module.exports = (function() {
         }
     }
 
+    function softDeleteProject(id, userId) {
+        return knex('projects')
+            .where({
+                'id'       : id,
+                'idUser'   : userId,
+                'isDeleted': '0'
+            })
+            .update({
+                'isDeleted'    : '1',
+                'googleEventId': ''
+            });
+    }
+
     return {
         getAll: function(req, res) {
             var userLogged = req.user;
@@ -319,23 +332,12 @@ module.exports = (function() {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
-            var softDeleteProject = knex('projects')
-                .where({
-                    'id'       : id,
-                    'idUser'   : userLogged.id,
-                    'isDeleted': '0'
-                })
-                .update({
-                    'isDeleted'    : '1',
-                    'googleEventId': ''
-                });
-
             googleClient.updateTokens(req.user);
 
             getProjectById(id, userLogged.id).then(function(data) {
                 return googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId);
             }).then(function() {
-                return softDeleteProject;
+                return softDeleteProject(id, userLogged.id);
             }).then(function() {
                   // emit websocket event
                 status.updateProjects();
