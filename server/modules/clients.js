@@ -4,8 +4,8 @@ module.exports = (function() {
 
     var projectsCount = '(select COUNT(*) from `projects` where idClient = `clients`.id and `isDeleted`="0") as nrProjects';
 
-    var server   = require('../../server'),
-        knex     = server.knex;
+    var server = require('../../server'),
+        knex   = server.knex;
 
     function getEmptyClient(nrProjects) {
         return {
