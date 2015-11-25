@@ -187,15 +187,6 @@ module.exports = (grunt) => {
             }
         },
 
-        mkdir: {
-            dist: {
-                options: {
-                    mode  : 777,
-                    create: ['dist/prod']
-                },
-            },
-        },
-
         exec: {
             checkout: {
                 cmd: function(version) {
@@ -214,26 +205,21 @@ module.exports = (grunt) => {
         watch: {
             scripts: {
                 files: ['public/**/*.js', 'spec/**/*.js'],
-                tasks: [/*'jshint', */'babel'],
+                tasks: ['babel'],
             }
         },
     });
 
     grunt.registerTask('default', [
-        'jshint', 'compile', 'mocha_istanbul', 'karma'
-    ]);
-
-    grunt.registerTask('compile', [
-        'babel'
+        'jshint', 'mocha_istanbul', 'karma'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
-        // 'mkdir:dist',
         'jade',
         'dom_munger',
         'fix_public_path',
-        'compile',
+        'babel',
         'concat',
         'htmlmin',
         'cssmin',
