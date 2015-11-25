@@ -6,7 +6,7 @@ module.exports = function(config) {
     config.set({
 
         // base path, that will be used to resolve files and exclude
-        basePath: './public',
+        basePath: '',
 
         // frameworks to use
         frameworks: ['jasmine'],
@@ -14,36 +14,36 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             // vendors
-            '../bower_components/jquery/dist/jquery.min.js',
-            '../bower_components/bootstrap/dist/js/bootstrap.min.js',
-            '../bower_components/angular/angular.min.js',
-            '../bower_components/angular-route/angular-route.min.js',
-            '../bower_components/angular-resource/angular-resource.min.js',
-            '../bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            '../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            '../bower_components/moment/min/moment.min.js',
-            '../bower_components/angular-ui-validate/dist/validate.js',
-            '../bower_components/angular-touch/angular-touch.min.js',
-            '../bower_components/angular-media-queries/match-media.js',
-            '../bower_components/angular-feedback/dist/feedback.min.js',
-            '../bower_components/angular-animate/angular-animate.min.js',
-            '../bower_components/Chart.js/Chart.min.js',
-            '../bower_components/angular-chart.js/dist/angular-chart.min.js',
-            '../bower_components/socket.io-client/socket.io.js',
-            '../bower_components/angular-socket-io/socket.js',
+            'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/bootstrap/dist/js/bootstrap.min.js',
+            'bower_components/angular/angular.min.js',
+            'bower_components/angular-route/angular-route.min.js',
+            'bower_components/angular-resource/angular-resource.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            'bower_components/moment/min/moment.min.js',
+            'bower_components/angular-ui-validate/dist/validate.js',
+            'bower_components/angular-touch/angular-touch.min.js',
+            'bower_components/angular-media-queries/match-media.js',
+            'bower_components/angular-feedback/dist/feedback.min.js',
+            'bower_components/angular-animate/angular-animate.min.js',
+            'bower_components/Chart.js/Chart.min.js',
+            'bower_components/angular-chart.js/dist/angular-chart.min.js',
+            'bower_components/socket.io-client/socket.io.js',
+            'bower_components/angular-socket-io/socket.js',
 
             // vendor helpers
-            '../bower_components/angular-mocks/angular-mocks.js',
-            '../bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
+            'bower_components/angular-mocks/angular-mocks.js',
+            'bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
 
             // app
-            'js/app.js',
-            'js/**/*.js',
+            'public/js/app.js',
+            'public/js/**/*.js',
 
             // test utils
-            'spec/_*.js',
+            'public/spec/_*.js',
             // test specs
-            'spec/*Spec.js'
+            'public/spec/*Spec.js'
         ],
 
         // list of files to exclude
@@ -51,15 +51,32 @@ module.exports = function(config) {
         ],
 
         preprocessors: {
-            'js/**/*.js': 'coverage',
+            'public/js/**/*.js': ['babel', 'coverage']
         },
+
         coverageReporter: {
-            dir : '../coverage/client/',
+            // configure the reporter to use isparta for JavaScript coverage
+            // Only on { "karma-coverage": "douglasduteil/karma-coverage#next" }
+            instrumenters: {
+                isparta : require('isparta')
+            },
+            instrumenter: {
+                'public/js/**/*.js': 'isparta'
+            },
+            dir: 'coverage/client/',
             reporters: [
                 { type: 'text' },
+                { type: 'text-summary' },
                 { type: 'html', subdir: 'html' },
                 // { type: 'lcov', subdir: 'lcov' },
             ]
+        },
+
+        babelPreprocessor: {
+            options: {
+                presets  : ['es2015'],
+                sourceMap: 'inline'
+            }
         },
 
         // test results reporter to use

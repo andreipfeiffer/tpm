@@ -23,7 +23,7 @@ module.exports = (() => {
 
     app.get('/', (req, res) => {
         if ('production' === process.env.NODE_ENV) {
-            res.sendFile( path.join(__dirname, '../dist', '/index.html') );
+            res.sendFile( path.join(__dirname, '../dist/prod', '/index.html') );
         } else {
             res.render('index', packageData);
         }

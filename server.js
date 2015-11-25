@@ -83,6 +83,8 @@
     // app.use(express.csrf());
 
     app.use(compression());
+    // temporary, because js files are pre-processed with Babel
+    app.use('/js', express.static(__dirname + '/dist/dev/js'));
     app.use(express.static(__dirname + '/public'));
     app.use('/dist', express.static(__dirname + '/dist'));
     app.use('/bower_components', express.static(__dirname + '/bower_components'));

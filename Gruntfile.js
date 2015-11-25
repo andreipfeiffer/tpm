@@ -1,8 +1,11 @@
 /*jshint scripturl: true, camelcase: false*/
 
-module.exports = function(grunt) {
+module.exports = (grunt) => {
 
     'use strict';
+
+    const DIST_PROD_URL = 'dist/prod';
+    const DIST_DEV_URL  = 'dist/dev';
 
     var packageData = grunt.file.readJSON('package.json');
 
@@ -12,7 +15,11 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        pkg: packageData, // the package file to use
+        pkg    : packageData,
+        distUrl: {
+            prod: DIST_PROD_URL,
+            dev : DIST_DEV_URL
+        },
 
         karma: {
             unit:  { configFile: 'karma.conf.js', keepalive: true },
@@ -89,8 +96,8 @@ module.exports = function(grunt) {
                     ],
                     remove: ['link','script'],
                     append: [
-                        { selector:'head', html:'<link href="dist/css/<%= pkg.name %>-<%= pkg.version %>.css" rel="stylesheet">' },
-                        { selector: 'body', html: '<script src="dist/js/<%= pkg.name %>-<%= pkg.version %>.js"></script>' }
+                        { selector: 'head', html: '<link href="<%= distUrl.prod %>/css/<%= pkg.name %>-<%= pkg.version %>.css" rel="stylesheet">' },
+                        { selector: 'body', html: '<script src="<%= distUrl.prod %>/js/<%= pkg.name %>-<%= pkg.version %>.js"></script>' }
                     ]
                 },
                 // overwrite file
@@ -117,7 +124,7 @@ module.exports = function(grunt) {
                     keepSpecialComments: 0
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['temp/style.css']
+                    '<%= distUrl.prod %>/css/<%= pkg.name %>-<%= pkg.version %>.css': ['temp/style.css']
                 }
             }
         },
@@ -125,12 +132,12 @@ module.exports = function(grunt) {
         htmlmin: {
             build: {
                 options: {
-                    removeComments: true,
+                    removeComments    : true,
                     collapseWhitespace: true,
                     preserveLineBreaks: true
                 },
                 files: {
-                    'dist/index.html': 'temp/index.html'
+                    '<%= distUrl.prod %>/index.html': 'temp/index.html'
                 }
             }
         },
@@ -143,7 +150,7 @@ module.exports = function(grunt) {
                     mangle: false
                 },
                 files: {
-                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.js': ['temp/script.js']
+                    '<%= distUrl.prod %>/js/<%= pkg.name %>-<%= pkg.version %>.js': ['temp/script.js']
                 }
             }
         },
@@ -153,15 +160,40 @@ module.exports = function(grunt) {
                 expand : true,
                 cwd    : 'bower_components/bootstrap/dist/fonts/',
                 src    : '**',
-                dest   : 'dist/fonts/',
+                dest   : '<%= distUrl.prod %>/fonts/',
                 flatten: true,
                 filter : 'isFile'
             }
         },
 
         clean: {
-            dist: ['dist'],
+            dist: [DIST_PROD_URL],
             temp: ['temp']
+        },
+
+        babel: {
+            options: {
+                sourceMap: true,
+                presets  : ['es2015']
+            },
+            client: {
+                files: [{
+                    expand: true,
+                    cwd   : './public/js/',
+                    src   : ['**/*.js'],
+                    dest  : DIST_DEV_URL + '/js',
+                    ext   : '.js'
+                }]
+            }
+        },
+
+        mkdir: {
+            dist: {
+                options: {
+                    mode  : 777,
+                    create: ['dist/prod']
+                },
+            },
         },
 
         exec: {
@@ -179,21 +211,29 @@ module.exports = function(grunt) {
             restart : 'sudo service upsidedown.ro.tpm restart'
         },
 
-        // watch: {
-        //     files: ['src/*.js', 'spec/*.js', 'css/*.css'],
-        //     tasks: ['jshint', 'csslint'],
-        // },
+        watch: {
+            scripts: {
+                files: ['public/**/*.js', 'spec/**/*.js'],
+                tasks: [/*'jshint', */'babel'],
+            }
+        },
     });
 
     grunt.registerTask('default', [
-        'jshint', 'mocha_istanbul', 'karma'
+        'jshint', 'compile', 'mocha_istanbul', 'karma'
+    ]);
+
+    grunt.registerTask('compile', [
+        'babel'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
+        // 'mkdir:dist',
         'jade',
         'dom_munger',
         'fix_public_path',
+        'compile',
         'concat',
         'htmlmin',
         'cssmin',
@@ -215,7 +255,7 @@ module.exports = function(grunt) {
         'protractor:bdd'
     ]);
 
-    grunt.registerTask('deploy', 'Deploy bulk commands', function(version) {
+    grunt.registerTask('deploy', 'Deploy bulk commands', version => {
         if ( version ) {
             grunt.log.writeln('Deploying v' + version);
             grunt.task.run('exec:checkout:' + version);
