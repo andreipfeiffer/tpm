@@ -15,7 +15,7 @@ module.exports = (() => {
         moment        = require('moment');
 
     // private encryption & validation methods
-    // var generateSalt = function() {
+    // function generateSalt() {
     //     var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ';
     //     var salt = '';
     //     for (var i = 0; i < 10; i += 1) {
@@ -29,7 +29,7 @@ module.exports = (() => {
         return crypto.createHash('md5').update(str).digest('hex');
     }
 
-    // var saltAndHash = function(pass, callback) {
+    // function saltAndHash(pass, callback) {
     //     var salt = generateSalt();
     //     callback(salt + md5(pass + salt));
     // };
@@ -85,7 +85,7 @@ module.exports = (() => {
 
     // used for initial username/password authentication
     var localStrategyAuth = new LocalStrategy((username, password, done) => {
-            // saltAndHash(password, function(resp) {
+            // saltAndHash(password, resp => {
             //     console.log(resp);
             // });
 
@@ -157,7 +157,7 @@ module.exports = (() => {
                             return res.status(200).json(loggedData);
                         } else if (data[0].accessToken.length && data[0].refreshToken.length) {
                             googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
-                            googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
+                            googleClient.refreshAccessToken(user.id, (/*newToken*/) => {
                                 // loggedData.googleToken = newToken;
                                 return res.status(200).json(loggedData);
                             });

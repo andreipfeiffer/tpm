@@ -81,7 +81,7 @@ module.exports = (() => {
                 return d.resolve(false);
             }
 
-            calendar.events.insert(params, function(err, response) {
+            calendar.events.insert(params, (err, response) => {
                 // id error from API, don't reject, resolve with 0
                 var id = err ? 0 : response.id;
                 d.resolve( id );

@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -53,7 +53,7 @@ module.exports = (function() {
 
                     googleClient.updateTokens(req.user);
 
-                    googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
+                    googleCalendar.getSelectedCalendarId(userLogged.id).then(id => {
                         result.selectedCalendar = id;
 
                         googleCalendar.getCalendars()
