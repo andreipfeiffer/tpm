@@ -23,12 +23,21 @@
 
                 feedback.load();
 
-                Settings.get({ type: 'google' }).$promise.then(function(data) {
-                    $scope.settings = data;
-                    $scope.selectedCalendar = getSelectedCalendar( data.selectedCalendar );
-                    $scope.isLoading = false;
-                    feedback.dismiss();
-                });
+                Settings
+                    .get({ type: 'google' }).$promise
+                    .then(function(data) {
+                        $scope.settings = data;
+                        $scope.selectedCalendar = getSelectedCalendar( data.selectedCalendar );
+                        $scope.isLoading = false;
+                        feedback.dismiss();
+                    })
+                    .catch(function(/*err*/) {
+                        $scope.isLoading = false;
+                        feedback.notify('Couldn\'t retrieve your calendars', {
+                            type  : 'warn',
+                            sticky: true
+                        });
+                    });
 
                 $scope.getGoogleAccess = function() {
                     $scope.isLoadingGoogle = true;
