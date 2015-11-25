@@ -6,7 +6,7 @@
 
     var server         = require('../../server.js'),
         knex           = server.knex,
-        agent          = require('supertest').agent( server.app ),
+        request        = require('supertest').agent( server.app ),
         db             = require('../modules/db'),
         projects       = require('../modules/projects'),
         googleCalendar = require('../modules/googleCalendar'),
@@ -58,7 +58,7 @@
             sinon.stub(status, 'updateProjects').returns();
 
             db.createDb()
-                .then(() => utils.authenticateUser( agent ))
+                .then(() => utils.authenticateUser( request ))
                 .then(res => {
                     utils.setAuthData( res.body );
                     done();
@@ -76,7 +76,7 @@
         it('should add a new project with full data', done => {
             var project = getProjectWithData();
 
-            agent
+            request
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
@@ -97,7 +97,7 @@
         it('should add a new project, if days & prices are null', done => {
             var project = getEmptyProject();
 
-            agent
+            request
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
@@ -115,7 +115,7 @@
             var project = getProjectWithData();
             project.clientName = 'new client per project';
 
-            agent
+            request
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
@@ -132,7 +132,7 @@
             // has id: 2
             project.clientName = 'client Ion';
 
-            agent
+            request
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
@@ -146,14 +146,14 @@
         it('should update an existing project', done => {
             var project = getProjectChanged();
 
-            agent
+            request
                 .put('/projects/1')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
                 .end((err, res) => {
                     expect( res.status ).to.equal(200);
 
-                    agent
+                    request
                         .get('/projects/1')
                         .set('authorization', utils.getAuthData().authToken)
                         .end((err, res) => {
@@ -170,13 +170,13 @@
         });
 
         it('should delete an existing project', done => {
-            agent
+            request
                 .delete('/projects/1')
                 .set('authorization', utils.getAuthData().authToken)
                 .end((err, res) => {
                     expect( res.status ).to.equal(204);
 
-                    agent
+                    request
                         .get('/projects/1')
                         .set('authorization', utils.getAuthData().authToken)
                         .end((err, res) => {
@@ -187,7 +187,7 @@
         });
 
         it('should get all projects', done => {
-            agent
+            request
                 .get('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .end((err, res) => {
@@ -239,7 +239,7 @@
                 this.stubEvent.returns( true );
                 var spy = sinon.spy( googleCalendar, 'updateEvent' );
 
-                agent
+                request
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
@@ -258,7 +258,7 @@
                 this.stubEvent.returns( true );
                 var spy = sinon.spy( googleCalendar, 'deleteEvent' );
 
-                agent
+                request
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
@@ -277,7 +277,7 @@
                 this.stubEvent.returns( false );
                 var spy = sinon.spy( googleCalendar, 'setEventId' );
 
-                agent
+                request
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
@@ -296,7 +296,7 @@
                 this.stubEvent.returns( false );
                 var spy = sinon.spy( googleCalendar, 'setEventId' );
 
-                agent
+                request
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )

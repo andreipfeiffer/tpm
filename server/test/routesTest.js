@@ -4,12 +4,12 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server = require('../../server.js'),
-        agent  = require('supertest').agent( server.app ),
-        db     = require('../modules/db'),
-        expect = require('expect.js'),
-        utils  = require('./_utils'),
-        pack   = require('../../package.json');
+    var server  = require('../../server.js'),
+        request = require('supertest').agent( server.app ),
+        db      = require('../modules/db'),
+        expect  = require('expect.js'),
+        utils   = require('./_utils'),
+        pack    = require('../../package.json');
 
     describe('Routes', () => {
 
@@ -18,7 +18,7 @@
 
         describe('Authorized routes without login', () => {
             it('should return index page', done => {
-                agent
+                request
                     .get('/')
                     .end((err, res) => {
                         expect( res.text ).to.have.string( pack.name );
@@ -32,7 +32,7 @@
 
         describe('Unauthorized routes', () => {
             it('should return unauthorized for GET:/clients', done => {
-                agent
+                request
                     .get('/clients')
                     .end((err, res) => {
                         expect( res.status ).to.equal(401);
@@ -40,7 +40,7 @@
                     });
             });
             it('should return unauthorized for GET:/clients/1', done => {
-                agent
+                request
                     .get('/clients/1')
                     .end((err, res) => {
                         expect( res.status ).to.equal(401);
@@ -48,7 +48,7 @@
                     });
             });
             it('should return unauthorized for PUT:/clients/1', done => {
-                agent
+                request
                     .put('/clients/1')
                     .end((err, res) => {
                         expect( res.status ).to.equal(401);
@@ -56,7 +56,7 @@
                     });
             });
             it('should return unauthorized for POST:/clients', done => {
-                agent
+                request
                     .post('/clients')
                     .end((err, res) => {
                         expect( res.status ).to.equal(401);
@@ -64,7 +64,7 @@
                     });
             });
             it('should return unauthorized for DELETE:/clients/1', done => {
-                agent
+                request
                     .del('/clients/1')
                     .end((err, res) => {
                         expect( res.status ).to.equal(401);
@@ -76,14 +76,14 @@
         describe('Authorized routes after login', () => {
 
             beforeEach(done => {
-                utils.authenticateUser( agent ).then(res => {
+                utils.authenticateUser( request ).then(res => {
                     utils.setAuthData( res.body );
                     done();
                 });
             });
 
             it('should authorize GET:/clients', done => {
-                agent
+                request
                     .get('/clients')
                     .set('authorization', utils.getAuthData().authToken)
                     .end((err, res) => {
@@ -92,7 +92,7 @@
                     });
             });
             it('should authorize GET:/clients/1', done => {
-                agent
+                request
                     .get('/clients/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .end((err, res) => {
@@ -101,7 +101,7 @@
                     });
             });
             it('should authorize PUT:/clients/1', done => {
-                agent
+                request
                     .put('/clients/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send({ name: 'new name', description: 'desc' })
@@ -111,7 +111,7 @@
                     });
             });
             it('should authorize POST:/clients', done => {
-                agent
+                request
                     .post('/clients')
                     .set('authorization', utils.getAuthData().authToken)
                     .send({ name: 'new client name' })
@@ -121,7 +121,7 @@
                     });
             });
             it('should authorize DELETE:/clients/1', done => {
-                agent
+                request
                     .del('/clients/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .end((err, res) => {

@@ -4,17 +4,17 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server = require('../../server.js'),
-        agent  = require('supertest').agent( server.app ),
-        db     = require('../modules/db'),
-        utils  = require('./_utils'),
-        expect = require('expect.js');
+    var server  = require('../../server.js'),
+        request = require('supertest').agent( server.app ),
+        db      = require('../modules/db'),
+        utils   = require('./_utils'),
+        expect  = require('expect.js');
 
     describe('Reports', () => {
 
         beforeEach(done => {
             db.createDb()
-                .then(() => utils.authenticateUser( agent ))
+                .then(() => utils.authenticateUser( request ))
                 .then(res => {
                     utils.setAuthData( res.body );
                     done();
@@ -28,7 +28,7 @@
         // ok, this tests only 1 complex query
         // based on fixtures on projects & projects_status_log tables
         it('should return the report', done => {
-            agent
+            request
                 .get('/reports')
                 .set('authorization', utils.getAuthData().authToken)
                 .end((err, res) => {

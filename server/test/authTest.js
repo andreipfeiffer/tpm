@@ -4,11 +4,11 @@
 
     process.env.NODE_ENV = 'test';
 
-    var server = require('../../server.js'),
-        agent  = require('supertest').agent( server.app ),
-        db     = require('../modules/db'),
-        expect = require('expect.js'),
-        utils  = require('./_utils');
+    var server  = require('../../server.js'),
+        request = require('supertest').agent( server.app ),
+        db      = require('../modules/db'),
+        expect  = require('expect.js'),
+        utils   = require('./_utils');
 
     describe('Auth', () => {
 
@@ -21,7 +21,7 @@
                 password: 'x'
             };
 
-            agent
+            request
                 .post('/login')
                 .send(body)
                 .end((err, res) => {
@@ -37,7 +37,7 @@
                 password: 'x'
             };
 
-            agent
+            request
                 .post('/login')
                 .send(body)
                 .end((err, res) => {
@@ -48,7 +48,7 @@
         });
 
         it('should login the user with correct credentials', done => {
-            utils.authenticateUser( agent ).then(res => {
+            utils.authenticateUser( request ).then(res => {
                 expect( res.body ).to.have.property('authUserId');
                 expect( res.body ).to.have.property('authToken');
                 expect( res.status ).to.equal(200);
@@ -58,13 +58,13 @@
 
         it('should logout the logged user', done => {
             utils
-                .authenticateUser( agent )
+                .authenticateUser( request )
                 .then(res => {
                     utils.setAuthData( res.body );
-                    return utils.logoutUser( agent );
+                    return utils.logoutUser( request );
                 })
                 .then(() => {
-                    agent
+                    request
                         .get('/clients')
                         .set('authorization', utils.getAuthData().authToken)
                         .end((err, res) => {

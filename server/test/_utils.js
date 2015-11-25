@@ -25,10 +25,10 @@ module.exports = (() => {
             return user.authData.authUserId;
         },
 
-        authenticateUser(agent) {
+        authenticateUser(request) {
             var d = Promise.defer();
 
-            agent
+            request
                 .post('/login')
                 .send( user.credentials )
                 .end((err, res) => {
@@ -42,10 +42,10 @@ module.exports = (() => {
             return d.promise;
         },
 
-        logoutUser(agent) {
+        logoutUser(request) {
             var d = Promise.defer();
 
-            agent
+            request
                 .get('/logout')
                 .end((err, res) => d.resolve(res));
 
