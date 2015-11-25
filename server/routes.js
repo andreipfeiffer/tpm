@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -21,7 +21,7 @@ module.exports = (function() {
         return res.status( result.status ).send( result.body );
     }
 
-    app.get('/', function(req, res) {
+    app.get('/', (req, res) => {
         if ('production' === process.env.NODE_ENV) {
             res.sendFile( path.join(__dirname, '../dist', '/index.html') );
         } else {
@@ -45,44 +45,42 @@ module.exports = (function() {
         .get(auth.ensureTokenAuthenticated, projects.getByClientId);
 
     app.route('/clients')
-        .get(auth.ensureTokenAuthenticated, function(req, res) {
-            clients.getAll(req.user).then(function(result) {
-                return getResponse( res, result );
-            });
+        .get(auth.ensureTokenAuthenticated, (req, res) => {
+            clients
+                .getAll(req.user)
+                .then((result) => getResponse( res, result ));
         })
-        .post(auth.ensureTokenAuthenticated, function(req, res) {
-            clients.add(req.user, req.body).then(function(result) {
-                return getResponse( res, result );
-            });
+        .post(auth.ensureTokenAuthenticated, (req, res) => {
+            clients
+                .add(req.user, req.body)
+                .then((result) => getResponse( res, result ));
         });
 
     app.route('/clients/:id')
-        .get(auth.ensureTokenAuthenticated, function(req, res) {
+        .get(auth.ensureTokenAuthenticated, (req, res) => {
             var id = parseInt( req.params.id );
-            clients.getById(req.user, id).then(function(result) {
-                return getResponse( res, result );
-            });
+            clients
+                .getById(req.user, id)
+                .then((result) => getResponse( res, result ));
         })
-        .put(auth.ensureTokenAuthenticated, function(req, res) {
+        .put(auth.ensureTokenAuthenticated, (req, res) => {
             var id = parseInt( req.params.id );
-            clients.update(req.user, id, req.body).then(function(result) {
-                return getResponse( res, result );
-            });
+            clients
+                .update(req.user, id, req.body)
+                .then((result) => getResponse( res, result ));
         })
-        .delete(auth.ensureTokenAuthenticated, function(req, res) {
+        .delete(auth.ensureTokenAuthenticated, (req, res) => {
             var id = parseInt( req.params.id );
-            clients.remove(req.user, id).then(function(result) {
-                return getResponse( res, result );
-            });
+            clients
+                .remove(req.user, id)
+                .then((result) => getResponse( res, result ));
         });
 
     app.route('/reports')
         .get(auth.ensureTokenAuthenticated, reports.getAll);
 
     app.route('/status')
-        .get(auth.ensureTokenAuthenticated, function(req, res) {
-            return res.send( true );
-        });
+        .get(auth.ensureTokenAuthenticated, (req, res) => res.send( true ));
 
 
     app.route('/settings/google')

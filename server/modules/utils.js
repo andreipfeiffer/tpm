@@ -1,44 +1,43 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
-    var server  = require('../../server'),
-        app     = server.app,
-        knex    = server.knex;
+    var server = require('../../server'),
+        app    = server.app,
+        knex   = server.knex;
 
     function logError(o) {
+        var d      = Promise.defer(),
+            _data  = (typeof o.data !== 'undefined') ? JSON.stringify( o.data ) : '',
+            _error = (o.data) ? JSON.stringify( o.data ) : 'no error provided';
 
-        var d     = Promise.defer(),
-            _data = (typeof o.data !== 'undefined') ? JSON.stringify( o.data ) : '';
-
-        knex('error_log').insert({
-            idUser: o.idUser || 0,
-            source: o.source || '',
-            data  : _data,
-            error : JSON.stringify( o.error )
-        }).then(function() {
-            console.error('[tpm_error]: ' + new Date().toString());
-            console.trace(o);
-            d.resolve();
-        }).catch(function(err) {
-            console.error(err);
-            d.reject();
-        });
+        knex('error_log')
+            .insert({
+                idUser: o.idUser || 0,
+                source: o.source || '',
+                data  : _data,
+                error : _error
+            })
+            .then(() => {
+                console.error('[tpm_error]: ' + new Date().toString());
+                console.trace(o);
+                d.resolve();
+            })
+            .catch(err => {
+                console.error(err);
+                d.reject();
+            });
 
         return d.promise;
     }
 
 
     return {
-        init: function() {
-            var self = this;
-
-            app.on('logError', function(o) {
-                self.logError(o);
-            });
+        init() {
+            app.on('logError', o => this.logError(o));
         },
 
-        logError: function(o) {
+        logError(o) {
             return logError(o);
         }
     };

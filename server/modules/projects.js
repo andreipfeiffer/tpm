@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -118,7 +118,7 @@ module.exports = (function() {
             projectData.dateAdded = data.dateAdded;
         }
 
-        getClientId(idUser, data).then(function(idClient) {
+        getClientId(idUser, data).then( idClient => {
             projectData.idClient = idClient;
             d.resolve( projectData );
         });
@@ -129,7 +129,7 @@ module.exports = (function() {
     function getClientId(idUser, data) {
         var d = Promise.defer();
 
-        clients.getByName(data.clientName, idUser).then(function(client) {
+        clients.getByName(data.clientName, idUser).then( client => {
 
             if ( client.length ) {
                 // client is found, so we set its id
@@ -139,7 +139,7 @@ module.exports = (function() {
                 if ( data.clientName && data.clientName.trim().length ) {
                     // client is not found, but the clientName was filled
                     // we add the new client, and set the new client id
-                    clients.addNew(idUser, data.clientName).then(function(client) {
+                    clients.addNew(idUser, data.clientName).then( client => {
                         d.resolve( client[0] );
                     });
                 } else {
@@ -177,11 +177,10 @@ module.exports = (function() {
                 return googleCalendar.updateEvent(idUser, eventId, editData);
             }
         } else if ( isStatusActive(newStatus) ) {
-            return googleCalendar.getSelectedCalendarId(idUser).then(function(calendarId) {
-                return googleCalendar.addEvent(idUser, editData, calendarId);
-            }).then(function(newEventId) {
-                return googleCalendar.setEventId(idUser, oldData.id, newEventId);
-            });
+            return googleCalendar
+                .getSelectedCalendarId(idUser)
+                .then( calendarId => googleCalendar.addEvent(idUser, editData, calendarId) )
+                .then( newEventId => googleCalendar.setEventId(idUser, oldData.id, newEventId) );
         }
     }
 
@@ -199,98 +198,101 @@ module.exports = (function() {
     }
 
     return {
-        getAll: function(req, res) {
+        getAll(req, res) {
             var userLogged = req.user;
 
-            getAllProjects(userLogged.id).then(function(data) {
-                return res.send( data[0] );
-            }).catch(function(e) {
-                var log = {
-                    idUser: userLogged.id,
-                    source: 'projects.getAll',
-                    error : e
-                };
-                server.app.emit('logError', log);
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            getAllProjects(userLogged.id)
+                .then(data => res.send( data[0] ))
+                .catch(e => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.getAll',
+                        error : e
+                    };
+                    server.app.emit('logError', log);
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         },
 
-        getByClientId: function(req, res) {
+        getByClientId(req, res) {
             var idClient   = req.params.id,
                 userLogged = req.user;
 
-            getProjectsByClientId(userLogged.id, idClient).then(function(data) {
-                return res.send( data );
-            }).catch(function(e) {
-                var log = {
-                    idUser: userLogged.id,
-                    source: 'projects.getByClientId',
-                    error : e
-                };
-                server.app.emit('logError', log);
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            getProjectsByClientId(userLogged.id, idClient)
+                .then(data => res.send( data ))
+                .catch(e => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.getByClientId',
+                        error : e
+                    };
+                    server.app.emit('logError', log);
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         },
 
-        getById: function(req, res) {
+        getById(req, res) {
             var id = req.params.id,
                 userLogged = req.user;
 
-            getProjectById(id, userLogged.id).then(function(data) {
-                if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
-                return res.send(data[0]);
-            }).catch(function(e) {
-                var log = {
-                    idUser: userLogged.id,
-                    source: 'projects.getById',
-                    error : e
-                };
-                server.app.emit('logError', log);
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            getProjectById(id, userLogged.id)
+                .then(data => {
+                    if (!data.length) { return res.status(404).send({ error: 'Record not found'}); }
+                    return res.send(data[0]);
+                })
+                .catch(e => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.getById',
+                        error : e
+                    };
+                    server.app.emit('logError', log);
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         },
 
-        update: function(req, res) {
+        update(req, res) {
             var id         = parseInt( req.params.id, 10 ),
                 userLogged = req.user,
                 newStatus, oldStatus, editData;
 
             googleClient.updateTokens(req.user);
 
-            getProjectData(userLogged.id, req.body).then(function(data) {
-                editData  = data;
-                newStatus = editData.status;
-                return getProjectById(id, userLogged.id);
-            }).then(function(oldData) {
-                oldStatus = oldData.status;
-                return setGoogleEvent(userLogged.id, oldData[0], editData);
-            }).then(function() {
-                editProject( id, userLogged.id, editData ).then(function() {
-                    if ( oldStatus !== newStatus ) {
-                        // emit websocket event
-                        status.updateIncome();
-
-                        logStatusChange(userLogged.id, id, newStatus).then(function() {
-                            return res.send(true);
-                        });
-                    } else {
-                        return res.send(true);
-                    }
+            getProjectData(userLogged.id, req.body)
+                .then(data => {
+                    editData  = data;
+                    newStatus = editData.status;
+                    return getProjectById(id, userLogged.id);
                 })
-                .catch(function(e) {
-                    var log = {
-                        idUser: userLogged.id,
-                        source: 'projects.update',
-                        data: req.body,
-                        error: e
-                    };
-                    server.app.emit('logError', log);
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                .then(oldData => {
+                    oldStatus = oldData.status;
+                    return setGoogleEvent(userLogged.id, oldData[0], editData);
+                })
+                .then(() => {
+                    editProject( id, userLogged.id, editData )
+                        .then(() => {
+                            if ( oldStatus !== newStatus ) {
+                                // emit websocket event
+                                status.updateIncome();
+                                logStatusChange(userLogged.id, id, newStatus).then(() => res.send(true));
+                            } else {
+                                return res.send(true);
+                            }
+                        })
+                        .catch(e => {
+                            var log = {
+                                idUser: userLogged.id,
+                                source: 'projects.update',
+                                data: req.body,
+                                error: e
+                            };
+                            server.app.emit('logError', log);
+                            return res.status(503).send({ error: 'Database error: ' + e.code});
+                        });
                 });
-            });
         },
 
-        add: function(req, res) {
+        add(req, res) {
             var data = req.body,
                 userLogged = req.user,
                 newProject = {},
@@ -298,86 +300,84 @@ module.exports = (function() {
 
             googleClient.updateTokens(req.user);
 
-            getProjectData(userLogged.id, data).then(function(data) {
-                newProjectData = data;
-                return knex('projects').insert( newProjectData );
-            }).then(function(newProjectId) {
-                // emit websocket event
-                status.updateProjects();
-                return getProjectById(newProjectId, userLogged.id);
-            }).then(function(project) {
-                newProject = project[0];
-                if ( isStatusActive( newProjectData.status ) ) {
-                    return googleCalendar.addEvent(userLogged.id, newProjectData);
-                }
-            }).then(function(eventId) {
-                return googleCalendar.setEventId(userLogged.id, newProject.id, eventId);
-            }).then(function() {
-                return logStatusChange(userLogged.id, newProject.id, req.body.status);
-            }).then(function() {
-                return res.status(201).send(newProject);
-            }, function(err) {
-                var log = {
-                    idUser: userLogged.id,
-                    source: 'projects.add',
-                    data  : req.body,
-                    error : err
-                };
-                server.app.emit('logError', log);
-                return res.status(503).send({ error: 'Error: ' + err.code});
-            });
+            getProjectData(userLogged.id, data)
+                .then(data => {
+                    newProjectData = data;
+                    return knex('projects').insert( newProjectData );
+                })
+                .then(newProjectId => {
+                    // emit websocket event
+                    status.updateProjects();
+                    return getProjectById(newProjectId, userLogged.id);
+                })
+                .then(project => {
+                    newProject = project[0];
+                    if ( isStatusActive( newProjectData.status ) ) {
+                        return googleCalendar.addEvent(userLogged.id, newProjectData);
+                    }
+                })
+                .then(eventId => googleCalendar.setEventId(userLogged.id, newProject.id, eventId))
+                .then(() => logStatusChange(userLogged.id, newProject.id, req.body.status))
+                .then(() => res.status(201).send(newProject))
+                .catch(err => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.add',
+                        data  : req.body,
+                        error : err
+                    };
+                    server.app.emit('logError', log);
+                    return res.status(503).send({ error: 'Error: ' + err.code});
+                });
         },
 
-        remove: function(req, res) {
+        remove(req, res) {
             var id = parseInt( req.params.id, 10 ),
                 userLogged = req.user;
 
             googleClient.updateTokens(req.user);
 
-            getProjectById(id, userLogged.id).then(function(data) {
-                return googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId);
-            }).then(function() {
-                return softDeleteProject(id, userLogged.id);
-            }).then(function() {
-                  // emit websocket event
-                status.updateProjects();
-                return res.status(204).end();
-            }).catch(function(e) {
-                var log = {
-                    idUser: userLogged.id,
-                    source: 'projects.remove',
-                    error : e
-                };
-                server.app.emit('logError', log);
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+            getProjectById(id, userLogged.id)
+                .then(data => googleCalendar.deleteEvent(userLogged.id, data[0].googleEventId))
+                .then(() => softDeleteProject(id, userLogged.id))
+                .then(() => {
+                      // emit websocket event
+                    status.updateProjects();
+                    return res.status(204).end();
+                })
+                .catch(e => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'projects.remove',
+                        error : e
+                    };
+                    server.app.emit('logError', log);
+                    return res.status(503).send({ error: 'Database error: ' + e.code});
+                });
         },
 
-        removeEvents: function(userId) {
+        removeEvents(userId) {
             var d = Promise.defer(),
                 calendarId;
 
-            googleCalendar.getSelectedCalendarId(userId).then(function(id) {
-                var d = Promise.defer();
-                calendarId = id;
+            googleCalendar
+                .getSelectedCalendarId(userId)
+                // @todo refactor extract method
+                .then(id => {
+                    var d = Promise.defer();
+                    calendarId = id;
 
-                if (!calendarId.length) {
-                    d.resolve(false);
-                } else {
-                    getActiveProjects(userId).then(function(projects) {
-                        d.resolve(projects);
-                    });
-                }
-                return d.promise;
-            }).then(function(projects) {
-                return googleCalendar.removeEvents(projects, calendarId);
-            }).then(function() {
-                return googleCalendar.clearEvents(userId);
-            }).then(function(result) {
-                d.resolve(result);
-            })/*.catch(function(err) {
-                d.reject(err);
-            })*/;
+                    if (!calendarId.length) {
+                        d.resolve(false);
+                    } else {
+                        getActiveProjects(userId).then( projects => d.resolve(projects) );
+                    }
+                    return d.promise;
+                })
+                .then(projects => googleCalendar.removeEvents(projects, calendarId))
+                .then(() => googleCalendar.clearEvents(userId))
+                .then(result => d.resolve(result))
+                .catch(err => d.reject(err));
 
             return d.promise;
         }

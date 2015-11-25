@@ -1,4 +1,4 @@
-module.exports = (function(){
+module.exports = (() => {
 
     'use strict';
 
@@ -13,25 +13,25 @@ module.exports = (function(){
     return {
         loggedUser: user,
 
-        setAuthData: function(authData) {
+        setAuthData(authData) {
             user.authData = authData;
         },
 
-        getAuthData: function() {
+        getAuthData() {
             return user.authData;
         },
 
-        getUserId: function() {
+        getUserId() {
             return user.authData.authUserId;
         },
 
-        authenticateUser: function(agent) {
+        authenticateUser(agent) {
             var d = Promise.defer();
 
             agent
                 .post('/login')
                 .send( user.credentials )
-                .end(function(err, res) {
+                .end((err, res) => {
                     if (err) {
                         d.reject(err);
                     } else {
@@ -42,14 +42,12 @@ module.exports = (function(){
             return d.promise;
         },
 
-        logoutUser: function(agent) {
+        logoutUser(agent) {
             var d = Promise.defer();
 
             agent
                 .get('/logout')
-                .end(function(err, res) {
-                    d.resolve(res);
-                });
+                .end((err, res) => d.resolve(res));
 
             return d.promise;
         }

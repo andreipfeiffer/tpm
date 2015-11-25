@@ -100,7 +100,7 @@ exports.knex  = knex;
 exports.io    = io;
 
 // verify database structure
-require('./server/modules/db').createDb(true).then(function() {
+require('./server/modules/db').createDb(true).then(() => {
 
     // load routes
     require('./server/routes');

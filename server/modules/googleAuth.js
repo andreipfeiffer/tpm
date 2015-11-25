@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -11,10 +11,10 @@ module.exports = (function() {
         googleClient   = require('./googleClient');
 
     function redirectCallback(req, res, next) {
-        passport.authenticate('google', function(err, user/*, info*/) {
+        passport.authenticate('google', (err, user/*, info*/) => {
             if (err) { return next(err); }
             if (!user) { return res.redirect('/#settings'); }
-            req.login(user, function(err) {
+            req.login(user, (err) => {
                 if (err) { return next(err); }
                 return res.redirect('/#settings');
             });
@@ -26,19 +26,18 @@ module.exports = (function() {
     }
 
     function storeGoogleOAuthToken(sessionID, token, refreshToken, done) {
-        findUserBySession(sessionID).then(function(data) {
-            var user = data[0];
-            // refreshToken is provided only on first authentication
-            // so we update only if provided
-            var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
+        findUserBySession(sessionID)
+            .then(data => {
+                var user = data[0];
+                // refreshToken is provided only on first authentication
+                // so we update only if provided
+                var refreshTokenField = refreshToken ? ', `googleOAuthRefreshToken`="' + refreshToken + '"' : '';
 
-            return knex.raw('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"')
-                .then(function() {
-                    done(null, user);
-                });
-        }).catch(function(e) {
-            done(e, false);
-        });
+                return knex
+                    .raw('update `users` set `googleOAuthToken`="' + token + '"' + refreshTokenField + ' where `id`="' + user.id + '"')
+                    .then(() => done(null, user));
+            })
+            .catch(e => done(e, false));
     }
 
     passport.use('google',
@@ -48,21 +47,24 @@ module.exports = (function() {
             callbackURL: config.google.redirectURL,
             passReqToCallback: true
         },
-        function(req, accessToken, refreshToken, profile, done) {
+        (req, accessToken, refreshToken, profile, done) => {
             // console.log('session: ' + req.sessionID);
             // console.log('accessToken: ' + accessToken);
             // console.log('refreshToken: ' + refreshToken);
             var user;
+
             if ( accessToken.length && (!refreshToken || !refreshToken.length) ) {
-                findUserBySession(req.sessionID).then(function(data) {
-                    user = data[0];
-                    return revokeToken(user.id, accessToken);
-                }).then(function() {
-                    setAuthError(user.id);
-                    done(null, user);
-                });
+                findUserBySession(req.sessionID)
+                    .then(data => {
+                        user = data[0];
+                        return revokeToken(user.id, accessToken);
+                    })
+                    .then(() => {
+                        setAuthError(user.id);
+                        done(null, user);
+                    });
             } else {
-                storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, function(err, user) {
+                storeGoogleOAuthToken(req.sessionID, accessToken, refreshToken, (err, user) => {
                     googleClient.setTokens(accessToken, refreshToken);
                     done(err, user);
                 });
@@ -73,13 +75,13 @@ module.exports = (function() {
     function revokeToken(userId, accessToken) {
         var d = Promise.defer();
 
-        googleClient.oauth2Client.revokeToken(accessToken, function (err/*, resGoogle, body*/) {
+        googleClient.oauth2Client.revokeToken(accessToken, (err/*, resGoogle, body*/) => {
             if (err) {
                 d.reject( err );
             } else {
-                googleClient.clearTokens(userId).then(function() {
-                    d.resolve( true );
-                });
+                googleClient
+                    .clearTokens(userId)
+                    .then(() => d.resolve( true ));
             }
         });
 
@@ -87,34 +89,19 @@ module.exports = (function() {
     }
 
     function revokeAccess(userLogged) {
-        var d = Promise.defer();
-
         // don't know what this is for
         // googleClient.updateTokens(userLogged);
 
-        projects.removeEvents(userLogged.id).then(function() {
-            return googleClient.getTokens(userLogged.id);
-        }).then(function(data) {
-            revokeToken(userLogged.id, data[0].accessToken).then(
-                function() {
-                    d.resolve( true );
-                },
-                function(err) {
-                    d.reject( err );
-                }
-            );
-        })/*.catch(function(e) {
-            return res.status(503).send({ error: 'Database error: ' + e.code});
-        })*/;
-
-        return d.promise;
+        return projects.removeEvents(userLogged.id)
+            .then(() => googleClient.getTokens(userLogged.id))
+            .then(data => revokeToken(userLogged.id, data[0].accessToken));
     }
 
     function setAuthError(idUser) {
         var log = {
             idUser: idUser,
             source: 'googleAuth',
-            error: { message: 'Authentication successfull, but no refresh_token returned' }
+            error : { message: 'Authentication successfull, but no refresh_token returned' }
         };
 
         server.app.emit('logError', log);
@@ -124,17 +111,22 @@ module.exports = (function() {
         callback: redirectCallback,
 
         // @todo refactor: remove req/res dependencies
-        revokeAccess: function(req, res) {
+        revokeAccess(req, res) {
             var userLogged = req.user;
 
-            return revokeAccess(userLogged).then(
-                function() {
+            return revokeAccess(userLogged)
+                .then(() => res.status(205).end())
+                .catch(err => {
+                    var log = {
+                        idUser: userLogged.id,
+                        source: 'googleAuth.revokeAccess',
+                        error : err
+                    };
+
+                    server.app.emit('logError', log);
+
                     return res.status(205).end();
-                },
-                function(err) {
-                    return res.status(400).send(err);
-                }
-            );
-        }
+                });
+            }
     };
 })();

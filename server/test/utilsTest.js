@@ -1,4 +1,4 @@
-(function() {
+(() => {
 
     'use strict';
 
@@ -20,23 +20,14 @@
         };        
     }
 
-    describe('Utils', function() {
+    describe('Utils', () => {
 
-        beforeEach(function(done) {
-            db.createDb().then(function() {
-                done();
-            });
-        });
+        beforeEach(done => db.createDb().then(() => done()));
+        afterEach(done => db.dropDb().then(() => done()));
 
-        afterEach(function(done) {
-            db.dropDb().then(function() {
-                done();
-            });
-        });
+        it('should emit en error event', () => {
 
-        it('should emit en error event', function() {
-
-            var log = getLog();
+            var log  = getLog();
             var mock = sinon.mock( utils );
 
             mock
@@ -50,14 +41,14 @@
             mock.restore();
         });
 
-        it('should log a new error', function(done) {
+        it('should log a new error', done => {
 
             var log  = getLog(),
                 mock = sinon.mock( console );
 
             mock.expects('trace').once();
 
-            utils.logError( log ).then(function() {
+            utils.logError( log ).then(() => {
                 mock.verify();
                 mock.restore();
                 done();

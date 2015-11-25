@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -9,17 +9,19 @@ module.exports = (function() {
 
     function getSelectedCalendarId(userId) {
         var d = Promise.defer();
-        knex('users').select('googleSelectedCalendar as googleCalendar').where({ id: userId }).then(function(data) {
-            d.resolve(data[0].googleCalendar);
-        }).catch(function(err) {
-            d.reject(err);
-        });
+
+        knex('users')
+            .select('googleSelectedCalendar as googleCalendar')
+            .where({ id: userId })
+            .then(data => d.resolve(data[0].googleCalendar))
+            .catch(err => d.reject(err));
+
         return d.promise;
     }
 
     function getCalendars() {
         var d = Promise.defer();
-        calendar.calendarList.list({ minAccessRole: 'owner' }, function(err, response) {
+        calendar.calendarList.list({ minAccessRole: 'owner' }, (err, response) => {
             if (err) {
                 d.reject(err);
             } else {
@@ -33,12 +35,13 @@ module.exports = (function() {
         var d = Promise.defer();
 
         if ( typeof calendarId === 'undefined' || !calendarId ) {
-            getSelectedCalendarId(userId).then(function(id) {
-                if (!id.length) {
-                    return d.resolve(false);
-                }
-                d.resolve( getProjectDataRaw(projectData, id) );
-            });
+            getSelectedCalendarId(userId)
+                .then(id => {
+                    if ( !id.length ) {
+                        return d.resolve(false);
+                    }
+                    d.resolve( getProjectDataRaw(projectData, id) );
+                });
         } else {
             d.resolve( getProjectDataRaw(projectData, calendarId) );
         }
@@ -47,7 +50,7 @@ module.exports = (function() {
     }
 
     function getProjectDataRaw(projectData, calendarId) {
-        var params = {},
+        var params  = {},
             eventId = projectData.googleEventId;
 
         params = {
@@ -73,7 +76,7 @@ module.exports = (function() {
     function addEvent(userId, projectData, calendarId) {
         var d = Promise.defer();
 
-        getProjectData(userId, projectData, calendarId).then(function(params) {
+        getProjectData(userId, projectData, calendarId).then(params => {
             if (!params) {
                 return d.resolve(false);
             }
@@ -98,7 +101,7 @@ module.exports = (function() {
 
         data.googleEventId = eventId;
 
-        getProjectData(userId, data).then(function(params) {
+        getProjectData(userId, data).then(params => {
             if (!params) {
                 return d.resolve(false);
             }
@@ -108,18 +111,16 @@ module.exports = (function() {
             // although should return 404
             // so, we cannot know if the event was updated, or ignored
 
-            calendar.events.patch(params, function(err, response) {
+            calendar.events.patch(params, (err, response) => {
                 if (err) {
                     var newEventId;
 
                     addEvent(userId, projectData)
-                        .then(function(newId) {
+                        .then(newId => {
                             newEventId = newId;
-                            return setEventIdOnProject(userId, projectData.id, newEventId);
+                            return setEventId(userId, projectData.id, newEventId);
                         })
-                        .then(function() {
-                            d.resolve(newEventId);
-                        });
+                        .then(() => d.resolve(newEventId));
                 } else {
                     d.resolve(response.id);
                 }
@@ -136,23 +137,23 @@ module.exports = (function() {
             return d.resolve(false);
         }
 
-        getSelectedCalendarId(userId).then(function(calendarId) {
+        getSelectedCalendarId(userId).then(calendarId => {
             if (!calendarId.length) {
                 return d.resolve(false);
             }
 
             var params = {
                 calendarId: calendarId,
-                eventId: eventId
+                eventId   : eventId
             };
 
-            calendar.events.delete(params, function(err, response) {
+            calendar.events.delete(params, (err, response) => {
                 if (err) {
                     // don't reject this, but fail it silently, and log it
                     var log = {
                         idUser: userId,
                         source: 'googleCalendar.deleteEvent',
-                        error: err
+                        error : err
                     };
                     server.app.emit('logError', log);
                     return d.resolve(false);
@@ -169,28 +170,26 @@ module.exports = (function() {
         return knex('projects')
             .select()
             .where({
-                'idUser': userId,
+                'idUser'   : userId,
                 'isDeleted': '0'
             })
             .andWhere('googleEventId', '!=', '')
             .andWhere('dateEstimated', '>=', getTodayDate())
-            .catch(function(e) {
-                console.log(e);
-            });
+            // @todo WTF of error handling is this?
+            .catch(e => console.log(e));
     }
 
     function getProjectsWithoutEvent(userId) {
         return knex('projects')
             .select()
             .where({
-                'idUser': userId,
-                'isDeleted': '0',
+                'idUser'       : userId,
+                'isDeleted'    : '0',
                 'googleEventId': ''
             })
             .andWhere('dateEstimated', '>=', getTodayDate())
-            .catch(function(e) {
-                console.log(e);
-            });
+            // @todo WTF of error handling is this?
+            .catch(e => console.log(e));
     }
 
     function changeCalendar(userId, oldCalendar, newCalendar) {
@@ -200,15 +199,11 @@ module.exports = (function() {
             return d.resolve(false);
         }
 
-        getProjectsWithEvent(userId).then(function(data) {
-            return moveEventsToAnotherCalendar(data, oldCalendar, newCalendar);
-        }).then(function() {
-            return getProjectsWithoutEvent(userId);
-        }).then(function(data) {
-            return addEventsToCalendar(userId, data, newCalendar);
-        }).then(function() {
-            d.resolve(true);
-        });
+        getProjectsWithEvent(userId)
+            .then(data => moveEventsToAnotherCalendar(data, oldCalendar, newCalendar))
+            .then(() => getProjectsWithoutEvent(userId))
+            .then(data => addEventsToCalendar(userId, data, newCalendar))
+            .then(() => d.resolve(true));
 
         return d.promise;
     }
@@ -217,17 +212,16 @@ module.exports = (function() {
         var d = Promise.defer(),
             requests = [];
 
-        eventsArray.forEach(function(project) {
+        eventsArray.forEach(project => {
             requests.push(
-                addEvent(userId, project, newCalendar).then(function(eventId) {
-                    return setEventIdOnProject(userId, project.id, eventId);
-                })
+                addEvent(userId, project, newCalendar)
+                    .then(eventId => setEventId(userId, project.id, eventId))
             );
         });
 
-        Promise.all( requests ).then(function(result) {
-            d.resolve(result);
-        });
+        Promise
+            .all( requests )
+            .then(result => d.resolve(result));
 
         return d.promise;
     }
@@ -236,15 +230,15 @@ module.exports = (function() {
         var d = Promise.defer(),
             requests = [];
 
-        eventsArray.forEach(function(project) {
+        eventsArray.forEach(project => {
             requests.push(
                 moveEvent(project.googleEventId, oldCalendar, newCalendar)
             );
         });
 
-        Promise.all( requests ).then(function() {
-            d.resolve(true);
-        });
+        Promise
+            .all( requests )
+            .then(() => d.resolve(true));
 
         return d.promise;
     }
@@ -252,38 +246,36 @@ module.exports = (function() {
     function moveEvent(id, oldCalendar, newCalendar) {
         var d = Promise.defer(),
             params = {
-                calendarId: oldCalendar,
+                calendarId : oldCalendar,
                 destination: newCalendar,
-                eventId: id
+                eventId    : id
             };
 
-        calendar.events.move(params, function(err, response) {
+        calendar.events.move(params, (err, response) => {
             if (err) {
                 d.resolve( false );
             } else {
-                d.resolve(response);
+                d.resolve( response );
             }
         });
 
         return d.promise;
     }
 
-    function setEventIdOnProject(idUser, idProject, idEvent) {
+    function setEventId(idUser, idProject, idEvent) {
         var d = Promise.defer();
 
         if ( idEvent || idEvent === '' ) {
             knex('projects')
                 .where({
-                    'id': idProject,
-                    'idUser': idUser,
+                    'id'       : idProject,
+                    'idUser'   : idUser,
                     'isDeleted': '0'
                 })
                 .update({
                     googleEventId: idEvent
                 })
-                .then(function(result) {
-                    d.resolve(result);
-                });
+                .then(result => d.resolve(result));
         } else {
             d.resolve(false);
         }
@@ -293,21 +285,20 @@ module.exports = (function() {
     function clearEvents(userId) {
         return knex('projects')
             .where({
-                'idUser': userId,
+                'idUser'   : userId,
                 'isDeleted': '0'
             })
             .andWhere('googleEventId', '!=', '')
             .update({'googleEventId': ''})
-            .catch(function(e) {
-                console.log(e);
-            });
+            // @todo WTF of error handling is this?
+            .catch(e => console.log(e));
     }
 
-    function removeEventsList(projects, calendarId) {
+    function removeEvents(projects, calendarId) {
         var requests = [];
 
         if (projects && projects.length) {
-            projects.forEach(function(project) {
+            projects.forEach(project => {
                 requests.push(
                     removeEvent(project.googleEventId, calendarId)
                 );
@@ -322,14 +313,14 @@ module.exports = (function() {
 
         var params = {
             calendarId: calendarId,
-            eventId: eventId
+            eventId   : eventId
         };
 
-        calendar.events.delete(params, function(err, response) {
+        calendar.events.delete(params, (err, response) => {
             if (err) {
-                d.resolve(false);
+                d.resolve( false );
             } else {
-                d.resolve(response);
+                d.resolve( response );
             }
         });
 
@@ -342,9 +333,9 @@ module.exports = (function() {
 
     function getDateFormat(date) {
         var today = date ? new Date(date) : new Date(),
-            dd = today.getDate(),
-            mm = today.getMonth() + 1,
-            yyyy = today.getFullYear();
+            dd    = today.getDate(),
+            mm    = today.getMonth() + 1,
+            yyyy  = today.getFullYear();
 
         if (dd < 10) { dd = '0' + dd; }
         if (mm < 10) { mm = '0' + mm; }
@@ -357,15 +348,15 @@ module.exports = (function() {
     }
 
     return {
-        getSelectedCalendarId: getSelectedCalendarId,
-        getCalendars         : getCalendars,
-        addEvent             : addEvent,
-        updateEvent          : updateEvent,
-        deleteEvent          : deleteEvent,
-        setEventId           : setEventIdOnProject,
-        removeEvents         : removeEventsList,
-        clearEvents          : clearEvents,
-        changeCalendar       : changeCalendar,
-        doesEventExists      : doesEventExists
+        getSelectedCalendarId,
+        getCalendars,
+        addEvent,
+        updateEvent,
+        deleteEvent,
+        setEventId,
+        removeEvents,
+        clearEvents,
+        changeCalendar,
+        doesEventExists
     };
 })();

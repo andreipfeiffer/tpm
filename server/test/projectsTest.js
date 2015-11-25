@@ -1,4 +1,4 @@
-(function() {
+(() => {
 
     'use strict';
 
@@ -6,8 +6,7 @@
 
     var server         = require('../../server.js'),
         knex           = server.knex,
-        supertest      = require('supertest'),
-        agent          = supertest.agent(server.app),
+        agent          = require('supertest').agent( server.app ),
         db             = require('../modules/db'),
         projects       = require('../modules/projects'),
         googleCalendar = require('../modules/googleCalendar'),
@@ -51,39 +50,37 @@
         });
     }
 
-    describe('Projects', function() {
+    describe('Projects', () => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
 
             sinon.stub(status, 'updateIncome').returns();
             sinon.stub(status, 'updateProjects').returns();
 
-            db.createDb().then(function() {
-                return utils.authenticateUser( agent );
-            }).then(function(res) {
-                utils.setAuthData( res.body );
-                done();
-            });
+            db.createDb()
+                .then(() => utils.authenticateUser( agent ))
+                .then(res => {
+                    utils.setAuthData( res.body );
+                    done();
+                });
         });
 
-        afterEach(function(done) {
+        afterEach(done => {
 
             status.updateIncome.restore();
             status.updateProjects.restore();
 
-            db.dropDb().then(function() {
-                done();
-            });
+            db.dropDb().then(() => done());
         });
 
-        it('should add a new project with full data', function(done) {
+        it('should add a new project with full data', done => {
             var project = getProjectWithData();
 
             agent
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.body ).to.have.property('id');
                     expect( res.body ).to.have.property('name', project.name);
                     expect( res.body ).to.have.property('status', project.status);
@@ -97,14 +94,14 @@
                 });
         });
 
-        it('should add a new project, if days & prices are null', function(done) {
+        it('should add a new project, if days & prices are null', done => {
             var project = getEmptyProject();
 
             agent
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.body ).to.have.property('id');
                     expect( res.body ).to.have.property('name', project.name);
                     expect( res.body ).to.have.property('days', 0);
@@ -114,7 +111,7 @@
                 });
         });
 
-        it('should add a new project, with a new client', function(done) {
+        it('should add a new project, with a new client', done => {
             var project = getProjectWithData();
             project.clientName = 'new client per project';
 
@@ -122,14 +119,14 @@
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.body.idClient ).to.not.equal( 0 );
                     expect( res.body.clientName ).to.equal( project.clientName );
                     done();
                 });
         });
 
-        it('should add a new project, with an existing client', function(done) {
+        it('should add a new project, with an existing client', done => {
             var project = getProjectWithData();
             // this client name should exist on the user
             // has id: 2
@@ -139,27 +136,27 @@
                 .post('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.body.idClient ).to.equal( 2 );
                     expect( res.body.clientName ).to.equal( project.clientName );
                     done();
                 });
         });
 
-        it('should update an existing project', function(done) {
+        it('should update an existing project', done => {
             var project = getProjectChanged();
 
             agent
                 .put('/projects/1')
                 .set('authorization', utils.getAuthData().authToken)
                 .send( project )
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.status ).to.equal(200);
 
                     agent
                         .get('/projects/1')
                         .set('authorization', utils.getAuthData().authToken)
-                        .end(function(err, res) {
+                        .end((err, res) => {
                             expect( res.body ).to.have.property('id', 1);
                             expect( res.body ).to.have.property('name', project.name);
                             expect( res.body ).to.have.property('status', project.status);
@@ -172,28 +169,28 @@
                 });
         });
 
-        it('should delete an existing project', function(done) {
+        it('should delete an existing project', done => {
             agent
                 .delete('/projects/1')
                 .set('authorization', utils.getAuthData().authToken)
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.status ).to.equal(204);
 
                     agent
                         .get('/projects/1')
                         .set('authorization', utils.getAuthData().authToken)
-                        .end(function(err, res) {
+                        .end((err, res) => {
                             expect( res.status ).to.equal(404);
                             done();
                         });
                 });
         });
 
-        it('should get all projects', function(done) {
+        it('should get all projects', done => {
             agent
                 .get('/projects')
                 .set('authorization', utils.getAuthData().authToken)
-                .end(function(err, res) {
+                .end((err, res) => {
                     expect( res.body ).to.be.an('array');
                     expect( res.body ).to.have.length(3);
                     expect( res.status ).to.equal(200);
@@ -204,39 +201,39 @@
         // pretty shitty test
         // cannot use the existing methods
         // to add google events
-        it('should remove all events', function(done) {
+        it('should remove all events', done => {
             var userId = utils.getUserId();
 
-            knex('users').where({ id: userId }).update({ 'googleSelectedCalendar': 'calendarName' }).then(function() {
-                return knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' });
-            }).then(function() {
-                return projects.removeEvents( userId );
-            }).then(function() {
-                return knex('projects').select().where({ idUser: userId });
-            }).then(function(data) {
-                expect( data[0].googleEventId ).to.equal('');
-                done();
-            });
+            knex('users')
+                .where({ id: userId })
+                .update({ 'googleSelectedCalendar': 'calendarName' })
+                .then(() => knex('projects').where({ idUser: userId }).update({ 'googleEventId': 'eventIdNumber' }))
+                .then(() => projects.removeEvents( userId ))
+                .then(() => knex('projects').select().where({ idUser: userId }))
+                .then(data => {
+                    expect( data[0].googleEventId ).to.equal('');
+                    done();
+                });
         });
 
-        describe('Google Calendar integration', function() {
+        describe('Google Calendar integration', () => {
 
-            beforeEach(function() {
+            beforeEach(() => {
                 this.stubEvent = sinon.stub( googleCalendar, 'doesEventExists' );
             });
 
-            afterEach(function() {
+            afterEach(() => {
                 this.stubEvent.restore();
             });
 
-            xit('should add the calendar event, if status is active', function() {
+            xit('should add the calendar event, if status is active', () => {
             });
 
-            xit('should not add the calendar event, if status is inactive', function() {
+            xit('should not add the calendar event, if status is inactive', () => {
             });
 
-            it('should update the calendar event, if the event exists, and status is active', function(done) {
-                var project = getProjectChanged();
+            it('should update the calendar event, if the event exists, and status is active', done => {
+                var project    = getProjectChanged();
                 project.status = 'in progress';
 
                 this.stubEvent.returns( true );
@@ -246,7 +243,7 @@
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
-                    .end(function(/*err, res*/) {
+                    .end((/*err, res*/) => {
                         expect( spy.calledOnce ).to.equal( true );
 
                         spy.restore();
@@ -254,8 +251,8 @@
                     });
             });
 
-            it('should remove the calendar event, if the event exists, and status is inactive', function(done) {
-                var project = getProjectChanged();
+            it('should remove the calendar event, if the event exists, and status is inactive', done => {
+                var project    = getProjectChanged();
                 project.status = 'paid';
 
                 this.stubEvent.returns( true );
@@ -265,7 +262,7 @@
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
-                    .end(function(/*err, res*/) {
+                    .end((/*err, res*/) => {
                         expect( spy.calledOnce ).to.equal( true );
 
                         spy.restore();
@@ -273,8 +270,8 @@
                     });
             });
 
-            it('should add the calendar event, if the event does not exists, and status is active', function(done) {
-                var project = getProjectChanged();
+            it('should add the calendar event, if the event does not exists, and status is active', done => {
+                var project    = getProjectChanged();
                 project.status = 'in progress';
 
                 this.stubEvent.returns( false );
@@ -284,7 +281,7 @@
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
-                    .end(function(/*err, res*/) {
+                    .end((/*err, res*/) => {
                         expect( spy.calledOnce ).to.equal( true );
 
                         spy.restore();
@@ -292,8 +289,8 @@
                     });
             });
 
-            it('should not add the calendar event, if the event does not exists, and status is inactive', function(done) {
-                var project = getProjectChanged();
+            it('should not add the calendar event, if the event does not exists, and status is inactive', done => {
+                var project    = getProjectChanged();
                 project.status = 'paid';
 
                 this.stubEvent.returns( false );
@@ -303,7 +300,7 @@
                     .put('/projects/1')
                     .set('authorization', utils.getAuthData().authToken)
                     .send( project )
-                    .end(function(/*err, res*/) {
+                    .end((/*err, res*/) => {
                         expect( spy.calledOnce ).to.equal( false );
 
                         spy.restore();

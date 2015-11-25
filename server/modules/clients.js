@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -86,41 +86,46 @@ module.exports = (function() {
     }
 
     return {
-        getAll: function(userLogged) {
+        getAll(userLogged) {
             var d = Promise.defer(),
                 noClient;
 
-            getProjectsWithoutClient( userLogged.id ).then(function(projectsNoClient) {
-                noClient = projectsNoClient;
-                return getAllClients( userLogged.id );
-            }).then(function(data) {
-                // add the empty client data at the beginning
-                data.unshift( getEmptyClient( noClient.length ) );
-                d.resolve({ status: 200, body: data });
-            }).catch(function(e) {
-                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-            });
+            getProjectsWithoutClient( userLogged.id )
+                .then(projectsNoClient => {
+                    noClient = projectsNoClient;
+                    return getAllClients( userLogged.id );
+                })
+                .then(data => {
+                    // add the empty client data at the beginning
+                    data.unshift( getEmptyClient( noClient.length ) );
+                    d.resolve({ status: 200, body: data });
+                })
+                .catch(e => {
+                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                });
 
             return d.promise;
         },
 
-        getById: function(userLogged, id) {
+        getById(userLogged, id) {
             var d = Promise.defer();
 
-            getClientById(id, userLogged.id).then(function(data) {
-                if ( !data.length ) {
-                    d.resolve({ status: 404, body: { error: 'Record not found'} });
-                } else {
-                    d.resolve({ status: 200, body: data[0] });
-                }
-            }).catch(function(e) {
-                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-            });
+            getClientById(id, userLogged.id)
+                .then(data => {
+                    if ( !data.length ) {
+                        d.resolve({ status: 404, body: { error: 'Record not found'} });
+                    } else {
+                        d.resolve({ status: 200, body: data[0] });
+                    }
+                })
+                .catch((e) => {
+                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                });
 
             return d.promise;
         },
 
-        update: function(userLogged, id, data) {
+        update(userLogged, id, data) {
             var d = Promise.defer();
 
             var editClient = knex('clients')
@@ -134,42 +139,37 @@ module.exports = (function() {
                     description: data.description
                 });
 
-            editClient.then(function() {
-                d.resolve({ status: 200, body: true });
-            }).catch(function(e) {
-                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-            });
+            editClient
+                .then(() => d.resolve({ status: 200, body: true }))
+                .catch((e) => {
+                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                });
 
             return d.promise;
         },
 
-        add: function(userLogged, data) {
+        add(userLogged, data) {
             var d = Promise.defer();
 
             addNewClient(userLogged.id, data.name)
-                .then(function(client) {
-                    return getClientById(client[0], userLogged.id);
-                })
-                .then(function(client) {
-                    d.resolve( { status: 201, body: client[0] } );
-                })
-                .catch(function(e) {
+                .then(client => getClientById(client[0], userLogged.id))
+                .then(client => d.resolve( { status: 201, body: client[0] } ))
+                .catch(e => {
                     d.resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
                 });
 
             return d.promise;
         },
 
-        remove: function(userLogged, id) {
+        remove(userLogged, id) {
             var d = Promise.defer();
 
-            deleteClient(id, userLogged.id).then(function() {
-                return unAssignClient( id );
-            }).then(function() {
-                d.resolve({ status: 204 });
-            }).catch(function(e) {
-                d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-            });
+            deleteClient(id, userLogged.id)
+                .then(() => unAssignClient( id ))
+                .then(() => d.resolve({ status: 204 }))
+                .catch(e => {
+                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                });
 
             return d.promise;
         },

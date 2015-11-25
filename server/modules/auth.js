@@ -1,17 +1,18 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
-    var server         = require('../../server'),
-        knex           = server.knex,
-        crypto         = require('crypto'),
-        passport       = require('passport'),
-        LocalStrategy  = require('passport-local').Strategy,
-        googleClient   = require('./googleClient'),
-        jwt            = require('jsonwebtoken'),
-        secret         = 'upsidedown-inseamna-Lia-si-Andrei',
-        moment         = require('moment'),
-        maxIdleSeconds = 60 * 60;
+    const SECRET           = 'upsidedown-inseamna-Lia-si-Andrei';
+    const MAX_IDLE_SECONDS = 60 * 60;
+
+    var server        = require('../../server'),
+        knex          = server.knex,
+        crypto        = require('crypto'),
+        passport      = require('passport'),
+        LocalStrategy = require('passport-local').Strategy,
+        googleClient  = require('./googleClient'),
+        jwt           = require('jsonwebtoken'),
+        moment        = require('moment');
 
     // private encryption & validation methods
     // var generateSalt = function() {
@@ -83,25 +84,26 @@ module.exports = (function() {
 
 
     // used for initial username/password authentication
-    var localStrategyAuth = new LocalStrategy(
-        function(username, password, done) {
+    var localStrategyAuth = new LocalStrategy((username, password, done) => {
             // saltAndHash(password, function(resp) {
             //     console.log(resp);
             // });
 
-            findUserByUsername(username).then(function(data) {
-                var user = data[0];
-                // console.log(user);
-                if (!user) {
-                    done(null, false, { message: 'Incorrect username.' });
-                } else if (validatePassword(password, user.password) === false) {
-                    done(null, false, { message: 'Incorrect password.' });
-                } else {
-                    return done(null, user);
-                }
-            }).catch(function(/*e*/) {
-                done(null, false, { message: 'Database error.' });
-            });
+            findUserByUsername(username)
+                .then(data => {
+                    var user = data[0];
+                    // console.log(user);
+                    if (!user) {
+                        done(null, false, { message: 'Incorrect username.' });
+                    } else if (validatePassword(password, user.password) === false) {
+                        done(null, false, { message: 'Incorrect password.' });
+                    } else {
+                        return done(null, user);
+                    }
+                })
+                .catch((/*e*/) => {
+                    done(null, false, { message: 'Database error.' });
+                });
         }
     );
 
@@ -110,19 +112,21 @@ module.exports = (function() {
     }
 
     function deserializeUser(id, done) {
-        findUserById(id).then(function(user) {
-            if (user) {
-                done(null, user);
-            } else {
-                done(null, false);
-            }
-        }).catch(function(e) {
-            done(e, false);
-        });
+        findUserById(id)
+            .then(user => {
+                if (user) {
+                    done(null, user);
+                } else {
+                    done(null, false);
+                }
+            })
+            .catch(e => {
+                done(e, false);
+            });
     }
 
     function login(req, res, next) {
-        return passport.authenticate('local', function(err, user) {
+        return passport.authenticate('local', (err, user) => {
             if (err) {
                 return next(err);
             }
@@ -130,40 +134,41 @@ module.exports = (function() {
                 return res.status(401).send({ error: 'Bad username or password'});
             }
 
-            req.logIn(user, function(err) {
+            req.logIn(user, err => {
                 if (err) {
                     return next(err);
                 }
 
                 req.user = user;
 
-                var newAuthToken = jwt.sign({ id: user.id }, secret),
-                    loggedData = {
+                var newAuthToken = jwt.sign({ id: user.id }, SECRET),
+                    loggedData   = {
                         authToken : newAuthToken,
                         authUserId: user.id
                     };
 
-                updateSession(user.id, req.sessionID).then(function() {
-                    return googleClient.getTokens(user.id);
-                }).then(function(data) {
-                    if (data[0].accessToken.length && !data[0].refreshToken.length) {
-                        setLoginError(user.id);
-                        loggedData.googleAuthNeeded = true;
-                        // googleAuth.revokeAccess(req, res);
-                        return res.status(200).json(loggedData);
-                    } else if (data[0].accessToken.length && data[0].refreshToken.length) {
-                        googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
-                        googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
-                            // loggedData.googleToken = newToken;
+                updateSession(user.id, req.sessionID)
+                    .then(() => googleClient.getTokens(user.id))
+                    .then(data => {
+                        if (data[0].accessToken.length && !data[0].refreshToken.length) {
+                            setLoginError(user.id);
+                            loggedData.googleAuthNeeded = true;
+                            // googleAuth.revokeAccess(req, res);
                             return res.status(200).json(loggedData);
-                        });
-                    } else {
-                        return res.status(200).json(loggedData);
-                    }
+                        } else if (data[0].accessToken.length && data[0].refreshToken.length) {
+                            googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
+                            googleClient.refreshAccessToken(user.id, function(/*newToken*/) {
+                                // loggedData.googleToken = newToken;
+                                return res.status(200).json(loggedData);
+                            });
+                        } else {
+                            return res.status(200).json(loggedData);
+                        }
 
-                }).catch(function(err) {
-                    return res.status(503).send({ error: 'Database error: ' + err.code});
-                });
+                    })
+                    .catch(err => {
+                        return res.status(503).send({ error: 'Database error: ' + err.code});
+                    });
             });
         })(req, res, next);
     }
@@ -172,10 +177,11 @@ module.exports = (function() {
         knex('users')
             .where({ id: req.user.id })
             .update({ sessionID: '', isLogged: 0 })
-            .then(function() {
+            .then(() => {
                 req.logout();
                 return res.status(200).end();
-            }).catch(function(e) {
+            })
+            .catch(e => {
                 return res.status(503).send({ error: 'Database error: ' + e.code});
             });
     }
@@ -185,44 +191,49 @@ module.exports = (function() {
             decoded;
 
         try {
-            decoded = jwt.verify(token, secret);
+            decoded = jwt.verify(token, SECRET);
         } catch (err) {
             return res.status(401).send({ error: err.message});
         }
 
-        findUserById(decoded.id).then(function(data) {
-            var user = data[0],
-                idle = getIdleTime( user.dateLastActive );
+        findUserById(decoded.id)
+            .then(data => {
+                var user = data[0],
+                    idle = getIdleTime( user.dateLastActive );
 
-            if (!user || !user.isLogged || idle > maxIdleSeconds) {
-                return res.status(401).end();
-            }
+                if (!user || !user.isLogged || idle > MAX_IDLE_SECONDS) {
+                    return res.status(401).end();
+                }
 
-            // verify session also
-            // is server is restarted, session is updated
-            updateSession(decoded.id, req.sessionID, user.sessionID).then(function() {
-                // add the logged user's data in the request, so the "next()" method can access it
-                req.user = user;
-                return next();
+                // verify session also
+                // is server is restarted, session is updated
+                updateSession(decoded.id, req.sessionID, user.sessionID)
+                    .then(() => {
+                        // add the logged user's data in the request, so the "next()" method can access it
+                        req.user = user;
+                        return next();
+                    });
+
+            })
+            .catch(e => {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
             });
-
-        }).catch(function(e) {
-            return res.status(503).send({ error: 'Database error: ' + e.code});
-        });
     }
 
     function ensureSessionAuthenticated(req, res, next) {
-        findUserBySession(req.sessionID).then(function(data) {
-            var user = data[0];
+        findUserBySession(req.sessionID)
+            .then(data => {
+                var user = data[0];
 
-            if (!user) { return res.status(401).end(); }
+                if (!user) { return res.status(401).end(); }
 
-            // add the logged user's data in the request, so the "next()" method can access it
-            req.user = user;
-            return next();
-        }).catch(function(e) {
-            return res.status(503).send({ error: 'Database error: ' + e.code});
-        });
+                // add the logged user's data in the request, so the "next()" method can access it
+                req.user = user;
+                return next();
+            })
+            .catch(e => {
+                return res.status(503).send({ error: 'Database error: ' + e.code});
+            });
     }
 
     // setup passport auth (before routes, after express session)
@@ -241,9 +252,9 @@ module.exports = (function() {
     }
 
     return {
-        login : login,
-        logout: logout,
-        ensureTokenAuthenticated  : ensureTokenAuthenticated,
-        ensureSessionAuthenticated: ensureSessionAuthenticated
+        login,
+        logout,
+        ensureTokenAuthenticated,
+        ensureSessionAuthenticated
     };
 })();

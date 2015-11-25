@@ -1,40 +1,37 @@
-(function() {
+(() => {
 
     'use strict';
 
     process.env.NODE_ENV = 'test';
 
-    var server         = require('../../server.js'),
-        supertest      = require('supertest'),
-        agent          = supertest.agent(server.app),
-        db             = require('../modules/db'),
-        utils          = require('./_utils'),
-        expect         = require('expect.js');
+    var server = require('../../server.js'),
+        agent  = require('supertest').agent( server.app ),
+        db     = require('../modules/db'),
+        utils  = require('./_utils'),
+        expect = require('expect.js');
 
-    describe('Reports', function() {
+    describe('Reports', () => {
 
-        beforeEach(function(done) {
-            db.createDb().then(function() {
-                return utils.authenticateUser( agent );
-            }).then(function(res) {
-                utils.setAuthData( res.body );
-                done();
-            });
+        beforeEach(done => {
+            db.createDb()
+                .then(() => utils.authenticateUser( agent ))
+                .then(res => {
+                    utils.setAuthData( res.body );
+                    done();
+                });
         });
 
-        afterEach(function(done) {
-            db.dropDb().then(function() {
-                done();
-            });
+        afterEach(done => {
+            db.dropDb().then(() => done());
         });
 
         // ok, this tests only 1 complex query
         // based on fixtures on projects & projects_status_log tables
-        it('should return the report', function(done) {
+        it('should return the report', done => {
             agent
                 .get('/reports')
                 .set('authorization', utils.getAuthData().authToken)
-                .end(function(err, res) {
+                .end((err, res) => {
 
                     // return only projects "finished" or "paid"
                     expect( res.body ).to.be.an('array');

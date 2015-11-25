@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -15,9 +15,7 @@ module.exports = (function() {
             .where({
                 'isDeleted': '0'
             })
-            .then(function( users ) {
-                d.resolve( users[0].nr );
-            });
+            .then(users => d.resolve( users[0].nr ));
 
         return d.promise;
     }
@@ -30,9 +28,7 @@ module.exports = (function() {
             .where({
                 'isDeleted': '0'
             })
-            .then(function( projects ) {
-                d.resolve( projects[0].nr );
-            });
+            .then(projects => d.resolve( projects[0].nr ));
 
         return d.promise;
     }
@@ -46,13 +42,9 @@ module.exports = (function() {
                 'isDeleted': '0',
                 'status'   : 'paid'
             })
-            .then(function( projects ) {
+            .then(projects => {
                 var income = 0;
-
-                projects.forEach(function(p) {
-                    income += p.priceFinal || p.priceEstimated;
-                });
-
+                projects.forEach(p => income += p.priceFinal || p.priceEstimated);
                 d.resolve( income );
             });
 
@@ -60,37 +52,34 @@ module.exports = (function() {
     }
 
     return {
-        init: function() {
-            var self = this;
-
-            io.on('connection', function (_socket) {
-
+        init() {
+            io.on('connection', _socket => {
                 // store a reference to the socket object
                 socket = _socket;
 
-                socket.on('status.get', function (/*data*/) {
-                    self.updateUsers();
-                    self.updateProjects();
-                    self.updateIncome();
+                socket.on('status.get', (/*data*/) => {
+                    this.updateUsers();
+                    this.updateProjects();
+                    this.updateIncome();
                 });
 
             });
         },
 
-        updateUsers: function() {
-            getTotalUsers().then(function(nr) {
+        updateUsers() {
+            getTotalUsers().then(nr => {
                 socket && socket.emit('status.data', { users: nr });
             });
         },
 
-        updateProjects: function() {
-            getTotalProjects().then(function(nr) {
+        updateProjects() {
+            getTotalProjects().then(nr => {
                 socket && socket.emit('status.data', { projects: nr });
             });
         },
 
-        updateIncome: function() {
-            getTotalIncome().then(function(income) {
+        updateIncome() {
+            getTotalIncome().then(income => {
                 socket && socket.emit('status.data', { income: income });
             });
         }

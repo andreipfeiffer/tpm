@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -33,20 +33,16 @@ module.exports = (function() {
     }
 
     function refreshAccessToken(userId, callback) {
-        oauth2Client.refreshAccessToken(function(err, tokens) {
+        oauth2Client.refreshAccessToken((err, tokens) => {
             if ( !tokens ) {
-                clearTokens(userId).then(function() {
-                    callback(null);
-                });
+                clearTokens( userId ).then(() => callback(null));
                 return;
             }
 
             knex('users')
                 .where({ id: userId })
                 .update({ googleOAuthToken: tokens['access_token'] })
-                .then(function() {
-                    callback(tokens['access_token']);
-                });
+                .then(() => callback(tokens['access_token']));
         });
     }
 
@@ -54,18 +50,18 @@ module.exports = (function() {
         return knex('users')
             .where({ id: userId })
             .update({
-                googleOAuthToken: '',
+                googleOAuthToken       : '',
                 googleOAuthRefreshToken: '',
-                googleSelectedCalendar: ''
+                googleSelectedCalendar : ''
             });
     }
 
     return {
-        oauth2Client      : oauth2Client,
-        setTokens         : setTokens,
-        getTokens         : getTokens,
-        updateTokens      : updateTokens,
-        clearTokens       : clearTokens,
-        refreshAccessToken: refreshAccessToken
+        oauth2Client,
+        setTokens,
+        getTokens,
+        updateTokens,
+        clearTokens,
+        refreshAccessToken
     };
 })();

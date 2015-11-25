@@ -29,7 +29,7 @@ module.exports = (function() {
     }
 
     function setUserSettings(idUser, data) {
-        return getUserSettings( idUser ).then(function(s) {
+        return getUserSettings( idUser ).then(s => {
             if ( s.length ) {
                 return updateUserSettings(idUser, data);
             } else {
@@ -39,72 +39,69 @@ module.exports = (function() {
     }
 
     return {
-        getGoogle: function(req, res) {
+        getGoogle(req, res) {
             var userLogged = req.user,
-                result = {};
+                result     = {};
 
-            googleClient.getTokens(userLogged.id).then(function(tokens) {
-                result.googleToken = !!tokens[0].accessToken.length;
+            googleClient
+                .getTokens(userLogged.id)
+                .then(tokens => {
+                    result.googleToken = !!tokens[0].accessToken.length;
 
-                if (!result.googleToken) {
-                    return res.send(result);
-                }
-
-                googleClient.updateTokens(req.user);
-
-                googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
-                    result.selectedCalendar = id;
-
-                    googleCalendar.getCalendars().then(function(calendars) {
-                        result.calendars = calendars;
+                    if (!result.googleToken) {
                         return res.send(result);
-                    }, function(err) {
-                        return res.status(400).send({ error: err.message });
+                    }
+
+                    googleClient.updateTokens(req.user);
+
+                    googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
+                        result.selectedCalendar = id;
+
+                        googleCalendar.getCalendars()
+                            .then(calendars => {
+                                result.calendars = calendars;
+                                return res.send(result);
+                            })
+                            .catch(err => res.status(400).send({ error: err.message }));
                     });
-                });
-            }).catch(function(e) {
-                return res.status(503).send({ error: 'Database error: ' + e.code});
-            });
+                })
+                .catch(e => res.status(503).send({ error: 'Database error: ' + e.code}));
         },
 
-        setGoogle: function(req, res) {
+        setGoogle(req, res) {
             var userLogged = req.user,
-                newId = req.params.calendarId;
+                newId      = req.params.calendarId;
 
             googleClient.updateTokens(req.user);
 
-            googleCalendar.getSelectedCalendarId(userLogged.id).then(function(id) {
-                return googleCalendar.changeCalendar(userLogged.id, id, newId);
-            }).then(function() {
-                return knex('users')
-                    .where({ id: userLogged.id })
-                    .update({
-                        googleSelectedCalendar: newId
-                    })
-                    .then(function() {
-                        return res.send(true);
-                    })
-                    .catch(function(e) {
-                        return res.status(503).send({ error: 'Database error: ' + e.code});
-                    });
-            });
+            googleCalendar
+                .getSelectedCalendarId( userLogged.id )
+                .then(id => googleCalendar.changeCalendar(userLogged.id, id, newId))
+                .then(() => {
+                    // @todo extract method
+                    return knex('users')
+                        .where({ id: userLogged.id })
+                        .update({
+                            googleSelectedCalendar: newId
+                        })
+                        .then(() => res.send(true))
+                        .catch(e => res.status(503).send({ error: 'Database error: ' + e.code}));
+                });
         },
 
-        getUser: function(req, res) {
+        getUser(req, res) {
             var userLogged = req.user;
 
-            getUserSettings( userLogged.id ).then(function( settings ) {
-                return res.send( settings[0] );
-            });
+            getUserSettings( userLogged.id )
+                .then(settings => res.send( settings[0] ));
         },
 
-        setUser: function(req, res) {
+        setUser(req, res) {
             var userLogged = req.user,
                 data       = req.body;
 
-            setUserSettings( userLogged.id, data ).then(function() {
-                return res.send(true);
-            });
+            setUserSettings( userLogged.id, data )
+                .then(() => res.send(true));
         }
     };
 

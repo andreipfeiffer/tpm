@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (() => {
 
     'use strict';
 
@@ -37,7 +37,7 @@ module.exports = (function() {
     }
 
     function moveFirstDayToPreviousMonth(projects) {
-        return projects.map(function(project) {
+        return projects.map(project => {
             var date = moment( project.date );
             if ( project.status === 'paid' && date.date() === 1 ) {
                 project.month = date.subtract(1, 'days').format('YYYY-M');
@@ -47,10 +47,10 @@ module.exports = (function() {
     }
 
     return {
-        getAll: function(req, res) {
+        getAll(req, res) {
             var userLogged = req.user;
 
-            getProjectsReport( userLogged.id ).then(function(data) {
+            getProjectsReport( userLogged.id ).then(data => {
                 // don't know why it returns 2 arrays
                 // (probably because of the 2 selects in the query)
                 var projects = moveFirstDayToPreviousMonth( data[0] );
