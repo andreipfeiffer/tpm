@@ -5,8 +5,7 @@ module.exports = (function() {
     var server         = require('../../server'),
         knex           = server.knex,
         googleCalendar = require('./googleCalendar'),
-        googleClient   = require('./googleClient'),
-        extend         = require('util')._extend;
+        googleClient   = require('./googleClient');
 
     function getUserSettings(idUser) {
         return knex('settings')
@@ -21,7 +20,7 @@ module.exports = (function() {
     }
 
     function insertUserSettings(idUser, settings) {
-        var data = extend({
+        var data = Object.assign({
             'idUser': idUser
         }, settings);
 

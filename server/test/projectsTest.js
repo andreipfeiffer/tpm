@@ -13,8 +13,7 @@
         status         = require('../modules/status'),
         utils          = require('./_utils'),
         expect         = require('expect.js'),
-        sinon          = require('sinon'),
-        extend         = require('util')._extend;
+        sinon          = require('sinon');
 
     function getEmptyProject() {
         return {
@@ -31,7 +30,7 @@
     }
 
     function getProjectWithData() {
-        return extend(getEmptyProject(), {
+        return Object.assign(getEmptyProject(), {
             status        : 'finished',
             days          : 5,
             priceEstimated: 100,
@@ -40,7 +39,7 @@
     }
 
     function getProjectChanged() {
-        return extend(getEmptyProject(), {
+        return Object.assign(getEmptyProject(), {
             name          : 'changed unit test project',
             status        : 'paid',
             days          : 6,
