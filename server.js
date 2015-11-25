@@ -1,112 +1,119 @@
 /*jshint globalstrict: true*/
 
-'use strict';
+(() => {    
 
-var express      = require('express'),
-    logger       = require('morgan'),
-    bodyParser   = require('body-parser'),
-    cookieParser = require('cookie-parser'),
-    session      = require('express-session'),
-    passport     = require('passport'),
-    config       = require('./config'),
-    favicon      = require('serve-favicon'),
-    app          = require('express')(),
-    server       = require('http').Server( app ),
-    io           = require('socket.io')( server ),
-    
-    compression  = require('compression')/*,
-    serveStatic  = require('serve-static')*/;
+    'use strict';
 
-function allowCrossDomain (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    const ENV = process.env.NODE_ENV || 'development';
 
-    // intercept OPTIONS method
-    if ('OPTIONS' === req.method) {
-        res.send(200);
-    } else {
-        next();
-    }
-}
+    var express      = require('express'),
+        logger       = require('morgan'),
+        bodyParser   = require('body-parser'),
+        cookieParser = require('cookie-parser'),
+        session      = require('express-session'),
+        passport     = require('passport'),
+        config       = require('./config'),
+        favicon      = require('serve-favicon'),
+        app          = require('express')(),
+        server       = require('http').Server( app ),
+        io           = require('socket.io')( server ),
+        
+        compression  = require('compression')/*,
+        serveStatic  = require('serve-static')*/;
 
-/*var function delay(req, res, next) {
-    if ( req.url === '/projects' ) {
-        setTimeout(function() {
+    function allowCrossDomain (req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+        // intercept OPTIONS method
+        if ('OPTIONS' === req.method) {
+            res.send(200);
+        } else {
             next();
-        }, 2000);
-    } else {
-        next();
+        }
     }
-}*/
 
-// Application initialization
-var env  = process.env.NODE_ENV || 'development';
-var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host     : config.mysql.host,
-        user     : config.mysql.user,
-        password : config.mysql.password,
-        database : config.mysql.database
+    /*var function delay(req, res, next) {
+        if ( req.url === '/projects' ) {
+            setTimeout(function() {
+                next();
+            }, 2000);
+        } else {
+            next();
+        }
+    }*/
+
+    // Application initialization
+    var knex = require('knex')({
+        client: 'mysql',
+        connection: {
+            host     : config.mysql.host,
+            user     : config.mysql.user,
+            password : config.mysql.password,
+            database : config.mysql.database
+        }
+    });
+
+    app.set('etag', true);
+    app.use(favicon(__dirname + '/public/images/favicon.ico'));
+
+    // setup middleware
+    if ('test' !== ENV) {
+        app.use(logger('dev'));
     }
-});
 
-app.set('etag', true);
-app.use(favicon(__dirname + '/public/images/favicon.ico'));
+    // setup common middleware
+    app.set('views', __dirname + '/public');
+    app.set('view engine', 'jade');
+    app.set('view options', { layout: false });
+    app.locals.pretty = true; // render templates with identation
 
-// setup middleware based on ENV
-if ('test' !== env) {
-    app.use(logger('dev'));
-}
+    app.use(allowCrossDomain);
+    app.use(bodyParser.json());
+    // express cookieParser and session needed for passport
+    app.use(cookieParser());
+    app.use(session({
+        secret: 'upsidedown-inseamna-Lia-si-Andrei' ,
+        saveUninitialized: true,
+        resave: false
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    // app.use(express.csrf());
 
-// setup common middleware
-app.set('views', __dirname + '/public');
-app.set('view engine', 'jade');
-app.set('view options', { layout: false });
-app.locals.pretty = true; // render templates with identation
+    app.use(compression());
+    app.use(express.static(__dirname + '/public'));
+    app.use('/dist', express.static(__dirname + '/dist'));
+    app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
-app.use(allowCrossDomain);
-app.use(bodyParser.json());
-// express cookieParser and session needed for passport
-app.use(cookieParser());
-app.use(session({
-    secret: 'upsidedown-inseamna-Lia-si-Andrei' ,
-    saveUninitialized: true,
-    resave: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-// app.use(express.csrf());
+    // app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
 
-app.use(compression());
-app.use(express.static(__dirname + '/public'));
-app.use('/dist', express.static(__dirname + '/dist'));
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
-
-// app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
-
-// app.use(delay);
+    // app.use(delay);
 
 
-function start(port) {
-    server.listen( port );
-    console.log('Express server listening on port %d in %s mode', port, env);
-}
+    function start(port) {
+        server.listen( port );
+        console.log('Express server listening on port %d in %s mode', port, ENV);
+    }
 
-exports.start = start;
-exports.app   = app;
-exports.knex  = knex;
-exports.io    = io;
+    module.exports = {
+        start,
+        app,
+        knex,
+        io
+    };
 
-// verify database structure
-require('./server/modules/db').createDb(true).then(() => {
+    // verify database structure
+    require('./server/modules/db').createDb(true).then(() => {
 
-    // load routes
-    require('./server/routes');
+        // load routes
+        require('./server/routes');
 
-    require('./server/modules/status').init();
-    require('./server/modules/utils').init();
+        require('./server/modules/status').init();
+        require('./server/modules/utils').init();
 
-    start(config.port);
-});
+        start(config.port);
+    });
+
+})();
