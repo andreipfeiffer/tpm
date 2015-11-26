@@ -1,5 +1,5 @@
 doctype html
-html(class='no-js', lang='en', ng-app='tpm')
+html(class='no-js', lang='en')
 
     head
         meta(charset='utf-8')
@@ -19,7 +19,7 @@ html(class='no-js', lang='en', ng-app='tpm')
         link(rel='stylesheet', href='css/bootstrap-overrides.css')
         link(rel='stylesheet', href='css/animations.css')
 
-    body(ng-class='{ "is-auth": isAuth }')
+    body(ng-class='{ "is-auth": isAuth }' data-main-app="" ng-cloak)
         .container
 
             //- logo displayed for non-auth pages, to get back to login
@@ -83,35 +83,9 @@ html(class='no-js', lang='en', ng-app='tpm')
                         small.text-muted= 'app status'
 
 
-    script(src='bower_components/jquery/dist/jquery.min.js')
-    script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
-    script(src='bower_components/angular/angular.min.js')
-    script(src='bower_components/angular-route/angular-route.min.js')
-    script(src='bower_components/angular-resource/angular-resource.min.js')
-    script(src='bower_components/angular-bootstrap/ui-bootstrap.min.js')
-    script(src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js')
-    script(src='bower_components/moment/min/moment.min.js')
-    script(src='bower_components/angular-ui-validate/dist/validate.js')
-    script(src='bower_components/angular-touch/angular-touch.min.js')
-    script(src='bower_components/angular-media-queries/match-media.js')
-    script(src='bower_components/angular-feedback/dist/feedback.min.js')
-    script(src='bower_components/angular-animate/angular-animate.min.js')
-    script(src='bower_components/Chart.js/Chart.min.js')
-    script(src='bower_components/angular-chart.js/dist/angular-chart.min.js')
-    script(src='bower_components/socket.io-client/socket.io.js')
-    script(src='bower_components/angular-socket-io/socket.js')
-
-    script(src='js/app.js')
-    script(src='js/utils.js')
-    script(src='js/controllers/authControllers.js')
-    script(src='js/controllers/headerControllers.js')
-    script(src='js/controllers/projectsControllers.js')
-    script(src='js/controllers/clientsControllers.js')
-    script(src='js/controllers/settingsControllers.js')
-    script(src='js/controllers/reportsControllers.js')
-    script(src='js/controllers/statusControllers.js')
-    script(src='js/services.js')
-    script(src='js/interceptors.js')
-    script(src='js/directives.js')
-    script(src='js/filters.js')
-    script(src='js/factories.js')
+    script(src='bower_components/system.js/dist/system.js')
+    script(src='js/system.config.js')
+    script.
+        var TPM = TPM || {};
+        TPM.apiUrl = 'http://localhost:3000/';
+        System.import('bootstrap.js');

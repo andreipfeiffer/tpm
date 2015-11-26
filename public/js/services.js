@@ -1,134 +1,144 @@
-(function() {
+import angular from 'angular';
+import utils from 'utils';
 
-    'use strict';
+// @todo extract module
+class SessionService {
+    constructor($http) {
+        this.$http = $http;
+    }
 
-    angular.module('TPM.Services', ['ngResource'])
+    setAuthToken(token) {
+        localStorage.setItem('TPMtoken', token);
+        this.$http.defaults.headers.common['Authorization'] = token;
+    }
+    getAuthToken() {
+        return localStorage.getItem('TPMtoken');
+    }
+    removeAuthToken() {
+        return localStorage.removeItem('TPMtoken');
+    }
+}
+SessionService.$inject = ['$http'];
 
-        .factory('ProjectsService', ['$http', '$resource', function($http, $resource) {
-            return $resource(
-                TPM.apiUrl + 'projects/:id',
-                {
-                    id: '@id'
-                },
-                {
-                    'update': { method:'PUT' }
-                }
-            );
-        }])
+// @todo extract module
+class SettingsUser {
+    constructor($http) {
+        this.$http    = $http;
+        // @todo use Map()
+        this.defaults = {
+            currency: utils.currencyList[0]
+        };
+    }
 
-        .factory('ProjectsClientService', ['$http', '$resource', function($http, $resource) {
-            return $resource(
-                TPM.apiUrl + 'projects/client/:id',
-                {
-                    id: '@id'
-                }
-            );
-        }])
+    fetch() {
+        return this.$http.get(TPM.apiUrl + 'settings/user');
+    }
+    remove() {
+        return localStorage.removeItem('TPMsettings');
+    }
+    set(data) {
+        var _settings = Object.assign( {}, this.defaults, data );
+        localStorage.setItem('TPMsettings', JSON.stringify( _settings ));
+    }
+    get() {
+        var settings = JSON.parse( localStorage.getItem('TPMsettings') );
+        if ( !settings ) {
+            settings = Object.assign( {}, this.defaults );
+        }
+        return settings;
+    }
+}
+SettingsUser.$inject = ['$http'];
 
-        .factory('ProjectsModal', ['$uibModal', 'SettingsUser', function($modal, SettingsUser) {
-            function ModalProjectsCtrl($scope, $uibModalInstance, data) {
-                $scope.data          = angular.extend({}, data.list);
-                $scope.title         = data.title;
-                $scope.detailedPrice = data.detailedPrice;
-                $scope.currency      = data.currency;
+export default angular.module('TPM.Services', ['ngResource'])
+
+    .factory('ProjectsService', ['$http', '$resource', ($http, $resource) => {
+        return $resource(
+            TPM.apiUrl + 'projects/:id',
+            {
+                id: '@id'
+            },
+            {
+                'update': { method:'PUT' }
             }
+        );
+    }])
 
-            function open(title, list, detailedPrice) {
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/projects-list-modal.html',
-                    controller : ModalProjectsCtrl,
-                    resolve    : {
-                        data : function() {
-                            return {
-                                list         : list,
-                                title        : title,
-                                currency     : SettingsUser.get().currency,
-                                detailedPrice: detailedPrice
-                            };
-                        }
+    .factory('ProjectsClientService', ['$http', '$resource', ($http, $resource) => {
+        return $resource(
+            TPM.apiUrl + 'projects/client/:id',
+            {
+                id: '@id'
+            }
+        );
+    }])
+
+    .factory('ProjectsModal', ['$uibModal', 'SettingsUser', ($modal, SettingsUser) => {
+
+        function ModalProjectsCtrl($scope, $uibModalInstance, data) {
+            $scope.data          = Object.assign({}, data.list);
+            $scope.title         = data.title;
+            $scope.detailedPrice = data.detailedPrice;
+            $scope.currency      = data.currency;
+        }
+        ModalProjectsCtrl.$inject = ['$scope', '$uibModalInstance', 'data'];
+
+        function open(title, list, detailedPrice) {
+            var currency      = SettingsUser.get().currency;
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/projects-list-modal.html',
+                controller : ModalProjectsCtrl,
+                resolve    : {
+                    data() {
+                        return {
+                            list,
+                            title,
+                            currency,
+                            detailedPrice
+                        };
                     }
-                });
+                }
+            });
 
-                return modalInstance;
+            return modalInstance;
+        }
+
+        return {
+            open: open
+        };
+    }])
+
+    .factory('ClientsService', ['$resource', ($resource) => {
+        return $resource(
+            TPM.apiUrl + 'clients/:id',
+            {
+                id: '@id'
+            },
+            {
+                'update': { method:'PUT' }
             }
+        );
+    }])
 
-            return {
-                open: open
-            };
-        }])
+    .factory('SettingsService', ['$resource', ($resource) => {
+        return $resource(
+            TPM.apiUrl + 'settings/:type/:field',
+            {
+                type: '@type',
+                field: '@field'
+            },
+            {
+                'update': { method:'PUT' }
+            }
+        );
+    }])
 
-        .factory('ClientsService', ['$resource', function($resource) {
-            return $resource(
-                TPM.apiUrl + 'clients/:id',
-                {
-                    id: '@id'
-                },
-                {
-                    'update': { method:'PUT' }
-                }
-            );
-        }])
+    .factory('ReportsService', ['$resource', ($resource) => {
+        return $resource(
+            TPM.apiUrl + 'reports'
+        );
+    }])
 
-        .factory('SettingsService', ['$resource', function($resource) {
-            return $resource(
-                TPM.apiUrl + 'settings/:type/:field',
-                {
-                    type: '@type',
-                    field: '@field'
-                },
-                {
-                    'update': { method:'PUT' }
-                }
-            );
-        }])
-
-        .factory('ReportsService', ['$resource', function($resource) {
-            return $resource(
-                TPM.apiUrl + 'reports'
-            );
-        }])
-
-        .service('SettingsUser', function($http) {
-            var defaults = {
-                currency: TPM.utils.currencyList[0]
-            };
-
-            this.fetch = function() {
-                return $http.get(TPM.apiUrl + 'settings/user');
-            };
-
-            this.set = function(data) {
-                var _settings = angular.extend( {}, defaults, data );
-                localStorage.setItem('TPMsettings', JSON.stringify( _settings ));
-            };
-
-            this.get = function() {
-                var settings = JSON.parse( localStorage.getItem('TPMsettings') );
-                if ( !settings ) {
-                    settings = angular.extend( {}, defaults );
-                }
-                return settings;
-            };
-
-            this.remove = function() {
-                return localStorage.removeItem('TPMsettings');
-            };
-        })
-
-        .service('SessionService', function($http) {
-
-            this.setAuthToken = function(token) {
-                localStorage.setItem('TPMtoken', token);
-                $http.defaults.headers.common['Authorization'] = token;
-            };
-
-            this.getAuthToken = function() {
-                return localStorage.getItem('TPMtoken');
-            };
-
-            this.removeAuthToken = function() {
-                return localStorage.removeItem('TPMtoken');
-            };
-        });
-
-}());
+    .service('SettingsUser', SettingsUser)
+    .service('SessionService',  SessionService);

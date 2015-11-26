@@ -1,11 +1,11 @@
-(function() {
+import angular from 'angular';
 
-    'use strict';
+export default angular.module('TPM.Directives', [])
 
-    TPM.directive('setFocus', function(){
+    .directive('setFocus', function() {
         return {
             restrict: 'A',
-            link: function(scope, element){
+            link    : function(scope, element){
                 var $elem = $(element[0]);
 
                 // attempt to set focus
@@ -20,21 +20,21 @@
 
             }
         };
-    });
+    })
 
-    TPM.directive('clickConfirm', ['$uibModal', '$parse', function($modal, $parse) {
+    .directive('clickConfirm', ['$uibModal', '$parse', function($modal, $parse) {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link    : function(scope, element, attrs) {
 
                 var modalInstance, clickHandler;
 
                 element.bind('click', function() {
                     modalInstance = $modal.open({
                         templateUrl: 'views/modal-confirm.html',
-                        controller: function ($scope) {
+                        controller : ['$scope', function($scope) {
                             $scope.message = attrs.clickConfirmMessage;
-                        }
+                        }]
                     });
 
                     modalInstance.result.then(function () {
@@ -51,5 +51,3 @@
             }
         };
     }]);
-
-}());
