@@ -84,10 +84,10 @@
 
     app.use(compression());
     // temporary, because js files are pre-processed with Babel
-    app.use('/js', express.static(__dirname + '/dist/dev/js'));
-    app.use(express.static(__dirname + '/public'));
+    app.use('/public/js', express.static(__dirname + '/dist/dev/js'));
+    app.use('/public', express.static(__dirname + '/public'));
     app.use('/dist', express.static(__dirname + '/dist'));
-    app.use('/bower_components', express.static(__dirname + '/bower_components'));
+    app.use('/node_modules/systemjs', express.static(__dirname + '/node_modules/systemjs'));
 
     // app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
 

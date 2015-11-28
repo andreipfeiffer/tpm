@@ -5,62 +5,62 @@ import 'angular-animate';
 var routes = {
 
     '/login': {
-        templateUrl: 'views/login.html',
+        templateUrl: 'public/views/login.html',
         controller: 'LoginController',
         requireLogin: false
     },
     '/logout': {
-        templateUrl: 'views/logout.html',
+        templateUrl: 'public/views/logout.html',
         controller: 'LogoutController',
         requireLogin: true
     },
 
     '/projects/client/:id': {
-        templateUrl: 'views/projects-list.html',
+        templateUrl: 'public/views/projects-list.html',
         controller: 'ProjectsListController',
         requireLogin: true
     },
     '/projects': {
-        templateUrl: 'views/projects-list.html',
+        templateUrl: 'public/views/projects-list.html',
         controller: 'ProjectsListController',
         requireLogin: true
     },
     '/projects/new': {
-        templateUrl: 'views/project-form.html',
+        templateUrl: 'public/views/project-form.html',
         controller: 'ProjectsNewController',
         requireLogin: true
     },
     '/projects/:id': {
-        templateUrl: 'views/project.html',
+        templateUrl: 'public/views/project.html',
         controller: 'ProjectsViewController',
         requireLogin: true
     },
     '/projects/:id/edit': {
-        templateUrl: 'views/project-form.html',
+        templateUrl: 'public/views/project-form.html',
         controller: 'ProjectsEditController',
         requireLogin: true
     },
 
     '/clients': {
-        templateUrl: 'views/clients-list.html',
+        templateUrl: 'public/views/clients-list.html',
         controller: 'ClientsListController',
         requireLogin: true
     },
 
     '/reports': {
-        templateUrl: 'views/reports.html',
+        templateUrl: 'public/views/reports.html',
         controller: 'ReportsController',
         requireLogin: true
     },
 
     '/settings': {
-        templateUrl: 'views/settings.html',
+        templateUrl: 'public/views/settings.html',
         controller: 'SettingsController',
         requireLogin: true
     },
 
     '/status': {
-        templateUrl: 'views/status.html',
+        templateUrl: 'public/views/status.html',
         controller: 'StatusController',
         requireLogin: false
     }
