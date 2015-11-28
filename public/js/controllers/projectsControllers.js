@@ -1,6 +1,6 @@
 import angular from 'angular';
-import utils from 'utils';
 import moment from 'moment';
+import utils from 'public/js/utils';
 
 // @todo move out !!!!!
 const dateSettings = {

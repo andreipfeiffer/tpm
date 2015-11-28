@@ -1,5 +1,5 @@
 import angular from 'angular';
-import utils from 'utils';
+import utils from 'public/js/utils';
 
 export default angular.module('TPM.SettingsControllers', [])
 

@@ -10,20 +10,20 @@ import 'angular-bootstrap-tpls';
 import 'angular-ui-validate';
 import 'angular-chart';
 
-import 'directives';
-import 'factories';
-import 'services';
-import 'interceptors';
-import 'filters';
-import 'controllers/authControllers';
-import 'controllers/headerControllers';
-import 'controllers/statusControllers';
-import 'controllers/projectsControllers';
-import 'controllers/clientsControllers';
-import 'controllers/reportsControllers';
-import 'controllers/settingsControllers';
+import 'public/js/directives';
+import 'public/js/factories';
+import 'public/js/services';
+import 'public/js/interceptors';
+import 'public/js/filters';
+import 'public/js/controllers/authControllers';
+import 'public/js/controllers/headerControllers';
+import 'public/js/controllers/statusControllers';
+import 'public/js/controllers/projectsControllers';
+import 'public/js/controllers/clientsControllers';
+import 'public/js/controllers/reportsControllers';
+import 'public/js/controllers/settingsControllers';
 
-import {mainConfigModule} from 'main_config';
+import {mainConfigModule} from 'public/js/main_config';
 
 var tpm = angular.module('tpm', [
     'ngRoute',
