@@ -1,8 +1,12 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
-    beforeEach(module('tpm'));
+    beforeEach(angular.mock.module('tpm'));
 
     describe('Directives: set-focus', function() {
         var element, scope;

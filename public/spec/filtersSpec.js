@@ -1,10 +1,14 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('TPM.Filters', function() {
 
-        beforeEach(module('TPM.Filters'));
+        beforeEach(angular.mock.module('TPM.Filters'));
 
         describe('filterByProjectStatus', function() {
             var filter;

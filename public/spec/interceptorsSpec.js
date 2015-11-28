@@ -1,10 +1,14 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('Interceptors', function() {
 
-        beforeEach(module('tpm'));
+        beforeEach(angular.mock.module('tpm'));
 
         describe('authInterceptor', function() {
             var scope, controller, $httpBackend, location, Session, feedback;

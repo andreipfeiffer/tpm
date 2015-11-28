@@ -1,10 +1,15 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+import utils from 'public/js/utils';
+
 (function() {
 
     'use strict';
 
     describe('Projects Controllers', function() {
 
-        beforeEach(module('tpm'));
+        beforeEach(angular.mock.module('tpm'));
 
         describe('ProjectsListController', function() {
             var scope, ctrl, $httpBackend;
@@ -82,8 +87,8 @@
                 $httpBackend.expectPOST(TPM.apiUrl + 'projects').respond(201);
 
                 scope.submitForm();
-                expect( TPM.utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
-                expect( TPM.utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
+                expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
+                expect( utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
                 $httpBackend.flush();
             });
 
@@ -124,8 +129,8 @@
                 $httpBackend.expectPUT(TPM.apiUrl + 'projects/1').respond(201);
 
                 scope.submitForm();
-                expect( TPM.utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
-                expect( TPM.utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
+                expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
+                expect( utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
                 $httpBackend.flush();
             });
 

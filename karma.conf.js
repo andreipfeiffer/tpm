@@ -6,40 +6,13 @@ module.exports = function(config) {
     config.set({
 
         // base path, that will be used to resolve files and exclude
-        basePath: '',
+        basePath: './',
 
         // frameworks to use
-        frameworks: ['jasmine'],
+        frameworks: ['systemjs', 'jasmine'],
 
         // list of files / patterns to load in the browser
         files: [
-            // vendors
-            'bower_components/jquery/dist/jquery.min.js',
-            'bower_components/bootstrap/dist/js/bootstrap.min.js',
-            'bower_components/angular/angular.min.js',
-            'bower_components/angular-route/angular-route.min.js',
-            'bower_components/angular-resource/angular-resource.min.js',
-            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            'bower_components/moment/min/moment.min.js',
-            'bower_components/angular-ui-validate/dist/validate.js',
-            'bower_components/angular-touch/angular-touch.min.js',
-            'bower_components/angular-media-queries/match-media.js',
-            'bower_components/angular-feedback/dist/feedback.min.js',
-            'bower_components/angular-animate/angular-animate.min.js',
-            'bower_components/Chart.js/Chart.min.js',
-            'bower_components/angular-chart.js/dist/angular-chart.min.js',
-            'bower_components/socket.io-client/socket.io.js',
-            'bower_components/angular-socket-io/socket.js',
-
-            // vendor helpers
-            'bower_components/angular-mocks/angular-mocks.js',
-            'bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
-
-            // app
-            'public/js/app.js',
-            'public/js/**/*.js',
-
             // test utils
             'public/spec/_*.js',
             // test specs
@@ -50,8 +23,19 @@ module.exports = function(config) {
         exclude: [
         ],
 
+        plugins: [
+            'karma-systemjs',
+            // 'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
+            'karma-babel-preprocessor',
+            'karma-jasmine',
+            'karma-coverage',
+            'karma-mocha-reporter'
+        ],
+
         preprocessors: {
-            'public/js/**/*.js': ['babel', 'coverage']
+            'public/js/**/*.js'       : ['babel', 'coverage'],
+            'public/spec/utilsSpec.js': ['babel']
         },
 
         coverageReporter: {
@@ -82,6 +66,50 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
         reporters: ['mocha', 'coverage'],
+
+        systemjs: {
+            baseURL: '/public',
+            configFile: 'public/system.config.js',
+            serveFiles: [
+                'public/bower_components/jquery/dist/jquery.js',
+                'public/bower_components/angular/angular.js',
+                'public/bower_components/angular-route/angular-route.js',
+                'public/bower_components/angular-touch/angular-touch.js',
+                'public/bower_components/angular-animate/angular-animate.js',
+                'public/bower_components/angular-resource/angular-resource.js',
+                'public/bower_components/angular-feedback/src/scripts/feedback.js',
+                'public/bower_components/angular-media-queries/match-media.js',
+                'public/bower_components/bootstrap/dist/js/bootstrap.js',
+                'public/bower_components/angular-bootstrap/ui-bootstrap.js',
+                'public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                'public/bower_components/angular-ui-validate/dist/validate.js',
+                'public/bower_components/moment/moment.js',
+                'public/bower_components/socket.io-client/socket.io.js',
+                'public/bower_components/angular-socket-io/socket.js',
+                'public/bower_components/Chart.js/Chart.min.js',
+                'public/bower_components/angular-chart.js/dist/angular-chart.min.js',
+
+                'public/bower_components/angular-mocks/angular-mocks.js',
+                'public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
+
+                'public/js/**/*.js'
+            ],
+
+            // SystemJS configuration specifically for tests, added after your config file.
+            // Good for adding test libraries and mock modules
+            config: {
+                paths  : {
+                    'angular-mocks'         : 'public/bower_components/angular-mocks/angular-mocks.js',
+                    'angular-socket-io-mock': 'public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
+
+                    'babel'                 : 'node_modules/babel-core/browser.js',
+                    'systemjs'              : 'node_modules/systemjs/dist/system.js',
+                    'system-polyfills'      : 'node_modules/systemjs/dist/system-polyfills.js',
+                    'es6-module-loader'     : 'node_modules/es6-module-loader/dist/es6-module-loader.js',
+                    'phantomjs-polyfill'    : 'node_modules/phantomjs-polyfill/bind-polyfill.js',
+                }
+            }
+        },
 
         // web server port
         port: 9876,

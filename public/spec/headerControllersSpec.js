@@ -1,10 +1,14 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('Header Controllers', function() {
 
-        beforeEach(module('tpm'));
+        beforeEach(angular.mock.module('tpm'));
 
         describe('MenuController', function() {
             var scope, ctrl, location;

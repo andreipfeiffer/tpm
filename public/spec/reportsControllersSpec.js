@@ -1,10 +1,14 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('Reports Controllers', function() {
 
-        beforeEach(module('tpm'));
+        beforeEach(angular.mock.module('tpm'));
 
         describe('ReportsController', function() {
             var scope, ctrl, location, cache, $httpBackend;

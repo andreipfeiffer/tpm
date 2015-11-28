@@ -1,11 +1,14 @@
+import 'angular';
+import 'angular-mocks';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('Auth Controllers', function() {
 
-        beforeEach(module('tpm'));
-
+        beforeEach(angular.mock.module('tpm'));
 
         describe('LoginController', function() {
             var scope, controller, $httpBackend, location, Session, feedback;

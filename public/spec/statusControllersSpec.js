@@ -1,10 +1,15 @@
+import 'angular';
+import 'angular-mocks';
+import 'angular-socket-io-mock';
+import tpm from 'public/js/main';
+
 (function() {
 
     'use strict';
 
     describe('Status Controllers', function() {
 
-        beforeEach(module('tpm'));
+        beforeEach(angular.mock.module('tpm'));
 
         describe('StatusController', function() {
             var scope, ctrl, websocket, $httpBackend;
