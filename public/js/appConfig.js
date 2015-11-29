@@ -1,5 +1,5 @@
-var isInitialized = false;
-var apiUrl = 'http://localhost:3000/';
+var isInitialized = false,
+    apiUrl = 'http://localhost:3000/';
 
 function _isLocalhost(host) {
     if (
@@ -23,9 +23,7 @@ export default {
     },
 
     setApiUrl(host, port) {
-        console.log(host, port);
         if ( isInitialized ) {
-            console.warn('appConfig.apiUrl already initialized');
             return;
         }
 

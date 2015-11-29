@@ -4,8 +4,6 @@ import 'angular-animate';
 import routes from 'public/js/appRoutes';
 import config from 'public/js/appConfig';
 
-console.log(config);
-
 export var appInit = angular.module('appInit', [
     'ngRoute'
 ]).config([
