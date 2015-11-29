@@ -30,18 +30,6 @@ export default angular.module('TPM.ClientsControllers', [])
                 feedback.dismiss();
             });
 
-            function getClientIndex(id) {
-                var index;
-
-                $scope.clientsList.forEach((client, idx) => {
-                    if (client.id === id) {
-                        index = idx;
-                    }
-                });
-
-                return index;
-            }
-
             $scope.toggleNewFormDisplay = () => {
                 $scope.isFormNewDisplayed = !$scope.isFormNewDisplayed;
                 setTimeout(() => angular.element('#new-client-name').focus(), 10);
@@ -59,11 +47,6 @@ export default angular.module('TPM.ClientsControllers', [])
                     feedback.notify('Client was added');
                 });
             };
-
-            function ModalEditClientCtrl($scope, $uibModalInstance, client) {
-                $scope.client = angular.extend({}, client);
-            }
-            ModalEditClientCtrl.$inject = ['$scope', '$uibModalInstance', 'client'];
 
             $scope.openEditDialog = (id) => {
                 if ( !id ) {
@@ -114,5 +97,14 @@ export default angular.module('TPM.ClientsControllers', [])
             };
 
             $scope.clearSearch = () => $scope.searchClient = '';
+
+            function getClientIndex(id) {
+                return $scope.clientsList.findIndex((client, idx) => client.id === id);
+            }
+
+            function ModalEditClientCtrl($scope, $uibModalInstance, client) {
+                $scope.client = angular.extend({}, client);
+            }
+            ModalEditClientCtrl.$inject = ['$scope', '$uibModalInstance', 'client'];
         }
     ]);

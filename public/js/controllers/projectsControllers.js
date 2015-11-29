@@ -60,15 +60,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             }
 
             function getProjectIndex(id) {
-                var index;
-
-                $scope.projectsList.forEach((project, idx) => {
-                    if (project.id === id) {
-                        index = idx;
-                    }
-                });
-
-                return index;
+                return $scope.projectsList.findIndex((project, idx) => project.id === id);
             }
 
             function initProjectsList(arr) {
