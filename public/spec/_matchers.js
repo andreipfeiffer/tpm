@@ -18,5 +18,4 @@ var customMatchers = {
     }
 };
 
-
 export default customMatchers;
