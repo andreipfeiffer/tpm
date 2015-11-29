@@ -87,7 +87,7 @@ export default angular.module('TPM.Services', ['ngResource'])
             var currency      = SettingsUser.get().currency;
 
             var modalInstance = $modal.open({
-                templateUrl: 'views/projects-list-modal.html',
+                templateUrl: 'public/views/projects-list-modal.html',
                 controller : ModalProjectsCtrl,
                 resolve    : {
                     data() {

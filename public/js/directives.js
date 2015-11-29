@@ -31,7 +31,7 @@ export default angular.module('TPM.Directives', [])
 
                 element.bind('click', function() {
                     modalInstance = $modal.open({
-                        templateUrl: 'views/modal-confirm.html',
+                        templateUrl: 'public/views/modal-confirm.html',
                         controller : ['$scope', function($scope) {
                             $scope.message = attrs.clickConfirmMessage;
                         }]

@@ -72,7 +72,7 @@ export default angular.module('TPM.ClientsControllers', [])
                     return;
                 }
                 var modalInstance = $modal.open({
-                    templateUrl: 'views/clients-edit-modal.html',
+                    templateUrl: 'public/views/clients-edit-modal.html',
                     controller : ModalEditClientCtrl,
                     resolve    : {
                         client: function () {
