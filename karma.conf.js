@@ -34,8 +34,8 @@ module.exports = function(config) {
         ],
 
         preprocessors: {
-            'public/js/**/*.js'       : ['babel', 'coverage'],
-            'public/spec/utilsSpec.js': ['babel']
+            'public/js/**/*.js'  : ['babel', 'coverage'],
+            'public/spec/**/*.js': ['babel']
         },
 
         coverageReporter: {
