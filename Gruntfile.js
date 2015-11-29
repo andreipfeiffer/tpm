@@ -44,7 +44,8 @@ module.exports = (grunt) => {
             files: [
                 '*.js',
                 'server/**/*.js',
-                'public/**/*.js'
+                'public/**/*.js',
+                '!public/bower_components/**'
             ],
             options: {
                 jshintrc: '.jshintrc',

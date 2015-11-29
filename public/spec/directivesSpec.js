@@ -1,6 +1,6 @@
 import 'angular';
 import 'angular-mocks';
-import tpm from 'public/js/main';
+import 'public/js/main';
 
 (function() {
 
