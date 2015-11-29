@@ -3,8 +3,8 @@ import utils from 'public/js/utils';
 
 export default angular.module('TPM.Filters', [])
 
-    .filter('filterByProjectStatus', function() {
-        return function(arr, status) {
+    .filter('filterByProjectStatus', () => {
+        return (arr, status) => {
 
             if ( !angular.isArray(arr) ) {
                 return [];
@@ -12,8 +12,8 @@ export default angular.module('TPM.Filters', [])
 
             var _status = status.trim();
 
-            return arr.filter(function(item) {
-                return (function() {
+            return arr.filter((item) => {
+                return (() => {
                     if (_status.length) {
                         // if we pass a specific filter
                         return (item.status === _status);
@@ -27,15 +27,15 @@ export default angular.module('TPM.Filters', [])
         };
     })
 
-    .filter('filterByClientId', function() {
-        return function(arr, id) {
+    .filter('filterByClientId', () => {
+        return (arr, id) => {
 
             if ( !angular.isArray(arr) ) {
                 return [];
             }
 
-            return arr.filter(function(item) {
-                return (function() {
+            return arr.filter((item) => {
+                return (() => {
                     // default value, when no filter is seleted, the value is ""
                     // when the filter is cleared, the value is null
                     if ( id === null || id === '' ) {

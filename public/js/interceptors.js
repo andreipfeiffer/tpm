@@ -2,9 +2,9 @@ import angular from 'angular';
 
 export default angular.module('TPM.Interceptors', [])
 
-    .factory('authInterceptor',['$injector', '$location', '$q', '$rootScope', function($injector, $location, $q, $rootScope) {
+    .factory('authInterceptor',['$injector', '$location', '$q', '$rootScope', ($injector, $location, $q, $rootScope) => {
         return {
-            responseError: function(rejection) {
+            responseError: (rejection) => {
 
                 var status       = parseInt(rejection.status),
                     feedback     = $injector.get('feedback'),
@@ -48,6 +48,6 @@ export default angular.module('TPM.Interceptors', [])
         };
     }])
 
-    .config(['$httpProvider', function($httpProvider) {
+    .config(['$httpProvider', ($httpProvider) => {
         return $httpProvider.interceptors.push('authInterceptor');
     }]);

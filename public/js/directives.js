@@ -2,10 +2,10 @@ import angular from 'angular';
 
 export default angular.module('TPM.Directives', [])
 
-    .directive('setFocus', function() {
+    .directive('setFocus', () => {
         return {
             restrict: 'A',
-            link    : function(scope, element){
+            link(scope, element) {
                 var $elem = $(element[0]);
 
                 // attempt to set focus
@@ -13,33 +13,31 @@ export default angular.module('TPM.Directives', [])
 
                 // need this second attempt for modals
                 if ( !$elem.is(':focus') ) {
-                    setTimeout( function() {
-                        $elem.focus();
-                    }, 50);
+                    setTimeout( () => $elem.focus(), 50);
                 }
 
             }
         };
     })
 
-    .directive('clickConfirm', ['$uibModal', '$parse', function($modal, $parse) {
+    .directive('clickConfirm', ['$uibModal', '$parse', ($modal, $parse) => {
         return {
             restrict: 'A',
-            link    : function(scope, element, attrs) {
+            link(scope, element, attrs) {
 
                 var modalInstance, clickHandler;
 
-                element.bind('click', function() {
+                element.bind('click', () => {
                     modalInstance = $modal.open({
                         templateUrl: 'public/views/modal-confirm.html',
-                        controller : ['$scope', function($scope) {
+                        controller : ['$scope', ($scope) => {
                             $scope.message = attrs.clickConfirmMessage;
                         }]
                     });
 
-                    modalInstance.result.then(function () {
+                    modalInstance.result.then( () => {
                         // close callback
-                    },function () {
+                    }, () => {
                         // dismiss callback
 
                         clickHandler = $parse(attrs.clickConfirm);

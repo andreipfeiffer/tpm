@@ -8,7 +8,7 @@ export var appInit = angular.module('appInit', [
     'ngRoute'
 ]).config([
     '$routeProvider', '$animateProvider', 'ChartJsProvider',
-    function ($routeProvider, $animateProvider, ChartJs) {
+    ($routeProvider, $animateProvider, ChartJs) => {
 
         //this loads up our routes dynamically from the routes object
         for (var path in routes) {
@@ -29,11 +29,11 @@ export var appInit = angular.module('appInit', [
     }
 ]).run([
     '$rootScope', '$location', '$http', 'SessionService', 'feedback',
-    function($rootScope, $location, $http, SessionService, feedback) {
+    ($rootScope, $location, $http, SessionService, feedback) => {
 
         // simple client authentication method: https://coderwall.com/p/f6brkg
         // @note: another more complex: https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
-        $rootScope.$on('$locationChangeStart', function(event, next/*, current*/) {
+        $rootScope.$on('$locationChangeStart', (event, next/*, current*/) => {
 
             $rootScope.isAuth = SessionService.getAuthToken();
 

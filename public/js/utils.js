@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export default {
-    toInt: function(x) {
+    toInt(x) {
         var nr = parseInt(x);
         if (isNaN(nr)) {
             return 0;
@@ -9,21 +9,21 @@ export default {
         return parseInt(x);
     },
 
-    isDateFormat: function(str) {
+    isDateFormat(str) {
         return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
     },
 
-    statusList  : ['on hold','in progress','finished','paid','cancelled'],
-    currencyList: ['RON', 'EUR'],
+    statusList  : Object.freeze( ['on hold','in progress','finished','paid','cancelled'] ),
+    currencyList: Object.freeze( ['RON', 'EUR'] ),
 
-    getActiveStatusList: function() {
+    getActiveStatusList() {
         return [
             this.statusList[0],
             this.statusList[1]
         ];
     },
 
-    getInactiveStatusList: function() {
+    getInactiveStatusList() {
         return [
             this.statusList[2],
             this.statusList[3],
@@ -31,7 +31,7 @@ export default {
         ];
     },
 
-    getRemainingWorkTime: function(_deadline) {
+    getRemainingWorkTime(_deadline) {
         var today       = moment(),
             weekendDays = this.getWeekendDays( _deadline ),
             // deadline always starts at 00:00
@@ -48,7 +48,7 @@ export default {
         };
     },
 
-    getPassedTime: function(_deadline) {
+    getPassedTime(_deadline) {
         var today       = moment(),
             weekendDays = this.getWeekendDays( _deadline ),
             deadline    = moment(_deadline);
@@ -61,7 +61,7 @@ export default {
         };
     },
 
-    getWeekendDays: function(_deadline) {
+    getWeekendDays(_deadline) {
         var nr = 0,
             dateStart = moment(),
             dateEnd   = moment(_deadline);
@@ -80,7 +80,7 @@ export default {
         return nr;
     },
 
-    getRemainingDays: function(timeLeft, weekendDays) {
+    getRemainingDays(timeLeft, weekendDays) {
         if (weekendDays > 0) {
             return timeLeft.subtract(weekendDays, 'days').asDays();
         }
@@ -95,7 +95,7 @@ export default {
      *
      * @param  {Object Moment}   today   current day object
      */
-    setTodayHour: function(today) {
+    setTodayHour(today) {
         var h = 10;
         if (today.hour() > 14) {
             h = 19;
