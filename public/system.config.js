@@ -8,11 +8,11 @@ System.config({
 
     meta: {
         'public/bower_components/angular/angular': { format: 'global', exports: 'angular', deps: ['jquery'] },
-        'public/bower_components/angular-*': { deps: ['angular'] },
         'public/bower_components/bootstrap/*': { deps: ['jquery'] },
         'public/bower_components/angular-bootstrap/*': { deps: ['angular', 'bootstrap', 'angular-bootstrap-tpls'] },
         'public/bower_components/angular-socket*': { deps: ['angular', 'socket-io'] },
         'public/bower_components/angular-chart*': { deps: ['angular', 'chart'] },
+        'public/bower_components/angular-*': { deps: ['angular'] },
     },
 
     map: {
