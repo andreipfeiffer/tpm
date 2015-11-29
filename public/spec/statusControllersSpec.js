@@ -1,7 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'angular-socket-io-mock';
-import 'public/js/main';
+import 'public/js/app';
 
 (function() {
 

@@ -1,6 +1,6 @@
 import 'angular';
 import 'angular-mocks';
-import 'public/js/main';
+import 'public/js/app';
 import utils from 'public/js/utils';
 
 (function() {

@@ -1,9 +1,9 @@
 import angular from 'angular';
-import tpm from 'public/js/main';
+import app from 'public/js/app';
 
 angular.element(document).ready(function() {
     angular.bootstrap(document.querySelector('[data-main-app]'), [
-        tpm.name
+        app.name
     ], {
         strictDi: true
     });

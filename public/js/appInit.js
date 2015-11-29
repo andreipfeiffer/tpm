@@ -66,7 +66,7 @@ var routes = {
     }
 };
 
-export var mainConfigModule = angular.module('mainConfigModule', [
+export var appInit = angular.module('appInit', [
     'ngRoute'
 ]).config([
     '$routeProvider', '$animateProvider', 'ChartJsProvider',
