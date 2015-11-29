@@ -13,6 +13,9 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            // needed to polyfill some features like Array.prototype.[new-stuff]
+            'node_modules/babel-polyfill/dist/polyfill.js',
+
             // test utils
             'public/spec/_*.js',
             // test specs
