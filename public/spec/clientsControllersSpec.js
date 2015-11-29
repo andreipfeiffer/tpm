@@ -66,7 +66,7 @@ import stubs from 'public/spec/_stubs';
                 var client = stubs.clientsList[0];
                 $httpBackend.flush();
 
-                var newClientData = angular.extend( {}, client );
+                var newClientData = Object.assign( {}, client );
                 newClientData.name = 'Edited client name';
 
                 $httpBackend.expectPUT(config.getApiUrl() + 'clients/' + client.id).respond(200);

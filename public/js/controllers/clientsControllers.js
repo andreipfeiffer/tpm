@@ -103,7 +103,7 @@ export default angular.module('TPM.ClientsControllers', [])
             }
 
             function ModalEditClientCtrl($scope, $uibModalInstance, client) {
-                $scope.client = angular.extend({}, client);
+                $scope.client = Object.assign({}, client);
             }
             ModalEditClientCtrl.$inject = ['$scope', '$uibModalInstance', 'client'];
         }

@@ -243,7 +243,7 @@ export default angular.module('TPM.ReportsControllers', [])
                     return res;
                 }
 
-                var _months = angular.extend([], months);
+                var _months = Object.assign([], months);
 
                 _months.reverse().forEach((month) => {
                     var year = month.monthRaw.slice(0, 4);
