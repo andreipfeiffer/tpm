@@ -68,7 +68,6 @@ module.exports = function(config) {
         reporters: ['mocha', 'coverage'],
 
         systemjs: {
-            baseURL: '/public',
             configFile: 'public/system.config.js',
             serveFiles: [
                 'public/bower_components/jquery/dist/jquery.js',
@@ -98,7 +97,7 @@ module.exports = function(config) {
             // SystemJS configuration specifically for tests, added after your config file.
             // Good for adding test libraries and mock modules
             config: {
-                paths  : {
+                paths: {
                     'angular-mocks'         : 'public/bower_components/angular-mocks/angular-mocks.js',
                     'angular-socket-io-mock': 'public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
 
