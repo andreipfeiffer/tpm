@@ -26,16 +26,16 @@ export default angular.module('TPM.ProjectsControllers', [])
         'feedback',
         ($scope, $q, $routeParams, tpmCache, Projects, Clients, SettingsUser, screenSize, feedback) => {
 
-            $scope.filterStatus = tpmCache.get('filterStatus') || '';
-            $scope.filterStatusOptions = utils.statusList;
-            $scope.filterActiveStatusOptions = utils.getActiveStatusList();
+            $scope.filterStatus                = tpmCache.get('filterStatus') || '';
+            $scope.filterStatusOptions         = utils.statusList;
+            $scope.filterActiveStatusOptions   = utils.getActiveStatusList();
             $scope.filterInactiveStatusOptions = utils.getInactiveStatusList();
-            $scope.filterClient = $routeParams.id || '';
-            $scope.currency = SettingsUser.get().currency;
+            $scope.filterClient                = $routeParams.id || '';
+            $scope.currency                    = SettingsUser.get().currency;
 
-            $scope.isLoading = true;
+            $scope.isLoading              = true;
+            $scope.showActions            = false;
             $scope.isEnabledToggleActions = screenSize.is('xs, sm');
-            $scope.showActions = false;
 
             !feedback.isActive() && feedback.load();
 
