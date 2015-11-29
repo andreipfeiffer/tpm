@@ -1,4 +1,5 @@
 import angular from 'angular';
+import config from 'public/js/appConfig';
 
 export default angular.module('TPM.StatusControllers', [])
 
@@ -16,7 +17,7 @@ export default angular.module('TPM.StatusControllers', [])
                 income  : 0
             };
 
-            $http.get(TPM.apiUrl + 'status');
+            $http.get(config.getApiUrl() + 'status');
 
             feedback.load();
 

@@ -1,5 +1,6 @@
 import angular from 'angular';
 import utils from 'public/js/utils';
+import config from 'public/js/appConfig';
 
 // @todo extract module
 class SessionService {
@@ -31,7 +32,7 @@ class SettingsUser {
     }
 
     fetch() {
-        return this.$http.get(TPM.apiUrl + 'settings/user');
+        return this.$http.get(config.getApiUrl() + 'settings/user');
     }
     remove() {
         return localStorage.removeItem('TPMsettings');
@@ -54,7 +55,7 @@ export default angular.module('TPM.Services', ['ngResource'])
 
     .factory('ProjectsService', ['$http', '$resource', ($http, $resource) => {
         return $resource(
-            TPM.apiUrl + 'projects/:id',
+            config.getApiUrl() + 'projects/:id',
             {
                 id: '@id'
             },
@@ -66,7 +67,7 @@ export default angular.module('TPM.Services', ['ngResource'])
 
     .factory('ProjectsClientService', ['$http', '$resource', ($http, $resource) => {
         return $resource(
-            TPM.apiUrl + 'projects/client/:id',
+            config.getApiUrl() + 'projects/client/:id',
             {
                 id: '@id'
             }
@@ -111,7 +112,7 @@ export default angular.module('TPM.Services', ['ngResource'])
 
     .factory('ClientsService', ['$resource', ($resource) => {
         return $resource(
-            TPM.apiUrl + 'clients/:id',
+            config.getApiUrl() + 'clients/:id',
             {
                 id: '@id'
             },
@@ -123,7 +124,7 @@ export default angular.module('TPM.Services', ['ngResource'])
 
     .factory('SettingsService', ['$resource', ($resource) => {
         return $resource(
-            TPM.apiUrl + 'settings/:type/:field',
+            config.getApiUrl() + 'settings/:type/:field',
             {
                 type: '@type',
                 field: '@field'
@@ -136,7 +137,7 @@ export default angular.module('TPM.Services', ['ngResource'])
 
     .factory('ReportsService', ['$resource', ($resource) => {
         return $resource(
-            TPM.apiUrl + 'reports'
+            config.getApiUrl() + 'reports'
         );
     }])
 

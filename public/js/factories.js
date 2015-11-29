@@ -1,5 +1,6 @@
 import angular from 'angular';
 import io from 'socket-io';
+import config from 'public/js/appConfig';
 
 export default angular.module('TPM.Factories', [])
 
@@ -9,6 +10,6 @@ export default angular.module('TPM.Factories', [])
 
     .factory('websocket', ['socketFactory', function(socketFactory) {
         return socketFactory({
-            ioSocket: io.connect( TPM.apiUrl )
+            ioSocket: io.connect( config.getApiUrl() )
         });
     }]);

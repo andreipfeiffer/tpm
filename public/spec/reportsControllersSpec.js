@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -15,7 +16,7 @@ import 'public/js/app';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, $location, tpmCache) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'reports').respond( TPM.mocks.reports );
+                $httpBackend.expectGET(config.getApiUrl() + 'reports').respond( TPM.mocks.reports );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 cache    = tpmCache;

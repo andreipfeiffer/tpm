@@ -205,6 +205,17 @@ module.exports = (grunt) => {
                 tasks: ['babel'],
             }
         },
+
+        plato: {
+            report: {
+                options : {
+                    jshint : false
+                },
+                files: {
+                    'reports/plato': ['public/js/**/*.js']
+                }
+            }
+        },
     });
 
     grunt.registerTask('default', [

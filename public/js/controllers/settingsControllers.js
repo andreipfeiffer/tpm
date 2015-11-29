@@ -1,5 +1,6 @@
 import angular from 'angular';
 import utils from 'public/js/utils';
+import config from 'public/js/appConfig';
 
 export default angular.module('TPM.SettingsControllers', [])
 
@@ -55,7 +56,7 @@ export default angular.module('TPM.SettingsControllers', [])
                 $scope.isLoadingGoogle = true;
                 feedback.load();
 
-                $http.delete(TPM.apiUrl + 'auth/google').success(function () {
+                $http.delete(config.getApiUrl() + 'auth/google').success(function () {
                     $scope.settings.googleToken = false;
                     $scope.isLoadingGoogle = false;
                     feedback.notify('Your Google Calendar is not syncronized anymore');

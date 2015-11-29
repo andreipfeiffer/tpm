@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -15,7 +16,7 @@ import 'public/js/app';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -51,7 +52,7 @@ import 'public/js/app';
                 scope.toggleNewFormDisplay();
                 scope.newClient.name = 'New client';
 
-                $httpBackend.expectPOST(TPM.apiUrl + 'clients').respond(201);
+                $httpBackend.expectPOST(config.getApiUrl() + 'clients').respond(201);
                 scope.addNewClient();
                 $httpBackend.flush();
 
@@ -66,7 +67,7 @@ import 'public/js/app';
                 var newClientData = angular.extend( {}, client );
                 newClientData.name = 'Edited client name';
 
-                $httpBackend.expectPUT(TPM.apiUrl + 'clients/' + client.id).respond(200);
+                $httpBackend.expectPUT(config.getApiUrl() + 'clients/' + client.id).respond(200);
                 scope.editClient( newClientData );
                 $httpBackend.flush();
 

@@ -2,6 +2,7 @@ import 'angular';
 import 'angular-mocks';
 import 'angular-socket-io-mock';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -22,7 +23,7 @@ import 'public/js/app';
                 websocket.removeAllListeners = jasmine.createSpy();
 
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'status').respond( true );
+                $httpBackend.expectGET(config.getApiUrl() + 'status').respond( true );
 
                 ctrl = $controller('StatusController', {$scope: scope});
             }));

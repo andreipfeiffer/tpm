@@ -1,6 +1,7 @@
 import angular from 'angular';
 import moment from 'moment';
 import utils from 'public/js/utils';
+import config from 'public/js/appConfig';
 
 // @todo move out !!!!!
 const dateSettings = {
@@ -199,8 +200,8 @@ export default angular.module('TPM.ProjectsControllers', [])
                 feedback.load();
 
                 // convert the dates to match the DB format
-                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
-                $scope.project.dateAdded = $filter('date')(new Date(), TPM.settings.dateFormat);
+                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+                $scope.project.dateAdded = $filter('date')(new Date(), config.dateFormat);
                 $scope.isLoading = true;
                 $scope.formSubmit = 'Please wait ...';
 
@@ -259,8 +260,8 @@ export default angular.module('TPM.ProjectsControllers', [])
                 feedback.load();
 
                 // convert the dates to match the DB format
-                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, TPM.settings.dateFormat);
-                $scope.project.dateAdded     = $filter('date')(new Date(), TPM.settings.dateFormat);
+                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+                $scope.project.dateAdded     = $filter('date')(new Date(), config.dateFormat);
                 $scope.isLoading             = true;
                 $scope.formSubmit            = 'Please wait ...';
 

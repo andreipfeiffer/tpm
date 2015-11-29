@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -31,7 +32,7 @@ import 'public/js/app';
             it('should redirect logged users if they get a request with the status "401"', function() {
 
                 // load a random controller to trigger a request
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(401);
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond(401);
                 controller('ClientsListController', {$scope: scope});
                 $httpBackend.flush();
 
@@ -42,7 +43,7 @@ import 'public/js/app';
             it('should display feedback message for status "5xx"', function() {
 
                 // load a random controller to trigger a request
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(500);
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond(500);
                 controller('ClientsListController', {$scope: scope});
                 $httpBackend.flush();
 
@@ -53,7 +54,7 @@ import 'public/js/app';
             it('should display feedback message for status "0"', function() {
 
                 // load a random controller to trigger a request
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond(0);
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond(0);
                 controller('ClientsListController', {$scope: scope});
                 $httpBackend.flush();
 

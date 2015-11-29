@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -37,7 +38,7 @@ import 'public/js/app';
                     password: 'xxx'
                 };
 
-                $httpBackend.expectPOST(TPM.apiUrl + 'login').respond(401, { 'error': 'bad credentials' });
+                $httpBackend.expectPOST(config.getApiUrl() + 'login').respond(401, { 'error': 'bad credentials' });
 
                 scope.login();
                 $httpBackend.flush();
@@ -57,8 +58,8 @@ import 'public/js/app';
                     password: 'asdasd'
                 };
 
-                $httpBackend.expectPOST(TPM.apiUrl + 'login').respond(200, { 'authToken': token });
-                $httpBackend.expectGET(TPM.apiUrl + 'settings/user').respond(200);
+                $httpBackend.expectPOST(config.getApiUrl() + 'login').respond(200, { 'authToken': token });
+                $httpBackend.expectGET(config.getApiUrl() + 'settings/user').respond(200);
 
                 scope.login();
                 $httpBackend.flush();
@@ -101,7 +102,7 @@ import 'public/js/app';
 
                 controller('LogoutController', {$scope: scope});
 
-                $httpBackend.expectGET(TPM.apiUrl + 'logout').respond(200);
+                $httpBackend.expectGET(config.getApiUrl() + 'logout').respond(200);
                 $httpBackend.flush();
 
                 expect(Session.getAuthToken()).not.toEqual( token );

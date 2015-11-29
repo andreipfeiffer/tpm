@@ -1,70 +1,10 @@
 import angular from 'angular';
 import 'angular-route';
 import 'angular-animate';
+import routes from 'public/js/appRoutes';
+import config from 'public/js/appConfig';
 
-var routes = {
-
-    '/login': {
-        templateUrl: 'public/views/login.html',
-        controller: 'LoginController',
-        requireLogin: false
-    },
-    '/logout': {
-        templateUrl: 'public/views/logout.html',
-        controller: 'LogoutController',
-        requireLogin: true
-    },
-
-    '/projects/client/:id': {
-        templateUrl: 'public/views/projects-list.html',
-        controller: 'ProjectsListController',
-        requireLogin: true
-    },
-    '/projects': {
-        templateUrl: 'public/views/projects-list.html',
-        controller: 'ProjectsListController',
-        requireLogin: true
-    },
-    '/projects/new': {
-        templateUrl: 'public/views/project-form.html',
-        controller: 'ProjectsNewController',
-        requireLogin: true
-    },
-    '/projects/:id': {
-        templateUrl: 'public/views/project.html',
-        controller: 'ProjectsViewController',
-        requireLogin: true
-    },
-    '/projects/:id/edit': {
-        templateUrl: 'public/views/project-form.html',
-        controller: 'ProjectsEditController',
-        requireLogin: true
-    },
-
-    '/clients': {
-        templateUrl: 'public/views/clients-list.html',
-        controller: 'ClientsListController',
-        requireLogin: true
-    },
-
-    '/reports': {
-        templateUrl: 'public/views/reports.html',
-        controller: 'ReportsController',
-        requireLogin: true
-    },
-
-    '/settings': {
-        templateUrl: 'public/views/settings.html',
-        controller: 'SettingsController',
-        requireLogin: true
-    },
-
-    '/status': {
-        templateUrl: 'public/views/status.html',
-        controller: 'StatusController',
-        requireLogin: false
-    }
-};
+console.log(config);
 
 export var appInit = angular.module('appInit', [
     'ngRoute'
@@ -111,17 +51,7 @@ export var appInit = angular.module('appInit', [
 
         $http.defaults.headers.common['Authorization'] = SessionService.getAuthToken();
 
-        // @todo make this read-only
-        var isLocalhost = false;
-        if ( $location.host() === 'localhost' || $location.host().indexOf('192.168') > -1 ) {
-            isLocalhost = true;
-        }
-
-        TPM.apiUrl = isLocalhost ? 'http://' + $location.host() + ':' + $location.port() + '/' : 'http://tpm.upsidedown.ro/';
-
-        TPM.settings = {
-            dateFormat: 'yyyy-MM-dd'
-        };
+        config.setApiUrl( $location.host(), $location.port() );
 
         feedback.config({
             duration: 2000,

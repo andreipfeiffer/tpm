@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -15,7 +16,7 @@ import 'public/js/app';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
+                $httpBackend.expectGET(config.getApiUrl() + 'settings/google').respond({
                     googleToken: false
                 });
 
@@ -40,7 +41,7 @@ import 'public/js/app';
                 $httpBackend.flush();
                 scope.settings.googleToken = false;
 
-                $httpBackend.expectDELETE(TPM.apiUrl + 'auth/google').respond(205);
+                $httpBackend.expectDELETE(config.getApiUrl() + 'auth/google').respond(205);
                 scope.revokeGoogleAccess();
                 $httpBackend.flush();
 
@@ -62,7 +63,7 @@ import 'public/js/app';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
+                $httpBackend.expectGET(config.getApiUrl() + 'settings/google').respond({
                     googleToken     : true,
                     calendars       : calendarsList,
                     selectedCalendar: 1
@@ -87,7 +88,7 @@ import 'public/js/app';
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, _SettingsUser_) {
                 SettingsUser = _SettingsUser_;
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'settings/google').respond({
+                $httpBackend.expectGET(config.getApiUrl() + 'settings/google').respond({
                     googleToken: false
                 });
 
@@ -101,7 +102,7 @@ import 'public/js/app';
 
                 scope.user.data.currency = 'EUR';
 
-                $httpBackend.expectPUT(TPM.apiUrl + 'settings/user', scope.user.data).respond( 200 );
+                $httpBackend.expectPUT(config.getApiUrl() + 'settings/user', scope.user.data).respond( 200 );
                 scope.saveUserSettings();
                 $httpBackend.flush();
 

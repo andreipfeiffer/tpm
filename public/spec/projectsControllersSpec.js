@@ -2,6 +2,7 @@ import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
 import utils from 'public/js/utils';
+import config from 'public/js/appConfig';
 
 (function() {
 
@@ -16,8 +17,8 @@ import utils from 'public/js/utils';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'projects').respond( TPM.mocks.projectsList );
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'projects').respond( TPM.mocks.projectsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsListController', {$scope: scope});
@@ -70,7 +71,7 @@ import utils from 'public/js/utils';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -84,7 +85,7 @@ import utils from 'public/js/utils';
                 expect(scope.project.name).toEqual('');
 
                 scope.project.name = 'new project name';
-                $httpBackend.expectPOST(TPM.apiUrl + 'projects').respond(201);
+                $httpBackend.expectPOST(config.getApiUrl() + 'projects').respond(201);
 
                 scope.submitForm();
                 expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
@@ -111,8 +112,8 @@ import utils from 'public/js/utils';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'projects/1').respond( projectDetails );
-                $httpBackend.expectGET(TPM.apiUrl + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'projects/1').respond( projectDetails );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -126,7 +127,7 @@ import utils from 'public/js/utils';
                 expect(scope.project.name).toEqual(projectDetails.name );
 
                 scope.project.name = 'new project name';
-                $httpBackend.expectPUT(TPM.apiUrl + 'projects/1').respond(201);
+                $httpBackend.expectPUT(config.getApiUrl() + 'projects/1').respond(201);
 
                 scope.submitForm();
                 expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
@@ -151,7 +152,7 @@ import utils from 'public/js/utils';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(TPM.apiUrl + 'projects/1').respond( projectDetails );
+                $httpBackend.expectGET(config.getApiUrl() + 'projects/1').respond( projectDetails );
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsViewController', {$scope: scope, $routeParams : routeParams});

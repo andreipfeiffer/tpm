@@ -1,4 +1,5 @@
 import angular from 'angular';
+import config from 'public/js/appConfig';
 
 export default angular.module('TPM.AuthControllers', [])
 
@@ -30,7 +31,7 @@ export default angular.module('TPM.AuthControllers', [])
                 feedback.load();
 
                 $http
-                    .post(TPM.apiUrl + 'login', $scope.credentials)
+                    .post(config.getApiUrl() + 'login', $scope.credentials)
                     .success(function (res) {
                         Session.setAuthToken( res.authToken );
 
@@ -57,7 +58,7 @@ export default angular.module('TPM.AuthControllers', [])
         function($http, $location, Session, SettingsUser) {
 
             $http
-                .get(TPM.apiUrl + 'logout')
+                .get(config.getApiUrl() + 'logout')
                 .success(function () {
                     SettingsUser.remove();
                     Session.removeAuthToken();
