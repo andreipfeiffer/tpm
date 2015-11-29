@@ -257,16 +257,17 @@ export default angular.module('TPM.ReportsControllers', [])
                     // res.labels.push( month.month );
                 });
 
-                // if first "year" didn't start at January, fill with empty data
-                for (var i = (12 - res.data[0].length); i > 0; i -= 1) {
-                    res.data[0].unshift( null );
-                }
+                res.data[0] = fillEmptyMonths( res.data[0] );
 
                 // reverse data, so the current year is first
                 res.data.reverse();
                 res.series.reverse();
 
                 return res;
+            }
+
+            function fillEmptyMonths(arr) {
+                return new Array( 12 - arr.length ).fill( null ).concat( arr );
             }
 
             function getPriceChartData() {
