@@ -3,6 +3,7 @@ import 'angular-mocks';
 import 'public/js/app';
 import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
+import customMatchers from 'public/spec/_matchers';
 
 (function() {
 
@@ -23,7 +24,7 @@ import config from 'public/js/appConfig';
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsListController', {$scope: scope});
 
-                jasmine.addMatchers( TPM.customMatchers );
+                jasmine.addMatchers( customMatchers );
             }));
 
 

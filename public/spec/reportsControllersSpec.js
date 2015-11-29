@@ -2,6 +2,7 @@ import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
 import config from 'public/js/appConfig';
+import customMatchers from 'public/spec/_matchers';
 
 (function() {
 
@@ -24,7 +25,7 @@ import config from 'public/js/appConfig';
                 scope    = $rootScope.$new();
                 ctrl     = $controller('ReportsController', {$scope: scope});
 
-                jasmine.addMatchers( TPM.customMatchers );
+                jasmine.addMatchers( customMatchers );
             }));
 
 

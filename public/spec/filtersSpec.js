@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
+import customMatchers from 'public/spec/_matchers';
 
 (function() {
 
@@ -18,7 +19,7 @@ import 'public/js/app';
                     filter = $injector.get('$filter')('filterByProjectStatus');
                 });
 
-                jasmine.addMatchers( TPM.customMatchers );
+                jasmine.addMatchers( customMatchers );
             });
 
             it('should return empty array, if passed value is not array', function() {
