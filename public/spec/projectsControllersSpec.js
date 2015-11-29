@@ -4,6 +4,7 @@ import 'public/js/app';
 import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
 import customMatchers from 'public/spec/_matchers';
+import stubs from 'public/spec/_stubs';
 
 (function() {
 
@@ -18,8 +19,8 @@ import customMatchers from 'public/spec/_matchers';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(config.getApiUrl() + 'projects').respond( TPM.mocks.projectsList );
-                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'projects').respond( stubs.projectsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
 
                 scope = $rootScope.$new();
                 ctrl = $controller('ProjectsListController', {$scope: scope});
@@ -40,7 +41,7 @@ import customMatchers from 'public/spec/_matchers';
                 expect(scope.projectsList).toBeUndefined();
                 $httpBackend.flush();
 
-                expect(scope.projectsList.length).toEqual( TPM.mocks.projectsList.length );
+                expect(scope.projectsList.length).toEqual( stubs.projectsList.length );
                 expect(scope.projectsList[0].clientName).toBeDefined();
 
                 var project1 = scope.projectsList[0];
@@ -53,8 +54,8 @@ import customMatchers from 'public/spec/_matchers';
             it('should delete a project', function() {
                 $httpBackend.flush();
 
-                scope.deleteProject( TPM.mocks.projectsList[0].id );
-                expect(scope.projectsList.length).toEqual( TPM.mocks.projectsList.length - 1 );
+                scope.deleteProject( stubs.projectsList[0].id );
+                expect(scope.projectsList.length).toEqual( stubs.projectsList.length - 1 );
             });
 
             it('should set the status filter', function() {
@@ -72,7 +73,7 @@ import customMatchers from 'public/spec/_matchers';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -109,12 +110,12 @@ import customMatchers from 'public/spec/_matchers';
             // the controller reads the id from routeParams
             // we need this so the GET request for details works as expected
             var routeParams = { id: 1 };
-            var projectDetails = TPM.mocks.projectsList[0];
+            var projectDetails = stubs.projectsList[0];
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
                 $httpBackend.expectGET(config.getApiUrl() + 'projects/1').respond( projectDetails );
-                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -149,7 +150,7 @@ import customMatchers from 'public/spec/_matchers';
         describe('ProjectsViewController', function() {
             var scope, ctrl, $httpBackend;
             var routeParams = { id: 1 };
-            var projectDetails = TPM.mocks.projectsList[0];
+            var projectDetails = stubs.projectsList[0];
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;

@@ -3,6 +3,7 @@ import 'angular-mocks';
 import 'public/js/app';
 import config from 'public/js/appConfig';
 import customMatchers from 'public/spec/_matchers';
+import stubs from 'public/spec/_stubs';
 
 (function() {
 
@@ -17,7 +18,7 @@ import customMatchers from 'public/spec/_matchers';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, $location, tpmCache) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(config.getApiUrl() + 'reports').respond( TPM.mocks.reports );
+                $httpBackend.expectGET(config.getApiUrl() + 'reports').respond( stubs.reports );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 cache    = tpmCache;
@@ -33,7 +34,7 @@ import customMatchers from 'public/spec/_matchers';
                 expect( scope.projects ).toEqualDeep( [] );
                 $httpBackend.flush();
 
-                expect( scope.projects ).toEqualDeep( TPM.mocks.reports );
+                expect( scope.projects ).toEqualDeep( stubs.reports );
             });
 
             it('should calculate "projects finished, not paid"', function() {

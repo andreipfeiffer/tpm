@@ -3,6 +3,7 @@ import 'angular-mocks';
 import 'public/js/app';
 import config from 'public/js/appConfig';
 import customMatchers from 'public/spec/_matchers';
+import stubs from 'public/spec/_stubs';
 
 (function() {
 
@@ -17,7 +18,7 @@ import customMatchers from 'public/spec/_matchers';
 
             beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
                 $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( TPM.mocks.clientsList );
+                $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
                 $httpBackend.whenGET(/views\//).respond(200);
 
                 scope = $rootScope.$new();
@@ -36,7 +37,7 @@ import customMatchers from 'public/spec/_matchers';
                 expect(scope.clientsList).toBeUndefined();
                 $httpBackend.flush();
 
-                expect(scope.clientsList).toEqualDeep( TPM.mocks.clientsList );
+                expect(scope.clientsList).toEqualDeep( stubs.clientsList );
             });
 
             it('should toggle the New Client form', function() {
@@ -57,12 +58,12 @@ import customMatchers from 'public/spec/_matchers';
                 scope.addNewClient();
                 $httpBackend.flush();
 
-                expect(scope.clientsList.length).toBe( TPM.mocks.clientsList.length + 1 );
+                expect(scope.clientsList.length).toBe( stubs.clientsList.length + 1 );
                 expect(scope.newClient.name).toBe('');
             });
 
             it('should edit a client', function() {
-                var client = TPM.mocks.clientsList[0];
+                var client = stubs.clientsList[0];
                 $httpBackend.flush();
 
                 var newClientData = angular.extend( {}, client );
@@ -78,8 +79,8 @@ import customMatchers from 'public/spec/_matchers';
             it('should delete a client', function() {
                 $httpBackend.flush();
 
-                scope.deleteClient( TPM.mocks.clientsList[0].id );
-                expect(scope.clientsList.length).toEqual( TPM.mocks.clientsList.length - 1 );
+                scope.deleteClient( stubs.clientsList[0].id );
+                expect(scope.clientsList.length).toEqual( stubs.clientsList.length - 1 );
             });
 
         });
