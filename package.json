@@ -80,8 +80,7 @@
         "chai-as-promised": "5.1.0",
         "sinon": "1.17.2",
         "isparta": "4.0.0",
-        "istanbul": "gotwarlost/istanbul.git#source-map",
-        "grunt-plato": "1.2.1"
+        "istanbul": "gotwarlost/istanbul.git#source-map"
     },
     "license": "MIT"
 }
