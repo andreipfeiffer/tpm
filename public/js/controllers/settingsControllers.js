@@ -10,7 +10,7 @@ export default angular.module('TPM.SettingsControllers', [])
         'feedback',
         'SettingsService',
         'SettingsUser',
-        function($scope, $http, feedback, Settings, SettingsUser) {
+        ($scope, $http, feedback, Settings, SettingsUser) => {
 
             $scope.isLoading = true;
             $scope.isLoadingGoogle = false;
@@ -25,13 +25,13 @@ export default angular.module('TPM.SettingsControllers', [])
 
             Settings
                 .get({ type: 'google' }).$promise
-                .then(function(data) {
+                .then((data) => {
                     $scope.settings = data;
                     $scope.selectedCalendar = getSelectedCalendar( data.selectedCalendar );
                     $scope.isLoading = false;
                     feedback.dismiss();
                 })
-                .catch(function(/*err*/) {
+                .catch((/*err*/) => {
                     $scope.isLoading = false;
                     feedback.notify('Couldn\'t retrieve your calendars', {
                         type  : 'warn',
@@ -39,36 +39,36 @@ export default angular.module('TPM.SettingsControllers', [])
                     });
                 });
 
-            $scope.getGoogleAccess = function() {
+            $scope.getGoogleAccess = () => {
                 $scope.isLoadingGoogle = true;
             };
 
-            $scope.setCalendar = function() {
+            $scope.setCalendar = () => {
                 feedback.load();
                 $scope.isLoadingGoogle = true;
-                Settings.update({ type: 'google', field: $scope.selectedCalendar.id }).$promise.then(function() {
+                Settings.update({ type: 'google', field: $scope.selectedCalendar.id }).$promise.then(() => {
                     $scope.isLoadingGoogle = false;
                     feedback.notify('Your calendar is now syncronized');
                 });
             };
 
-            $scope.revokeGoogleAccess = function() {
+            $scope.revokeGoogleAccess = () => {
                 $scope.isLoadingGoogle = true;
                 feedback.load();
 
-                $http.delete(config.getApiUrl() + 'auth/google').success(function () {
+                $http.delete(config.getApiUrl() + 'auth/google').success( () => {
                     $scope.settings.googleToken = false;
                     $scope.isLoadingGoogle = false;
                     feedback.notify('Your Google Calendar is not syncronized anymore');
                 });
             };
 
-            $scope.saveUserSettings = function() {
+            $scope.saveUserSettings = () => {
                 var settings = $scope.user.data;
 
                 feedback.load();
 
-                Settings.update({ type: 'user' }, settings).$promise.then(function() {
+                Settings.update({ type: 'user' }, settings).$promise.then(() => {
                     SettingsUser.set( settings );
                     feedback.notify('Your settings are saved');
                 });
@@ -81,7 +81,7 @@ export default angular.module('TPM.SettingsControllers', [])
                     return {};
                 }
 
-                calendar = $scope.settings.calendars.items.filter(function(item) {
+                calendar = $scope.settings.calendars.items.filter((item) => {
                     return item.id === id;
                 });
 

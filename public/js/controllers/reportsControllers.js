@@ -14,7 +14,7 @@ export default angular.module('TPM.ReportsControllers', [])
         'ReportsService',
         'SettingsUser',
         'ProjectsModal',
-        function($scope, $modal, $http, $location, feedback, tpmCache, Reports, SettingsUser, ProjectsModal) {
+        ($scope, $modal, $http, $location, feedback, tpmCache, Reports, SettingsUser, ProjectsModal) => {
 
             $scope.currency   = SettingsUser.get().currency;
             $scope.isLoading  = true;
@@ -29,7 +29,7 @@ export default angular.module('TPM.ReportsControllers', [])
 
             feedback.load();
 
-            Reports.query().$promise.then(function(data) {
+            Reports.query().$promise.then((data) => {
 
                 $scope.projects          = data;
                 $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
@@ -48,16 +48,16 @@ export default angular.module('TPM.ReportsControllers', [])
                 feedback.dismiss();
             });
 
-            $scope.gotoFinishedProjects = function() {
+            $scope.gotoFinishedProjects = () => {
                 tpmCache.put('filterStatus', 'finished');
                 $location.path('/projects');
             };
 
-            $scope.showProjects = function(title, list, detailedPrice) {
+            $scope.showProjects = (title, list, detailedPrice) => {
                 ProjectsModal.open( title, list, detailedPrice );
             };
 
-            $scope.showProjectsByPriceChange = function(point) {
+            $scope.showProjectsByPriceChange = (point) => {
                 var data = point[0],
                     priceChange, projectsList, detailedPrice;
 
@@ -101,7 +101,7 @@ export default angular.module('TPM.ReportsControllers', [])
             }
 
             function getPaidProjectsByMonth(projects, year, month) {
-                return projects.filter(function(project) {
+                return projects.filter((project) => {
                     return (
                         project.month  === (year + '-' + month) &&
                         project.status === 'paid'
@@ -110,7 +110,7 @@ export default angular.module('TPM.ReportsControllers', [])
             }
 
             function getTotalPrice(projects) {
-                return projects.reduce(function(price, project) {
+                return projects.reduce((price, project) => {
                     return price + getPrice( project );
                 }, 0);
             }
@@ -153,7 +153,7 @@ export default angular.module('TPM.ReportsControllers', [])
             function groupByClient(projects) {
                 var res = [];
 
-                projects.forEach(function(project) {
+                projects.forEach((project) => {
                     var client = getCurrentClient(res, project.idClient);
 
                     if ( project.status !== 'paid' ) {
@@ -198,7 +198,7 @@ export default angular.module('TPM.ReportsControllers', [])
             }
 
             function getCurrentClient(res, idClient) {
-                return res.filter(function(project) {
+                return res.filter((project) => {
                     return project.id === idClient;
                 })[0];
             }
@@ -228,7 +228,7 @@ export default angular.module('TPM.ReportsControllers', [])
             }*/
 
             function getProjectsByStatus(projects, status) {
-                return projects.filter(function(project) {
+                return projects.filter((project) => {
                     return project.status === status;
                 });
             }
@@ -245,7 +245,7 @@ export default angular.module('TPM.ReportsControllers', [])
 
                 var _months = angular.extend([], months);
 
-                _months.reverse().forEach(function(month) {
+                _months.reverse().forEach((month) => {
                     var year = month.monthRaw.slice(0, 4);
 
                     if ( res.series.indexOf(year) === -1 ) {
@@ -291,7 +291,7 @@ export default angular.module('TPM.ReportsControllers', [])
                 // type =  1; // price was raised
                 // type =  0; // price was not changed
 
-                return $scope.projects.filter(function(project) {
+                return $scope.projects.filter((project) => {
                     var priceEstimated = parseInt( project.priceEstimated ),
                         priceFinal     = parseInt( project.priceFinal );
 

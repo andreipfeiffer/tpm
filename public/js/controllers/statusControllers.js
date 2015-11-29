@@ -8,7 +8,7 @@ export default angular.module('TPM.StatusControllers', [])
         '$http',
         'feedback',
         'websocket',
-        function($scope, $http, feedback, websocket) {
+        ($scope, $http, feedback, websocket) => {
 
             $scope.isLoading = true;
             $scope.status = {
@@ -29,14 +29,14 @@ export default angular.module('TPM.StatusControllers', [])
             websocket.emit('status.get', {});
 
             // @toso could have the listeners added only once, at run-time
-            websocket.on('status.data', function (data) {
+            websocket.on('status.data', (data) => {
                 feedback.dismiss();
                 updateData( data );
                 $scope.isLoading = false;
             });
 
             function updateData(data) {
-                Object.keys( data ).forEach(function(prop) {
+                Object.keys( data ).forEach((prop) => {
                     if ( typeof $scope.status[prop] !== 'undefined' ) {
                         $scope.status[prop] = data[prop];
                     }

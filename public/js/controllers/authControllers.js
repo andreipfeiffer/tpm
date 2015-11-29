@@ -10,7 +10,7 @@ export default angular.module('TPM.AuthControllers', [])
         'SessionService',
         'SettingsUser',
         'feedback',
-        function($scope, $http, $location, Session, SettingsUser, feedback) {
+        ($scope, $http, $location, Session, SettingsUser, feedback) => {
 
             // if user is already authenticated, redirect
             if ( Session.getAuthToken() ) {
@@ -26,23 +26,23 @@ export default angular.module('TPM.AuthControllers', [])
 
             feedback.dismiss();
 
-            $scope.login = function() {
+            $scope.login = () => {
                 $scope.isLoading = true;
                 feedback.load();
 
                 $http
                     .post(config.getApiUrl() + 'login', $scope.credentials)
-                    .success(function (res) {
+                    .success((res) => {
                         Session.setAuthToken( res.authToken );
 
-                        SettingsUser.fetch().success(function (settings) {
+                        SettingsUser.fetch().success((settings) => {
                             SettingsUser.set( settings );
                             $location.path('/projects');
                             feedback.dismiss();
                         });
 
                     })
-                    .error(function (res) {
+                    .error((res) => {
                         $scope.isLoading = false;
                         feedback.notify(res.error, { type: 'error', sticky: true });
                     });
@@ -55,11 +55,11 @@ export default angular.module('TPM.AuthControllers', [])
         '$location',
         'SessionService',
         'SettingsUser',
-        function($http, $location, Session, SettingsUser) {
+        ($http, $location, Session, SettingsUser) => {
 
             $http
                 .get(config.getApiUrl() + 'logout')
-                .success(function () {
+                .success( () => {
                     SettingsUser.remove();
                     Session.removeAuthToken();
                     $location.path('/login');

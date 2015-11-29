@@ -10,7 +10,7 @@ export default angular.module('TPM.ClientsControllers', [])
         'ProjectsModal',
         'screenSize',
         'feedback',
-        function($scope, $modal, Clients, ProjectsClient, ProjectsModal, screenSize, feedback) {
+        ($scope, $modal, Clients, ProjectsClient, ProjectsModal, screenSize, feedback) => {
 
             $scope.isFormNewDisplayed     = false;
             $scope.isFormNewLoading       = false;
@@ -24,7 +24,7 @@ export default angular.module('TPM.ClientsControllers', [])
 
             feedback.load();
 
-            Clients.query().$promise.then(function(data) {
+            Clients.query().$promise.then((data) => {
                 $scope.clientsList = data;
                 $scope.isLoading   = false;
                 feedback.dismiss();
@@ -33,7 +33,7 @@ export default angular.module('TPM.ClientsControllers', [])
             function getClientIndex(id) {
                 var index;
 
-                $scope.clientsList.forEach(function(client, idx) {
+                $scope.clientsList.forEach((client, idx) => {
                     if (client.id === id) {
                         index = idx;
                     }
@@ -42,17 +42,15 @@ export default angular.module('TPM.ClientsControllers', [])
                 return index;
             }
 
-            $scope.toggleNewFormDisplay = function() {
+            $scope.toggleNewFormDisplay = () => {
                 $scope.isFormNewDisplayed = !$scope.isFormNewDisplayed;
-                setTimeout(function() {
-                    angular.element('#new-client-name').focus();
-                }, 10);
+                setTimeout(() => angular.element('#new-client-name').focus(), 10);
             };
 
-            $scope.addNewClient = function() {
+            $scope.addNewClient = () => {
                 feedback.load();
                 $scope.isFormNewLoading = true;
-                Clients.save( $scope.newClient ).$promise.then(function(result) {
+                Clients.save( $scope.newClient ).$promise.then((result) => {
                     $scope.isFormNewLoading = false;
                     $scope.newClient.name   = '';
 
@@ -62,12 +60,12 @@ export default angular.module('TPM.ClientsControllers', [])
                 });
             };
 
-            var ModalEditClientCtrl = function($scope, $uibModalInstance, client) {
+            function ModalEditClientCtrl($scope, $uibModalInstance, client) {
                 $scope.client = angular.extend({}, client);
-            };
+            }
             ModalEditClientCtrl.$inject = ['$scope', '$uibModalInstance', 'client'];
 
-            $scope.openEditDialog = function(id) {
+            $scope.openEditDialog = (id) => {
                 if ( !id ) {
                     return;
                 }
@@ -75,54 +73,46 @@ export default angular.module('TPM.ClientsControllers', [])
                     templateUrl: 'public/views/clients-edit-modal.html',
                     controller : ModalEditClientCtrl,
                     resolve    : {
-                        client: function () {
+                        client() {
                             return $scope.clientsList[getClientIndex(id)];
                         }
                     }
                 });
 
                 // focus form after modal is opened
-                modalInstance.opened.then(function () {
-                    setTimeout(function() {
-                        angular.element('#edit-client-name').focus();
-                    }, 100);
+                modalInstance.opened.then( () => {
+                    setTimeout(() => angular.element('#edit-client-name').focus(), 100);
                 });
 
-                modalInstance.result.then(function (client) {
-                    $scope.editClient(client);
-                });
+                modalInstance.result.then( (client) => $scope.editClient(client));
 
                 return modalInstance;
             };
 
-            $scope.showProjects = function() {
+            $scope.showProjects = () => {
                 var clientId   = this.client.id,
                     clientName = this.client.name || 'No Client';
 
-                ProjectsClient.query({ id: clientId }).$promise.then(function(data) {
-                    data.forEach(function(project) {
-                        project.clientName = clientName;
-                    });
+                ProjectsClient.query({ id: clientId }).$promise.then((data) => {
+                    data.forEach((project) => project.clientName = clientName);
                     ProjectsModal.open( 'Projects for ' + clientName, data );
                 });
             };
 
-            $scope.editClient = function(client) {
+            $scope.editClient = (client) => {
                 feedback.load();
-                Clients.update({ id: client.id }, client).$promise.then(function() {
+                Clients.update({ id: client.id }, client).$promise.then(() => {
                     $scope.clientsList[getClientIndex(client.id)] = client;
                     feedback.notify('Client was updated');
                 });
             };
 
-            $scope.deleteClient = function(id) {
+            $scope.deleteClient = (id) => {
                 Clients.delete({ id: id });
                 $scope.clientsList.splice(getClientIndex(id), 1);
                 feedback.notify('Client was deleted');
             };
 
-            $scope.clearSearch = function() {
-                $scope.searchClient = '';
-            };
+            $scope.clearSearch = () => $scope.searchClient = '';
         }
     ]);

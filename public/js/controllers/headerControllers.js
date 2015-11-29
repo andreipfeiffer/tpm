@@ -6,13 +6,13 @@ export default angular.module('TPM.HeaderControllers', [])
         '$scope',
         '$location',
         'screenSize',
-        function($scope, $location, screenSize) {
+        ($scope, $location, screenSize) => {
 
-            $scope.isActive = function (path) {
+            $scope.isActive = (path) => {
                 return ( $location.path().indexOf( path ) > -1 );
             };
 
-            $scope.collapseMenu = function() {
+            $scope.collapseMenu = () => {
                 screenSize.is('xs') && angular.element('#navbar-toggle').trigger('click');
             };
 
