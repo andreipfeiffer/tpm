@@ -99,7 +99,7 @@ export default angular.module('TPM.ClientsControllers', [])
             $scope.clearSearch = () => $scope.searchClient = '';
 
             function getClientIndex(id) {
-                return $scope.clientsList.findIndex((client, idx) => client.id === id);
+                return $scope.clientsList.findIndex((client) => client.id === id);
             }
 
             function ModalEditClientCtrl($scope, $uibModalInstance, client) {
