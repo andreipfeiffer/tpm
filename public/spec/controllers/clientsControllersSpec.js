@@ -69,7 +69,7 @@ describe('Clients Controllers', () => {
             scope.editClient( newClientData );
             $httpBackend.flush();
 
-            expect(scope.clientsList[0]).toEqualDeep( newClientData );
+            expect(scope.clientsList[0]).toEqual( newClientData );
         });
 
         it('should delete a client', () => {

@@ -1,7 +1,6 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
-import customMatchers from 'public/spec/_matchers';
 
 describe('TPM.Filters', () => {
 
@@ -14,12 +13,10 @@ describe('TPM.Filters', () => {
             inject(($injector)=> {
                 filter = $injector.get('$filter')('filterByProjectStatus');
             });
-
-            jasmine.addMatchers( customMatchers );
         });
 
         it('should return empty array, if passed value is not array', () => {
-            expect(filter(undefined)).toEqualDeep([]);
+            expect(filter(undefined)).toEqual([]);
         });
 
         it('should return a filtered by status array', () => {

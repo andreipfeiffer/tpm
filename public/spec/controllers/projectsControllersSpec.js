@@ -3,7 +3,6 @@ import 'angular-mocks';
 import 'public/js/app';
 import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
-import customMatchers from 'public/spec/_matchers';
 import stubs from 'public/spec/_stubs';
 
 describe('Projects Controllers', () => {
@@ -20,8 +19,6 @@ describe('Projects Controllers', () => {
 
             scope = $rootScope.$new();
             ctrl = $controller('ProjectsListController', {$scope: scope});
-
-            jasmine.addMatchers( customMatchers );
         }));
 
 

@@ -27,7 +27,6 @@ describe('Reports Controllers', () => {
 
 
         it('should set the response from the API to $scope.projects', () => {
-            expect( scope.projects ).toEqualDeep( [] );
             $httpBackend.flush();
 
             expect( scope.projects ).toEqualDeep( stubs.reports );
@@ -62,7 +61,6 @@ describe('Reports Controllers', () => {
         it('should set data for the monthly income chart', () => {
             $httpBackend.flush();
 
-            expect( scope.chartMonth.series ).toEqualDeep( ['2015', '2014'] );
 
             // 2015
             expect( scope.chartMonth.data[0].length ).toEqual( 3 );
@@ -85,7 +83,6 @@ describe('Reports Controllers', () => {
         it('should set data for the price evolution chart', () => {
             $httpBackend.flush();
 
-            expect( scope.chartPrice.data ).toEqualDeep( [1, 3, 1] );
         });
 
         it('should set data for "income by client"', () => {

@@ -2,7 +2,6 @@ import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
 import utils from 'public/js/utils';
-import customMatchers from 'public/spec/_matchers';
 
 var defaultSettings = {
     currency: utils.currencyList[0]
@@ -20,7 +19,6 @@ describe('SettingsUser', () => {
 
     beforeEach(inject((_SettingsUser_) => {
         SettingsUser = _SettingsUser_;
-        jasmine.addMatchers( customMatchers );
     }));
 
     afterEach(() => {
@@ -33,19 +31,19 @@ describe('SettingsUser', () => {
     });*/
 
     it('should get default Settings', () => {
-        expect( SettingsUser.get() ).toEqualDeep( defaultSettings );
+        expect( SettingsUser.get() ).toEqual( defaultSettings );
     });
 
     it('should set new Settings', () => {
         SettingsUser.set( newSettings );
-        expect( SettingsUser.get() ).toEqualDeep( newSettings );
+        expect( SettingsUser.get() ).toEqual( newSettings );
     });
 
     it('should remove SettingsUser', () => {
         SettingsUser.set( newSettings );
         SettingsUser.remove();
 
-        expect( SettingsUser.get() ).toEqualDeep( defaultSettings );
+        expect( SettingsUser.get() ).toEqual( defaultSettings );
     });
 
 });
