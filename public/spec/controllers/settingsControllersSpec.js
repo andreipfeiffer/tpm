@@ -21,6 +21,19 @@ describe('Settings Controllers', () => {
         }));
 
 
+        it('should setCalendar()', () => {
+            $httpBackend.flush();
+
+            const CALENDAR_ID = 2;
+            scope.selectedCalendar.id = CALENDAR_ID;
+            $httpBackend.expectPUT(config.getApiUrl() + 'settings/google/' + CALENDAR_ID).respond();
+
+            scope.setCalendar();
+            expect(scope.isLoadingGoogle).toBe(true);
+            $httpBackend.flush();
+            expect(scope.isLoadingGoogle).toBe(false);
+        });
+
         it('should set settings.googleToken', () => {
             $httpBackend.flush();
             expect(scope.settings.googleToken).toBeDefined();
