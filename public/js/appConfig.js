@@ -1,5 +1,4 @@
-var isInitialized = false,
-    apiUrl = 'http://localhost:3000/';
+var apiUrl = 'http://localhost:3000/';
 
 function _isLocalhost(host) {
     if (
@@ -23,11 +22,6 @@ export default {
     },
 
     setApiUrl(host, port) {
-        if ( isInitialized ) {
-            return;
-        }
-
         apiUrl = _isLocalhost(host) ? 'http://' + host + ':' + port + '/' : 'http://tpm.upsidedown.ro/';
-        isInitialized = true;
     }
 };
