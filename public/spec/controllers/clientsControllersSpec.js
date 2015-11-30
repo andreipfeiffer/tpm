@@ -5,14 +5,40 @@ import config from 'public/js/appConfig';
 import customMatchers from 'public/spec/_matchers';
 import stubs from 'public/spec/_stubs';
 
+var fakeModal = {
+    result: {
+        then: (confirmCallback, cancelCallback) => {
+            // Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
+            // this.confirmCallBack = confirmCallback;
+            // this.cancelCallback  = cancelCallback;
+            confirmCallback();
+        }
+    },
+    opened: {
+        then: (confirmCallback) => {
+            // this.confirmCallBack = confirmCallback;
+            confirmCallback();
+        }
+    },
+    close(item) {
+        //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
+        // this.result.confirmCallBack( item );
+    },
+    dismiss(type) {
+        //The user clicked cancel on the modal dialog, call the stored cancel callback
+        // this.result.cancelCallback( type );
+    }
+};
+
 describe('Clients Controllers', () => {
 
     beforeEach(angular.mock.module('tpm'));
 
     describe('ClientsListController', () => {
-        var scope, ctrl, $httpBackend;
+        var scope, ctrl, $httpBackend, $modal;
 
-        beforeEach(inject((_$httpBackend_, $rootScope, $controller) => {
+        beforeEach(inject((_$httpBackend_, $rootScope, $controller, $uibModal) => {
+            $modal       = $uibModal;
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
             $httpBackend.whenGET(/views\//).respond(200);
@@ -77,6 +103,26 @@ describe('Clients Controllers', () => {
 
             scope.deleteClient( stubs.clientsList[0].id );
             expect(scope.clientsList.length).toEqual( stubs.clientsList.length - 1 );
+        });
+
+        it('should open the edit modal, when id is truthy', () => {
+            $httpBackend.flush();
+
+            spyOn($modal, 'open').and.returnValue(fakeModal);
+            spyOn(scope, 'editClient').and.callFake(() => {});
+
+            scope.openEditDialog( 1 );
+            expect( scope.editClient ).toHaveBeenCalled();
+        });
+
+        it('should not open the edit modal, when id is 0', () => {
+            $httpBackend.flush();
+
+            spyOn($modal, 'open').and.returnValue(fakeModal);
+            spyOn(scope, 'editClient').and.callFake(() => {});
+
+            scope.openEditDialog( 0 );
+            expect( scope.editClient ).not.toHaveBeenCalled();
         });
 
     });
