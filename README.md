@@ -24,6 +24,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Log server errors
 * Reports section
 * App Status section, using websockets
+* ES6 compliant code
 
 ## Future Goals
 
