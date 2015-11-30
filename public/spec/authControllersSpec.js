@@ -93,6 +93,10 @@ describe('Auth Controllers', () => {
             controller = $controller;
         }));
 
+        afterEach(() => {
+            AuthToken.remove();
+        });
+
 
         it('should logout and redirect to login', () => {
 

@@ -25,6 +25,9 @@ describe('Interceptors', () => {
             AuthToken.set( TOKEN );
         }));
 
+        afterEach(() => {
+            AuthToken.remove();
+        });
 
         it('should redirect logged users if they get a request with the status "401"', () => {
 
