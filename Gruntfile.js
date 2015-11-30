@@ -189,7 +189,7 @@ module.exports = (grunt) => {
 
         exec: {
             checkout: {
-                cmd: function(version) {
+                cmd: (version) => {
                     return 'git checkout ' + version;
                 }
             },
