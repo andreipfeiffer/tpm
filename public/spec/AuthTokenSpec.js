@@ -4,7 +4,7 @@ import 'public/js/app';
 
 var getAuthHeader = ($http) => $http.defaults.headers.common['Authorization'];
 
-describe('Settings Controllers', () => {
+describe('AuthToken', () => {
 
     beforeEach(angular.mock.module('tpm'));
 
@@ -19,11 +19,11 @@ describe('Settings Controllers', () => {
     });
 
 
-    it('should get default null AuthToken', () => {
+    it('should get() default null AuthToken', () => {
         expect( AuthToken.get() ).toBeNull();
     });
 
-    it('should set AuthToken', inject(($http) => {
+    it('should set() AuthToken', inject(($http) => {
         const TOKEN = 'myAuthTokenValue';
         AuthToken.set( TOKEN );
 
@@ -31,7 +31,7 @@ describe('Settings Controllers', () => {
         expect( AuthToken.get() ).toEqual( TOKEN );
     }));
 
-    it('should remove AuthToken', inject(($http) => {
+    it('should remove() AuthToken', inject(($http) => {
         AuthToken.set('toBeRemoved');
         AuthToken.remove();
 
