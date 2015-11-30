@@ -11,6 +11,7 @@ class AuthToken {
         return localStorage.getItem('TPMtoken');
     }
     remove() {
+        this.$http.defaults.headers.common['Authorization'] = '';
         return localStorage.removeItem('TPMtoken');
     }
 }
