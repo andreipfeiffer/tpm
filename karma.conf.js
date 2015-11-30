@@ -16,10 +16,9 @@ module.exports = function(config) {
             // needed to polyfill some features like Array.prototype.[new-stuff]
             'node_modules/babel-polyfill/dist/polyfill.js',
 
-            // test utils
-            'public/spec/_*.js',
             // test specs
-            'public/spec/*Spec.js'
+            'public/spec/*.js',
+            'public/spec/**/*.js'
         ],
 
         // list of files to exclude
