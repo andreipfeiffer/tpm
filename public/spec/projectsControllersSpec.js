@@ -28,7 +28,7 @@ describe('Projects Controllers', () => {
         it('should set the response from the API to $scope.projectsList', () => {
             var getClientById = (id) => {
                 return scope.clientsList.find( (client) => client.id === id );
-            }
+            };
 
             expect(scope.projectsList).toBeUndefined();
             $httpBackend.flush();
