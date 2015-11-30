@@ -79,31 +79,34 @@ module.exports = (grunt) => {
         },
 
         dom_munger: {
-            build: {
+            css: {
                 options: {
-                    read: [
-                        {
-                            selector : 'script',
-                            attribute: 'src',
-                            writeto  : 'jsRefs',
-                            isPath   : false
-                        },
-                        {
-                            selector : 'link',
-                            attribute: 'href',
-                            writeto  : 'cssRefs',
-                            isPath   : false
-                        }
-                    ],
-                    remove: ['link','script'],
-                    append: [
-                        { selector: 'head', html: '<link href="<%= distUrl.prod %>/css/<%= pkg.name %>-<%= pkg.version %>.css" rel="stylesheet">' },
-                        { selector: 'body', html: '<script src="<%= distUrl.prod %>/js/<%= pkg.name %>-<%= pkg.version %>.js"></script>' }
-                    ]
+                    read: [{
+                        selector : 'link',
+                        attribute: 'href',
+                        writeto  : 'cssRefs',
+                        isPath   : false
+                    }],
+                    remove: ['link'],
+                    append: [{ selector: 'head', html: '<link href="<%= distUrl.prod %>/css/<%= pkg.name %>-<%= pkg.version %>.css" rel="stylesheet">' }]
                 },
                 // overwrite file
                 src: 'temp/index.html'
             },
+            /*js: {
+                options: {
+                    read: [{
+                        selector : 'script',
+                        attribute: 'src',
+                        writeto  : 'jsRefs',
+                        isPath   : false
+                    }],
+                    remove: ['script'],
+                    append: [{ selector: 'body', html: '<script src="<%= distUrl.prod %>/js/<%= pkg.name %>-<%= pkg.version %>.js"></script>' }]
+                },
+                // overwrite file
+                src: 'temp/index.html'
+            },*/
         },
 
         concat: {
@@ -111,10 +114,10 @@ module.exports = (grunt) => {
                 src : '<%= resources.css %>',
                 dest:'temp/style.css'
             },
-            js: {
+            /*js: {
                 src : '<%= resources.js %>',
                 dest:'temp/script.js'
-            }
+            }*/
         },
 
         cssmin: {
@@ -159,7 +162,7 @@ module.exports = (grunt) => {
         copy: {
             fonts: {
                 expand : true,
-                cwd    : 'bower_components/bootstrap/dist/fonts/',
+                cwd    : 'public/bower_components/bootstrap/dist/fonts/',
                 src    : '**',
                 dest   : '<%= distUrl.prod %>/fonts/',
                 flatten: true,
@@ -225,13 +228,14 @@ module.exports = (grunt) => {
     grunt.registerTask('build', [
         'clean:dist',
         'jade',
-        'dom_munger',
+        'dom_munger:css',
         'fix_public_path',
         'babel',
-        'concat',
+        'concat:css',
+        // 'concat:js',
         'htmlmin',
         'cssmin',
-        'uglify',
+        // 'uglify',
         'copy',
         'clean:temp'
     ]);
