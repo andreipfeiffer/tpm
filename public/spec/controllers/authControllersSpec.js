@@ -39,7 +39,7 @@ describe('Auth Controllers', () => {
             scope.login();
             $httpBackend.flush();
 
-            expect(feedback.isActive()).toBeTruthy();
+            expect(feedback.isActive()).toBe(true);
             expect(feedback.getType()).toBe('error');
             expect(location.path()).toEqual('/login');
         });

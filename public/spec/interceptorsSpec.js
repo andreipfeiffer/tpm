@@ -47,7 +47,7 @@ describe('Interceptors', () => {
             controller('ClientsListController', {$scope: scope});
             $httpBackend.flush();
 
-            expect(feedback.isActive()).toBeTruthy();
+            expect(feedback.isActive()).toBe(true);
             expect(feedback.getType()).toEqual('error');
         });
 
@@ -58,7 +58,7 @@ describe('Interceptors', () => {
             controller('ClientsListController', {$scope: scope});
             $httpBackend.flush();
 
-            expect(feedback.isActive()).toBeTruthy();
+            expect(feedback.isActive()).toBe(true);
             expect(feedback.getType()).toEqual('error');
             expect(feedback.getMessage()).toContain('offline');
         });

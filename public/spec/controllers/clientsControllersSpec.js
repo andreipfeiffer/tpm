@@ -39,9 +39,9 @@ describe('Clients Controllers', () => {
         it('should toggle the New Client form', () => {
             $httpBackend.flush();
 
-            expect(scope.isFormNewDisplayed).toBeFalsy();
+            expect(scope.isFormNewDisplayed).toBe(false);
             scope.toggleNewFormDisplay();
-            expect(scope.isFormNewDisplayed).toBeTruthy();
+            expect(scope.isFormNewDisplayed).toBe(true);
         });
 
         it('should add a new client', () => {

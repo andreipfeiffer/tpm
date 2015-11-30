@@ -20,7 +20,7 @@ describe('Directives', () => {
 
         it('should auto set focus on the element', () => {
             // @todo not working, not getting the element focused
-            // expect( $(element[0]).is(':focus') ).toBeTruthy();
+            // expect( $(element[0]).is(':focus') ).toBe(true);
         });
 
     });

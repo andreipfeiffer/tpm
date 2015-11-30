@@ -24,16 +24,16 @@ describe('utils', () => {
     describe('isDateFormat', () => {
 
         it('should return true', () => {
-            expect( utils.isDateFormat('2014-12-12') ).toBeTruthy();
-            expect( utils.isDateFormat(' 2014-12-12 ') ).toBeTruthy();
+            expect( utils.isDateFormat('2014-12-12') ).toBe(true);
+            expect( utils.isDateFormat(' 2014-12-12 ') ).toBe(true);
         });
 
         it('should return false', () => {
-            expect( utils.isDateFormat('2014 12 12') ).toBeFalsy();
-            expect( utils.isDateFormat('204-12-12') ).toBeFalsy();
-            expect( utils.isDateFormat('20444-12-12') ).toBeFalsy();
-            expect( utils.isDateFormat('2014-2-12') ).toBeFalsy();
-            expect( utils.isDateFormat('2014-12-1') ).toBeFalsy();
+            expect( utils.isDateFormat('2014 12 12') ).toBe(false);
+            expect( utils.isDateFormat('204-12-12') ).toBe(false);
+            expect( utils.isDateFormat('20444-12-12') ).toBe(false);
+            expect( utils.isDateFormat('2014-2-12') ).toBe(false);
+            expect( utils.isDateFormat('2014-12-1') ).toBe(false);
         });
 
     });

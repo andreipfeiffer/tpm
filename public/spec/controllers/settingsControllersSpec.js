@@ -37,13 +37,13 @@ describe('Settings Controllers', () => {
         it('should set settings.googleToken', () => {
             $httpBackend.flush();
             expect(scope.settings.googleToken).toBeDefined();
-            expect(scope.settings.googleToken).toBeFalsy();
+            expect(scope.settings.googleToken).toBe(false);
         });
 
         it('should set the loader when Google access is requested', () => {
             $httpBackend.flush();
             scope.getGoogleAccess();
-            expect(scope.isLoadingGoogle).toBeTruthy();
+            expect(scope.isLoadingGoogle).toBe(true);
         });
 
         it('should revoke googleToken', () => {
@@ -54,7 +54,7 @@ describe('Settings Controllers', () => {
             scope.revokeGoogleAccess();
             $httpBackend.flush();
 
-            expect(scope.settings.googleToken).toBeFalsy();
+            expect(scope.settings.googleToken).toBe(false);
         });
 
     });

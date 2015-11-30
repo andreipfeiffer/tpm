@@ -82,8 +82,8 @@ describe('Projects Controllers', () => {
             $httpBackend.expectPOST(config.getApiUrl() + 'projects').respond(201);
 
             scope.submitForm();
-            expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
-            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
+            expect( utils.isDateFormat(scope.project.dateAdded) ).toBe(true);
+            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBe(true);
             $httpBackend.flush();
         });
 
@@ -91,7 +91,7 @@ describe('Projects Controllers', () => {
             $httpBackend.flush();
 
             scope.openDatePicker( $.Event('click') );
-            expect(scope.isDatePickerOpened).toBeTruthy();
+            expect(scope.isDatePickerOpened).toBe(true);
         });
 
     });
@@ -124,8 +124,8 @@ describe('Projects Controllers', () => {
             $httpBackend.expectPUT(config.getApiUrl() + 'projects/1').respond(201);
 
             scope.submitForm();
-            expect( utils.isDateFormat(scope.project.dateAdded) ).toBeTruthy();
-            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBeTruthy();
+            expect( utils.isDateFormat(scope.project.dateAdded) ).toBe(true);
+            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBe(true);
             $httpBackend.flush();
         });
 
@@ -133,7 +133,7 @@ describe('Projects Controllers', () => {
             $httpBackend.flush();
 
             scope.openDatePicker( $.Event('click') );
-            expect(scope.isDatePickerOpened).toBeTruthy();
+            expect(scope.isDatePickerOpened).toBe(true);
         });
 
     });

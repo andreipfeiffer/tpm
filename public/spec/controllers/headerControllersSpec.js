@@ -18,12 +18,12 @@ describe('Header Controllers', () => {
 
         it('should return true, if the location path matches', () => {
             location.path('/projects');
-            expect(scope.isActive('projects')).toBeTruthy();
+            expect(scope.isActive('projects')).toBe(true);
         });
 
         it('should return false, if the location path does not match', () => {
             location.path('/asdasd');
-            expect(scope.isActive('projects')).toBeFalsy();
+            expect(scope.isActive('projects')).toBe(false);
         });
 
     });
