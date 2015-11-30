@@ -1,19 +1,19 @@
-class SessionService {
+class AuthToken {
     constructor($http) {
         this.$http = $http;
     }
 
-    setAuthToken(token) {
+    set(token) {
         localStorage.setItem('TPMtoken', token);
         this.$http.defaults.headers.common['Authorization'] = token;
     }
-    getAuthToken() {
+    get() {
         return localStorage.getItem('TPMtoken');
     }
-    removeAuthToken() {
+    remove() {
         return localStorage.removeItem('TPMtoken');
     }
 }
-SessionService.$inject = ['$http'];
+AuthToken.$inject = ['$http'];
 
-export default SessionService;
+export default AuthToken;

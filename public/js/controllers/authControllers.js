@@ -7,13 +7,13 @@ export default angular.module('TPM.AuthControllers', [])
         '$scope',
         '$http',
         '$location',
-        'SessionService',
+        'AuthToken',
         'SettingsUser',
         'feedback',
-        ($scope, $http, $location, Session, SettingsUser, feedback) => {
+        ($scope, $http, $location, AuthToken, SettingsUser, feedback) => {
 
             // if user is already authenticated, redirect
-            if ( Session.getAuthToken() ) {
+            if ( AuthToken.get() ) {
                 $location.path('/projects');
             }
 
@@ -33,7 +33,7 @@ export default angular.module('TPM.AuthControllers', [])
                 $http
                     .post(config.getApiUrl() + 'login', $scope.credentials)
                     .success((res) => {
-                        Session.setAuthToken( res.authToken );
+                        AuthToken.set( res.authToken );
 
                         SettingsUser.fetch().success((settings) => {
                             SettingsUser.set( settings );
@@ -53,15 +53,15 @@ export default angular.module('TPM.AuthControllers', [])
     .controller('LogoutController', [
         '$http',
         '$location',
-        'SessionService',
+        'AuthToken',
         'SettingsUser',
-        ($http, $location, Session, SettingsUser) => {
+        ($http, $location, AuthToken, SettingsUser) => {
 
             $http
                 .get(config.getApiUrl() + 'logout')
                 .success( () => {
                     SettingsUser.remove();
-                    Session.removeAuthToken();
+                    AuthToken.remove();
                     $location.path('/login');
                 });
         }

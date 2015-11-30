@@ -1,6 +1,6 @@
 import angular from 'angular';
 import config from 'public/js/appConfig';
-import SessionService from 'public/js/components/SessionService';
+import AuthToken from 'public/js/components/AuthToken';
 import SettingsUser from 'public/js/components/SettingsUser';
 
 export default angular.module('TPM.Services', ['ngResource'])
@@ -94,4 +94,4 @@ export default angular.module('TPM.Services', ['ngResource'])
     }])
 
     .service('SettingsUser', SettingsUser)
-    .service('SessionService',  SessionService);
+    .service('AuthToken',  AuthToken);

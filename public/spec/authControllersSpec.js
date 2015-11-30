@@ -12,12 +12,12 @@ import config from 'public/js/appConfig';
         beforeEach(angular.mock.module('tpm'));
 
         describe('LoginController', function() {
-            var scope, controller, $httpBackend, location, Session, feedback;
+            var scope, controller, $httpBackend, location, AuthToken, feedback;
 
-            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_, _feedback_) {
+            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _AuthToken_, _feedback_) {
                 $httpBackend = _$httpBackend_;
                 location     = _$location_;
-                Session      = _SessionService_;
+                AuthToken    = _AuthToken_;
                 feedback     = _feedback_;
                 scope        = $rootScope.$new();
 
@@ -26,7 +26,7 @@ import config from 'public/js/appConfig';
             }));
 
             afterEach(function() {
-                Session.removeAuthToken();
+                AuthToken.remove();
             });
 
 
@@ -64,14 +64,14 @@ import config from 'public/js/appConfig';
                 scope.login();
                 $httpBackend.flush();
 
-                expect(Session.getAuthToken()).toEqual( token );
+                expect(AuthToken.get()).toEqual( token );
                 expect(location.path()).not.toEqual('/login');
             });
 
             it('should redirect already logged users', function() {
 
                 // login user
-                Session.setAuthToken('abcdef');
+                AuthToken.set('abcdef');
 
                 controller('LoginController', {$scope: scope});
                 expect(location.path()).not.toEqual('/login');
@@ -82,17 +82,17 @@ import config from 'public/js/appConfig';
 
 
         describe('LogoutController', function() {
-            var scope, controller, $httpBackend, location, Session;
+            var scope, controller, $httpBackend, location, AuthToken;
             var token = 'abcdef';
 
-            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_) {
+            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _AuthToken_) {
                 $httpBackend = _$httpBackend_;
                 location     = _$location_;
-                Session      = _SessionService_;
+                AuthToken    = _AuthToken_;
                 scope        = $rootScope.$new();
 
                 // authenticate the user
-                Session.setAuthToken( token );
+                AuthToken.set( token );
 
                 controller = $controller;
             }));
@@ -105,8 +105,8 @@ import config from 'public/js/appConfig';
                 $httpBackend.expectGET(config.getApiUrl() + 'logout').respond(200);
                 $httpBackend.flush();
 
-                expect(Session.getAuthToken()).not.toEqual( token );
-                expect(Session.getAuthToken()).toBeFalsy();
+                expect(AuthToken.get()).not.toEqual( token );
+                expect(AuthToken.get()).toBeFalsy();
                 expect(location.path()).toEqual('/login');
             });
 

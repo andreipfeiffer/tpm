@@ -28,18 +28,18 @@ export var appInit = angular.module('appInit', [
         });
     }
 ]).run([
-    '$rootScope', '$location', '$http', 'SessionService', 'feedback',
-    ($rootScope, $location, $http, SessionService, feedback) => {
+    '$rootScope', '$location', '$http', 'AuthToken', 'feedback',
+    ($rootScope, $location, $http, AuthToken, feedback) => {
 
         // simple client authentication method: https://coderwall.com/p/f6brkg
         // @note: another more complex: https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
         $rootScope.$on('$locationChangeStart', (event, next/*, current*/) => {
 
-            $rootScope.isAuth = SessionService.getAuthToken();
+            $rootScope.isAuth = AuthToken.get();
 
             for (var i in routes) {
                 if (next.indexOf(i) !== -1) {
-                    if (routes[i].requireLogin && !SessionService.getAuthToken()) {
+                    if (routes[i].requireLogin && !AuthToken.get()) {
                         $location.path('/login');
                         // event.preventDefault();
                     }
@@ -47,7 +47,7 @@ export var appInit = angular.module('appInit', [
             }
         });
 
-        $http.defaults.headers.common['Authorization'] = SessionService.getAuthToken();
+        $http.defaults.headers.common['Authorization'] = AuthToken.get();
 
         config.setApiUrl( $location.host(), $location.port() );
 

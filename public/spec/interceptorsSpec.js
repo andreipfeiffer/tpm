@@ -12,20 +12,20 @@ import config from 'public/js/appConfig';
         beforeEach(angular.mock.module('tpm'));
 
         describe('authInterceptor', function() {
-            var scope, controller, $httpBackend, location, Session, feedback;
+            var scope, controller, $httpBackend, location, AuthToken, feedback;
             var token = 'abcdef';
 
-            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _SessionService_, _feedback_) {
+            beforeEach(inject(function(_$httpBackend_, _$location_, $rootScope, $controller, _AuthToken_, _feedback_) {
                 $httpBackend = _$httpBackend_;
                 location     = _$location_;
-                Session      = _SessionService_;
+                AuthToken    = _AuthToken_;
                 feedback     = _feedback_;
 
                 scope = $rootScope.$new();
                 controller = $controller;
 
                 location.path('/clients');
-                Session.setAuthToken( token );
+                AuthToken.set( token );
             }));
 
 
@@ -37,7 +37,7 @@ import config from 'public/js/appConfig';
                 $httpBackend.flush();
 
                 expect(location.path()).toEqual('/login');
-                expect(Session.getAuthToken()).not.toEqual( token );
+                expect(AuthToken.get()).not.toEqual( token );
             });
 
             it('should display feedback message for status "5xx"', function() {

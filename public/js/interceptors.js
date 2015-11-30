@@ -21,7 +21,7 @@ export default angular.module('TPM.Interceptors', [])
 
                 // Unauthorized access attempt
                 if (status === 401) {
-                    // same logic as SessionService.removeAuthToken();
+                    // same logic as AuthToken.remove();
                     // cannot inject the Service, because of a circular dep of $http
                     $rootScope.isAuth = false;
                     localStorage.removeItem('TPMtoken');
