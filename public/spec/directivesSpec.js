@@ -2,16 +2,14 @@ import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
 
-(function() {
-
-    'use strict';
+describe('Directives', () => {
 
     beforeEach(angular.mock.module('tpm'));
 
-    describe('Directives: set-focus', function() {
+    describe('Directives: set-focus', () => {
         var element, scope;
 
-        beforeEach(inject(function($rootScope, $compile) {
+        beforeEach(inject(($rootScope, $compile) => {
             scope = $rootScope.$new();
 
             element = '<a href="" set-focus></a>';
@@ -20,18 +18,18 @@ import 'public/js/app';
             scope.$digest();
         }));
 
-        it('should auto set focus on the element', function() {
+        it('should auto set focus on the element', () => {
             // @todo not working, not getting the element focused
             // expect( $(element[0]).is(':focus') ).toBeTruthy();
         });
 
     });
 
-    describe('Directives: click-confirm', function() {
+    describe('Directives: click-confirm', () => {
         var element, scope, compile, rootScope, timeout;
         var message = 'Are you sure?';
 
-        beforeEach(inject(function($rootScope, $compile, $timeout) {
+        beforeEach(inject(($rootScope, $compile, $timeout) => {
             scope     = $rootScope.$new();
             compile   = $compile;
             rootScope = $rootScope;
@@ -43,18 +41,18 @@ import 'public/js/app';
             scope.$digest();
         }));
 
-        it('open a modal with the title set in attribute', function() {
+        it('open a modal with the title set in attribute', () => {
             // trigger click on element
             compile(element)(rootScope).triggerHandler('click');
             // needs a delay, while the modal is displayed
-            timeout(function() {
+            timeout(() => {
                 expect( $('.modal-title').text() ).toBe( message );
             }, 100);
         });
 
-        // it('execute the callback, set in attribute', function() {
+        // it('execute the callback, set in attribute', () => {
         // });
 
     });
 
-})();
+});

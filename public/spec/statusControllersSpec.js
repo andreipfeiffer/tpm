@@ -4,45 +4,39 @@ import 'angular-socket-io-mock';
 import 'public/js/app';
 import config from 'public/js/appConfig';
 
-(function() {
+describe('Status Controllers', () => {
 
-    'use strict';
+    beforeEach(angular.mock.module('tpm'));
 
-    describe('Status Controllers', function() {
+    describe('StatusController', () => {
+        var scope, ctrl, websocket, $httpBackend;
 
-        beforeEach(angular.mock.module('tpm'));
+        beforeEach(inject(($rootScope, _$httpBackend_, $controller, _websocket_) => {
+            websocket = _websocket_;
+            scope     = $rootScope.$new();
 
-        describe('StatusController', function() {
-            var scope, ctrl, websocket, $httpBackend;
+            // stub missing method before we instantiate the controller
+            websocket.removeAllListeners = jasmine.createSpy();
 
-            beforeEach(inject(function($rootScope, _$httpBackend_, $controller, _websocket_) {
-                websocket = _websocket_;
-                scope     = $rootScope.$new();
+            $httpBackend = _$httpBackend_;
+            $httpBackend.expectGET(config.getApiUrl() + 'status').respond( true );
 
-                // stub missing method before we instantiate the controller
-                websocket.removeAllListeners = jasmine.createSpy();
+            ctrl = $controller('StatusController', {$scope: scope});
+        }));
 
-                $httpBackend = _$httpBackend_;
-                $httpBackend.expectGET(config.getApiUrl() + 'status').respond( true );
+        it('should receive data when "status.get" is emitted', () => {
+            expect( scope.status.users ).toEqual( 0 );
+            websocket.receive('status.data', { users: 2 } );
+            expect( scope.status.users ).toEqual( 2 );
 
-                ctrl = $controller('StatusController', {$scope: scope});
-            }));
+            expect( scope.status.projects ).toEqual( 0 );
+            websocket.receive('status.data', { projects: 3 } );
+            expect( scope.status.projects ).toEqual( 3 );
 
-            it('should receive data when "status.get" is emitted', function() {
-                expect( scope.status.users ).toEqual( 0 );
-                websocket.receive('status.data', { users: 2 } );
-                expect( scope.status.users ).toEqual( 2 );
-
-                expect( scope.status.projects ).toEqual( 0 );
-                websocket.receive('status.data', { projects: 3 } );
-                expect( scope.status.projects ).toEqual( 3 );
-
-                expect( scope.status.income ).toEqual( 0 );
-                websocket.receive('status.data', { income: 11 } );
-                expect( scope.status.income ).toEqual( 11 );
-            });
-
+            expect( scope.status.income ).toEqual( 0 );
+            websocket.receive('status.data', { income: 11 } );
+            expect( scope.status.income ).toEqual( 11 );
         });
-    });
 
-})();
+    });
+});

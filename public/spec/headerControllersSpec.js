@@ -2,35 +2,29 @@ import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
 
-(function() {
+describe('Header Controllers', () => {
 
-    'use strict';
+    beforeEach(angular.mock.module('tpm'));
 
-    describe('Header Controllers', function() {
+    describe('MenuController', () => {
+        var scope, ctrl, location;
 
-        beforeEach(angular.mock.module('tpm'));
-
-        describe('MenuController', function() {
-            var scope, ctrl, location;
-
-            beforeEach(inject(function($rootScope, $controller, $location) {
-                location = $location;
-                scope    = $rootScope.$new();
-                ctrl     = $controller('MenuController', {$scope: scope});
-            }));
+        beforeEach(inject(($rootScope, $controller, $location) => {
+            location = $location;
+            scope    = $rootScope.$new();
+            ctrl     = $controller('MenuController', {$scope: scope});
+        }));
 
 
-            it('should return true, if the location path matches', function() {
-                location.path('/projects');
-                expect(scope.isActive('projects')).toBeTruthy();
-            });
-
-            it('should return false, if the location path does not match', function() {
-                location.path('/asdasd');
-                expect(scope.isActive('projects')).toBeFalsy();
-            });
-
+        it('should return true, if the location path matches', () => {
+            location.path('/projects');
+            expect(scope.isActive('projects')).toBeTruthy();
         });
-    });
 
-})();
+        it('should return false, if the location path does not match', () => {
+            location.path('/asdasd');
+            expect(scope.isActive('projects')).toBeFalsy();
+        });
+
+    });
+});
