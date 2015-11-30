@@ -1,25 +1,7 @@
 import angular from 'angular';
 import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
-
-// @todo extract module
-class SessionService {
-    constructor($http) {
-        this.$http = $http;
-    }
-
-    setAuthToken(token) {
-        localStorage.setItem('TPMtoken', token);
-        this.$http.defaults.headers.common['Authorization'] = token;
-    }
-    getAuthToken() {
-        return localStorage.getItem('TPMtoken');
-    }
-    removeAuthToken() {
-        return localStorage.removeItem('TPMtoken');
-    }
-}
-SessionService.$inject = ['$http'];
+import SessionService from 'public/js/components/SessionService';
 
 // @todo extract module
 class SettingsUser {
