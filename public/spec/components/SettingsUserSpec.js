@@ -19,6 +19,7 @@ describe('SettingsUser', () => {
 
     beforeEach(inject((_SettingsUser_) => {
         SettingsUser = _SettingsUser_;
+        SettingsUser.remove();
     }));
 
     afterEach(() => {
