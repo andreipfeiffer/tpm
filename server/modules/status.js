@@ -63,6 +63,12 @@ module.exports = (() => {
                     this.updateIncome();
                 });
 
+            }).on('error', err => {
+                var log = {
+                    source: 'status.init',
+                    error : err
+                };
+                server.app.emit('logError', log);
             });
         },
 

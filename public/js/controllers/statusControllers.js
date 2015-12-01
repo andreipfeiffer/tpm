@@ -28,12 +28,15 @@ export default angular.module('TPM.StatusControllers', [])
 
             websocket.emit('status.get', {});
 
-            // @toso could have the listeners added only once, at run-time
+            // @todo could have the listeners added only once, at run-time
             websocket.on('status.data', (data) => {
                 feedback.dismiss();
                 updateData( data );
                 $scope.isLoading = false;
+                console.log('on status.data', data);
             });
+
+            websocket.on('error', err => console.warn(err));
 
             function updateData(data) {
                 Object.keys( data ).forEach((prop) => {
