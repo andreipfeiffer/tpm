@@ -72,9 +72,8 @@ export default angular.module('TPM.ClientsControllers', [])
                 return modalInstance;
             };
 
-            $scope.showProjects = () => {
-                var clientId   = this.client.id,
-                    clientName = this.client.name || 'No Client';
+            $scope.showProjects = (clientId) => {
+                var clientName = getClientById(clientId).name || 'No Client';
 
                 ProjectsClient.query({ id: clientId }).$promise.then((data) => {
                     data.forEach((project) => project.clientName = clientName);
@@ -100,6 +99,10 @@ export default angular.module('TPM.ClientsControllers', [])
 
             function getClientIndex(id) {
                 return $scope.clientsList.findIndex((client) => client.id === id);
+            }
+
+            function getClientById(id) {
+                return $scope.clientsList[getClientIndex(id)];
             }
 
             function ModalEditClientCtrl($scope, $uibModalInstance, client) {
