@@ -2,6 +2,7 @@ import angular from 'angular';
 import config from 'public/js/appConfig';
 import AuthToken from 'public/js/components/AuthToken';
 import SettingsUser from 'public/js/components/SettingsUser';
+import ProjectsModal from 'public/js/components/ProjectsModal';
 
 export default angular.module('TPM.Services', ['ngResource'])
 
@@ -26,7 +27,7 @@ export default angular.module('TPM.Services', ['ngResource'])
         );
     }])
 
-    .factory('ProjectsModal', ['$uibModal', 'SettingsUser', ($modal, SettingsUser) => {
+    /*.factory('ProjectsModal', ['$uibModal', 'SettingsUser', ($modal, SettingsUser) => {
 
         function ModalProjectsCtrl($scope, $uibModalInstance, data) {
             $scope.data          = Object.assign({}, data.list);
@@ -60,7 +61,7 @@ export default angular.module('TPM.Services', ['ngResource'])
         return {
             open: open
         };
-    }])
+    }])*/
 
     .factory('ClientsService', ['$resource', ($resource) => {
         return $resource(
@@ -94,4 +95,5 @@ export default angular.module('TPM.Services', ['ngResource'])
     }])
 
     .service('SettingsUser', SettingsUser)
+    .service('ProjectsModal', ProjectsModal)
     .service('AuthToken',  AuthToken);
