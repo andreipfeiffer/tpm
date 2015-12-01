@@ -1,13 +1,11 @@
 import 'angular';
-import 'angular-animate';
 import 'angular-mocks';
 import 'public/js/app';
-import stubs from 'public/spec/_stubs';
 
 describe('ProjectsModal', () => {
 
     const MODAL_TITLE = 'projects modal title';
-    var ProjectsModal, $modal, $httpBackend, scope;
+    var ProjectsModal, $modal, $httpBackend;
 
     beforeEach(angular.mock.module('tpm'));
 
