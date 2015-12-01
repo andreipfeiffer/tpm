@@ -84,6 +84,11 @@ export default angular.module('TPM.ReportsControllers', [])
 
             function getFirstMonth(projects) {
                 var firstPaidProject = getProjectsByStatus(projects, 'paid').reverse()[0];
+
+                if ( !firstPaidProject ) {
+                    return;
+                }
+
                 var date = firstPaidProject.month.split('-').map( utils.toInt );
                 return {
                     year : date[0],
@@ -93,6 +98,11 @@ export default angular.module('TPM.ReportsControllers', [])
 
             function getLastMonth(projects) {
                 var lastPaidProject = getProjectsByStatus(projects, 'paid')[0];
+
+                if ( !lastPaidProject ) {
+                    return;
+                }
+
                 var date = lastPaidProject.month.split('-').map( utils.toInt );
                 return {
                     year : date[0],
@@ -121,6 +131,10 @@ export default angular.module('TPM.ReportsControllers', [])
                     last     = getLastMonth( projects ),
                     res      = [],
                     year, month, monthProjects, totalPrice;
+
+                if ( !first || !last ) {
+                    return res;
+                }
 
                 for ( year = first.year; year <= last.year; year += 1 ) {
                     for ( month = 1; month <= 12; month += 1 ) {
