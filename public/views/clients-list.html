@@ -49,7 +49,7 @@
                 >
                     <td
                         class="cell-border"
-                        ng-class="{ 'cell-border--warning': $index == 0 }" 
+                        ng-class="{ 'cell-border--warning': client.id == 0 }" 
                         ng-dblclick="openEditDialog(client.id)"
                     >
                         <strong>{{client.name.length ? client.name : 'No Client'}}</strong>
