@@ -23,7 +23,7 @@ module.exports = (() => {
             salt += set[p];
         }
         return salt;
-    };
+    }
 
     function md5(str) {
         return crypto.createHash('md5').update(str).digest('hex');
@@ -253,6 +253,9 @@ module.exports = (() => {
         login,
         logout,
         ensureTokenAuthenticated,
-        ensureSessionAuthenticated
+        ensureSessionAuthenticated,
+        create() {
+            saltAndHashPassword();
+        }
     };
 })();
