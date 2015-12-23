@@ -37,6 +37,9 @@ module.exports = (() => {
     function validatePassword(plainPass, hashedPass) {
         var salt = hashedPass.substr(0, 10);
         var validHash = salt + md5(plainPass + salt);
+        // console.log('plainPass', plainPass);
+        // console.log('validHash', validHash);
+        // console.log('hashedPass', hashedPass);
         return (hashedPass === validHash);
     }
 
