@@ -45,11 +45,11 @@ html(class='no-js', lang='en')
                 #navbar.collapse.navbar-collapse.clearfix(ng-if='isAuth', ng-controller='MenuController')
                     ul.nav.navbar-nav.navbar-left
                         li(ng-class='{ active: isActive("projects")}')
-                            a.btn.btn-link(href='#projects', ng-click='collapseMenu()') Projects
+                            a.btn.btn-link(href='#projects', ng-click='collapseMenu("projects")') Projects
                         li(ng-class='{ active: isActive("clients")}')
-                            a.btn.btn-link(href='#clients', ng-click='collapseMenu()') Clients
+                            a.btn.btn-link(href='#clients', ng-click='collapseMenu("clients")') Clients
                         li(ng-class='{ active: isActive("reports")}')
-                            a.btn.btn-link(href='#reports', ng-click='collapseMenu()') Reports
+                            a.btn.btn-link(href='#reports', ng-click='collapseMenu("reports")') Reports
 
                     ul.nav.navbar-nav.navbar-right
                         li.dropdown
@@ -58,7 +58,7 @@ html(class='no-js', lang='en')
                                 span.caret
                             ul.dropdown-menu
                                 li
-                                    a(href='#settings', ng-click='collapseMenu()') Settings
+                                    a(href='#settings', ng-click='collapseMenu("settings")') Settings
                                 li.disabled
                                     a(href='') Profile
                                 li.divider(role='separator')

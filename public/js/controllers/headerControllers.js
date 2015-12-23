@@ -12,7 +12,8 @@ export default angular.module('TPM.HeaderControllers', [])
                 return ( $location.path().indexOf( path ) > -1 );
             };
 
-            $scope.collapseMenu = () => {
+            $scope.collapseMenu = function(page) {
+                $location.path( page );
                 screenSize.is('xs') && angular.element('#navbar-toggle').trigger('click');
             };
 
