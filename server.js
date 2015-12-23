@@ -1,4 +1,4 @@
-/*jshint globalstrict: true*/
+/*jshint globalstrict: true, newcap: false*/
 
 (() => {    
 
