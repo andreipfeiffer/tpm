@@ -2,13 +2,17 @@
 
     <header class="clearfix">
         <h1 class="pull-left">My Projects</h1>
-        <br><a href="#projects/new" class="btn btn-success pull-right"><span class="hidden-xs">Got a </span>New Project?</a>
+        <br>
+        <a href="#projects/new" class="btn btn-success pull-right">
+            <span ng-if="hasProjects()"><span class="hidden-xs">Got a </span>New Project?</span>
+            <span ng-if="!hasProjects()"><span class="hidden-xs">Add your </span>First Project</span>
+        </a>
     </header>
 
     <hr>
     <br>
 
-    <section>
+    <section ng-if="hasProjects()">
 
         <form class="row">
 
@@ -132,5 +136,9 @@
         </p>
 
     </section>
+
+    <p class="alert alert-warning text-center" ng-if="!isLoading && !hasProjects()">
+        You have no Projects added. <br><br><strong>Add your first project to get started.</strong>
+    </p>
 
 </section>

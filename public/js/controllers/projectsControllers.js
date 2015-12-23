@@ -134,6 +134,8 @@ export default angular.module('TPM.ProjectsControllers', [])
                     project.passedDays > 7 && project.passedDays <= 30
                 );
             };
+
+            $scope.hasProjects = () => $scope.projectsList.length;
         }
     ])
 
