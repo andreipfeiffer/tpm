@@ -26,6 +26,7 @@ export default angular.module('TPM.ProjectsControllers', [])
         'feedback',
         ($scope, $q, $routeParams, tpmCache, Projects, Clients, SettingsUser, screenSize, feedback) => {
 
+            $scope.projectsList                = [];
             $scope.filterStatus                = tpmCache.get('filterStatus') || '';
             $scope.filterStatusOptions         = utils.statusList;
             $scope.filterActiveStatusOptions   = utils.getActiveStatusList();
