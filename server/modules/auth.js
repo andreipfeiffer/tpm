@@ -82,28 +82,23 @@ module.exports = (() => {
             .update( data );
     }
 
-
     // used for initial username/password authentication
     var localStrategyAuth = new LocalStrategy((username, password, done) => {
-            // saltAndHash(password, resp => {
-            //     console.log(resp);
-            // });
-
-            findUserByUsername(username)
-                .then(data => {
-                    var user = data[0];
-                    // console.log(user);
-                    if (!user) {
-                        done(null, false, { message: 'Incorrect username.' });
-                    } else if (validatePassword(password, user.password) === false) {
-                        done(null, false, { message: 'Incorrect password.' });
-                    } else {
-                        return done(null, user);
-                    }
-                })
-                .catch((/*e*/) => {
-                    done(null, false, { message: 'Database error.' });
-                });
+        findUserByUsername(username)
+            .then(data => {
+                var user = data[0];
+                // console.log(user);
+                if (!user) {
+                    done(null, false, { message: 'Incorrect username.' });
+                } else if (validatePassword(password, user.password) === false) {
+                    done(null, false, { message: 'Incorrect password.' });
+                } else {
+                    return done(null, user);
+                }
+            })
+            .catch((/*e*/) => {
+                done(null, false, { message: 'Database error.' });
+            });
         }
     );
 
