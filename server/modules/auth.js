@@ -29,10 +29,10 @@ module.exports = (() => {
         return crypto.createHash('md5').update(str).digest('hex');
     }
 
-    // function saltAndHash(pass, callback) {
-    //     var salt = generateSalt();
-    //     callback(salt + md5(pass + salt));
-    // };
+    function saltAndHashPassword(pass) {
+        var salt = generateSalt();
+        return salt + md5(pass + salt);
+    }
 
     function validatePassword(plainPass, hashedPass) {
         var salt = hashedPass.substr(0, 10);
