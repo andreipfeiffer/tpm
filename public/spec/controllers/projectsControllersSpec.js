@@ -3,6 +3,7 @@ import 'angular-mocks';
 import 'public/js/app';
 import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
+import customMatchers from 'public/spec/_matchers';
 import stubs from 'public/spec/_stubs';
 
 describe('Projects Controllers', () => {
@@ -19,6 +20,8 @@ describe('Projects Controllers', () => {
 
             scope = $rootScope.$new();
             ctrl = $controller('ProjectsListController', {$scope: scope});
+
+            jasmine.addMatchers( customMatchers );
         }));
 
 
@@ -27,7 +30,7 @@ describe('Projects Controllers', () => {
                 return scope.clientsList.find( (client) => client.id === id );
             };
 
-            expect(scope.projectsList).toBeUndefined();
+            expect(scope.projectsList).toEqualDeep([]);
             $httpBackend.flush();
 
             expect(scope.projectsList.length).toEqual( stubs.projectsList.length );

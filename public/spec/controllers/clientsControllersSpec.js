@@ -31,7 +31,7 @@ describe('Clients Controllers', () => {
 
 
         it('should set the response from the API to $scope.clientsList', () => {
-            expect(scope.clientsList).toBeUndefined();
+            expect(scope.clientsList).toEqualDeep([]);
             $httpBackend.flush();
 
             expect(scope.clientsList).toEqualDeep( stubs.clientsList );
