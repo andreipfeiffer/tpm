@@ -68,7 +68,8 @@
     app.set('views', __dirname + '/public');
     app.set('view engine', 'jade');
     app.set('view options', { layout: false });
-    app.locals.pretty = true; // render templates with identation
+    // render templates with identation
+    app.locals.pretty = true;
 
     app.use(allowCrossDomain);
     app.use(bodyParser.json());
