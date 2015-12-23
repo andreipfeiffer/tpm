@@ -33,6 +33,8 @@
         "jsonwebtoken": "5.4.1",
         "moment": "2.10.6",
         "socket.io": "1.3.7",
+        "redis": "2.4.2",
+        "connect-redis": "3.0.1",
 
         "matchdep": "1.0.0",
         "grunt": "0.4.5",

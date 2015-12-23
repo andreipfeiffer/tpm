@@ -17,7 +17,8 @@
         app          = require('express')(),
         server       = require('http').Server( app ),
         io           = require('socket.io')( server ),
-        
+        redis        = require('redis'),
+        redisStore   = require('connect-redis')(session),
         compression  = require('compression')/*,
         serveStatic  = require('serve-static')*/;
 
@@ -74,7 +75,12 @@
     // express cookieParser and session needed for passport
     app.use(cookieParser());
     app.use(session({
-        secret: 'upsidedown-inseamna-Lia-si-Andrei' ,
+        secret: 'upsidedown-inseamna-Lia-si-Andrei',
+        store: new redisStore({
+            host  : 'localhost',
+            port  : 6379,
+            client: redis.createClient()
+        }),
         saveUninitialized: true,
         resave: false
     }));
