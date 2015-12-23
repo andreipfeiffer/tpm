@@ -12,6 +12,7 @@ export default angular.module('TPM.ClientsControllers', [])
         'feedback',
         ($scope, $modal, Clients, ProjectsClient, ProjectsModal, screenSize, feedback) => {
 
+            $scope.clientsList            = [];
             $scope.isFormNewDisplayed     = false;
             $scope.isFormNewLoading       = false;
             $scope.searchClient           = '';
