@@ -95,6 +95,7 @@ export default angular.module('TPM.ClientsControllers', [])
                 feedback.notify('Client was deleted');
             };
 
+            $scope.hasClients  = () => $scope.clientsList.length > 1;
             $scope.clearSearch = () => $scope.searchClient = '';
 
             function getClientIndex(id) {
