@@ -25,6 +25,7 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Reports section
 * App Status section, using websockets
 * ES6 compliant code
+* Redis session store
 
 ## Future Goals
 
