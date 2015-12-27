@@ -80,7 +80,8 @@
         store: new redisStore({
             host  : 'localhost',
             port  : 6379,
-            client: redis.createClient()
+            client: redis.createClient(),
+            ttl   : config.sessionExpirationTime
         }),
         saveUninitialized: true,
         resave: false
