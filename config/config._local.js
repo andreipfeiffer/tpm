@@ -12,5 +12,6 @@ module.exports = {
         redirectURL : '/auth/google/callback'
     },
     // in seconds
-    sessionExpirationTime: 60 * 60
+    sessionExpirationTime: 60 * 60,
+    secret: 'upsidedown-inseamna-Lia-si-Andrei'
 };

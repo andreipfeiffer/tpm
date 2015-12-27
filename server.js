@@ -76,7 +76,7 @@
     // express cookieParser and session needed for passport
     app.use(cookieParser());
     app.use(session({
-        secret: 'upsidedown-inseamna-Lia-si-Andrei',
+        secret: config.secret,
         store: new redisStore({
             host  : 'localhost',
             port  : 6379,

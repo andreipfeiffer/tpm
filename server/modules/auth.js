@@ -2,8 +2,6 @@ module.exports = (() => {
 
     'use strict';
 
-    const SECRET           = 'upsidedown-inseamna-Lia-si-Andrei';
-
     var server        = require('../../server'),
         config        = require('../../config'),
         knex          = server.knex,
@@ -139,7 +137,7 @@ module.exports = (() => {
 
                 req.user = user;
 
-                var newAuthToken = jwt.sign({ id: user.id }, SECRET),
+                var newAuthToken = jwt.sign({ id: user.id }, config.secret),
                     loggedData   = {
                         authToken : newAuthToken,
                         authUserId: user.id
@@ -189,7 +187,7 @@ module.exports = (() => {
             decoded;
 
         try {
-            decoded = jwt.verify(token, SECRET);
+            decoded = jwt.verify(token, config.secret);
         } catch (err) {
             return res.status(401).send({ error: err.message});
         }
