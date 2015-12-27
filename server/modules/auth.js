@@ -3,9 +3,9 @@ module.exports = (() => {
     'use strict';
 
     const SECRET           = 'upsidedown-inseamna-Lia-si-Andrei';
-    const MAX_IDLE_SECONDS = 60 * 60;
 
     var server        = require('../../server'),
+        config        = require('../../config'),
         knex          = server.knex,
         crypto        = require('crypto'),
         passport      = require('passport'),
@@ -199,7 +199,7 @@ module.exports = (() => {
                 var user = data[0],
                     idle = getIdleTime( user.dateLastActive );
 
-                if (!user || !user.isLogged || idle > MAX_IDLE_SECONDS) {
+                if (!user || !user.isLogged || idle > config.sessionExpirationTime) {
                     return res.status(401).end();
                 }
 
