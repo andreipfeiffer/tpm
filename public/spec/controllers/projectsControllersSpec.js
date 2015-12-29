@@ -83,7 +83,7 @@ describe('Projects Controllers', () => {
 
             scope.submitForm();
             expect( utils.isDateFormat(scope.project.dateAdded) ).toBe(true);
-            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBe(true);
+            expect( scope.project.dateEstimated ).toBeNull();
             $httpBackend.flush();
         });
 

@@ -68,11 +68,18 @@ export default angular.module('TPM.ProjectsControllers', [])
                 angular.forEach( arr, (project) => {
 
                     // set remaining time, for active projects
-                    var remaining = utils.getRemainingWorkTime( project.dateEstimated );
-                    project.remainingDays = Math.round( remaining.daysWork );
-                    project.remainingText = remaining.textTotal;
-                    project.remainingWeekendDays = remaining.weekendDays;
-                    project.dateEstimatedFormatted = moment(project.dateEstimated).format('ddd, DD MMM');
+                    if ( project.dateEstimated ) {
+                        let remaining = utils.getRemainingWorkTime( project.dateEstimated );
+                        project.remainingDays = Math.round( remaining.daysWork );
+                        project.remainingText = remaining.textTotal;
+                        project.remainingWeekendDays = remaining.weekendDays;
+                        project.dateEstimatedFormatted = moment( project.dateEstimated ).format('ddd, DD MMM');
+                    } else {
+                        project.remainingDays = '-';
+                        project.remainingText = 'no deadline';
+                        project.remainingWeekendDays = '-';
+                        project.dateEstimatedFormatted = '';
+                    }
 
                     // set clients name
                     if ( !project.idClient ) {
@@ -174,6 +181,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.statusList            = utils.statusList;
             $scope.isNewClient           = false;
             $scope.isLoading             = false;
+            $scope.hasDeadline           = false;
             $scope.currency              = SettingsUser.get().currency;
 
             // project model
@@ -195,7 +203,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 feedback.load();
 
                 // convert the dates to match the DB format
-                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+                $scope.project.dateEstimated = getEstimatedDate();
                 $scope.project.dateAdded = $filter('date')(new Date(), config.dateFormat);
                 $scope.isLoading = true;
                 $scope.formSubmit = 'Please wait ...';
@@ -214,6 +222,14 @@ export default angular.module('TPM.ProjectsControllers', [])
             };
 
             $scope.clearClient = () => $scope.project.clientName = '';
+            $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
+
+            function getEstimatedDate() {
+                if ( !$scope.hasDeadline ) {
+                    return null;
+                }
+                return $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+            }
         }
     ])
 
@@ -236,6 +252,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.isDatePickerOpened    = false;
             $scope.statusList            = utils.statusList;
             $scope.isLoading             = false;
+            $scope.hasDeadline           = false;
             $scope.currency              = SettingsUser.get().currency;
 
             $q.all([
@@ -246,6 +263,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 $scope.project               = data[0];
                 $scope.clientsList           = data[1];
                 $scope.selectedDateEstimated = $scope.project.dateEstimated;
+                $scope.hasDeadline           = !!$scope.project.dateEstimated;
 
             });
 
@@ -253,7 +271,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 feedback.load();
 
                 // convert the dates to match the DB format
-                $scope.project.dateEstimated = $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+                $scope.project.dateEstimated = getEstimatedDate();
                 $scope.project.dateAdded     = $filter('date')(new Date(), config.dateFormat);
                 $scope.isLoading             = true;
                 $scope.formSubmit            = 'Please wait ...';
@@ -274,6 +292,13 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.clearClient = () => {
                 $scope.project.clientName = '';
             };
+            $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
 
+            function getEstimatedDate() {
+                if ( !$scope.hasDeadline ) {
+                    return null;
+                }
+                return $filter('date')($scope.selectedDateEstimated, config.dateFormat);
+            }
         }
     ]);

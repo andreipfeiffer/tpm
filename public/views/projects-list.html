@@ -85,15 +85,19 @@
                         </small>
                     </td>
                     <td class="b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
-                        {{project.dateEstimatedFormatted}}
+                        <span ng-if="project.dateEstimatedFormatted">
+                            {{project.dateEstimatedFormatted}}<br>
+                        </span>
                         <small class="text-muted">
-                            <br>{{project.remainingText}}
+                            {{project.remainingText}}
                         </small>
                     </td>
                     <td class="hidden-xs b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
-                        {{project.days}} estimated
+                        <span ng-if="project.days">
+                            {{project.days}} estimated<br>
+                        </span>
                         <small class="hidden-xs text-muted">
-                            <br>{{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
+                            {{project.remainingDays >= 0 ? project.remainingDays + ' left' : '-'}}
                         </small>
                     </td>
                     <td ng-show="!showActions" class="hidden-xs hidden-sm b-one-line text-right">

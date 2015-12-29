@@ -44,28 +44,6 @@
 
         <div class="form-group row">
 
-            <div class="col-xs-8 col-sm-3">
-                <label class="control-label" for="projectPriceFinal">Deadline:</label>
-                <div class="input-group">
-                    <input type="text" class="form-control"
-                        ng-model             = "selectedDateEstimated"
-                        uib-datepicker-popup = "{{dateSettings.dateFormat}}"
-                        datepicker-options   = "dateSettings.dateOptions"
-                        date-disabled        = "disabled(date, mode)"
-                        is-open              = "isDatePickerOpened"
-                        close-text           = "Close"
-                    />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                </div>
-            </div>
-
-            <div class="col-xs-4 col-sm-2">
-                <label class="control-label" for="projectDays">Est<span class="hidden-xs">imated</span> days:</label>
-                <input id="projectDays" class="form-control" ng-model="project.days" type="number" placeholder="Number of days">
-            </div>
-
             <div class="clearfix visible-xs-block form-group"></div>
 
             <div class="col-xs-6 col-sm-2">
@@ -89,6 +67,36 @@
             <div class="col-sm-3">
                 <label class="control-label" for="projectStatus">Status:</label>
                 <select id="projectStatus" ng-model="project.status" ng-options="status for status in statusList" class="form-control"></select>
+            </div>
+
+            <div class="col-xs-12 col-sm-5" ng-show="!hasDeadline">
+                <label class="control-label">&nbsp;</label>
+                <button type="button" class="btn btn-block btn-warning" ng-click="toggleDeadline()">Set deadline</button>
+            </div>
+            
+            <div class="col-xs-8 col-sm-3" ng-show="hasDeadline">
+                <label class="control-label" for="projectPriceFinal">Deadline:</label>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-warning" ng-click="toggleDeadline()"><i class="glyphicon glyphicon-remove"></i></button>
+                    </span>
+                    <input type="text" class="form-control"
+                        ng-model             = "selectedDateEstimated"
+                        uib-datepicker-popup = "{{dateSettings.dateFormat}}"
+                        datepicker-options   = "dateSettings.dateOptions"
+                        date-disabled        = "disabled(date, mode)"
+                        is-open              = "isDatePickerOpened"
+                        close-text           = "Close"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-xs-4 col-sm-2" ng-show="hasDeadline">
+                <label class="control-label" for="projectDays">Est<span class="hidden-xs">imated</span> days:</label>
+                <input id="projectDays" class="form-control" ng-model="project.days" type="number" placeholder="Days">
             </div>
         </div>
 

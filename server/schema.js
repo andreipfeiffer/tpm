@@ -63,7 +63,7 @@ schema.structure.projects = ''
     +     '`priceEstimated` smallint(5) unsigned NOT NULL DEFAULT "0",'
     +     '`priceFinal` smallint(5) unsigned NOT NULL DEFAULT "0",'
     +     '`dateAdded` date NOT NULL,'
-    +     '`dateEstimated` date NOT NULL,'
+    +     '`dateEstimated` date NULL DEFAULT NULL,'
     +     '`description` text NOT NULL,'
     +     '`googleEventId` varchar(64) NOT NULL,'
     +     '`isDeleted` tinyint(1) NOT NULL DEFAULT "0",'
@@ -72,7 +72,7 @@ schema.structure.projects = ''
     +     'KEY `idUser` (`idUser`),'
     +     'KEY `idClient` (`idClient`),'
     +     'KEY `isDeleted` (`isDeleted`)'
-    + ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1';
+    + ') ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
 
 schema.populate.projects = ''
     + 'INSERT INTO `' + config.mysql.database + '`.`projects` (`id`, `idUser`, `idClient`, `name`, `status`, `dateAdded`, `dateEstimated`) VALUES'
