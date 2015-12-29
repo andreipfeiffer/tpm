@@ -27,42 +27,6 @@ export default angular.module('TPM.Services', ['ngResource'])
         );
     }])
 
-    /*.factory('ProjectsModal', ['$uibModal', 'SettingsUser', ($modal, SettingsUser) => {
-
-        function ModalProjectsCtrl($scope, $uibModalInstance, data) {
-            $scope.data          = Object.assign({}, data.list);
-            $scope.title         = data.title;
-            $scope.detailedPrice = data.detailedPrice;
-            $scope.currency      = data.currency;
-        }
-        ModalProjectsCtrl.$inject = ['$scope', '$uibModalInstance', 'data'];
-
-        function open(title, list, detailedPrice) {
-            var currency      = SettingsUser.get().currency;
-
-            var modalInstance = $modal.open({
-                templateUrl: 'public/views/projects-list-modal.html',
-                controller : ModalProjectsCtrl,
-                resolve    : {
-                    data() {
-                        return {
-                            list,
-                            title,
-                            currency,
-                            detailedPrice
-                        };
-                    }
-                }
-            });
-
-            return modalInstance;
-        }
-
-        return {
-            open: open
-        };
-    }])*/
-
     .factory('ClientsService', ['$resource', ($resource) => {
         return $resource(
             config.getApiUrl() + 'clients/:id',
