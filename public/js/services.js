@@ -3,20 +3,9 @@ import config from 'public/js/appConfig';
 import AuthToken from 'public/js/components/AuthToken';
 import SettingsUser from 'public/js/components/SettingsUser';
 import ProjectsModal from 'public/js/components/ProjectsModal';
+import Projects from 'public/js/components/Projects';
 
 export default angular.module('TPM.Services', ['ngResource'])
-
-    .factory('ProjectsService', ['$http', '$resource', ($http, $resource) => {
-        return $resource(
-            config.getApiUrl() + 'projects/:id',
-            {
-                id: '@id'
-            },
-            {
-                'update': { method:'PUT' }
-            }
-        );
-    }])
 
     .factory('ProjectsClientService', ['$http', '$resource', ($http, $resource) => {
         return $resource(
@@ -57,6 +46,8 @@ export default angular.module('TPM.Services', ['ngResource'])
             config.getApiUrl() + 'reports'
         );
     }])
+
+    .service('Projects', Projects)
 
     .service('SettingsUser', SettingsUser)
     .service('ProjectsModal', ProjectsModal)

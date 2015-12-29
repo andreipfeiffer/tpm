@@ -19,7 +19,7 @@ export default angular.module('TPM.ProjectsControllers', [])
         '$q',
         '$routeParams',
         'tpmCache',
-        'ProjectsService',
+        'Projects',
         'ClientsService',
         'SettingsUser',
         'screenSize',
@@ -41,7 +41,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             !feedback.isActive() && feedback.load();
 
             $q.all([
-                Projects.query().$promise,
+                Projects.http().query().$promise,
                 Clients.query().$promise
             ]).then((data) => {
 
@@ -105,7 +105,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             }
 
             $scope.deleteProject = (id) => {
-                Projects.delete({ id: id });
+                Projects.http().delete({ id: id });
                 $scope.projectsList.splice(getProjectIndex(id), 1);
                 feedback.notify('Project was deleted');
             };
@@ -150,9 +150,9 @@ export default angular.module('TPM.ProjectsControllers', [])
     .controller('ProjectsViewController', [
         '$scope',
         '$routeParams',
-        'ProjectsService',
+        'Projects',
         ($scope, $routeParams, Projects) => {
-            Projects.get({ id: $routeParams.id }).$promise.then((data) => {
+            Projects.http().get({ id: $routeParams.id }).$promise.then((data) => {
                 $scope.project = data;
                 // set remaining time
                 var remaining = utils.getRemainingWorkTime( data.dateEstimated );
@@ -167,7 +167,7 @@ export default angular.module('TPM.ProjectsControllers', [])
         '$routeParams',
         '$filter',
         '$location',
-        'ProjectsService',
+        'Projects',
         'ClientsService',
         'SettingsUser',
         'feedback',
@@ -208,7 +208,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 $scope.isLoading = true;
                 $scope.formSubmit = 'Please wait ...';
 
-                Projects.save($scope.project).$promise.then(() => {
+                Projects.http().save($scope.project).$promise.then(() => {
                     $location.path('/projects');
                     feedback.notify('Project was added');
                 });
@@ -239,7 +239,7 @@ export default angular.module('TPM.ProjectsControllers', [])
         '$routeParams',
         '$filter',
         '$location',
-        'ProjectsService',
+        'Projects',
         'ClientsService',
         'SettingsUser',
         'feedback',
@@ -256,7 +256,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.currency              = SettingsUser.get().currency;
 
             $q.all([
-                Projects.get({ id: $routeParams.id }).$promise,
+                Projects.http().get({ id: $routeParams.id }).$promise,
                 Clients.query().$promise
             ]).then((data) => {
 
@@ -276,7 +276,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 $scope.isLoading             = true;
                 $scope.formSubmit            = 'Please wait ...';
 
-                Projects.update({ id: $routeParams.id }, $scope.project).$promise.then(() => {
+                Projects.http().update({ id: $routeParams.id }, $scope.project).$promise.then(() => {
                     $location.path('/projects');
                     feedback.notify('Project was updated');
                 });
