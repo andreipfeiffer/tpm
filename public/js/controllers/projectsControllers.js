@@ -1,7 +1,6 @@
 import angular from 'angular';
 import moment from 'moment';
 import utils from 'public/js/utils';
-import config from 'public/js/appConfig';
 
 // @todo move out !!!!!
 const dateSettings = {
@@ -73,7 +72,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                         project.remainingDays = Math.round( remaining.daysWork );
                         project.remainingText = remaining.textTotal;
                         project.remainingWeekendDays = remaining.weekendDays;
-                        project.dateEstimatedFormatted = moment( project.dateEstimated ).format('ddd, DD MMM');
+                        project.dateEstimatedFormatted = moment( project.dateEstimated ).format('DD MMM');
                     } else {
                         project.remainingDays = '-';
                         project.remainingText = 'no deadline';
@@ -165,13 +164,12 @@ export default angular.module('TPM.ProjectsControllers', [])
     .controller('ProjectsNewController', [
         '$scope',
         '$routeParams',
-        '$filter',
         '$location',
         'Projects',
         'ClientsService',
         'SettingsUser',
         'feedback',
-        ($scope, $routeParams, $filter, $location, Projects, Clients, SettingsUser, feedback) => {
+        ($scope, $routeParams, $location, Projects, Clients, SettingsUser, feedback) => {
 
             $scope.formAction            = 'Add';
             $scope.formSubmit            = $scope.formAction + ' project';
@@ -202,13 +200,12 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.submitForm = () => {
                 feedback.load();
 
-                // convert the dates to match the DB format
-                $scope.project.dateEstimated = getEstimatedDate();
-                $scope.project.dateAdded = $filter('date')(new Date(), config.dateFormat);
                 $scope.isLoading = true;
                 $scope.formSubmit = 'Please wait ...';
 
-                Projects.http().save($scope.project).$promise.then(() => {
+                let data = Projects.serialize( $scope );
+
+                Projects.http().save( data ).$promise.then(() => {
                     $location.path('/projects');
                     feedback.notify('Project was added');
                 });
@@ -223,13 +220,6 @@ export default angular.module('TPM.ProjectsControllers', [])
 
             $scope.clearClient = () => $scope.project.clientName = '';
             $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
-
-            function getEstimatedDate() {
-                if ( !$scope.hasDeadline ) {
-                    return null;
-                }
-                return $filter('date')($scope.selectedDateEstimated, config.dateFormat);
-            }
         }
     ])
 
@@ -237,13 +227,12 @@ export default angular.module('TPM.ProjectsControllers', [])
         '$scope',
         '$q',
         '$routeParams',
-        '$filter',
         '$location',
         'Projects',
         'ClientsService',
         'SettingsUser',
         'feedback',
-        ($scope, $q, $routeParams, $filter, $location, Projects, Clients, SettingsUser, feedback) => {
+        ($scope, $q, $routeParams, $location, Projects, Clients, SettingsUser, feedback) => {
 
             $scope.formAction            = 'Edit';
             $scope.formSubmit            = $scope.formAction + ' project';
@@ -269,14 +258,12 @@ export default angular.module('TPM.ProjectsControllers', [])
 
             $scope.submitForm = () => {
                 feedback.load();
+                $scope.isLoading  = true;
+                $scope.formSubmit = 'Please wait ...';
 
-                // convert the dates to match the DB format
-                $scope.project.dateEstimated = getEstimatedDate();
-                $scope.project.dateAdded     = $filter('date')(new Date(), config.dateFormat);
-                $scope.isLoading             = true;
-                $scope.formSubmit            = 'Please wait ...';
+                let data = Projects.serialize( $scope );
 
-                Projects.http().update({ id: $routeParams.id }, $scope.project).$promise.then(() => {
+                Projects.http().update({ id: $routeParams.id }, data).$promise.then(() => {
                     $location.path('/projects');
                     feedback.notify('Project was updated');
                 });
@@ -293,12 +280,5 @@ export default angular.module('TPM.ProjectsControllers', [])
                 $scope.project.clientName = '';
             };
             $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
-
-            function getEstimatedDate() {
-                if ( !$scope.hasDeadline ) {
-                    return null;
-                }
-                return $filter('date')($scope.selectedDateEstimated, config.dateFormat);
-            }
         }
     ]);

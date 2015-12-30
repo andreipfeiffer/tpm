@@ -1,7 +1,6 @@
 import 'angular';
 import 'angular-mocks';
 import 'public/js/app';
-import utils from 'public/js/utils';
 import config from 'public/js/appConfig';
 import customMatchers from 'public/spec/_matchers';
 import stubs from 'public/spec/_stubs';
@@ -61,9 +60,10 @@ describe('Projects Controllers', () => {
 
 
     describe('ProjectsNewController', () => {
-        var scope, ctrl, $httpBackend;
+        var scope, ctrl, $httpBackend, feedback;
 
-        beforeEach(inject((_$httpBackend_, $rootScope, $controller) => {
+        beforeEach(inject((_$httpBackend_, $rootScope, $controller, _feedback_) => {
+            feedback     = _feedback_;
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
             $httpBackend.whenGET(/views\//).respond(200);
@@ -82,9 +82,10 @@ describe('Projects Controllers', () => {
             $httpBackend.expectPOST(config.getApiUrl() + 'projects').respond(201);
 
             scope.submitForm();
-            expect( utils.isDateFormat(scope.project.dateAdded) ).toBe(true);
-            expect( scope.project.dateEstimated ).toBeNull();
+            expect( feedback.isLoading() ).toBe(true);
             $httpBackend.flush();
+            expect( feedback.isLoading() ).toBe(false);
+            expect( feedback.getMessage() ).toBe('Project was added');
         });
 
         it('should display the date picker', () => {
@@ -98,13 +99,14 @@ describe('Projects Controllers', () => {
 
 
     describe('ProjectsEditController', () => {
-        var scope, ctrl, $httpBackend;
+        var scope, ctrl, $httpBackend, feedback;
         // the controller reads the id from routeParams
         // we need this so the GET request for details works as expected
         var routeParams = { id: 1 };
         var projectDetails = stubs.projectsList[0];
 
-        beforeEach(inject((_$httpBackend_, $rootScope, $controller) => {
+        beforeEach(inject((_$httpBackend_, $rootScope, $controller, _feedback_) => {
+            feedback     = _feedback_;
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET(config.getApiUrl() + 'projects/1').respond( projectDetails );
             $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
@@ -124,9 +126,10 @@ describe('Projects Controllers', () => {
             $httpBackend.expectPUT(config.getApiUrl() + 'projects/1').respond(201);
 
             scope.submitForm();
-            expect( utils.isDateFormat(scope.project.dateAdded) ).toBe(true);
-            expect( utils.isDateFormat(scope.project.dateEstimated) ).toBe(true);
+            expect( feedback.isLoading() ).toBe(true);
             $httpBackend.flush();
+            expect( feedback.isLoading() ).toBe(false);
+            expect( feedback.getMessage() ).toBe('Project was updated');
         });
 
         it('should display the date picker', () => {
