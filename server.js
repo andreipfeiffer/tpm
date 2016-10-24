@@ -124,6 +124,8 @@
         require('./server/modules/utils').init();
 
         start(config.port);
+    }).catch(err => {
+        console.error('DataBase Server might not be started');
     });
 
 })();
