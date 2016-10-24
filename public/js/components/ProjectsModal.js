@@ -15,6 +15,7 @@ class ProjectsModal {
         ModalProjectsCtrl.$inject = ['$scope', '$uibModalInstance', 'data'];
 
         var modalInstance = this.$modal.open({
+            animation  : false,
             templateUrl: 'public/views/projects-list-modal.html',
             controller : ModalProjectsCtrl,
             resolve    : {
