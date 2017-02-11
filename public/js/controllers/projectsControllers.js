@@ -219,7 +219,10 @@ export default angular.module('TPM.ProjectsControllers', [])
             };
 
             $scope.clearClient = () => $scope.project.clientName = '';
-            $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
+            $scope.toggleDeadline = () => {
+                $scope.hasDeadline = !$scope.hasDeadline;
+                $scope.hasDeadline && ($scope.isDatePickerOpened = true);
+            }
         }
     ])
 
@@ -279,6 +282,9 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.clearClient = () => {
                 $scope.project.clientName = '';
             };
-            $scope.toggleDeadline = () => $scope.hasDeadline = !$scope.hasDeadline;
+            $scope.toggleDeadline = () => {
+                $scope.hasDeadline = !$scope.hasDeadline;
+                $scope.hasDeadline && ($scope.isDatePickerOpened = true);
+            }
         }
     ]);

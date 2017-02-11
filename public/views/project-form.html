@@ -11,7 +11,7 @@
     <form name="projectsForm" ng-submit="submitForm()" novalidate>
 
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6 col-md-8">
                 <label class="control-label" for="projectName">Name your project:</label>
                 <div class="form-group">
                     <input type="text" id="projectName"
@@ -21,7 +21,7 @@
                     class="form-control input-lg" placeholder="Project Name">
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6 col-md-4">
                 <label class="control-label" for="clientName">Set a client:</label>
                 <div ng-class="{ 'input-group': project.clientName.length }">
                     <input type="text" id="clientName" autocomplete="off"
@@ -46,15 +46,15 @@
 
             <div class="clearfix visible-xs-block form-group"></div>
 
-            <div class="col-xs-6 col-sm-2">
-                <label class="control-label" for="projectPriceEstimated">Est<span class="hidden-xs">imated</span> price:</label>
+            <div class="col-xs-6 col-sm-4 col-md-2">
+                <label class="control-label" for="projectPriceEstimated">Estimated</span> price:</label>
                 <div class="input-group">
                     <input id="projectPriceEstimated" class="form-control" ng-model="project.priceEstimated" type="number">
                     <div class="input-group-addon">{{ currency }}</div>
                 </div>
             </div>
 
-            <div class="col-xs-6 col-sm-2">
+            <div class="col-xs-6 col-sm-4 col-md-2">
                 <label class="control-label" for="projectPriceFinal">Final price:</label>
                 <div class="input-group">
                     <input id="projectPriceFinal" class="form-control" ng-model="project.priceFinal" type="number">
@@ -64,21 +64,26 @@
 
             <div class="clearfix visible-xs-block form-group"></div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-4 col-md-2">
                 <label class="control-label" for="projectStatus">Status:</label>
                 <select id="projectStatus" ng-model="project.status" ng-options="status for status in statusList" class="form-control"></select>
             </div>
 
-            <div class="col-xs-12 col-sm-5" ng-show="!hasDeadline">
+            <div class="col-xs-6 col-xs-offset-3 col-md-2 col-md-offset-4" ng-show="!hasDeadline">
                 <label class="control-label">&nbsp;</label>
-                <button type="button" class="btn btn-block btn-warning" ng-click="toggleDeadline()">Set deadline</button>
+                <button type="button" class="btn btn-block btn-default" ng-click="toggleDeadline()">
+                    <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                    Set deadline
+                </button>
             </div>
+
+            <div class="clearfix visible-xs-block visible-sm-block form-group"></div>
             
-            <div class="col-xs-8 col-sm-3" ng-show="hasDeadline">
+            <div class="col-xs-8 col-md-4" ng-show="hasDeadline">
                 <label class="control-label" for="projectPriceFinal">Deadline:</label>
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-warning" ng-click="toggleDeadline()"><i class="glyphicon glyphicon-remove"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="toggleDeadline()"><i class="glyphicon glyphicon-remove"></i></button>
                     </span>
                     <input type="text" class="form-control"
                         ng-model             = "selectedDateEstimated"
@@ -94,7 +99,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-4 col-sm-2" ng-show="hasDeadline">
+            <div class="col-xs-4 col-md-2" ng-show="hasDeadline">
                 <label class="control-label" for="projectDays">Est<span class="hidden-xs">imated</span> days:</label>
                 <input id="projectDays" class="form-control" ng-model="project.days" type="number" placeholder="Days">
             </div>
@@ -107,7 +112,9 @@
             <textarea id="projectDescription" ng-model="project.description" class="form-control" rows="5"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary" ng-disabled="isLoading || (!project.id && projectsForm.$invalid)">{{formSubmit}}</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="isLoading || (!project.id && projectsForm.$invalid)">
+            {{formSubmit}}
+        </button>
         <a href="#projects" class="btn btn-default">Cancel</a>
     </form>
 
