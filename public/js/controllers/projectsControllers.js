@@ -179,7 +179,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.statusList            = utils.statusList;
             $scope.isNewClient           = false;
             $scope.isLoading             = false;
-            $scope.hasDeadline           = false;
+            $scope.hasDeadline           = true;
             $scope.currency              = SettingsUser.get().currency;
 
             // project model
@@ -244,7 +244,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.isDatePickerOpened    = false;
             $scope.statusList            = utils.statusList;
             $scope.isLoading             = false;
-            $scope.hasDeadline           = false;
+            $scope.hasDeadline           = true;
             $scope.currency              = SettingsUser.get().currency;
 
             $q.all([
