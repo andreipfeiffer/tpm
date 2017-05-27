@@ -249,6 +249,7 @@ module.exports = (grunt) => {
     ]);
 
     grunt.registerTask('test', [
+        'jshint',
         'karma',
         'mocha_istanbul',
         'protractor:bdd'
