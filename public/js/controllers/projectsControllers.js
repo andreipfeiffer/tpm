@@ -35,7 +35,7 @@ export default angular.module('TPM.ProjectsControllers', [])
 
             $scope.isLoading              = true;
             $scope.showActions            = false;
-            $scope.isEnabledToggleActions = screenSize.is('xs, sm');
+            $scope.isEnabledToggleActions = screenSize.is('xs');
 
             !feedback.isActive() && feedback.load();
 
