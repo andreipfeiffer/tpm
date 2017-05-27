@@ -17,7 +17,7 @@ export default angular.module('TPM.ClientsControllers', [])
             $scope.isFormNewLoading       = false;
             $scope.searchClient           = '';
             $scope.isLoading              = true;
-            $scope.isEnabledToggleActions = screenSize.is('xs, sm');
+            $scope.isEnabledToggleActions = screenSize.is('xs');
             $scope.showActions            = false;
             $scope.newClient              = {
                 name: ''
