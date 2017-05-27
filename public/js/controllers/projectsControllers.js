@@ -222,7 +222,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.toggleDeadline = () => {
                 $scope.hasDeadline = !$scope.hasDeadline;
                 $scope.hasDeadline && ($scope.isDatePickerOpened = true);
-            }
+            };
         }
     ])
 
@@ -285,6 +285,6 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.toggleDeadline = () => {
                 $scope.hasDeadline = !$scope.hasDeadline;
                 $scope.hasDeadline && ($scope.isDatePickerOpened = true);
-            }
+            };
         }
     ]);
