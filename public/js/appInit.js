@@ -24,7 +24,7 @@ export var appInit = angular.module('appInit', [
             animation : false
         });
         ChartJs.setOptions('Line', {
-            colours: ['#1eae32', '#1693f4', '#ed9c1c'],
+            colours: ['#1eae32', '#1693f4', '#ed9c1c', '#f72e41', '#c736dd'],
         });
     }
 ]).run([
