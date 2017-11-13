@@ -87,47 +87,42 @@ module.exports = (() => {
 
     return {
         getAll(userLogged) {
-            var d = Promise.defer(),
-                noClient;
+            return new Promise((resolve) => {
+                let noClient;
 
-            getProjectsWithoutClient( userLogged.id )
-                .then(projectsNoClient => {
-                    noClient = projectsNoClient;
-                    return getAllClients( userLogged.id );
-                })
-                .then(data => {
-                    // add the empty client data at the beginning
-                    data.unshift( getEmptyClient( noClient.length ) );
-                    d.resolve({ status: 200, body: data });
-                })
-                .catch(e => {
-                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-                });
-
-            return d.promise;
+                getProjectsWithoutClient( userLogged.id )
+                    .then(projectsNoClient => {
+                        noClient = projectsNoClient;
+                        return getAllClients( userLogged.id );
+                    })
+                    .then(data => {
+                        // add the empty client data at the beginning
+                        data.unshift( getEmptyClient( noClient.length ) );
+                        resolve({ status: 200, body: data });
+                    })
+                    .catch(e => {
+                        resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                    });
+            });
         },
 
         getById(userLogged, id) {
-            var d = Promise.defer();
-
-            getClientById(id, userLogged.id)
-                .then(data => {
-                    if ( !data.length ) {
-                        d.resolve({ status: 404, body: { error: 'Record not found'} });
-                    } else {
-                        d.resolve({ status: 200, body: data[0] });
-                    }
-                })
-                .catch((e) => {
-                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-                });
-
-            return d.promise;
+            return new Promise((resolve) => {
+                getClientById(id, userLogged.id)
+                    .then(data => {
+                        if ( !data.length ) {
+                            resolve({ status: 404, body: { error: 'Record not found'} });
+                        } else {
+                            resolve({ status: 200, body: data[0] });
+                        }
+                    })
+                    .catch((e) => {
+                        resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                    });
+            });
         },
 
         update(userLogged, id, data) {
-            var d = Promise.defer();
-
             var editClient = knex('clients')
                 .where({
                     'id'       : id,
@@ -139,39 +134,35 @@ module.exports = (() => {
                     description: data.description
                 });
 
-            editClient
-                .then(() => d.resolve({ status: 200, body: true }))
-                .catch((e) => {
-                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-                });
-
-            return d.promise;
+            return new Promise((resolve) => {
+                editClient
+                    .then(() => resolve({ status: 200, body: true }))
+                    .catch((e) => {
+                        resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                    });
+            });
         },
 
         add(userLogged, data) {
-            var d = Promise.defer();
-
-            addNewClient(userLogged.id, data.name)
-                .then(client => getClientById(client[0], userLogged.id))
-                .then(client => d.resolve( { status: 201, body: client[0] } ))
-                .catch(e => {
-                    d.resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
-                });
-
-            return d.promise;
+            return new Promise((resolve) => {
+                addNewClient(userLogged.id, data.name)
+                    .then(client => getClientById(client[0], userLogged.id))
+                    .then(client => resolve( { status: 201, body: client[0] } ))
+                    .catch(e => {
+                        resolve( { status: 503, body: { error: 'Database error: ' + e.code} } );
+                    });
+            });
         },
 
         remove(userLogged, id) {
-            var d = Promise.defer();
-
-            deleteClient(id, userLogged.id)
-                .then(() => unAssignClient( id ))
-                .then(() => d.resolve({ status: 204 }))
-                .catch(e => {
-                    d.resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
-                });
-
-            return d.promise;
+            return new Promise((resolve) => {
+                deleteClient(id, userLogged.id)
+                    .then(() => unAssignClient( id ))
+                    .then(() => resolve({ status: 204 }))
+                    .catch(e => {
+                        resolve({ status: 503, body: { error: 'Database error: ' + e.code} });
+                    });
+            });
         },
 
         getByName: getClientByName,

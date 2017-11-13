@@ -73,19 +73,17 @@ module.exports = (() => {
     ));
 
     function revokeToken(userId, accessToken) {
-        var d = Promise.defer();
-
-        googleClient.oauth2Client.revokeToken(accessToken, (err/*, resGoogle, body*/) => {
-            if (err) {
-                d.reject( err );
-            } else {
-                googleClient
-                    .clearTokens(userId)
-                    .then(() => d.resolve( true ));
-            }
+        return new Promise((resolve, reject) => {
+            googleClient.oauth2Client.revokeToken(accessToken, (err/*, resGoogle, body*/) => {
+                if (err) {
+                    reject( err );
+                } else {
+                    googleClient
+                        .clearTokens(userId)
+                        .then(() => resolve( true ));
+                }
+            });
         });
-
-        return d.promise;
     }
 
     function revokeAccess(userLogged) {

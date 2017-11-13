@@ -8,47 +8,41 @@ module.exports = (() => {
         socket;
 
     function getTotalUsers() {
-        var d = Promise.defer();
-
-        knex('users')
-            .count('id as nr')
-            .where({
-                'isDeleted': '0'
-            })
-            .then(users => d.resolve( users[0].nr ));
-
-        return d.promise;
+        return new Promise((resolve) => {
+            knex('users')
+                .count('id as nr')
+                .where({
+                    'isDeleted': '0'
+                })
+                .then(users => resolve( users[0].nr ));
+        });
     }
 
     function getTotalProjects() {
-        var d = Promise.defer();
-
-        knex('projects')
-            .count('id as nr')
-            .where({
-                'isDeleted': '0'
-            })
-            .then(projects => d.resolve( projects[0].nr ));
-
-        return d.promise;
+        return new Promise((resolve) => {
+            knex('projects')
+                .count('id as nr')
+                .where({
+                    'isDeleted': '0'
+                })
+                .then(projects => resolve( projects[0].nr ));
+        });
     }
 
     function getTotalIncome() {
-        var d = Promise.defer();
-
-        knex('projects')
-            .select('priceEstimated', 'priceFinal')
-            .where({
-                'isDeleted': '0',
-                'status'   : 'paid'
-            })
-            .then(projects => {
-                var income = 0;
-                projects.forEach(p => income += p.priceFinal || p.priceEstimated);
-                d.resolve( income );
-            });
-
-        return d.promise;
+        return new Promise((resolve) => {
+            knex('projects')
+                .select('priceEstimated', 'priceFinal')
+                .where({
+                    'isDeleted': '0',
+                    'status'   : 'paid'
+                })
+                .then(projects => {
+                    var income = 0;
+                    projects.forEach(p => income += p.priceFinal || p.priceEstimated);
+                    resolve( income );
+                });
+        });
     }
 
     return {

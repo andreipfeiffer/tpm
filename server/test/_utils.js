@@ -26,30 +26,26 @@ module.exports = (() => {
         },
 
         authenticateUser(request) {
-            var d = Promise.defer();
-
-            request
-                .post('/login')
-                .send( user.credentials )
-                .end((err, res) => {
-                    if (err) {
-                        d.reject(err);
-                    } else {
-                        d.resolve(res);
-                    }
-                });
-
-            return d.promise;
+            return new Promise((resolve, reject) => {
+                request
+                    .post('/login')
+                    .send( user.credentials )
+                    .end((err, res) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(res);
+                        }
+                    });
+            });
         },
 
         logoutUser(request) {
-            var d = Promise.defer();
-
-            request
-                .get('/logout')
-                .end((err, res) => d.resolve(res));
-
-            return d.promise;
+            return new Promise((resolve) => {
+                request
+                    .get('/logout')
+                    .end((err, res) => resolve(res));
+            });
         }
 
     };

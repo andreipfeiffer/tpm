@@ -8,45 +8,41 @@ module.exports = (() => {
         calendar = google.calendar('v3');
 
     function getSelectedCalendarId(userId) {
-        var d = Promise.defer();
-
-        knex('users')
-            .select('googleSelectedCalendar as googleCalendar')
-            .where({ id: userId })
-            .then(data => d.resolve(data[0].googleCalendar))
-            .catch(err => d.reject(err));
-
-        return d.promise;
+        return new Promise((resolve, reject) => {
+            knex('users')
+                .select('googleSelectedCalendar as googleCalendar')
+                .where({ id: userId })
+                .then(data => resolve(data[0].googleCalendar))
+                .catch(err => reject(err));
+        });
     }
 
     function getCalendars() {
-        var d = Promise.defer();
-        calendar.calendarList.list({ minAccessRole: 'owner' }, (err, response) => {
-            if (err) {
-                d.reject(err);
-            } else {
-                d.resolve(response);
-            }
+        return new Promise((resolve, reject) => {
+            calendar.calendarList.list({ minAccessRole: 'owner' }, (err, response) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(response);
+                }
+            });
         });
-        return d.promise;
     }
 
     function getProjectData(userId, projectData, calendarId) {
-        var d = Promise.defer();
-
-        if ( typeof calendarId === 'undefined' || !calendarId ) {
-            getSelectedCalendarId(userId)
-                .then(id => {
-                    if ( !id.length ) {
-                        return d.resolve(false);
-                    }
-                    d.resolve( getProjectDataRaw(projectData, id) );
-                });
-        } else {
-            d.resolve( getProjectDataRaw(projectData, calendarId) );
-        }
-
-        return d.promise;
+        return new Promise((resolve) => {
+            if ( typeof calendarId === 'undefined' || !calendarId ) {
+                getSelectedCalendarId(userId)
+                    .then(id => {
+                        if ( !id.length ) {
+                            return resolve(false);
+                        }
+                        resolve( getProjectDataRaw(projectData, id) );
+                    });
+            } else {
+                resolve( getProjectDataRaw(projectData, calendarId) );
+            }
+        });
     }
 
     function getProjectDataRaw(projectData, calendarId) {
@@ -74,96 +70,92 @@ module.exports = (() => {
     }
 
     function addEvent(userId, projectData, calendarId) {
-        var d = Promise.defer();
+        return new Promise((resolve) => {
+            getProjectData(userId, projectData, calendarId).then(params => {
+                if (!params) {
+                    return resolve(false);
+                }
 
-        getProjectData(userId, projectData, calendarId).then(params => {
-            if (!params) {
-                return d.resolve(false);
-            }
-
-            calendar.events.insert(params, (err, response) => {
-                // id error from API, don't reject, resolve with 0
-                var id = err ? 0 : response.id;
-                d.resolve( id );
+                calendar.events.insert(params, (err, response) => {
+                    // id error from API, don't reject, resolve with 0
+                    var id = err ? 0 : response.id;
+                    resolve( id );
+                });
             });
         });
-
-        return d.promise;
     }
 
     function updateEvent(userId, eventId, projectData) {
-        var d = Promise.defer(),
-            data = JSON.parse( JSON.stringify(projectData) );
+        return new Promise((resolve) => {
+            let data = JSON.parse( JSON.stringify(projectData) );
 
-        if ( !eventId.length ) {
-            return d.resolve(false);
-        }
-
-        data.googleEventId = eventId;
-
-        getProjectData(userId, data).then(params => {
-            if (!params) {
-                return d.resolve(false);
+            if ( !eventId.length ) {
+                return resolve(false);
             }
 
-            // @todo apparently if you patch an event, that was deleted manually
-            // from the calendar, the request returns ok
-            // although should return 404
-            // so, we cannot know if the event was updated, or ignored
+            data.googleEventId = eventId;
 
-            calendar.events.patch(params, (err, response) => {
-                if (err) {
-                    var newEventId;
-
-                    addEvent(userId, projectData)
-                        .then(newId => {
-                            newEventId = newId;
-                            return setEventId(userId, projectData.id, newEventId);
-                        })
-                        .then(() => d.resolve(newEventId));
-                } else {
-                    d.resolve(response.id);
+            getProjectData(userId, data).then(params => {
+                if (!params) {
+                    return resolve(false);
                 }
+
+                // @todo apparently if you patch an event, that was deleted manually
+                // from the calendar, the request returns ok
+                // although should return 404
+                // so, we cannot know if the event was updated, or ignored
+
+                calendar.events.patch(params, (err, response) => {
+                    if (err) {
+                        var newEventId;
+
+                        addEvent(userId, projectData)
+                            .then(newId => {
+                                newEventId = newId;
+                                return setEventId(userId, projectData.id, newEventId);
+                            })
+                            .then(() => resolve(newEventId));
+                    } else {
+                        resolve(response.id);
+                    }
+                });
             });
         });
-
-        return d.promise;
     }
 
     function deleteEvent(userId, eventId) {
-        var d = Promise.defer();
+        return new Promise((resolve) => {
 
-        if (!eventId.trim().length) {
-            return d.resolve(false);
-        }
-
-        getSelectedCalendarId(userId).then(calendarId => {
-            if (!calendarId.length) {
-                return d.resolve(false);
+            if (!eventId.trim().length) {
+                return resolve(false);
             }
 
-            var params = {
-                calendarId: calendarId,
-                eventId   : eventId
-            };
-
-            calendar.events.delete(params, (err, response) => {
-                if (err) {
-                    // don't reject this, but fail it silently, and log it
-                    var log = {
-                        idUser: userId,
-                        source: 'googleCalendar.deleteEvent',
-                        error : err
-                    };
-                    server.app.emit('logError', log);
-                    return d.resolve(false);
-                } else {
-                    d.resolve(response);
+            getSelectedCalendarId(userId).then(calendarId => {
+                if (!calendarId.length) {
+                    return resolve(false);
                 }
+
+                var params = {
+                    calendarId: calendarId,
+                    eventId   : eventId
+                };
+
+                calendar.events.delete(params, (err, response) => {
+                    if (err) {
+                        // don't reject this, but fail it silently, and log it
+                        var log = {
+                            idUser: userId,
+                            source: 'googleCalendar.deleteEvent',
+                            error : err
+                        };
+                        server.app.emit('logError', log);
+                        return resolve(false);
+                    } else {
+                        resolve(response);
+                    }
+                });
             });
         });
-
-        return d.promise;
     }
 
     function getProjectsWithEvent(userId) {
@@ -193,93 +185,88 @@ module.exports = (() => {
     }
 
     function changeCalendar(userId, oldCalendar, newCalendar) {
-        var d = Promise.defer();
+        return new Promise((resolve) => {
 
-        if (oldCalendar === newCalendar || !newCalendar.length) {
-            return d.resolve(false);
-        }
+            if (oldCalendar === newCalendar || !newCalendar.length) {
+                return resolve(false);
+            }
 
-        getProjectsWithEvent(userId)
-            .then(data => moveEventsToAnotherCalendar(data, oldCalendar, newCalendar))
-            .then(() => getProjectsWithoutEvent(userId))
-            .then(data => addEventsToCalendar(userId, data, newCalendar))
-            .then(() => d.resolve(true));
-
-        return d.promise;
+            getProjectsWithEvent(userId)
+                .then(data => moveEventsToAnotherCalendar(data, oldCalendar, newCalendar))
+                .then(() => getProjectsWithoutEvent(userId))
+                .then(data => addEventsToCalendar(userId, data, newCalendar))
+                .then(() => resolve(true));
+        });
     }
 
     function addEventsToCalendar(userId, eventsArray, newCalendar) {
-        var d = Promise.defer(),
-            requests = [];
+        return new Promise((resolve) => {
+            const requests = [];
 
-        eventsArray.forEach(project => {
-            requests.push(
-                addEvent(userId, project, newCalendar)
-                    .then(eventId => setEventId(userId, project.id, eventId))
-            );
+            eventsArray.forEach(project => {
+                requests.push(
+                    addEvent(userId, project, newCalendar)
+                        .then(eventId => setEventId(userId, project.id, eventId))
+                );
+            });
+
+            Promise
+                .all( requests )
+                .then(result => resolve(result));
         });
-
-        Promise
-            .all( requests )
-            .then(result => d.resolve(result));
-
-        return d.promise;
     }
 
     function moveEventsToAnotherCalendar(eventsArray, oldCalendar, newCalendar) {
-        var d = Promise.defer(),
-            requests = [];
+        return new Promise((resolve) => {
+            const requests = [];
 
-        eventsArray.forEach(project => {
-            requests.push(
-                moveEvent(project.googleEventId, oldCalendar, newCalendar)
-            );
+            eventsArray.forEach(project => {
+                requests.push(
+                    moveEvent(project.googleEventId, oldCalendar, newCalendar)
+                );
+            });
+
+            Promise
+                .all( requests )
+                .then(() => resolve(true));
         });
-
-        Promise
-            .all( requests )
-            .then(() => d.resolve(true));
-
-        return d.promise;
     }
 
     function moveEvent(id, oldCalendar, newCalendar) {
-        var d = Promise.defer(),
-            params = {
+        return new Promise((resolve) => {
+            const params = {
                 calendarId : oldCalendar,
                 destination: newCalendar,
                 eventId    : id
             };
 
-        calendar.events.move(params, (err, response) => {
-            if (err) {
-                d.resolve( false );
-            } else {
-                d.resolve( response );
-            }
+            calendar.events.move(params, (err, response) => {
+                if (err) {
+                    resolve( false );
+                } else {
+                    resolve( response );
+                }
+            });
         });
-
-        return d.promise;
     }
 
     function setEventId(idUser, idProject, idEvent) {
-        var d = Promise.defer();
-
-        if ( idEvent || idEvent === '' ) {
-            knex('projects')
-                .where({
-                    'id'       : idProject,
-                    'idUser'   : idUser,
-                    'isDeleted': '0'
-                })
-                .update({
-                    googleEventId: idEvent
-                })
-                .then(result => d.resolve(result));
-        } else {
-            d.resolve(false);
-        }
-        return d.promise;
+        return new Promise((resolve) => {
+            if ( idEvent || idEvent === '' ) {
+                knex('projects')
+                    .where({
+                        'id'       : idProject,
+                        'idUser'   : idUser,
+                        'isDeleted': '0'
+                    })
+                    .update({
+                        googleEventId: idEvent
+                    })
+                    .then(result => resolve(result));
+            } else {
+                resolve(false);
+            }
+        });
     }
 
     function clearEvents(userId) {
@@ -309,22 +296,21 @@ module.exports = (() => {
     }
 
     function removeEvent(eventId, calendarId) {
-        var d = Promise.defer();
+        return new Promise((resolve) => {
+            
+            const params = {
+                calendarId: calendarId,
+                eventId   : eventId
+            };
 
-        var params = {
-            calendarId: calendarId,
-            eventId   : eventId
-        };
-
-        calendar.events.delete(params, (err, response) => {
-            if (err) {
-                d.resolve( false );
-            } else {
-                d.resolve( response );
-            }
+            calendar.events.delete(params, (err, response) => {
+                if (err) {
+                    resolve( false );
+                } else {
+                    resolve( response );
+                }
+            });
         });
-
-        return d.promise;
     }
 
     function getTodayDate() {

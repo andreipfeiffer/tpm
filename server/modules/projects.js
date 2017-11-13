@@ -98,8 +98,6 @@ module.exports = (() => {
     }
 
     function getProjectData(idUser, data) {
-        var d = Promise.defer();
-
         var projectData = {
             idClient      : 0,
             name          : data.name,
@@ -118,40 +116,39 @@ module.exports = (() => {
             projectData.dateAdded = data.dateAdded;
         }
 
-        getClientId(idUser, data).then( idClient => {
-            projectData.idClient = idClient;
-            d.resolve( projectData );
+        return new Promise((resolve) => {
+            getClientId(idUser, data).then( idClient => {
+                projectData.idClient = idClient;
+                resolve( projectData );
+            });
         });
-
-        return d.promise;
     }
 
     function getClientId(idUser, data) {
-        var d = Promise.defer();
+        return new Promise((resolve) => {
+            
+            clients.getByName(data.clientName, idUser).then( client => {
 
-        clients.getByName(data.clientName, idUser).then( client => {
-
-            if ( client.length ) {
-                // client is found, so we set its id
-                d.resolve( client[0].id );
-            } else {
-
-                if ( data.clientName && data.clientName.trim().length ) {
-                    // client is not found, but the clientName was filled
-                    // we add the new client, and set the new client id
-                    clients.addNew(idUser, data.clientName).then( client => {
-                        d.resolve( client[0] );
-                    });
+                if ( client.length ) {
+                    // client is found, so we set its id
+                    resolve( client[0].id );
                 } else {
-                    // client is not found, and clientName was not filled
-                    // we set "no client"
-                    d.resolve( 0 );
+
+                    if ( data.clientName && data.clientName.trim().length ) {
+                        // client is not found, but the clientName was filled
+                        // we add the new client, and set the new client id
+                        clients.addNew(idUser, data.clientName).then( client => {
+                            resolve( client[0] );
+                        });
+                    } else {
+                        // client is not found, and clientName was not filled
+                        // we set "no client"
+                        resolve( 0 );
+                    }
+
                 }
-
-            }
+            });
         });
-
-        return d.promise;
     }
 
     function editProject(id, idUser, data) {
@@ -357,29 +354,28 @@ module.exports = (() => {
         },
 
         removeEvents(userId) {
-            var d = Promise.defer(),
-                calendarId;
+            return new Promise((resolve, reject) => {
+                let calendarId;
 
-            googleCalendar
-                .getSelectedCalendarId(userId)
-                // @todo refactor extract method
-                .then(id => {
-                    var d = Promise.defer();
-                    calendarId = id;
+                googleCalendar
+                    .getSelectedCalendarId(userId)
+                    // @todo refactor extract method
+                    .then(id => {
+                        return new Promise((resolve) => {
+                            calendarId = id;
 
-                    if (!calendarId.length) {
-                        d.resolve(false);
-                    } else {
-                        getActiveProjects(userId).then( projects => d.resolve(projects) );
-                    }
-                    return d.promise;
-                })
-                .then(projects => googleCalendar.removeEvents(projects, calendarId))
-                .then(() => googleCalendar.clearEvents(userId))
-                .then(result => d.resolve(result))
-                .catch(err => d.reject(err));
-
-            return d.promise;
+                            if (!calendarId.length) {
+                                resolve(false);
+                            } else {
+                                getActiveProjects(userId).then( projects => resolve(projects) );
+                            }
+                        });
+                    })
+                    .then(projects => googleCalendar.removeEvents(projects, calendarId))
+                    .then(() => googleCalendar.clearEvents(userId))
+                    .then(result => resolve(result))
+                    .catch(err => reject(err));
+                });
         }
     };
 
