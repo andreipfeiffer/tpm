@@ -8,7 +8,7 @@ module.exports = (() => {
         googleClient      = require('./googleClient'),
         status            = require('./status'),
         clients           = require('./clients'),
-        statusArr         = ['on hold', 'in progress', 'finished', 'paid', 'cancelled'],
+        statusArr         = ['on hold', 'started', 'almost done', 'finished', 'paid', 'cancelled'],
         statusArrActive   = [statusArr[0], statusArr[1]],
         statusArrInactive = [statusArr[2], statusArr[3], statusArr[4]];
 

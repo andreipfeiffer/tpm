@@ -122,7 +122,14 @@ export default angular.module('TPM.ProjectsControllers', [])
                 return 'remainingDays';
             };
 
+            $scope.isProjectAlmostDone = (project) => {
+                return project.status === 'almost done';
+            };
+
             $scope.isProjectOverdue = (project) => {
+                if ($scope.isProjectAlmostDone(project)) {
+                    return false;
+                }
                 return (
                     $scope.filterActiveStatusOptions.indexOf(project.status) > -1 &&
                     project.remainingDays < 0
@@ -133,6 +140,9 @@ export default angular.module('TPM.ProjectsControllers', [])
             };
 
             $scope.isProjectLate = (project) => {
+                if ($scope.isProjectAlmostDone(project)) {
+                    return false;
+                }
                 return (
                     $scope.filterActiveStatusOptions.indexOf(project.status) > -1 &&
                     project.remainingDays <= project.days && project.remainingDays >= 0

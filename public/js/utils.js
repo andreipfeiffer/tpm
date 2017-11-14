@@ -13,21 +13,22 @@ export default {
         return (/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/).test(str.trim());
     },
 
-    statusList  : Object.freeze( ['on hold','in progress','finished','paid','cancelled'] ),
+    statusList  : Object.freeze( ['on hold','started','almost done','finished','paid','cancelled'] ),
     currencyList: Object.freeze( ['RON', 'EUR'] ),
 
     getActiveStatusList() {
         return [
             this.statusList[0],
-            this.statusList[1]
+            this.statusList[1],
+            this.statusList[2]
         ];
     },
 
     getInactiveStatusList() {
         return [
-            this.statusList[2],
             this.statusList[3],
-            this.statusList[4]
+            this.statusList[4],
+            this.statusList[5]
         ];
     },
 

@@ -58,7 +58,7 @@ schema.structure.projects = ''
     +     '`idUser` smallint(5) unsigned NOT NULL,'
     +     '`idClient` smallint(5) unsigned NOT NULL DEFAULT "0",'
     +     '`name` text NOT NULL,'
-    +     '`status` enum("on hold","in progress","finished","paid","cancelled") NOT NULL DEFAULT "on hold",'
+    +     '`status` enum("on hold","started","almost done","finished","paid","cancelled") NOT NULL DEFAULT "on hold",'
     +     '`days` tinyint(3) unsigned NOT NULL DEFAULT "0",'
     +     '`priceEstimated` smallint(5) unsigned NOT NULL DEFAULT "0",'
     +     '`priceFinal` smallint(5) unsigned NOT NULL DEFAULT "0",'
@@ -96,7 +96,7 @@ schema.populate['projects_status_log'] = ''
     + 'INSERT INTO `' + config.mysql.database + '`.`projects_status_log` (`idUser`, `idProject`, `status`, `date`) VALUES'
     + '  (1, 1, \'on hold\', \'2014-07-23 16:58:56\')'
 
-    + ', (1, 2, \'in progress\', \'2014-08-23 17:58:56\')'
+    + ', (1, 2, \'started\', \'2014-08-23 17:58:56\')'
     + ', (1, 2, \'finished\',    \'2014-12-23 17:58:56\')'
     // because this is set to the first day of month
     // reports should set it to the previous month

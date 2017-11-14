@@ -16,7 +16,7 @@ export default {
             'idUser'       : 1,
             'idClient'     : 0,
             'name'         : 'Album foto',
-            'status'       : 'in progress',
+            'status'       : 'started',
             'price'        : 20,
             'dateAdded'    : '2014-07-22T21:00:00.000Z',
             'dateEstimated': '2014-09-11T21:00:00.000Z'
@@ -26,7 +26,7 @@ export default {
             'idUser'       : 1,
             'idClient'     : 2,
             'name'         : 'Bratari duble',
-            'status'       : 'in progress',
+            'status'       : 'started',
             'price'        : 100,
             'dateAdded'    : '2014-07-22T21:00:00.000Z',
             'dateEstimated': '2014-09-11T21:00:00.000Z'

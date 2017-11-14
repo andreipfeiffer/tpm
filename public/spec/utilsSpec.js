@@ -42,9 +42,11 @@ describe('utils', () => {
 
         it('should be an array with all the project statuses', () => {
             expect( utils.statusList[0] ).toEqual('on hold');
-            expect( utils.statusList[1] ).toEqual('in progress');
-            expect( utils.statusList[2] ).toEqual('finished');
-            expect( utils.statusList[3] ).toEqual('paid');
+            expect( utils.statusList[1] ).toEqual('started');
+            expect( utils.statusList[2] ).toEqual('almost done');
+            expect( utils.statusList[3] ).toEqual('finished');
+            expect( utils.statusList[4] ).toEqual('paid');
+            expect( utils.statusList[5] ).toEqual('cancelled');
         });
 
     });
@@ -53,9 +55,10 @@ describe('utils', () => {
 
         it('should return an array with the active statuses only', () => {
             var arr = utils.getActiveStatusList();
-            expect( arr.length ).toBe(2);
+            expect( arr.length ).toBe(3);
             expect( arr[0] ).toEqual('on hold');
-            expect( arr[1] ).toEqual('in progress');
+            expect( arr[1] ).toEqual('started');
+            expect( arr[2] ).toEqual('almost done');
         });
 
     });

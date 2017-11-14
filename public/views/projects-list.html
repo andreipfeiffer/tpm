@@ -21,7 +21,7 @@
                     <button type="button" class="btn btn-default btn-sm"
                         ng-class="{active: filterStatus == ''}"
                         ng-click="setFilterStatus('')">
-                        Active projects
+                        Active
                         <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: '' | filterByClientId: filterClient).length"></span>
                     </button>
                     <button type="button" class="btn btn-default btn-sm text-capitalize"
@@ -65,16 +65,21 @@
                     <td
                         class="cell-border"
                         ng-class="{
+                            'cell-border--almost' : isProjectAlmostDone( project ),
                             'cell-border--danger' : isProjectOverdue( project ),
                             'cell-border--warning': isProjectLate( project )
-                    }">
+                        }
+                    ">
                         <b>{{project.name}}</b><br>
                         {{project.clientName}}
 
-                        <b class="cell-border__text" ng-if="isProjectOverdue( project )">
+                        <b class="cell-border__text" ng-if="isProjectAlmostDone( project )">
+                            Almost done
+                        </b>
+                        <b class="cell-border__text" ng-if="!isProjectAlmostDone( project ) && isProjectOverdue( project )">
                             {{ project.status == 'finished' ? project.passedText : 'Overdue' }}
                         </b>
-                        <b class="cell-border__text" ng-if="isProjectLate( project )">
+                        <b class="cell-border__text" ng-if="!isProjectAlmostDone( project ) && isProjectLate( project )">
                             {{ project.status == 'finished' ? project.passedText : 'Late' }}
                         </b>
                     </td>

@@ -23,16 +23,16 @@ describe('TPM.Filters', () => {
         it('should return a filtered by status array', () => {
             var arr = [
                 { status: 'on hold' },
-                { status: 'in progress' },
+                { status: 'started' },
                 { status: 'on hold' },
                 { status: 'finished' },
                 { status: 'paid' },
-                { status: 'in progress' },
+                { status: 'started' },
                 { status: 'on hold' }
             ];
 
             expect( filter(arr, 'on hold').length ).toBe(3);
-            expect( filter(arr, 'in progress').length ).toBe(2);
+            expect( filter(arr, 'started').length ).toBe(2);
             expect( filter(arr, '').length ).toBe(5);
         });
 

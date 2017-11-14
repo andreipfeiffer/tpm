@@ -83,7 +83,11 @@
 	.table.table-tpm .cell-border--danger {
 		border-left-color: #EC5454;
 	}
+	.table.table-tpm .cell-border--almost {
+		border-left-color: rgb(33, 199, 27);
+	}
 
+	.table.table-tpm tr:hover .cell-border--almost,
 	.table.table-tpm tr:hover .cell-border--warning,
 	.table.table-tpm tr:hover .cell-border--danger {
 		border-left-width: 75px;

@@ -233,7 +233,7 @@
 
             it('should update the calendar event, if the event exists, and status is active', done => {
                 var project    = getProjectChanged();
-                project.status = 'in progress';
+                project.status = 'started';
 
                 this.stubEvent.returns( true );
                 var spy = sinon.spy( googleCalendar, 'updateEvent' );
@@ -271,7 +271,7 @@
 
             it('should add the calendar event, if the event does not exists, and status is active', done => {
                 var project    = getProjectChanged();
-                project.status = 'in progress';
+                project.status = 'started';
 
                 this.stubEvent.returns( false );
                 var spy = sinon.spy( googleCalendar, 'setEventId' );
