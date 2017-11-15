@@ -2,7 +2,7 @@ module.exports = function() {
 
     this.World = function World() {
 
-        var EC = protractor.ExpectedConditions;
+        let EC = protractor.ExpectedConditions;
 
         this.setCredentials = function(username, password) {
             element(by.model('credentials.username')).sendKeys( username );
