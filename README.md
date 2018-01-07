@@ -36,3 +36,10 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 * Login with Google
 * Timeline projects display variant
 * Offline availability
+
+## Get started
+
+1. start MySQL server
+2. `node server`
+3. `grunt watch`
+
