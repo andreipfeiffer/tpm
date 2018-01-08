@@ -1,9 +1,8 @@
 import angular from 'angular';
-// import utils from 'public/js/utils';
+import utils from 'public/js/utils';
 
 export default angular.module('TPM.Filters', [])
 
-    /*
     .filter('filterByProjectStatus', () => {
         return (arr, status) => {
 
@@ -27,7 +26,6 @@ export default angular.module('TPM.Filters', [])
             });
         };
     })
-    */
 
     .filter('filterByClientId', () => {
         return (arr, id) => {

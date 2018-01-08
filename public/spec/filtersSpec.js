@@ -7,7 +7,6 @@ describe('TPM.Filters', () => {
 
     beforeEach(angular.mock.module('TPM.Filters'));
 
-    /*
     describe('filterByProjectStatus', () => {
         var filter;
 
@@ -25,20 +24,19 @@ describe('TPM.Filters', () => {
             var arr = [
                 { status: 'on hold' },
                 { status: 'started' },
-                { status: 'on hold' },
+                { status: 'almost done' },
                 { status: 'finished' },
                 { status: 'paid' },
                 { status: 'started' },
                 { status: 'on hold' }
             ];
 
-            expect( filter(arr, 'on hold').length ).toBe(3);
+            expect( filter(arr, 'on hold').length ).toBe(2);
             expect( filter(arr, 'started').length ).toBe(2);
             expect( filter(arr, '').length ).toBe(5);
         });
 
     });
-    */
 
     describe('filterByClientId', () => {
         var filter;
