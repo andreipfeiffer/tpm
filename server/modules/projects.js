@@ -282,7 +282,7 @@ module.exports = (() => {
                     return getProjectById(id, userLogged.id);
                 })
                 .then(oldData => {
-                    oldStatus = oldData.status;
+                    oldStatus = oldData[0].status;
                     return setGoogleEvent(userLogged.id, oldData[0], editData);
                 })
                 .then(() => {
