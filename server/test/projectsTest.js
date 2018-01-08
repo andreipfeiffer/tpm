@@ -185,13 +185,13 @@
                 });
         });
 
-        it('should get all projects', done => {
+        it('should get all non-archived projects', done => {
             request
                 .get('/projects')
                 .set('authorization', utils.getAuthData().authToken)
                 .end((err, res) => {
                     expect( res.body ).to.be.an('array');
-                    expect( res.body ).to.have.length(3);
+                    expect( res.body ).to.have.length(2);
                     expect( res.status ).to.equal(200);
                     done();
                 });

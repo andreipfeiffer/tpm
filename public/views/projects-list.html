@@ -34,6 +34,12 @@
                         {{status}}
                         <span class="badge hidden-xs" ng-bind="(projectsList | filterByProjectStatus: status | filterByClientId: filterClient).length"></span>
                     </button>
+                    <button type="button" class="btn btn-default btn-sm"
+                        ng-class="{active: filterStatus == 'paid'}"
+                        ng-click="setFilterStatus('paid')">
+                        Paid
+                        <span class="badge hidden-xs">{{archivedNr}}</span>
+                    </button>
                     <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
                         ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
                 </div>
@@ -57,10 +63,9 @@
             <tbody>
                 <tr
                     ng-repeat="
-                        project in projectsList |
-                            orderBy              : orderCriteria() |
-                            filterByProjectStatus:filterStatus |
-                            filterByClientId     :filterClient
+                        project in displayedProjectList |
+                            orderBy         : orderCriteria() |
+                            filterByClientId: filterClient
                 ">
                     <td
                         class="cell-border"

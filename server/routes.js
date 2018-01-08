@@ -36,6 +36,11 @@ module.exports = (() => {
         .get(auth.ensureTokenAuthenticated, projects.getAll)
         .post(auth.ensureTokenAuthenticated, projects.add);
 
+    app.route('/projects/archived')
+        .get(auth.ensureTokenAuthenticated, projects.getArchived);
+    app.route('/projects/archived-number')
+        .get(auth.ensureTokenAuthenticated, projects.getArchivedNumber);
+
     app.route('/projects/:id')
         .get(auth.ensureTokenAuthenticated, projects.getById)
         .put(auth.ensureTokenAuthenticated, projects.update)

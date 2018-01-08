@@ -23,8 +23,9 @@ module.exports = (() => {
             });
     }
 
-    function getAllProjects(idUser) {
+    function getAllProjects(idUser, archived = false) {
 
+        var sign = archived ? '=' : '!=';
         var q = '';
 
         q += 'SELECT';
@@ -39,6 +40,7 @@ module.exports = (() => {
 
         q += ' WHERE projects.idUser = ' + idUser;
         q += ' AND projects.isDeleted = 0';
+        q += ' AND projects.status '+sign+' "paid"';
         q += ' GROUP BY status_log.idProject';
 
         return knex.raw( q );
@@ -194,21 +196,39 @@ module.exports = (() => {
             });
     }
 
+    function errorHandler(e, res, userId, method) {
+        var log = {
+            idUser: userId,
+            source: method,
+            error : e
+        };
+        server.app.emit('logError', log);
+        return res.status(503).send({ error: 'Database error: ' + e.code});
+    }
+
     return {
         getAll(req, res) {
             var userLogged = req.user;
 
-            getAllProjects(userLogged.id)
+            getAllProjects(userLogged.id, false)
                 .then(data => res.send( data[0] ))
-                .catch(e => {
-                    var log = {
-                        idUser: userLogged.id,
-                        source: 'projects.getAll',
-                        error : e
-                    };
-                    server.app.emit('logError', log);
-                    return res.status(503).send({ error: 'Database error: ' + e.code});
-                });
+                .catch(e => errorHandler(e, res, userLogged.id, 'projects.getAll'));
+        },
+
+        getArchived(req, res) {
+            var userLogged = req.user;
+
+            getAllProjects(userLogged.id, true)
+                .then(data => res.send( data[0] ))
+                .catch(e => errorHandler(e, res, userLogged.id, 'projects.getArchived'));
+        },
+
+        getArchivedNumber(req, res) {
+            var userLogged = req.user;
+
+            getAllProjects(userLogged.id, true)
+                .then(data => res.send( { nr: data[0].length } ))
+                .catch(e => errorHandler(e, res, userLogged.id, 'projects.getArchivedNumber'));
         },
 
         getByClientId(req, res) {

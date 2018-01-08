@@ -7,6 +7,7 @@ describe('TPM.Filters', () => {
 
     beforeEach(angular.mock.module('TPM.Filters'));
 
+    /*
     describe('filterByProjectStatus', () => {
         var filter;
 
@@ -37,6 +38,7 @@ describe('TPM.Filters', () => {
         });
 
     });
+    */
 
     describe('filterByClientId', () => {
         var filter;

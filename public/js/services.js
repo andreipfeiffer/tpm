@@ -7,7 +7,7 @@ import Projects from 'public/js/components/Projects';
 
 export default angular.module('TPM.Services', ['ngResource'])
 
-    .factory('ProjectsClientService', ['$http', '$resource', ($http, $resource) => {
+    .factory('ProjectsClientService', ['$resource', ($resource) => {
         return $resource(
             config.getApiUrl() + 'projects/client/:id',
             {

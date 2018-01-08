@@ -16,6 +16,7 @@ describe('Projects Controllers', () => {
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET(config.getApiUrl() + 'projects').respond( stubs.projectsList );
             $httpBackend.expectGET(config.getApiUrl() + 'clients').respond( stubs.clientsList );
+            $httpBackend.expectGET(config.getApiUrl() + 'projects/archived-number').respond({ nr: 2 });
 
             scope = $rootScope.$new();
             ctrl = $controller('ProjectsListController', {$scope: scope});

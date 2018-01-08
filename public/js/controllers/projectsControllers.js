@@ -25,9 +25,12 @@ export default angular.module('TPM.ProjectsControllers', [])
         'feedback',
         ($scope, $q, $routeParams, tpmCache, Projects, Clients, SettingsUser, screenSize, feedback) => {
 
+            $scope.displayedProjectList        = [];
             $scope.projectsList                = [];
+            $scope.archivedList                = [];
+            $scope.archivedNr                  = '-';
             $scope.filterStatus                = tpmCache.get('filterStatus') || '';
-            $scope.filterStatusOptions         = utils.statusList;
+            $scope.filterStatusOptions         = utils.statusList.filter(s => s !== 'paid');
             $scope.filterActiveStatusOptions   = utils.getActiveStatusList();
             $scope.filterInactiveStatusOptions = utils.getInactiveStatusList();
             $scope.filterClient                = $routeParams.id || '';
@@ -41,13 +44,16 @@ export default angular.module('TPM.ProjectsControllers', [])
 
             $q.all([
                 Projects.http().query().$promise,
-                Clients.query().$promise
+                Clients.query().$promise,
+                Projects.getProjectsArchivedNumber()
             ]).then((data) => {
 
                 $scope.clientsList = data[1];
                 $scope.projectsList = initProjectsList( data[0] );
+                $scope.archivedNr = data[2].data.nr;
                 $scope.isLoading = false;
                 feedback.isLoading() && feedback.dismiss();
+                setDisplayedProjectsList('');
 
             });
 
@@ -65,6 +71,10 @@ export default angular.module('TPM.ProjectsControllers', [])
 
             function initProjectsList(arr) {
                 angular.forEach( arr, (project) => {
+
+                    if (project.status === 'paid') {
+                        return;
+                    }
 
                     // set remaining time, for active projects
                     if ( project.dateEstimated ) {
@@ -103,6 +113,36 @@ export default angular.module('TPM.ProjectsControllers', [])
                 return arr;
             }
 
+            function getArchived() {
+                return Projects.getProjectsArchived().then((archivedProjects) => {
+                    $scope.archivedList = archivedProjects.data;
+                });
+            }
+
+            function setDisplayedProjectsList(filter) {
+                if (filter === 'paid') {
+                    $scope.displayedProjectList = [];
+                    $scope.isLoading = true;
+                    feedback.load();
+                    return getArchived().then(() => {
+                        $scope.displayedProjectList = $scope.archivedList;
+                        $scope.isLoading = false;
+                        feedback.dismiss();
+                    });
+                }
+
+                $scope.displayedProjectList = $scope.projectsList.filter(p => {
+                    if (filter.length) {
+                        // if we pass a specific filter
+                        return (p.status === filter);
+                    } else {
+                        // if we don't pass specific filter
+                        // return only the active statuses
+                        return (utils.getActiveStatusList().indexOf(p.status) > -1);
+                    }
+                });
+            }
+
             $scope.deleteProject = (id) => {
                 Projects.http().delete({ id: id });
                 $scope.projectsList.splice(getProjectIndex(id), 1);
@@ -112,6 +152,7 @@ export default angular.module('TPM.ProjectsControllers', [])
             $scope.setFilterStatus = (filter) => {
                 $scope.filterStatus = filter;
                 tpmCache.put('filterStatus', filter);
+                setDisplayedProjectsList(filter);
             };
 
             $scope.orderCriteria = () => {

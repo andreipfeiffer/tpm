@@ -2,7 +2,8 @@ import config from 'public/js/appConfig';
 
 class Projects {
 
-    constructor($resource, $filter) {
+    constructor($http, $resource, $filter) {
+        this.$http = $http;
         this.$resource = $resource;
         this.$filter   = $filter;
     }
@@ -41,7 +42,15 @@ class Projects {
     getFormattedDate(date) {
         return this.$filter('date')(date, config.dateFormat);
     }
+
+    getProjectsArchivedNumber() {
+        return this.$http.get(config.getApiUrl() + 'projects/archived-number');
+    }
+
+    getProjectsArchived() {
+        return this.$http.get(config.getApiUrl() + 'projects/archived');
+    }
 }
-Projects.$inject = ['$resource', '$filter'];
+Projects.$inject = ['$http', '$resource', '$filter'];
 
 export default Projects;
