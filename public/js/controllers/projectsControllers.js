@@ -53,7 +53,7 @@ export default angular.module('TPM.ProjectsControllers', [])
                 $scope.archivedNr = data[2].data.nr;
                 $scope.isLoading = false;
                 feedback.isLoading() && feedback.dismiss();
-                setDisplayedProjectsList('');
+                setDisplayedProjectsList($scope.filterStatus);
 
             });
 
