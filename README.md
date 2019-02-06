@@ -43,3 +43,10 @@ Personal app that uses the MEAN stack concept, except that "M" is from MySQL, no
 2. `node server`
 3. `grunt watch`
 
+## Deploy
+
+1. login to server
+2. `git fetch`
+3. `rm -rf bower_components`
+4. `grunt deploy:<tag>`
+
