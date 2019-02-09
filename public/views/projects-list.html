@@ -232,7 +232,7 @@
       class="alert alert-warning text-center"
       ng-show="
         !isLoading &&
-        !(projectsList | filterByProjectStatus: filterStatus | filterByClientId: filterClient).length
+        !(displayedProjectList | filterByProjectStatus: filterStatus | filterByClientId: filterClient).length
       "
     >
       The are no
