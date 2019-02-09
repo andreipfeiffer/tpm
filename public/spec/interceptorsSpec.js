@@ -26,7 +26,7 @@ describe("Interceptors", () => {
       scope = $rootScope.$new();
       controller = $controller;
 
-      location.path("/clients");
+      location.path("/projects");
       AuthToken.set(TOKEN);
     }));
 
@@ -36,8 +36,8 @@ describe("Interceptors", () => {
 
     it('should redirect logged users if they get a request with the status "401"', () => {
       // load a random controller to trigger a request
-      $httpBackend.expectGET(config.getApiUrl() + "clients").respond(401);
-      controller("ClientsListController", { $scope: scope });
+      $httpBackend.expectGET(config.getApiUrl() + "projects").respond(401);
+      controller("ProjectsViewController", { $scope: scope });
       $httpBackend.flush();
 
       expect(location.path()).toEqual("/login");
@@ -46,8 +46,8 @@ describe("Interceptors", () => {
 
     it('should display feedback message for status "5xx"', () => {
       // load a random controller to trigger a request
-      $httpBackend.expectGET(config.getApiUrl() + "clients").respond(500);
-      controller("ClientsListController", { $scope: scope });
+      $httpBackend.expectGET(config.getApiUrl() + "projects").respond(500);
+      controller("ProjectsViewController", { $scope: scope });
       $httpBackend.flush();
 
       expect(feedback.isActive()).toBe(true);
@@ -56,8 +56,8 @@ describe("Interceptors", () => {
 
     it('should display feedback message for status "0"', () => {
       // load a random controller to trigger a request
-      $httpBackend.expectGET(config.getApiUrl() + "clients").respond(0);
-      controller("ClientsListController", { $scope: scope });
+      $httpBackend.expectGET(config.getApiUrl() + "projects").respond(0);
+      controller("ProjectsViewController", { $scope: scope });
       $httpBackend.flush();
 
       expect(feedback.isActive()).toBe(true);

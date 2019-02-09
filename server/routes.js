@@ -66,6 +66,17 @@ module.exports = (() => {
     });
 
   app
+    .route("/clients/search/:keyword")
+    .get(auth.ensureTokenAuthenticated, (req, res) => {
+      var loggedUserId = req.user.id;
+      var searchName = req.params.keyword;
+
+      clients
+        .searchByName(loggedUserId, searchName)
+        .then(result => getResponse(res, result));
+    });
+
+  app
     .route("/clients/:id")
     .get(auth.ensureTokenAuthenticated, (req, res) => {
       var id = parseInt(req.params.id);

@@ -54,3 +54,9 @@ h1,
 .is-auth .fdb {
   top: 45px;
 }
+
+.clients-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

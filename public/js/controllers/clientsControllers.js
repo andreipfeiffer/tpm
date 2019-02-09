@@ -6,11 +6,12 @@ export default angular
   .controller("ClientsListController", [
     "$scope",
     "$uibModal",
-    "ClientsService",
+    "Clients",
     "ProjectsClientService",
     "ProjectsModal",
     "screenSize",
     "feedback",
+    "tpmCache",
     (
       $scope,
       $modal,
@@ -18,26 +19,36 @@ export default angular
       ProjectsClient,
       ProjectsModal,
       screenSize,
-      feedback
+      feedback,
+      tpmCache
     ) => {
-      $scope.clientsList = [];
+      $scope.clientsList = tpmCache.get("clientListSearchResult") || [];
+      $scope.projectsList = tpmCache.get("clientListProjects") || [];
       $scope.isFormNewDisplayed = false;
       $scope.isFormNewLoading = false;
-      $scope.searchClient = "";
-      $scope.isLoading = true;
+      $scope.searchClient =
+        ($scope.clientsList[0] && $scope.clientsList[0].name) || "";
+      $scope.searchClientOptions = {
+        debounce: { default: 300 }
+      };
+      $scope.isLoading = false;
       $scope.isEnabledToggleActions = screenSize.is("xs");
       $scope.showActions = false;
       $scope.newClient = {
         name: ""
       };
 
+      /*
       feedback.load();
 
-      Clients.query().$promise.then(data => {
-        $scope.clientsList = data;
-        $scope.isLoading = false;
-        feedback.dismiss();
-      });
+      Clients.http()
+        .query()
+        .$promise.then(data => {
+          $scope.clientsList = data;
+          $scope.isLoading = false;
+          feedback.dismiss();
+        });
+      */
 
       $scope.toggleNewFormDisplay = () => {
         $scope.isFormNewDisplayed = !$scope.isFormNewDisplayed;
@@ -47,14 +58,16 @@ export default angular
       $scope.addNewClient = () => {
         feedback.load();
         $scope.isFormNewLoading = true;
-        Clients.save($scope.newClient).$promise.then(result => {
-          $scope.isFormNewLoading = false;
-          $scope.newClient.name = "";
+        Clients.http()
+          .save($scope.newClient)
+          .$promise.then(result => {
+            $scope.isFormNewLoading = false;
+            $scope.newClient.name = "";
 
-          $scope.clientsList.push(result);
-          $scope.clientsForm.$setPristine(true);
-          feedback.notify("Client was added");
-        });
+            $scope.clientsList.push(result);
+            $scope.clientsForm.$setPristine(true);
+            feedback.notify("Client was added");
+          });
       };
 
       $scope.openEditDialog = id => {
@@ -81,6 +94,23 @@ export default angular
         return modalInstance;
       };
 
+      $scope.searchClients = keyword => {
+        feedback.load();
+        return Clients.search(keyword).then(res => {
+          feedback.dismiss();
+          return res.data;
+        });
+      };
+
+      $scope.getProjects = client => {
+        feedback.load();
+        return ProjectsClient.query({ id: client.id }).$promise.then(data => {
+          feedback.dismiss();
+          setResults(client, data);
+        });
+      };
+
+      /*
       $scope.showProjects = clientId => {
         var clientName = getClientById(clientId).name || "No Client";
 
@@ -89,35 +119,50 @@ export default angular
           ProjectsModal.open("Projects for " + clientName, data);
         });
       };
+      */
 
       $scope.editClient = client => {
         feedback.load();
-        Clients.update({ id: client.id }, client).$promise.then(() => {
-          $scope.clientsList[getClientIndex(client.id)] = client;
-          feedback.notify("Client was updated");
-        });
+        Clients.http()
+          .update({ id: client.id }, client)
+          .$promise.then(() => {
+            $scope.clientsList[getClientIndex(client.id)] = client;
+            feedback.notify("Client was updated");
+          });
       };
 
       $scope.deleteClient = id => {
-        Clients.delete({ id: id });
+        Clients.http().delete({ id: id });
         $scope.clientsList.splice(getClientIndex(id), 1);
         feedback.notify("Client was deleted");
       };
 
-      $scope.hasClients = () => $scope.clientsList.length > 1;
-      $scope.clearSearch = () => ($scope.searchClient = "");
+      $scope.hasClients = () => $scope.clientsList.length > 0;
+      $scope.clearSearch = () => setResults(undefined, []);
 
       function getClientIndex(id) {
         return $scope.clientsList.findIndex(client => client.id === id);
       }
 
+      /*
       function getClientById(id) {
         return $scope.clientsList[getClientIndex(id)];
       }
+      */
 
       function ModalEditClientCtrl($scope, $uibModalInstance, client) {
         $scope.client = Object.assign({}, client);
       }
       ModalEditClientCtrl.$inject = ["$scope", "$uibModalInstance", "client"];
+
+      function setResults(client, projects) {
+        var clientList = client ? [client] : [];
+
+        $scope.searchClient = client ? client.name : "";
+        $scope.clientsList = clientList;
+        $scope.projectsList = projects;
+        tpmCache.put("clientListSearchResult", clientList);
+        tpmCache.put("clientListProjects", projects);
+      }
     }
   ]);

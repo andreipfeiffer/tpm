@@ -14,12 +14,7 @@
         ng-click="toggleNewFormDisplay()"
         ng-show="!isFormNewDisplayed"
       >
-        <span ng-if="hasClients()"
-          ><span class="hidden-xs">Got a </span>New Client?</span
-        >
-        <span ng-if="!hasClients()"
-          ><span class="hidden-xs">Add your </span>First Client</span
-        >
+        <span class="hidden-xs">Got a </span>New Client?
       </button>
 
       <div class="input-group pull-right" ng-show="isFormNewDisplayed">
@@ -56,44 +51,51 @@
   <br />
 
   <section>
+    <header class="clients-header">
+      <div
+        ng-class="{ 'input-group': searchClient.length }"
+        style="max-width: 30em;"
+      >
+        <input
+          type="text"
+          autocomplete="off"
+          ng-model="searchClient"
+          ng-model-options="searchClientOptions"
+          placeholder="Search by name ..."
+          uib-typeahead="client as client.name for client in searchClients($viewValue)"
+          typeahead-min-length="3"
+          typeahead-no-results="noResults"
+          typeahead-on-select="getProjects($item)"
+          class="form-control"
+        />
+
+        <span ng-show="searchClient.length" class="input-group-btn">
+          <button
+            class="btn btn-default"
+            type="button"
+            ng-click="clearSearch()"
+          >
+            <span
+              class="glyphicon glyphicon-ban-circle"
+              aria-hidden="true"
+            ></span>
+          </button>
+        </span>
+      </div>
+
+      <i ng-show="noResults" style="padding-left: 1em;" class="text-muted">
+        No clients found
+      </i>
+    </header>
+
     <table class="table table-hover table-tpm" ng-if="hasClients()">
       <thead>
         <tr>
-          <th colspan="3">
-            <div
-              ng-class="{ 'input-group': searchClient.length }"
-              style="max-width: 22em;"
-            >
-              <input
-                type="text"
-                autocomplete="off"
-                ng-model="searchClient"
-                placeholder="Search ..."
-                uib-typeahead="client.name for client in clientsList | filter: { name: $viewValue } | limitTo:8"
-                class="form-control"
-              />
-
-              <span ng-show="searchClient.length" class="input-group-btn">
-                <button
-                  class="btn btn-default"
-                  type="button"
-                  ng-click="clearSearch()"
-                >
-                  <span
-                    class="glyphicon glyphicon-ban-circle"
-                    aria-hidden="true"
-                  ></span>
-                </button>
-              </span>
-            </div>
-          </th>
+          <th colspan="3"></th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          ng-repeat="client in clientsList | orderBy:'name' | filter: { name: searchClient }"
-          ng-hide="!$index && !client.nrProjects"
-        >
+        <tr ng-repeat="client in clientsList | orderBy:'name'">
           <td
             class="cell-border"
             ng-class="{ 'cell-border--warning': client.id == 0 }"
@@ -111,14 +113,9 @@
             </b>
           </td>
 
-          <td width="120" ng-show="!showActions" class="text-center">
-            <a
-              href=""
-              ng-click="showProjects(client.id)"
-              ng-if="client.nrProjects > 0"
-              >{{ client.nrProjects }} projects</a
-            >
-            <span ng-if="client.nrProjects === 0">0 projects</span>
+          <td width="120" ng-show="!showActions" class="text-center text-muted">
+            {{ client.nrProjects }}
+            {{ client.nrProjects === 1 ? "project" : "projects" }}
           </td>
 
           <td
@@ -172,20 +169,41 @@
       </tbody>
     </table>
 
-    <p
-      class="alert alert-warning text-center"
-      ng-show="!isLoading && !(clientsList | filter: { name: searchClient }).length"
+    <table
+      class="table table-tpm table-no-header"
+      ng-if="projectsList.length > 0"
     >
-      The are no Clients to display
-    </p>
+      <tbody>
+        <tr ng-repeat="project in projectsList">
+          <td>{{ $index + 1 }}.</td>
+          <td width="100%">
+            <a href="#projects/{{ project.id }}/edit">
+              <b>{{ project.name }}</b>
+            </a>
+          </td>
+
+          <td class="text-right" ng-if="!detailedPrice">
+            <b>{{
+              project.priceFinal ? project.priceFinal : project.priceEstimated
+            }}</b>
+            {{ currency }}
+          </td>
+          <td class="text-right b-one-line" ng-if="detailedPrice">
+            {{ project.priceFinal }} - {{ project.priceEstimated }} =
+            <b class="text-danger">{{
+              project.priceFinal - project.priceEstimated
+            }}</b>
+            {{ currency }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
-  <p
-    class="alert alert-warning text-center"
-    ng-if="!isLoading && !hasClients()"
-  >
-    You have no Clients added. <br /><br /><strong
-      >Add your first client to get started.</strong
-    >
-  </p>
+  <div ng-if="!isLoading && !hasClients()">
+    <br /><br />
+    <p class="alert alert-info text-center">
+      Use the search box to find clients
+    </p>
+  </div>
 </section>

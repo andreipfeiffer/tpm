@@ -20,7 +20,7 @@ export default angular
     "$routeParams",
     "tpmCache",
     "Projects",
-    "ClientsService",
+    "Clients",
     "SettingsUser",
     "screenSize",
     "feedback",
@@ -64,7 +64,7 @@ export default angular
 
       $q.all([
         Projects.http().query().$promise,
-        Clients.query().$promise,
+        Clients.http().query().$promise,
         Projects.getProjectsArchivedCounts()
       ]).then(data => {
         $scope.clientsList = data[1];
@@ -259,7 +259,7 @@ export default angular
     "$routeParams",
     "$location",
     "Projects",
-    "ClientsService",
+    "Clients",
     "SettingsUser",
     "feedback",
     (
@@ -295,7 +295,7 @@ export default angular
         description: ""
       };
 
-      $scope.clientsList = Clients.query();
+      $scope.clientsList = Clients.http().query();
 
       $scope.submitForm = () => {
         feedback.load();
@@ -334,7 +334,7 @@ export default angular
     "$routeParams",
     "$location",
     "Projects",
-    "ClientsService",
+    "Clients",
     "SettingsUser",
     "feedback",
     (
@@ -359,7 +359,7 @@ export default angular
 
       $q.all([
         Projects.http().get({ id: $routeParams.id }).$promise,
-        Clients.query().$promise
+        Clients.http().query().$promise
       ]).then(data => {
         $scope.project = data[0];
         $scope.clientsList = data[1];

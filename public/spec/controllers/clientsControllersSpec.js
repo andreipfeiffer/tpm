@@ -14,9 +14,7 @@ describe("Clients Controllers", () => {
     beforeEach(inject((_$httpBackend_, $rootScope, $controller, $uibModal) => {
       $modal = $uibModal;
       $httpBackend = _$httpBackend_;
-      $httpBackend
-        .expectGET(config.getApiUrl() + "clients")
-        .respond(stubs.clientsList);
+
       $httpBackend.whenGET(/views\//).respond(200);
 
       scope = $rootScope.$new();
@@ -30,23 +28,14 @@ describe("Clients Controllers", () => {
       jasmine.addMatchers(customMatchers);
     }));
 
-    it("should set the response from the API to $scope.clientsList", () => {
-      expect(scope.clientsList).toEqualDeep([]);
-      $httpBackend.flush();
-
-      expect(scope.clientsList).toEqualDeep(stubs.clientsList);
-    });
-
     it("should toggle the New Client form", () => {
-      $httpBackend.flush();
-
       expect(scope.isFormNewDisplayed).toBe(false);
       scope.toggleNewFormDisplay();
       expect(scope.isFormNewDisplayed).toBe(true);
     });
 
     it("should add a new client", () => {
-      $httpBackend.flush();
+      expect(scope.clientsList.length).toBe(0);
 
       scope.toggleNewFormDisplay();
       scope.newClient.name = "New client";
@@ -55,12 +44,17 @@ describe("Clients Controllers", () => {
       scope.addNewClient();
       $httpBackend.flush();
 
-      expect(scope.clientsList.length).toBe(stubs.clientsList.length + 1);
+      expect(scope.clientsList.length).toBe(1);
       expect(scope.newClient.name).toBe("");
     });
 
     it("should edit a client", () => {
       var client = stubs.clientsList[0];
+
+      $httpBackend
+        .expectGET(config.getApiUrl() + "projects/client/" + client.id)
+        .respond(200);
+      scope.getProjects(client);
       $httpBackend.flush();
 
       var newClientData = Object.assign({}, client);
@@ -76,15 +70,20 @@ describe("Clients Controllers", () => {
     });
 
     it("should delete a client", () => {
+      const CLIENT = stubs.clientsList[0];
+
+      $httpBackend
+        .expectGET(config.getApiUrl() + "projects/client/" + CLIENT.id)
+        .respond(200);
+      scope.getProjects(CLIENT);
       $httpBackend.flush();
 
-      scope.deleteClient(stubs.clientsList[0].id);
-      expect(scope.clientsList.length).toEqual(stubs.clientsList.length - 1);
+      expect(scope.clientsList.length).toEqual(1);
+      scope.deleteClient(CLIENT.id);
+      expect(scope.clientsList.length).toEqual(0);
     });
 
     it("should open the edit modal, when id is truthy", () => {
-      $httpBackend.flush();
-
       spyOn($modal, "open").and.returnValue(stubs.fakeModal);
       spyOn(scope, "editClient").and.callFake(() => {});
 
@@ -93,8 +92,6 @@ describe("Clients Controllers", () => {
     });
 
     it("should not open the edit modal, when id is 0", () => {
-      $httpBackend.flush();
-
       spyOn($modal, "open").and.returnValue(stubs.fakeModal);
       spyOn(scope, "editClient").and.callFake(() => {});
 

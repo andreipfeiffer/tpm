@@ -36,6 +36,16 @@ module.exports = (() => {
       });
   }
 
+  function searchClientByName(keyword, idUser) {
+    return knex("clients")
+      .select("id", "name", "description", knex.raw(projectsCount))
+      .where({
+        idUser: idUser,
+        isDeleted: "0"
+      })
+      .andWhere("name", "like", "%" + keyword + "%");
+  }
+
   function getAllClients(idUser) {
     return knex("clients")
       .select("id", "name", "description", knex.raw(projectsCount))
@@ -97,6 +107,21 @@ module.exports = (() => {
           .then(data => {
             // add the empty client data at the beginning
             data.unshift(getEmptyClient(noClient.length));
+            resolve({ status: 200, body: data });
+          })
+          .catch(e => {
+            resolve({
+              status: 503,
+              body: { error: "Database error: " + e.code }
+            });
+          });
+      });
+    },
+
+    searchByName(loggedUserId, searchName) {
+      return new Promise(resolve => {
+        searchClientByName(searchName, loggedUserId)
+          .then(data => {
             resolve({ status: 200, body: data });
           })
           .catch(e => {

@@ -4,6 +4,7 @@ import AuthToken from "public/js/components/AuthToken";
 import SettingsUser from "public/js/components/SettingsUser";
 import ProjectsModal from "public/js/components/ProjectsModal";
 import Projects from "public/js/components/Projects";
+import Clients from "public/js/components/Clients";
 
 export default angular
   .module("TPM.Services", ["ngResource"])
@@ -14,21 +15,6 @@ export default angular
       return $resource(config.getApiUrl() + "projects/client/:id", {
         id: "@id"
       });
-    }
-  ])
-
-  .factory("ClientsService", [
-    "$resource",
-    $resource => {
-      return $resource(
-        config.getApiUrl() + "clients/:id",
-        {
-          id: "@id"
-        },
-        {
-          update: { method: "PUT" }
-        }
-      );
     }
   ])
 
@@ -56,6 +42,7 @@ export default angular
   ])
 
   .service("Projects", Projects)
+  .service("Clients", Clients)
 
   .service("SettingsUser", SettingsUser)
   .service("ProjectsModal", ProjectsModal)
