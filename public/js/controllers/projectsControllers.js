@@ -38,11 +38,15 @@ export default angular
       $scope.displayedProjectList = [];
       $scope.projectsList = [];
       $scope.archivedList = {
-        paid: [],
-        cancelled: []
+        paid: {
+          list: [],
+          count: 0
+        },
+        cancelled: {
+          list: [],
+          count: 0
+        }
       };
-      $scope.countPaid = "-";
-      $scope.countCancelled = "-";
       $scope.filterStatus = tpmCache.get("filterStatus") || "";
       $scope.filterStatusOptions = utils.statusList.filter(
         s => s !== "paid" && s !== "cancelled"
@@ -65,8 +69,8 @@ export default angular
       ]).then(data => {
         $scope.clientsList = data[1];
         $scope.projectsList = initProjectsList(data[0]);
-        $scope.countPaid = data[2].data.paid;
-        $scope.countCancelled = data[2].data.cancelled;
+        $scope.archivedList["paid"].count = data[2].data.paid;
+        $scope.archivedList["cancelled"].count = data[2].data.cancelled;
         $scope.isLoading = false;
         feedback.isLoading() && feedback.dismiss();
         setDisplayedProjectsList($scope.filterStatus);
@@ -132,28 +136,34 @@ export default angular
         return arr;
       }
 
-      function getProjectsByStatus(status) {
-        return Projects.getProjectsByStatus(status).then(archivedProjects => {
-          $scope.archivedList[status] = archivedProjects.data;
+      function getProjectsByStatus(status, limit) {
+        return Projects.getProjectsByStatus(status, limit).then(
+          archivedProjects => {
+            $scope.archivedList[status].list = archivedProjects.data;
+          }
+        );
+      }
+
+      function getArchivedProjects(status, limit) {
+        $scope.displayedProjectList = [];
+        $scope.isLoading = true;
+        feedback.load();
+
+        return getProjectsByStatus(status, limit).then(() => {
+          $scope.displayedProjectList = $scope.archivedList[status].list;
+          $scope.isLoading = false;
+          feedback.dismiss();
         });
       }
 
       function setDisplayedProjectsList(filter) {
         if (filter === "paid" || filter === "cancelled") {
           // don't fetch data if already loaded
-          if ($scope.archivedList[filter].length) {
-            $scope.displayedProjectList = $scope.archivedList[filter];
+          if ($scope.archivedList[filter].list.length) {
+            $scope.displayedProjectList = $scope.archivedList[filter].list;
             return;
           }
-
-          $scope.displayedProjectList = [];
-          $scope.isLoading = true;
-          feedback.load();
-          return getProjectsByStatus(filter).then(() => {
-            $scope.displayedProjectList = $scope.archivedList[filter];
-            $scope.isLoading = false;
-            feedback.dismiss();
-          });
+          return getArchivedProjects(filter, true);
         }
 
         $scope.displayedProjectList = $scope.projectsList.filter(p => {
@@ -167,6 +177,10 @@ export default angular
           }
         });
       }
+
+      $scope.loadAllProjectsByStatus = status => {
+        getArchivedProjects(status, false);
+      };
 
       $scope.deleteProject = id => {
         Projects.http().delete({ id: id });

@@ -54,7 +54,7 @@
             ng-click="setFilterStatus('paid')"
           >
             Paid
-            <span class="badge hidden-xs">{{ countPaid }}</span>
+            <span class="badge hidden-xs">{{ archivedList.paid.count }}</span>
           </button>
           <button
             type="button"
@@ -63,7 +63,9 @@
             ng-click="setFilterStatus('cancelled')"
           >
             Cancelled
-            <span class="badge hidden-xs">{{ countCancelled }}</span>
+            <span class="badge hidden-xs">{{
+              archivedList.cancelled.count
+            }}</span>
           </button>
         </div>
       </div>
@@ -143,7 +145,7 @@
               ng-show="filterInactiveStatusOptions.indexOf(filterStatus) > -1"
             >
               <br />{{
-                project.passedText || project.date | date:'dd MMM yyyy'
+                project.passedText || project.date | date: "dd MMM yyyy"
               }}
             </small>
           </td>
@@ -227,6 +229,24 @@
         </tr>
       </tbody>
     </table>
+
+    <div
+      class="text-center text-muted"
+      ng-show="
+        !isLoading &&
+        ['paid', 'cancelled'].indexOf(filterStatus) > -1 &&
+        archivedList[filterStatus].count > archivedList[filterStatus].list.length
+      "
+    >
+      Displaying only the last 30 days <br /><br />
+
+      <button
+        class="btn btn-primary"
+        ng-click="loadAllProjectsByStatus(filterStatus)"
+      >
+        Load all {{ filterStatus }} projects
+      </button>
+    </div>
 
     <p
       class="alert alert-warning text-center"

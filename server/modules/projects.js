@@ -10,6 +10,7 @@ module.exports = (() => {
 
   var server = require("../../server"),
     knex = server.knex,
+    moment = require("moment"),
     googleCalendar = require("./googleCalendar"),
     googleClient = require("./googleClient"),
     status = require("./status"),
@@ -42,7 +43,7 @@ module.exports = (() => {
       });
   }
 
-  function getAllProjects(idUser, status) {
+  function getAllProjects(idUser, status, limit) {
     var q = "";
 
     q += "SELECT";
@@ -60,6 +61,7 @@ module.exports = (() => {
     q += " AND projects.isDeleted = 0";
 
     q += getStatusQuery(status);
+    q += getLimitQuery(limit);
     q += " GROUP BY status_log.idProject";
 
     return knex.raw(q);
@@ -70,6 +72,20 @@ module.exports = (() => {
       return ' AND projects.status = "' + status + '"';
     }
     return ' AND projects.status IN ("' + statusArrDefault.join('", "') + '")';
+  }
+
+  function getLimitQuery(limit) {
+    if (!limit) {
+      return "";
+    }
+
+    return (
+      ' AND status_log.date >= "' +
+      moment()
+        .subtract(30, "days")
+        .toISOString() +
+      '"'
+    );
   }
 
   function logStatusChange(idUser, idProject, status) {
@@ -244,8 +260,9 @@ module.exports = (() => {
     getByStatus(req, res) {
       var userLogged = req.user;
       var status = req.params.status;
+      var limit = !!req.params.limit;
 
-      getAllProjects(userLogged.id, status)
+      getAllProjects(userLogged.id, status, limit)
         .then(data => res.send(data[0]))
         .catch(e =>
           errorHandler(e, res, userLogged.id, "projects.getByStatus")

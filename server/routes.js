@@ -40,6 +40,9 @@ module.exports = (() => {
     .route("/projects/status/:status")
     .get(auth.ensureTokenAuthenticated, projects.getByStatus);
   app
+    .route("/projects/status/:status/:limit")
+    .get(auth.ensureTokenAuthenticated, projects.getByStatus);
+  app
     .route("/projects/archived-counts")
     .get(auth.ensureTokenAuthenticated, projects.getArchivedCounts);
 

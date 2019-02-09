@@ -26,11 +26,14 @@
     });
 
     it("should not add a new client, without specified name", done => {
-      clients.add(user, {}).then(res => {
-        expect(res.body).to.have.property("error");
-        expect(res).to.have.property("status", 503);
-        done();
-      });
+      clients
+        .add(user, {})
+        .then(res => {
+          expect(res.body).to.have.property("error");
+          expect(res).to.have.property("status", 503);
+          done();
+        })
+        .catch(err => done());
     });
 
     it("should edit an existing client", done => {

@@ -46,8 +46,14 @@ class Projects {
     return this.$http.get(config.getApiUrl() + "projects/archived-counts");
   }
 
-  getProjectsByStatus(status) {
-    return this.$http.get(config.getApiUrl() + "projects/status/"+status);
+  getProjectsByStatus(status, limit) {
+    var url = config.getApiUrl() + "projects/status/" + status;
+
+    if (limit) {
+      url += "/with-limit";
+    }
+
+    return this.$http.get(url);
   }
 }
 Projects.$inject = ["$http", "$resource", "$filter"];
