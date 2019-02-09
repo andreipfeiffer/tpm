@@ -1,148 +1,148 @@
 // Karma configuration
 module.exports = function(config) {
+  "use strict";
 
-    'use strict';
+  config.set({
+    // base path, that will be used to resolve files and exclude
+    basePath: "./",
 
-    config.set({
+    // frameworks to use
+    frameworks: ["systemjs", "jasmine"],
 
-        // base path, that will be used to resolve files and exclude
-        basePath: './',
+    // list of files / patterns to load in the browser
+    files: [
+      // needed to polyfill some features like Array.prototype.[new-stuff]
+      "node_modules/babel-polyfill/dist/polyfill.js",
 
-        // frameworks to use
-        frameworks: ['systemjs', 'jasmine'],
+      // test specs
+      "public/spec/*.js",
+      "public/spec/**/*.js"
+    ],
 
-        // list of files / patterns to load in the browser
-        files: [
-            // needed to polyfill some features like Array.prototype.[new-stuff]
-            'node_modules/babel-polyfill/dist/polyfill.js',
+    // list of files to exclude
+    exclude: [],
 
-            // test specs
-            'public/spec/*.js',
-            'public/spec/**/*.js'
-        ],
+    plugins: [
+      "karma-systemjs",
+      "karma-phantomjs-launcher",
+      "karma-chrome-launcher",
+      "karma-firefox-launcher",
+      "karma-safari-launcher",
+      "karma-babel-preprocessor",
+      "karma-jasmine",
+      "karma-coverage",
+      "karma-mocha-reporter"
+    ],
 
-        // list of files to exclude
-        exclude: [
-        ],
+    preprocessors: {
+      "public/js/**/*.js": ["babel", "coverage"],
+      "public/spec/**/*.js": ["babel"]
+    },
 
-        plugins: [
-            'karma-systemjs',
-            'karma-phantomjs-launcher',
-            'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-safari-launcher',
-            'karma-babel-preprocessor',
-            'karma-jasmine',
-            'karma-coverage',
-            'karma-mocha-reporter'
-        ],
+    coverageReporter: {
+      // configure the reporter to use isparta for JavaScript coverage
+      // Only on { "karma-coverage": "douglasduteil/karma-coverage#next" }
+      instrumenters: {
+        isparta: require("isparta")
+      },
+      instrumenter: {
+        "public/js/**/*.js": "isparta"
+      },
+      dir: "coverage/client/",
+      reporters: [
+        { type: "text" },
+        { type: "text-summary" },
+        { type: "html", subdir: "html" }
+        // { type: 'lcov', subdir: 'lcov' },
+      ]
+    },
 
-        preprocessors: {
-            'public/js/**/*.js'  : ['babel', 'coverage'],
-            'public/spec/**/*.js': ['babel']
-        },
+    babelPreprocessor: {
+      options: {
+        presets: ["es2015"],
+        sourceMap: "inline"
+      }
+    },
 
-        coverageReporter: {
-            // configure the reporter to use isparta for JavaScript coverage
-            // Only on { "karma-coverage": "douglasduteil/karma-coverage#next" }
-            instrumenters: {
-                isparta : require('isparta')
-            },
-            instrumenter: {
-                'public/js/**/*.js': 'isparta'
-            },
-            dir: 'coverage/client/',
-            reporters: [
-                { type: 'text' },
-                { type: 'text-summary' },
-                { type: 'html', subdir: 'html' },
-                // { type: 'lcov', subdir: 'lcov' },
-            ]
-        },
+    // test results reporter to use
+    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+    reporters: ["mocha", "coverage"],
 
-        babelPreprocessor: {
-            options: {
-                presets  : ['es2015'],
-                sourceMap: 'inline'
-            }
-        },
+    systemjs: {
+      configFile: "public/system.config.js",
+      serveFiles: [
+        "public/bower_components/jquery/dist/jquery.min.js",
+        "public/bower_components/angular/angular.min.js",
+        "public/bower_components/angular-route/angular-route.min.js",
+        "public/bower_components/angular-touch/angular-touch.min.js",
+        "public/bower_components/angular-animate/angular-animate.min.js",
+        "public/bower_components/angular-resource/angular-resource.min.js",
+        "public/bower_components/angular-feedback/dist/feedback.min.js",
+        "public/bower_components/angular-media-queries/match-media.js",
+        "public/bower_components/bootstrap/dist/js/bootstrap.min.js",
+        "public/bower_components/angular-bootstrap/ui-bootstrap.min.js",
+        "public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js",
+        "public/bower_components/angular-ui-validate/dist/validate.min.js",
+        "public/bower_components/moment/min/moment.min.js",
+        "public/bower_components/socket.io-client/socket.io.js",
+        "public/bower_components/angular-socket-io/socket.min.js",
+        "public/bower_components/Chart.js/Chart.min.js",
+        "public/bower_components/angular-chart.js/dist/angular-chart.min.js",
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['mocha', 'coverage'],
+        "public/bower_components/angular-mocks/angular-mocks.js",
+        "public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js",
 
-        systemjs: {
-            configFile: 'public/system.config.js',
-            serveFiles: [
-                'public/bower_components/jquery/dist/jquery.min.js',
-                'public/bower_components/angular/angular.min.js',
-                'public/bower_components/angular-route/angular-route.min.js',
-                'public/bower_components/angular-touch/angular-touch.min.js',
-                'public/bower_components/angular-animate/angular-animate.min.js',
-                'public/bower_components/angular-resource/angular-resource.min.js',
-                'public/bower_components/angular-feedback/dist/feedback.min.js',
-                'public/bower_components/angular-media-queries/match-media.js',
-                'public/bower_components/bootstrap/dist/js/bootstrap.min.js',
-                'public/bower_components/angular-bootstrap/ui-bootstrap.min.js',
-                'public/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-                'public/bower_components/angular-ui-validate/dist/validate.min.js',
-                'public/bower_components/moment/min/moment.min.js',
-                'public/bower_components/socket.io-client/socket.io.js',
-                'public/bower_components/angular-socket-io/socket.min.js',
-                'public/bower_components/Chart.js/Chart.min.js',
-                'public/bower_components/angular-chart.js/dist/angular-chart.min.js',
+        "public/js/**/*.js"
+      ],
 
-                'public/bower_components/angular-mocks/angular-mocks.js',
-                'public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
+      // SystemJS configuration specifically for tests, added after your config file.
+      // Good for adding test libraries and mock modules
+      config: {
+        paths: {
+          "angular-mocks":
+            "public/bower_components/angular-mocks/angular-mocks.js",
+          "angular-socket-io-mock":
+            "public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js",
 
-                'public/js/**/*.js'
-            ],
+          babel: "node_modules/babel-core/browser.js",
+          systemjs: "node_modules/systemjs/dist/system.js",
+          "system-polyfills": "node_modules/systemjs/dist/system-polyfills.js",
+          "es6-module-loader":
+            "node_modules/es6-module-loader/dist/es6-module-loader.js",
+          "phantomjs-polyfill":
+            "node_modules/phantomjs-polyfill/bind-polyfill.js"
+        }
+      }
+    },
 
-            // SystemJS configuration specifically for tests, added after your config file.
-            // Good for adding test libraries and mock modules
-            config: {
-                paths: {
-                    'angular-mocks'         : 'public/bower_components/angular-mocks/angular-mocks.js',
-                    'angular-socket-io-mock': 'public/bower_components/angular-socket.io-mock/angular-socket.io-mock.js',
+    // web server port
+    port: 9876,
 
-                    'babel'                 : 'node_modules/babel-core/browser.js',
-                    'systemjs'              : 'node_modules/systemjs/dist/system.js',
-                    'system-polyfills'      : 'node_modules/systemjs/dist/system-polyfills.js',
-                    'es6-module-loader'     : 'node_modules/es6-module-loader/dist/es6-module-loader.js',
-                    'phantomjs-polyfill'    : 'node_modules/phantomjs-polyfill/bind-polyfill.js',
-                }
-            }
-        },
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
-        // web server port
-        port: 9876,
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
 
-        // enable / disable colors in the output (reporters and logs)
-        colors: true,
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera
+    // - Safari (only Mac)
+    // - PhantomJS
+    // - IE (only Windows)
+    browsers: ["PhantomJS" /*, 'Chrome', 'Firefox', 'Safari'*/],
 
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
+    // If browser does not capture in given timeout [ms], kill it
+    captureTimeout: 10000,
 
-        // Start these browsers, currently available:
-        // - Chrome
-        // - ChromeCanary
-        // - Firefox
-        // - Opera
-        // - Safari (only Mac)
-        // - PhantomJS
-        // - IE (only Windows)
-        browsers: ['PhantomJS'/*, 'Chrome', 'Firefox', 'Safari'*/],
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: true,
 
-        // If browser does not capture in given timeout [ms], kill it
-        captureTimeout: 10000,
-
-        // Continuous Integration mode
-        // if true, it capture browsers, run tests and exit
-        singleRun: true,
-
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: false
-
-    });
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: false
+  });
 };

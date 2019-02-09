@@ -1,239 +1,278 @@
-import angular from 'angular';
-import moment from 'moment';
-import utils from 'public/js/utils';
+import angular from "angular";
+import moment from "moment";
+import utils from "public/js/utils";
 
-export default angular.module('TPM.ReportsControllers', [])
+export default angular
+  .module("TPM.ReportsControllers", [])
 
-    .controller('ReportsController', [
-        '$scope',
-        '$uibModal',
-        '$http',
-        '$location',
-        'feedback',
-        'tpmCache',
-        'ReportsService',
-        'SettingsUser',
-        'ProjectsModal',
-        ($scope, $modal, $http, $location, feedback, tpmCache, Reports, SettingsUser, ProjectsModal) => {
+  .controller("ReportsController", [
+    "$scope",
+    "$uibModal",
+    "$http",
+    "$location",
+    "feedback",
+    "tpmCache",
+    "ReportsService",
+    "SettingsUser",
+    "ProjectsModal",
+    (
+      $scope,
+      $modal,
+      $http,
+      $location,
+      feedback,
+      tpmCache,
+      Reports,
+      SettingsUser,
+      ProjectsModal
+    ) => {
+      $scope.currency = SettingsUser.get().currency;
+      $scope.isLoading = true;
+      $scope.projects = [];
+      $scope.chartMonth = {
+        data: [[0]],
+        series: [],
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ]
+      };
 
-            $scope.currency   = SettingsUser.get().currency;
-            $scope.isLoading  = true;
-            $scope.projects   = [];
-            $scope.chartMonth = {
-                data  : [
-                    [0]
-                ],
-                series: [],
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-            };
+      feedback.load();
 
-            feedback.load();
+      Reports.query().$promise.then(data => {
+        $scope.projects = data;
+        $scope.clientsByProjects = groupByClient(data).sort(
+          sortClientsByProjects
+        );
+        $scope.clientsByPrice = groupByClient(data).sort(sortClientsByPrice);
+        $scope.notPaid = getNotPaid(data);
+        $scope.isLoading = false;
 
-            Reports.query().$promise.then((data) => {
+        // setup chart data for month report
+        $scope.months = groupByMonth(data);
+        var chartMonthsData = getMonthsChartData($scope.months);
+        $scope.chartMonth.data = chartMonthsData.data;
+        $scope.chartMonth.series = chartMonthsData.series;
 
-                $scope.projects          = data;
-                $scope.clientsByProjects = groupByClient( data ).sort( sortClientsByProjects );
-                $scope.clientsByPrice    = groupByClient( data ).sort( sortClientsByPrice );
-                $scope.notPaid           = getNotPaid( data );
-                $scope.isLoading         = false;
+        $scope.chartPrice = getPriceChartData(data);
 
-                // setup chart data for month report
-                $scope.months            = groupByMonth( data );
-                var chartMonthsData      = getMonthsChartData( $scope.months );
-                $scope.chartMonth.data   = chartMonthsData.data;
-                $scope.chartMonth.series = chartMonthsData.series;
+        feedback.dismiss();
+      });
 
-                $scope.chartPrice        = getPriceChartData( data );
+      $scope.gotoFinishedProjects = () => {
+        tpmCache.put("filterStatus", "finished");
+        $location.path("/projects");
+      };
 
-                feedback.dismiss();
+      $scope.showProjects = (title, list, detailedPrice) => {
+        ProjectsModal.open(title, list, detailedPrice);
+      };
+
+      $scope.showProjectsByPriceChange = point => {
+        var data = point[0],
+          priceChange,
+          projectsList,
+          detailedPrice;
+
+        if (!data) {
+          return;
+        }
+
+        var labelIndex = $scope.chartPrice.labels.indexOf(data.label);
+        if (labelIndex > -1) {
+          // magic number here
+          // the labels are set in the same order
+          // as the type param of the getProjectsByPriceChange()
+          // all we need is to extract 1, so we get to -1, 0, 1
+          // instead of 0, 1, 2
+          priceChange = labelIndex - 1;
+          projectsList = getProjectsByPriceChange(priceChange);
+          detailedPrice = priceChange === 0 ? false : true;
+
+          $scope.showProjects(
+            "Projects with " + data.label.toLowerCase(),
+            projectsList,
+            detailedPrice
+          );
+        }
+      };
+
+      function getFirstMonth(projects) {
+        var firstPaidProject = getProjectsByStatus(
+          projects,
+          "paid"
+        ).reverse()[0];
+
+        if (!firstPaidProject) {
+          return;
+        }
+
+        var date = firstPaidProject.month.split("-").map(utils.toInt);
+        return {
+          year: date[0],
+          month: date[1]
+        };
+      }
+
+      function getLastMonth(projects) {
+        var lastPaidProject = getProjectsByStatus(projects, "paid")[0];
+
+        if (!lastPaidProject) {
+          return;
+        }
+
+        var date = lastPaidProject.month.split("-").map(utils.toInt);
+        return {
+          year: date[0],
+          month: date[1]
+        };
+      }
+
+      function getPaidProjectsByMonth(projects, year, month) {
+        return projects.filter(project => {
+          return (
+            project.month === year + "-" + month && project.status === "paid"
+          );
+        });
+      }
+
+      function getTotalPrice(projects) {
+        return projects.reduce((price, project) => {
+          return price + getPrice(project);
+        }, 0);
+      }
+
+      function groupByMonth(projectsList) {
+        var projects = getProjectsByStatus(projectsList, "paid"),
+          first = getFirstMonth(projects),
+          last = getLastMonth(projects),
+          res = [],
+          year,
+          month,
+          monthProjects,
+          totalPrice;
+
+        if (!first || !last) {
+          return res;
+        }
+
+        for (year = first.year; year <= last.year; year += 1) {
+          for (month = 1; month <= 12; month += 1) {
+            if (
+              // ignore months after last one
+              (year === last.year && month > last.month) ||
+              // ignore months before first one
+              (year === first.year && month < first.month)
+            ) {
+              // do nothing
+            } else {
+              monthProjects = getPaidProjectsByMonth(projects, year, month);
+              totalPrice = getTotalPrice(monthProjects);
+
+              res.push({
+                price: totalPrice,
+                month: moment(year + "-" + month + "-01", "YYYY-MM-DD").format(
+                  "MMMM YYYY"
+                ),
+                monthRaw: year + "-" + month,
+                projects: monthProjects
+              });
+            }
+          }
+        }
+
+        return res.reverse();
+      }
+
+      function groupByClient(projects) {
+        var res = [];
+
+        projects.forEach(project => {
+          var client = getCurrentClient(res, project.idClient);
+
+          if (project.status !== "paid") {
+            return;
+          }
+
+          if (!client) {
+            res.push({
+              price: 0,
+              id: project.idClient,
+              name: getClientName(project),
+              projects: []
             });
 
-            $scope.gotoFinishedProjects = () => {
-                tpmCache.put('filterStatus', 'finished');
-                $location.path('/projects');
-            };
+            client = res[res.length - 1];
+          }
 
-            $scope.showProjects = (title, list, detailedPrice) => {
-                ProjectsModal.open( title, list, detailedPrice );
-            };
+          client["price"] += getPrice(project);
+          client.projects.push(project);
+        });
 
-            $scope.showProjectsByPriceChange = (point) => {
-                var data = point[0],
-                    priceChange, projectsList, detailedPrice;
+        return res;
+      }
 
-                if ( !data ) { return; }
+      function getNotPaid(projects) {
+        var list = getProjectsByStatus(projects, "finished");
+        return {
+          value: getTotalPrice(list),
+          nr: list.length
+        };
+      }
 
-                var labelIndex = $scope.chartPrice.labels.indexOf( data.label );
-                if ( labelIndex > -1 ) {
-                    // magic number here
-                    // the labels are set in the same order
-                    // as the type param of the getProjectsByPriceChange()
-                    // all we need is to extract 1, so we get to -1, 0, 1
-                    // instead of 0, 1, 2
-                    priceChange   = labelIndex - 1;
-                    projectsList  = getProjectsByPriceChange( priceChange );
-                    detailedPrice = (priceChange === 0) ? false : true;
+      function getPrice(project) {
+        if (project.priceFinal) {
+          return project.priceFinal;
+        }
+        return project.priceEstimated;
+      }
 
-                    $scope.showProjects(
-                        'Projects with ' + data.label.toLowerCase(),
-                        projectsList,
-                        detailedPrice
-                    );
-                }
-            };
+      function getClientName(project) {
+        return project.clientName || "No Client";
+      }
 
-            function getFirstMonth(projects) {
-                var firstPaidProject = getProjectsByStatus(projects, 'paid').reverse()[0];
+      function getCurrentClient(res, idClient) {
+        return res.filter(project => {
+          return project.id === idClient;
+        })[0];
+      }
 
-                if ( !firstPaidProject ) {
-                    return;
-                }
+      function sortClientsByPrice(c1, c2) {
+        var price1 = parseInt(c1.price);
+        var price2 = parseInt(c2.price);
+        if (price1 > price2) {
+          return -1;
+        }
+        if (price1 < price2) {
+          return 1;
+        }
+        return 0;
+      }
 
-                var date = firstPaidProject.month.split('-').map( utils.toInt );
-                return {
-                    year : date[0],
-                    month: date[1]
-                };
-            }
+      function sortClientsByProjects(c1, c2) {
+        var projects1 = parseInt(c1.projects.length);
+        var projects2 = parseInt(c2.projects.length);
+        if (projects1 > projects2) {
+          return -1;
+        }
+        if (projects1 < projects2) {
+          return 1;
+        }
+        return 0;
+      }
 
-            function getLastMonth(projects) {
-                var lastPaidProject = getProjectsByStatus(projects, 'paid')[0];
-
-                if ( !lastPaidProject ) {
-                    return;
-                }
-
-                var date = lastPaidProject.month.split('-').map( utils.toInt );
-                return {
-                    year : date[0],
-                    month: date[1]
-                };
-            }
-
-            function getPaidProjectsByMonth(projects, year, month) {
-                return projects.filter((project) => {
-                    return (
-                        project.month  === (year + '-' + month) &&
-                        project.status === 'paid'
-                    );
-                });
-            }
-
-            function getTotalPrice(projects) {
-                return projects.reduce((price, project) => {
-                    return price + getPrice( project );
-                }, 0);
-            }
-
-            function groupByMonth(projectsList) {
-                var projects = getProjectsByStatus( projectsList, 'paid' ),
-                    first    = getFirstMonth( projects ),
-                    last     = getLastMonth( projects ),
-                    res      = [],
-                    year, month, monthProjects, totalPrice;
-
-                if ( !first || !last ) {
-                    return res;
-                }
-
-                for ( year = first.year; year <= last.year; year += 1 ) {
-                    for ( month = 1; month <= 12; month += 1 ) {
-
-                        if (
-                            // ignore months after last one
-                            ( year === last.year && month > last.month ) ||
-                            // ignore months before first one
-                            ( year === first.year && month < first.month )
-                        ) {
-                            // do nothing
-                        } else {
-                            monthProjects = getPaidProjectsByMonth( projects, year, month );
-                            totalPrice    = getTotalPrice( monthProjects );
-
-                            res.push({
-                                price   : totalPrice,
-                                month   : moment(year + '-' + month + '-01', 'YYYY-MM-DD').format('MMMM YYYY'),
-                                monthRaw: year + '-' + month,
-                                projects: monthProjects
-                            });
-                        }
-
-                    }
-                }
-
-                return res.reverse();
-            }
-
-            function groupByClient(projects) {
-                var res = [];
-
-                projects.forEach((project) => {
-                    var client = getCurrentClient(res, project.idClient);
-
-                    if ( project.status !== 'paid' ) {
-                        return;
-                    }
-
-                    if ( !client ) {
-                        res.push({
-                            price   : 0,
-                            id      : project.idClient,
-                            name    : getClientName( project ),
-                            projects: []
-                        });
-
-                        client = res[res.length - 1];
-                    }
-
-                    client['price'] += getPrice( project );
-                    client.projects.push( project );
-                });
-
-                return res;
-            }
-
-            function getNotPaid(projects) {
-                var list = getProjectsByStatus(projects, 'finished');
-                return {
-                    value: getTotalPrice( list ),
-                    nr   : list.length
-                };
-            }
-
-            function getPrice(project) {
-                if ( project.priceFinal ) {
-                    return project.priceFinal;
-                }
-                return project.priceEstimated;
-            }
-
-            function getClientName(project) {
-                return project.clientName || 'No Client';
-            }
-
-            function getCurrentClient(res, idClient) {
-                return res.filter((project) => {
-                    return project.id === idClient;
-                })[0];
-            }
-
-            function sortClientsByPrice(c1, c2) {
-                var price1 = parseInt( c1.price );
-                var price2 = parseInt( c2.price );
-                if (price1 > price2) { return -1; }
-                if (price1 < price2) { return 1; }
-                return 0;
-            }
-
-            function sortClientsByProjects(c1, c2) {
-                var projects1 = parseInt( c1.projects.length );
-                var projects2 = parseInt( c2.projects.length );
-                if (projects1 > projects2) { return -1; }
-                if (projects1 < projects2) { return 1; }
-                return 0;
-            }
-
-            /*function sortProjectsByDate(p1, p2) {
+      /*function sortProjectsByDate(p1, p2) {
                 var date1 = parseInt( p1.date );
                 var date2 = parseInt( p2.date );
                 if (date1 > date2) { return -1; }
@@ -241,90 +280,93 @@ export default angular.module('TPM.ReportsControllers', [])
                 return 0;
             }*/
 
-            function getProjectsByStatus(projects, status) {
-                return projects.filter((project) => {
-                    return project.status === status;
-                });
-            }
+      function getProjectsByStatus(projects, status) {
+        return projects.filter(project => {
+          return project.status === status;
+        });
+      }
 
-            function getMonthsChartData(months) {
-                var res = {
-                    data  : [],
-                    series: []
-                };
+      function getMonthsChartData(months) {
+        var res = {
+          data: [],
+          series: []
+        };
 
-                if ( !months.length ) {
-                    return res;
-                }
-
-                var _months = Object.assign([], months);
-
-                _months.reverse().forEach((month) => {
-                    var year = month.monthRaw.slice(0, 4);
-
-                    if ( res.series.indexOf(year) === -1 ) {
-                        res.series.push( year );
-                        res.data.push([]);
-                    }
-
-                    res.data[ res.series.length - 1 ].push( month.price );
-                    // res.labels.push( month.month );
-                });
-
-                res.data[0] = fillEmptyMonths( res.data[0] );
-
-                // reverse data, so the current year is first
-                res.data.reverse();
-                res.series.reverse();
-
-                return res;
-            }
-
-            function fillEmptyMonths(arr) {
-                return new Array( 12 - arr.length ).fill( null ).concat( arr );
-            }
-
-            function getPriceChartData() {
-                var data = [],
-                    priceLowered    = getProjectsByPriceChange( -1 ).length,
-                    priceNotChanged = getProjectsByPriceChange( 0 ).length,
-                    priceRaised     = getProjectsByPriceChange( 1 ).length;
-
-                // populate data only if we have some data
-                if ( priceLowered || priceNotChanged || priceRaised ) {
-                    data = [priceLowered, priceNotChanged, priceRaised];
-                }
-
-                return {
-                    data  : data,
-                    labels: ['Price lowered', 'Price not changed', 'Price raised']
-                };
-            }
-
-            function getProjectsByPriceChange(type) {
-                // type = -1; // price was lowered
-                // type =  1; // price was raised
-                // type =  0; // price was not changed
-
-                return $scope.projects.filter((project) => {
-                    var priceEstimated = parseInt( project.priceEstimated ),
-                        priceFinal     = parseInt( project.priceFinal );
-
-                    if ( project.status !== 'paid' ) {
-                        return false;
-                    }
-
-                    if ( type === 0 ) {
-                        return ( priceEstimated === priceFinal || priceFinal === 0 || priceEstimated === 0 );
-                    }
-                    if ( type === 1 ) {
-                        return ( priceEstimated < priceFinal && priceEstimated > 0 );
-                    }
-                    if ( type === -1 ) {
-                        return ( priceEstimated > priceFinal && priceFinal > 0 );
-                    }
-                });
-            }
-
+        if (!months.length) {
+          return res;
         }
-    ]);
+
+        var _months = Object.assign([], months);
+
+        _months.reverse().forEach(month => {
+          var year = month.monthRaw.slice(0, 4);
+
+          if (res.series.indexOf(year) === -1) {
+            res.series.push(year);
+            res.data.push([]);
+          }
+
+          res.data[res.series.length - 1].push(month.price);
+          // res.labels.push( month.month );
+        });
+
+        res.data[0] = fillEmptyMonths(res.data[0]);
+
+        // reverse data, so the current year is first
+        res.data.reverse();
+        res.series.reverse();
+
+        return res;
+      }
+
+      function fillEmptyMonths(arr) {
+        return new Array(12 - arr.length).fill(null).concat(arr);
+      }
+
+      function getPriceChartData() {
+        var data = [],
+          priceLowered = getProjectsByPriceChange(-1).length,
+          priceNotChanged = getProjectsByPriceChange(0).length,
+          priceRaised = getProjectsByPriceChange(1).length;
+
+        // populate data only if we have some data
+        if (priceLowered || priceNotChanged || priceRaised) {
+          data = [priceLowered, priceNotChanged, priceRaised];
+        }
+
+        return {
+          data: data,
+          labels: ["Price lowered", "Price not changed", "Price raised"]
+        };
+      }
+
+      function getProjectsByPriceChange(type) {
+        // type = -1; // price was lowered
+        // type =  1; // price was raised
+        // type =  0; // price was not changed
+
+        return $scope.projects.filter(project => {
+          var priceEstimated = parseInt(project.priceEstimated),
+            priceFinal = parseInt(project.priceFinal);
+
+          if (project.status !== "paid") {
+            return false;
+          }
+
+          if (type === 0) {
+            return (
+              priceEstimated === priceFinal ||
+              priceFinal === 0 ||
+              priceEstimated === 0
+            );
+          }
+          if (type === 1) {
+            return priceEstimated < priceFinal && priceEstimated > 0;
+          }
+          if (type === -1) {
+            return priceEstimated > priceFinal && priceFinal > 0;
+          }
+        });
+      }
+    }
+  ]);

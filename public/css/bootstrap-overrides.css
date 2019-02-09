@@ -1,134 +1,139 @@
 .navbar-default,
 .navbar-default .navbar-collapse {
-	background-color: #f5f5f5;
-	border-color: #dddddd;
+  background-color: #f5f5f5;
+  border-color: #dddddd;
 }
 .navbar-collapse {
-	-webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
 }
 .navbar-nav > li > a {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border: 0;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
 }
 .navbar-brand {
-	height: auto;
+  height: auto;
 }
 
 @media (max-width: 768px) {
-	.navbar-collapse .navbar-nav {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-		.navbar-right {
-			text-align: center;
-		}
-	.navbar-nav > li > a {
-		font-size: 14px;
-		text-transform: uppercase;
-		font-weight: bold;
-	}
+  .navbar-collapse .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .navbar-right {
+    text-align: center;
+  }
+  .navbar-nav > li > a {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 }
 @media (min-width: 768px) {
-	.navbar-fixed-top .navbar-right:last-child {
-		padding-right: 8px;
-		margin-right: 0;
-	}
+  .navbar-fixed-top .navbar-right:last-child {
+    padding-right: 8px;
+    margin-right: 0;
+  }
 }
 
 .form-control.ng-invalid.ng-dirty:not(:focus) {
-	border-color:#e9322d;
-	-webkit-box-shadow:0 0 6px #f8b9b7;
-	-moz-box-shadow:0 0 6px #f8b9b7;
-	box-shadow:0 0 6px #f8b9b7;
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
 }
 /*.form-control.ng-invalid.ng-dirty:focus {
 }*/
 
 .table-tpm {
-	border-bottom: 2px solid #f5f5f5;
-	border-collapse: separate;
-	overflow: hidden;
+  border-bottom: 2px solid #f5f5f5;
+  border-collapse: separate;
+  overflow: hidden;
 }
-	.table.table-tpm th {
-		border-color: #f5f5f5;
-		border-bottom-width: 1px;
-	}
-	.table.table-tpm td {
-		/*
+.table.table-tpm th {
+  border-color: #f5f5f5;
+  border-bottom-width: 1px;
+}
+.table.table-tpm td {
+  /*
 		we simulate a top border using gradient
 		because collapsed border on table doesn't help
 		because wide borders are centered on the cell margin, so they get outside the table
 		so we need separate borders on table
 		but having a top border also, it displays a diagonal line on top (border triangle)
 		*/
-		border-top: 0;
-		/*background: -moz-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* FF3.6-15 */
-		/*background: -webkit-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
-		background: linear-gradient(to bottom, rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	}
+  border-top: 0;
+  /*background: -moz-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+  /*background: -webkit-linear-gradient(top,  rgba(230,230,230,1) 0px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    rgba(230, 230, 230, 1) 0px,
+    rgba(255, 255, 255, 0) 1px,
+    rgba(255, 255, 255, 0) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
 
-	.table.table-tpm .cell-border {
-		border-left: 5px #f5f5f5 solid;
-		position: relative;
+.table.table-tpm .cell-border {
+  border-left: 5px #f5f5f5 solid;
+  position: relative;
 
-		-webkit-transition: border-left .25s;
-    	transition: border-left .25s;
-	}
-	.table.table-tpm .cell-border--warning {
-		border-left-color: #e9ca30;
-	}
-	.table.table-tpm .cell-border--danger {
-		border-left-color: #EC5454;
-	}
-	.table.table-tpm .cell-border--almost {
-		border-left-color: rgb(33, 199, 27);
-	}
+  -webkit-transition: border-left 0.25s;
+  transition: border-left 0.25s;
+}
+.table.table-tpm .cell-border--warning {
+  border-left-color: #e9ca30;
+}
+.table.table-tpm .cell-border--danger {
+  border-left-color: #ec5454;
+}
+.table.table-tpm .cell-border--almost {
+  border-left-color: rgb(33, 199, 27);
+}
 
-	.table.table-tpm tr:hover .cell-border--almost,
-	.table.table-tpm tr:hover .cell-border--warning,
-	.table.table-tpm tr:hover .cell-border--danger {
-		border-left-width: 75px;
-	}
-		.cell-border__text {
-			box-sizing: border-box;
-			position: absolute;
-			top: 0;
-			left: -75px;
-			color: white;
-			width: 75px;
-			padding: 8px;
-			text-transform: uppercase;
-			font-size: 11px;
-			font-weight: bold;
-			line-height: 1.9em;
-		}
+.table.table-tpm tr:hover .cell-border--almost,
+.table.table-tpm tr:hover .cell-border--warning,
+.table.table-tpm tr:hover .cell-border--danger {
+  border-left-width: 75px;
+}
+.cell-border__text {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: -75px;
+  color: white;
+  width: 75px;
+  padding: 8px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1.9em;
+}
 
 .table-no-header,
 .table-no-header tr:first-child td {
-	border: 0;
-	background: transparent;
+  border: 0;
+  background: transparent;
 }
 
 .btn-group {
-	font-size: 0;
+  font-size: 0;
 }
 .btn-group .btn {
-	display: inline-block;
-	float: none;
+  display: inline-block;
+  float: none;
 }
 
 .btn-sm .badge {
-	top: 0;
-	padding: 2px 8px;
-	background-color: #e5e5e5;
-	color: inherit;
-	font-size: inherit;
-	border-radius: 8px;
+  top: 0;
+  padding: 2px 8px;
+  background-color: #e5e5e5;
+  color: inherit;
+  font-size: inherit;
+  border-radius: 8px;
 }
 .btn:hover .badge,
 .btn.active .badge {
-	background-color: #ffffff;
+  background-color: #ffffff;
 }

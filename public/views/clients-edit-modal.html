@@ -1,19 +1,28 @@
 <div class="modal-header">
-    <h3 class="modal-title">Edit client</h3>
+  <h3 class="modal-title">Edit client</h3>
 </div>
 <div class="modal-body">
-    <form ng-submit="$close(client)">
-        <div class="form-group">
-            <label for="edit-client-name">Client Name</label>
-            <input id="edit-client-name" type="text" class="form-control" ng-model="client.name">
-        </div>
-        <div class="form-group">
-            <label for="edit-client-description">Client description</label>
-            <textarea id="edit-client-description" class="form-control" ng-model="client.description"></textarea>
-        </div>
-    </form>
+  <form ng-submit="$close(client)">
+    <div class="form-group">
+      <label for="edit-client-name">Client Name</label>
+      <input
+        id="edit-client-name"
+        type="text"
+        class="form-control"
+        ng-model="client.name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="edit-client-description">Client description</label>
+      <textarea
+        id="edit-client-description"
+        class="form-control"
+        ng-model="client.description"
+      ></textarea>
+    </div>
+  </form>
 </div>
 <div class="modal-footer text-left">
-    <button class="btn btn-primary" ng-click="$close(client)">Edit Client</button>
-    <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+  <button class="btn btn-primary" ng-click="$close(client)">Edit Client</button>
+  <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
 </div>

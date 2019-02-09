@@ -1,16 +1,14 @@
-module.exports = (function(){
+module.exports = (function() {
+  "use strict";
 
-    'use strict';
+  switch (process.env.NODE_ENV) {
+    case "production":
+      return require("./config/config.production");
 
-    switch (process.env.NODE_ENV) {
+    case "test":
+      return require("./config/config.test");
 
-        case 'production':
-            return require('./config/config.production');
-
-        case 'test':
-            return require('./config/config.test');
-
-        default:
-            return require('./config/config._local');
-    }
+    default:
+      return require("./config/config._local");
+  }
 })();

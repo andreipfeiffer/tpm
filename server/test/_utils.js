@@ -1,53 +1,48 @@
 module.exports = (() => {
+  "use strict";
 
-    'use strict';
+  var user = {
+    credentials: {
+      username: "asd",
+      password: "asdasd"
+    },
+    authData: {}
+  };
 
-    var user = {
-        credentials: {
-            username: 'asd',
-            password: 'asdasd'
-        },
-        authData: {}
-    };
+  return {
+    loggedUser: user,
 
-    return {
-        loggedUser: user,
+    setAuthData(authData) {
+      user.authData = authData;
+    },
 
-        setAuthData(authData) {
-            user.authData = authData;
-        },
+    getAuthData() {
+      return user.authData;
+    },
 
-        getAuthData() {
-            return user.authData;
-        },
+    getUserId() {
+      return user.authData.authUserId;
+    },
 
-        getUserId() {
-            return user.authData.authUserId;
-        },
+    authenticateUser(request) {
+      return new Promise((resolve, reject) => {
+        request
+          .post("/login")
+          .send(user.credentials)
+          .end((err, res) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(res);
+            }
+          });
+      });
+    },
 
-        authenticateUser(request) {
-            return new Promise((resolve, reject) => {
-                request
-                    .post('/login')
-                    .send( user.credentials )
-                    .end((err, res) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(res);
-                        }
-                    });
-            });
-        },
-
-        logoutUser(request) {
-            return new Promise((resolve) => {
-                request
-                    .get('/logout')
-                    .end((err, res) => resolve(res));
-            });
-        }
-
-    };
-
+    logoutUser(request) {
+      return new Promise(resolve => {
+        request.get("/logout").end((err, res) => resolve(res));
+      });
+    }
+  };
 })();
