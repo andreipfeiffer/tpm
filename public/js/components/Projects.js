@@ -42,12 +42,12 @@ class Projects {
     return this.$filter("date")(date, config.dateFormat);
   }
 
-  getProjectsArchivedNumber() {
-    return this.$http.get(config.getApiUrl() + "projects/archived-number");
+  getProjectsArchivedCounts() {
+    return this.$http.get(config.getApiUrl() + "projects/archived-counts");
   }
 
-  getProjectsArchived() {
-    return this.$http.get(config.getApiUrl() + "projects/archived");
+  getProjectsByStatus(status) {
+    return this.$http.get(config.getApiUrl() + "projects/status/"+status);
   }
 }
 Projects.$inject = ["$http", "$resource", "$filter"];

@@ -1,6 +1,13 @@
 module.exports = (() => {
   "use strict";
 
+  const STATUS_ON_HOLD = "on hold";
+  const STATUS_STARTED = "started";
+  const STATUS_ALMOST_DONE = "almost done";
+  const STATUS_FINISHED = "finished";
+  const STATUS_PAID = "paid";
+  const STATUS_CANCELLED = "cancelled";
+
   var server = require("../../server"),
     knex = server.knex,
     googleCalendar = require("./googleCalendar"),
@@ -8,15 +15,21 @@ module.exports = (() => {
     status = require("./status"),
     clients = require("./clients"),
     statusArr = [
-      "on hold",
-      "started",
-      "almost done",
-      "finished",
-      "paid",
-      "cancelled"
+      STATUS_ON_HOLD,
+      STATUS_STARTED,
+      STATUS_ALMOST_DONE,
+      STATUS_FINISHED,
+      STATUS_PAID,
+      STATUS_CANCELLED
     ],
-    statusArrActive = [statusArr[0], statusArr[1]],
-    statusArrInactive = [statusArr[2], statusArr[3], statusArr[4]];
+    statusArrActive = [STATUS_ON_HOLD, STATUS_STARTED, STATUS_ALMOST_DONE],
+    statusArrInactive = [STATUS_FINISHED, STATUS_PAID],
+    statusArrDefault = [
+      STATUS_ON_HOLD,
+      STATUS_STARTED,
+      STATUS_ALMOST_DONE,
+      STATUS_FINISHED
+    ];
 
   function getProjectById(id, idUser) {
     return knex("projects")
@@ -29,8 +42,7 @@ module.exports = (() => {
       });
   }
 
-  function getAllProjects(idUser, archived = false) {
-    var sign = archived ? "=" : "!=";
+  function getAllProjects(idUser, status) {
     var q = "";
 
     q += "SELECT";
@@ -46,10 +58,19 @@ module.exports = (() => {
 
     q += " WHERE projects.idUser = " + idUser;
     q += " AND projects.isDeleted = 0";
-    q += " AND projects.status " + sign + ' "paid"';
+
+    q += getStatusQuery(status);
     q += " GROUP BY status_log.idProject";
 
     return knex.raw(q);
+  }
+
+  function getStatusQuery(status) {
+    console.log(status);
+    if (statusArr.indexOf(status) > -1) {
+      return ' AND projects.status = "' + status + '"';
+    }
+    return ' AND projects.status IN ("' + statusArrDefault.join('", "') + '")';
   }
 
   function logStatusChange(idUser, idProject, status) {
@@ -216,28 +237,37 @@ module.exports = (() => {
     getAll(req, res) {
       var userLogged = req.user;
 
-      getAllProjects(userLogged.id, false)
+      getAllProjects(userLogged.id)
         .then(data => res.send(data[0]))
         .catch(e => errorHandler(e, res, userLogged.id, "projects.getAll"));
     },
 
-    getArchived(req, res) {
+    getByStatus(req, res) {
       var userLogged = req.user;
+      var status = req.params.status;
 
-      getAllProjects(userLogged.id, true)
+      getAllProjects(userLogged.id, status)
         .then(data => res.send(data[0]))
         .catch(e =>
-          errorHandler(e, res, userLogged.id, "projects.getArchived")
+          errorHandler(e, res, userLogged.id, "projects.getByStatus")
         );
     },
 
-    getArchivedNumber(req, res) {
+    getArchivedCounts(req, res) {
       var userLogged = req.user;
 
-      getAllProjects(userLogged.id, true)
-        .then(data => res.send({ nr: data[0].length }))
+      Promise.all([
+        getAllProjects(userLogged.id, STATUS_PAID),
+        getAllProjects(userLogged.id, STATUS_CANCELLED)
+      ])
+        .then(data => {
+          return res.send({
+            paid: data[0][0].length,
+            cancelled: data[1][0].length
+          });
+        })
         .catch(e =>
-          errorHandler(e, res, userLogged.id, "projects.getArchivedNumber")
+          errorHandler(e, res, userLogged.id, "projects.getArchivedCounts")
         );
     },
 

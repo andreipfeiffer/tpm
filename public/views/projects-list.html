@@ -54,7 +54,16 @@
             ng-click="setFilterStatus('paid')"
           >
             Paid
-            <span class="badge hidden-xs">{{ archivedNr }}</span>
+            <span class="badge hidden-xs">{{ countPaid }}</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-default btn-sm"
+            ng-class="{active: filterStatus == 'cancelled'}"
+            ng-click="setFilterStatus('cancelled')"
+          >
+            Cancelled
+            <span class="badge hidden-xs">{{ countCancelled }}</span>
           </button>
         </div>
       </div>

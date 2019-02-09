@@ -20,7 +20,7 @@ describe("Projects Controllers", () => {
         .expectGET(config.getApiUrl() + "clients")
         .respond(stubs.clientsList);
       $httpBackend
-        .expectGET(config.getApiUrl() + "projects/archived-number")
+        .expectGET(config.getApiUrl() + "projects/archived-counts")
         .respond({ nr: 2 });
 
       scope = $rootScope.$new();
