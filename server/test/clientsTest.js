@@ -33,7 +33,7 @@
           expect(res).to.have.property("status", 503);
           done();
         })
-        .catch(err => done());
+        .catch(() => done());
     });
 
     it("should edit an existing client", done => {
