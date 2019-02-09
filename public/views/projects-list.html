@@ -36,9 +36,9 @@
             class="btn btn-default btn-sm text-capitalize"
             ng-repeat="status in filterStatusOptions"
             ng-class="{
-                            'active'   : filterStatus == status,
-                            'hidden-xs': filterActiveStatusOptions.indexOf( status ) > -1
-                        }"
+              'active'   : filterStatus == status,
+              'hidden-xs': filterActiveStatusOptions.indexOf( status ) > -1
+            }"
             ng-click="setFilterStatus(status)"
           >
             {{ status }}
@@ -56,8 +56,6 @@
             Paid
             <span class="badge hidden-xs">{{ archivedNr }}</span>
           </button>
-          <!-- <a href="#projects/list/{{filterStatusOptions[3]}}" class="btn btn-default btn-sm text-capitalize"
-                        ng-class="{active: filterStatus == filterStatusOptions[3]}">{{filterStatusOptions[3]}}</a> -->
         </div>
       </div>
     </form>
@@ -94,19 +92,18 @@
       <tbody>
         <tr
           ng-repeat="
-                        project in displayedProjectList |
-                            orderBy         : orderCriteria() |
-                            filterByClientId: filterClient
-                "
+            project in displayedProjectList |
+              orderBy         : orderCriteria() |
+              filterByClientId: filterClient
+        "
         >
           <td
             class="cell-border"
             ng-class="{
-                            'cell-border--almost' : isProjectAlmostDone( project ),
-                            'cell-border--danger' : isProjectOverdue( project ),
-                            'cell-border--warning': isProjectLate( project )
-                        }
-                    "
+              'cell-border--almost' : isProjectAlmostDone( project ),
+              'cell-border--danger' : isProjectOverdue( project ),
+              'cell-border--warning': isProjectLate( project )
+            }"
           >
             <b>{{ project.name }}</b
             ><br />
@@ -223,9 +220,9 @@
     <p
       class="alert alert-warning text-center"
       ng-show="
-            !isLoading &&
-            !(projectsList | filterByProjectStatus: filterStatus | filterByClientId: filterClient).length
-        "
+        !isLoading &&
+        !(projectsList | filterByProjectStatus: filterStatus | filterByClientId: filterClient).length
+      "
     >
       The are no
       <b>{{ filterStatus === "" ? "active" : filterStatus }}</b> projects to
@@ -237,8 +234,8 @@
     class="alert alert-warning text-center"
     ng-if="!isLoading && !hasProjects()"
   >
-    You have no Projects added. <br /><br /><strong
-      >Add your first project to get started.</strong
-    >
+    You have no Projects added.
+    <br /><br />
+    <strong>Add your first project to get started.</strong>
   </p>
 </section>
