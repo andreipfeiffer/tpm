@@ -142,7 +142,9 @@
               class="text-muted"
               ng-show="filterInactiveStatusOptions.indexOf(filterStatus) > -1"
             >
-              <br />{{ project.passedText }}
+              <br />{{
+                project.passedText || project.date | date:'dd MMM yyyy'
+              }}
             </small>
           </td>
           <td
