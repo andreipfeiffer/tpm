@@ -66,7 +66,6 @@ module.exports = (() => {
   }
 
   function getStatusQuery(status) {
-    console.log(status);
     if (statusArr.indexOf(status) > -1) {
       return ' AND projects.status = "' + status + '"';
     }
