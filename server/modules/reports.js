@@ -5,7 +5,7 @@ module.exports = (() => {
     knex = server.knex,
     moment = require("moment");
 
-  function getProjectsReport(idUser) {
+  function getProjectsReport(idUser, month) {
     var q = "";
 
     q += "SELECT";
@@ -17,13 +17,12 @@ module.exports = (() => {
     q += " priceFinal,";
     q += " date,";
     q += " projects.status,";
-    q +=
-      ' CONCAT(YEAR(filtered_projects.date), "-" , MONTH(filtered_projects.date)) AS month';
+    q += ' DATE_FORMAT(filtered_projects.date, "%Y-%m") AS month';
 
     q +=
       " FROM (SELECT date, idProject FROM projects_status_log WHERE idUser=" +
       idUser +
-      ' AND status IN ("paid", "finished") ORDER BY date DESC)';
+      ' AND status = "paid" ORDER BY date DESC)';
     q += " AS filtered_projects";
 
     q += " LEFT JOIN projects";
@@ -33,20 +32,54 @@ module.exports = (() => {
     q += " ON projects.idClient = clients.id";
 
     q += " WHERE projects.isDeleted = 0";
+    q += " AND projects.status = 'paid'";
+
+    // if we pass a specific month, select only projects from that month
+    if (month) {
+      q +=
+        ' AND DATE_FORMAT(filtered_projects.date, "%Y-%m") = \'' + month + "'";
+    }
     q += " GROUP BY filtered_projects.idProject";
-    q += " ORDER BY filtered_projects.date DESC";
+    // q += " ORDER BY filtered_projects.date DESC";
 
     return knex.raw(q);
   }
 
-  function moveFirstDayToPreviousMonth(projects) {
-    return projects.map(project => {
-      var date = moment(project.date);
-      if (project.status === "paid" && date.date() === 1) {
-        project.month = date.subtract(1, "days").format("YYYY-M");
+  function groupByMonth(projects) {
+    const result = {};
+
+    projects.forEach(project => {
+      if (!result[project.month]) {
+        result[project.month] = {
+          count: 0,
+          total: 0
+        };
       }
-      return project;
+
+      result[project.month].count += 1;
+      result[project.month].total += getPrice(project);
     });
+
+    return result;
+  }
+
+  function groupByClient(projects) {
+    const result = {};
+
+    projects.forEach(project => {
+      if (!result[project.idClient]) {
+        result[project.idClient] = {
+          name: project.clientName,
+          count: 0,
+          total: 0
+        };
+      }
+
+      result[project.idClient].count += 1;
+      result[project.idClient].total += getPrice(project);
+    });
+
+    return result;
   }
 
   return {
@@ -56,10 +89,62 @@ module.exports = (() => {
       getProjectsReport(userLogged.id).then(data => {
         // don't know why it returns 2 arrays
         // (probably because of the 2 selects in the query)
-        var projects = moveFirstDayToPreviousMonth(data[0]);
+        var totalsByMonth = groupByMonth(data[0]);
+        var totalsByClient = groupByClient(data[0]);
 
-        return res.send(projects);
+        var totalsByMonthArr = Object.keys(totalsByMonth)
+          .sort()
+          .map(month => ({
+            month: month,
+            displayMonth: moment(month + "-01").format("YYYY MMMM"),
+            count: totalsByMonth[month].count,
+            total: totalsByMonth[month].total
+          }));
+
+        var totalsByClientArr = Object.entries(totalsByClient)
+          .filter(item => item[0] > 0)
+          .sort((a, b) => b[1].total - a[1].total)
+          .slice(0, 10)
+          .map(item => ({
+            id: item[0],
+            name: item[1].name,
+            count: item[1].count,
+            total: item[1].total
+          }));
+
+        var countsByClientArr = Object.entries(totalsByClient)
+          .filter(item => item[0] > 0)
+          .sort((a, b) => b[1].count - a[1].count)
+          .slice(0, 10)
+          .map(item => ({
+            id: item[0],
+            name: item[1].name,
+            count: item[1].count,
+            total: item[1].total
+          }));
+
+        return res.send({
+          byMonth: totalsByMonthArr,
+          totalByClient: totalsByClientArr,
+          countsByClient: countsByClientArr
+        });
+      });
+    },
+
+    getByMonth(req, res) {
+      var userLogged = req.user;
+      var month = req.params.month;
+
+      getProjectsReport(userLogged.id, month).then(data => {
+        return res.send(data[0]);
       });
     }
   };
+
+  function getPrice(project) {
+    if (project.priceFinal) {
+      return project.priceFinal;
+    }
+    return project.priceEstimated;
+  }
 })();

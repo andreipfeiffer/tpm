@@ -46,6 +46,10 @@ class Projects {
     return this.$http.get(config.getApiUrl() + "projects/archived-counts");
   }
 
+  getProjectsInMonth(month) {
+    return this.$http.get(config.getApiUrl() + "projects/month/" + month);
+  }
+
   getProjectsByStatus(status, limit) {
     var url = config.getApiUrl() + "projects/status/" + status;
 

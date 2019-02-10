@@ -5,6 +5,7 @@ import SettingsUser from "public/js/components/SettingsUser";
 import ProjectsModal from "public/js/components/ProjectsModal";
 import Projects from "public/js/components/Projects";
 import Clients from "public/js/components/Clients";
+import Reports from "public/js/components/Reports";
 
 export default angular
   .module("TPM.Services", ["ngResource"])
@@ -34,15 +35,9 @@ export default angular
     }
   ])
 
-  .factory("ReportsService", [
-    "$resource",
-    $resource => {
-      return $resource(config.getApiUrl() + "reports");
-    }
-  ])
-
   .service("Projects", Projects)
   .service("Clients", Clients)
+  .service("Reports", Reports)
 
   .service("SettingsUser", SettingsUser)
   .service("ProjectsModal", ProjectsModal)

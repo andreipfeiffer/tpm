@@ -111,11 +111,12 @@ module.exports = (() => {
 
   function getProjectsByClientId(idUser, idClient) {
     return knex("projects")
-      .select()
+      .select("projects.*", "clients.name AS clientName")
+      .leftJoin("clients", "projects.idClient", "clients.id")
       .where({
-        idUser: idUser,
-        idClient: idClient,
-        isDeleted: "0"
+        "projects.idUser": idUser,
+        "projects.idClient": idClient,
+        "projects.isDeleted": "0"
       })
       .catch(function(e) {
         console.log(e);

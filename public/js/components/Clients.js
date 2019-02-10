@@ -18,14 +18,6 @@ class Clients {
     );
   }
 
-  // serialize(scope) {
-  //   return Object.assign({}, scope.project, {
-  //     days: this.getDays(scope),
-  //     dateEstimated: this.getEstimatedDate(scope),
-  //     dateAdded: this.getFormattedDate(new Date())
-  //   });
-  // }
-
   search(keyword) {
     return this.$http.get(config.getApiUrl() + "clients/search/" + keyword);
   }

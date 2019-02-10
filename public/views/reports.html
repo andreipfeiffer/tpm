@@ -1,171 +1,197 @@
 <section>
+  <header class="clearfix row">
+    <h1 class="pull-left col-sm-8">Reports</h1>
+  </header>
 
-    <header class="clearfix row">
-        <h1 class="pull-left col-sm-8">Reports</h1>
-    </header>
+  <hr />
+  <br />
 
-    <hr>
-    <br>
+  <div ng-hide="isLoading">
+    <uib-tabset>
+      <uib-tab heading="Income per month">
+        <section>
+          <br /><br />
+          <h2>Income per month</h2>
+          <br />
 
-    <div ng-hide="isLoading">
+          <div ng-if="report.length">
+            <canvas
+              height="70"
+              id="line"
+              class="chart chart-line"
+              ng-show="chartIncomeByMonth.series.length > 0"
+              chart-data="chartIncomeByMonth.data"
+              chart-labels="chartIncomeByMonth.labels"
+              chart-series="chartIncomeByMonth.series"
+              chart-legend="true"
+            >
+            </canvas>
 
-        <uib-tabset>
+            <br />
 
-            <uib-tab heading="Income per month">
-                <section>
-                    <br><br>
-                    <h2>Income per month</h2>
-                    <br>
+            <table class="table table-hover table-tpm table-no-header">
+              <tbody>
+                <tr ng-repeat="month in displayedReport">
+                  <td>
+                    <strong>{{ month.displayMonth }}</strong>
+                  </td>
+                  <td class="text-right" width="100">
+                    <a href="" ng-click="showProjectsByMonth(month.month)"
+                      >{{ month.count }} projects</a
+                    >
+                  </td>
+                  <td class="text-right" width="120">
+                    <b>{{ month.total }}</b> {{ currency }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-                    <div ng-if="months.length">
+            <div
+              class="text-center text-muted"
+              ng-if="(displayedReport.length < report.length)"
+            >
+              Displaying only the last 3 years <br /><br />
 
-                        <canvas height="70" id="line" class="chart chart-line"
-                            ng-show="months.length > 1"
-                            chart-data="chartMonth.data"
-                            chart-labels="chartMonth.labels"
-                            chart-series="chartMonth.series"
-                            chart-legend="true">
-                        </canvas>
+              <button class="btn btn-primary" ng-click="displayAllYears()">
+                Display all years
+              </button>
+            </div>
 
-                        <br>
+            <br />
+            <br />
 
-                        <table class="table table-hover table-tpm table-no-header">
-                            <tbody>
-                                <tr ng-repeat="month in months">
-                                    <td>
-                                        <strong>{{month.month}}</strong>
-                                    </td>
-                                    <td class="text-right" width="100">
-                                        <a href="" ng-click="showProjects('Projects from ' + month.month, month.projects)">{{month.projects.length}} projects</a>
-                                    </td>
-                                    <td class="text-right" width="120">
-                                        <b>{{month.price}}</b> {{ currency }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="panel panel-warning">
+                  <div class="panel-heading"><b>NOTE:</b></div>
+                  <div class="panel-body">
+                    Projects are always included on the month in which they were
+                    <b>Paid</b>.
+                  </div>
+                </div>
+              </div>
 
-                        <br>
-                        <br>
+              <div class="col-sm-6">
+                <div class="panel panel-warning" ng-if="notPaid.nr > 0">
+                  <div class="panel-heading"><b>PROJECTS NOT PAID:</b></div>
+                  <div class="panel-body">
+                    There are
+                    <a href="" ng-click="gotoFinishedProjects()"
+                      >{{ notPaid.nr }} Projects</a
+                    >
+                    "finished", but not "paid", in total of
+                    <b>{{ notPaid.value }} {{ currency }}</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="panel panel-warning">
-                                    <div class="panel-heading"><b>NOTE:</b></div>
-                                    <div class="panel-body">
-                                        Projects are always included on the month in which they were <b>Paid</b>.
-                                    </div>
-                                </div>
-                            </div>
+          <p
+            class="alert alert-warning text-center"
+            ng-show="!isLoading && !report.length"
+          >
+            Currently, there are no Reports to display. You need to have "Paid"
+            projects in order to display Reports.
+          </p>
+        </section>
+      </uib-tab>
 
-                            <div class="col-sm-6">
-                                <div class="panel panel-warning" ng-if="notPaid.nr > 0">
-                                    <div class="panel-heading"><b>PROJECTS NOT PAID:</b></div>
-                                    <div class="panel-body">
-                                        There are
-                                        <a href="" ng-click="gotoFinishedProjects()">{{ notPaid.nr }} Projects</a>
-                                        "finished", but not "paid", in total of
-                                        <b>{{ notPaid.value }} {{ currency }}</b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <uib-tab heading="Income per year">
+        <section>
+          <br /><br />
+          <h2>Income per year</h2>
+          <br />
 
-                    <p class="alert alert-warning text-center" ng-show="!isLoading && !months.length">
-                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
-                    </p>
-                </section>
-            </uib-tab>
+          <div ng-if="report.length">
+            <canvas
+              height="70"
+              id="line"
+              class="chart chart-line"
+              ng-show="chartIncomeByYear.series.length > 0"
+              chart-data="chartIncomeByYear.data"
+              chart-labels="chartIncomeByYear.labels"
+              chart-series="chartIncomeByYear.series"
+            >
+            </canvas>
+          </div>
+        </section>
+      </uib-tab>
 
-            <uib-tab heading="Price evolution per project">
-                <section>
-                    <br><br>
-                    <h2>Price evolution per project</h2>
-                    <br>
-                    
-                    <div ng-if="chartPrice.data.length">
-                        <canvas id="doughnut" class="chart chart-doughnut" height="80"
-                            chart-data="chartPrice.data"
-                            chart-labels="chartPrice.labels"
-                            chart-click="showProjectsByPriceChange">
-                        </canvas>
+      <uib-tab heading="Most income per client">
+        <section>
+          <br /><br />
+          <h2>Most income per client</h2>
+          <br />
+          <table
+            class="table table-hover table-tpm table-no-header"
+            ng-show="!isLoading && clientsByTotal.length"
+          >
+            <tbody>
+              <tr ng-repeat="client in clientsByTotal">
+                <td class="text-right" width="20">{{ $index + 1 }}.</td>
+                <td>
+                  <strong>{{ client.name }}</strong>
+                </td>
+                <td class="text-right" width="100">
+                  <a href="" ng-click="showProjectsByClient(client)"
+                    >{{ client.count }} projects</a
+                  >
+                </td>
+                <td class="text-right" width="100">
+                  <b>{{ client.total }}</b> {{ currency }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                        <br>
-                        <br>
+          <p
+            class="alert alert-warning text-center"
+            ng-show="!isLoading && !clientsByTotal.length"
+          >
+            Currently, there are no Reports to display. You need to have "Paid"
+            projects in order to display Reports.
+          </p>
+        </section>
+      </uib-tab>
 
-                        <div class="panel panel-warning">
-                            <div class="panel-heading"><b>NOTE:</b></div>
-                            <div class="panel-body">
-                                Project price is considered "changed", only if you set different <b>Estimated</b> and <b>Final</b> price</b>.
-                            </div>
-                        </div>
-                    </div>
+      <uib-tab heading="Most projects per client">
+        <section>
+          <br /><br />
+          <h2>Most projects per client</h2>
+          <br />
+          <table
+            class="table table-hover table-tpm table-no-header"
+            ng-show="!isLoading && clientsByCount.length"
+          >
+            <tbody>
+              <tr ng-repeat="client in clientsByCount">
+                <td class="text-right" width="20">{{ $index + 1 }}.</td>
+                <td>
+                  <strong>{{ client.name }}</strong>
+                </td>
+                <td class="text-right" width="100">
+                  <a href="" ng-click="showProjectsByClient(client)"
+                    >{{ client.count }} projects</a
+                  >
+                </td>
+                <td class="text-right" width="100">
+                  <b>{{ client.total }}</b> {{ currency }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                    <p class="alert alert-warning text-center" ng-show="!isLoading && !chartPrice.data.length">
-                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
-                    </p>
-                </section>
-            </uib-tab>
-
-            <uib-tab heading="Most income per client">
-                <section>
-                    <br><br>
-                    <h2>Most income per client</h2>
-                    <br>
-                    <table class="table table-hover table-tpm table-no-header" ng-show="!isLoading && clientsByPrice.length">
-                        <tbody>
-                            <tr ng-repeat="client in clientsByPrice | limitTo: 10">
-                                <td class="text-right" width="20">{{ $index + 1 }}.</td>
-                                <td>
-                                    <strong>{{client.name}}</strong>
-                                </td>
-                                <td class="text-right" width="100">
-                                    <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
-                                </td>
-                                <td class="text-right" width="100">
-                                    <b>{{ client.price }}</b> {{ currency }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByPrice.length">
-                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
-                    </p>
-                </section>
-            </uib-tab>
-
-            <uib-tab heading="Most projects per client">
-                <section>
-                    <br><br>
-                    <h2>Most projects per client</h2>
-                    <br>
-                    <table class="table table-hover table-tpm table-no-header" ng-show="!isLoading && clientsByProjects.length">
-                        <tbody>
-                            <tr ng-repeat="client in clientsByProjects | limitTo: 10">
-                                <td class="text-right" width="20">{{ $index + 1 }}.</td>
-                                <td>
-                                    <strong>{{client.name}}</strong>
-                                </td>
-                                <td class="text-right" width="100">
-                                    <a href="" ng-click="showProjects('Projects from ' + client.name, client.projects)">{{client.projects.length}} projects</a>
-                                </td>
-                                <td class="text-right" width="100">
-                                    <b>{{ client.price }}</b> {{ currency }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <p class="alert alert-warning text-center" ng-show="!isLoading && !clientsByProjects.length">
-                        Currently, there are no Reports to display. You need to have "Paid" projects in order to display Reports.
-                    </p>
-                </section>
-            </uib-tab>
-
-        </uib-tabset>
-
-    </div>
-
+          <p
+            class="alert alert-warning text-center"
+            ng-show="!isLoading && !clientsByCount.length"
+          >
+            Currently, there are no Reports to display. You need to have "Paid"
+            projects in order to display Reports.
+          </p>
+        </section>
+      </uib-tab>
+    </uib-tabset>
+  </div>
 </section>

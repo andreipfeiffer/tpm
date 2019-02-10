@@ -94,6 +94,9 @@ module.exports = (() => {
     });
 
   app.route("/reports").get(auth.ensureTokenAuthenticated, reports.getAll);
+  app
+    .route("/reports/month/:month")
+    .get(auth.ensureTokenAuthenticated, reports.getByMonth);
 
   app
     .route("/status")
