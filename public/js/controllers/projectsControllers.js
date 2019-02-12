@@ -90,7 +90,12 @@ export default angular
 
       function initProjectsList(arr) {
         angular.forEach(arr, project => {
-          if (project.status === "paid") {
+          project.price =
+            project.priceFinal > 0
+              ? project.priceFinal
+              : project.priceEstimated;
+
+          if (project.status === "paid" || project.status === "cancelled") {
             return;
           }
 
@@ -117,11 +122,6 @@ export default angular
             project.clientName = getClientById(project.idClient).name;
           }
 
-          project.price =
-            project.priceFinal > 0
-              ? project.priceFinal
-              : project.priceEstimated;
-
           // set passed time, for inactive projects
           if (
             project.date &&
@@ -139,7 +139,9 @@ export default angular
       function getProjectsByStatus(status, limit) {
         return Projects.getProjectsByStatus(status, limit).then(
           archivedProjects => {
-            $scope.archivedList[status].list = archivedProjects.data;
+            $scope.archivedList[status].list = initProjectsList(
+              archivedProjects.data
+            );
           }
         );
       }
