@@ -198,7 +198,7 @@ export default angular
         if (
           $scope.filterInactiveStatusOptions.indexOf($scope.filterStatus) > -1
         ) {
-          return "passedDays";
+          return "-date";
         }
 
         return "remainingDays";
