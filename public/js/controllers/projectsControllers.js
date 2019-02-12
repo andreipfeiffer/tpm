@@ -145,7 +145,6 @@ export default angular
       }
 
       function getArchivedProjects(status, limit) {
-        $scope.displayedProjectList = [];
         $scope.isLoading = true;
         feedback.load();
 
