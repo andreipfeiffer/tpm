@@ -94,7 +94,7 @@
           >
             Work Days
           </th>
-          <th width="100" class="text-uppercase text-right">
+          <th width="100" class="hidden-xs text-uppercase text-right">
             Price
           </th>
           <th></th>
@@ -138,7 +138,7 @@
               {{ project.status == "finished" ? project.passedText : "Late" }}
             </b>
           </td>
-          <td ng-show="!showActions" class="b-one-line text-capitalize">
+          <td ng-show="!showActions" class="text-capitalize">
             {{ project.status }}
             <small
               class="text-muted"
@@ -177,7 +177,7 @@
           </td>
           <td
             ng-show="!showActions"
-            class="b-one-line text-right"
+            class="hidden-xs b-one-line text-right"
           >
             <b>{{ project.price }}</b>
             {{ currency }}
@@ -190,9 +190,9 @@
               class="btn-group b-one-line"
               ng-show="!isEnabledToggleActions || showActions"
             >
-              <a href="#projects/{{ project.id }}" class="btn btn-default">
+              <!-- <a href="#projects/{{ project.id }}" class="btn btn-default">
                 <span class="glyphicon glyphicon-list-alt"></span>
-              </a>
+              </a> -->
               <a href="#projects/{{ project.id }}/edit" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
               </a>
