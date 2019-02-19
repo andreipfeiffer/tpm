@@ -227,6 +227,11 @@ module.exports = (() => {
   }
 
   function ensureSessionAuthenticated(req, res, next) {
+    if (!req.sessionID) {
+      console.warn("Session is not set up");
+      return res.status(401).end();
+    }
+
     findUserBySession(req.sessionID)
       .then(data => {
         var user = data[0];
