@@ -23,7 +23,7 @@ export default {
     return "/";
   },
 
-  setApiUrl(host, port) {
+  setApiUrl(/*host, port*/) {
     /*
     apiUrl = _isLocalhost(host)
       ? "http://" + host + ":" + port + "/"
