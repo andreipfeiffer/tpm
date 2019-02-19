@@ -1,3 +1,4 @@
+/*
 var apiUrl = "http://localhost:3000/";
 
 function _isLocalhost(host) {
@@ -13,17 +14,20 @@ function _isLocalhost(host) {
   }
   return false;
 }
+*/
 
 export default {
   dateFormat: "yyyy-MM-dd",
 
   getApiUrl() {
-    return apiUrl;
+    return "/";
   },
 
   setApiUrl(host, port) {
+    /*
     apiUrl = _isLocalhost(host)
       ? "http://" + host + ":" + port + "/"
       : "http://tpm.upsidedown.ro/";
+      */
   }
 };
