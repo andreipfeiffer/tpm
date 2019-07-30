@@ -1,21 +1,21 @@
 sudo: false
 language: node_js
 node_js:
-    - "8.0"
+  - "8.0"
 
 services:
-    - redis-server
+  - redis-server
 
 before_install:
-    - "npm install -g grunt-cli"
-    - "npm install -g bower"
+  - mysql -e "create database IF NOT EXISTS tpm_test;"
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - "npm install -g grunt-cli"
+  - "npm install -g bower"
 
 install:
-    - "npm install"
-    - "bower install"
+  - "npm install"
+  - "bower install"
 
 before_script:
-    - mysql -e "create database IF NOT EXISTS tpm_test;"
-    - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-    - grunt build
-    - grunt
+  - grunt build
+  - grunt
