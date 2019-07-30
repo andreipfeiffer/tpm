@@ -91,7 +91,11 @@
 .table.table-tpm .cell-border--almost {
   border-left-color: rgb(33, 199, 27);
 }
+.table.table-tpm .cell-border--started {
+  border-left-color: #b3ecb1;
+}
 
+.table.table-tpm tr:hover .cell-border--started,
 .table.table-tpm tr:hover .cell-border--almost,
 .table.table-tpm tr:hover .cell-border--warning,
 .table.table-tpm tr:hover .cell-border--danger {

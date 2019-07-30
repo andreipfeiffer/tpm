@@ -209,8 +209,15 @@ export default angular
         return project.status === "almost done";
       };
 
+      $scope.isProjectStarted = project => {
+        return project.status === "started";
+      };
+
       $scope.isProjectOverdue = project => {
-        if ($scope.isProjectAlmostDone(project)) {
+        if (
+          $scope.isProjectAlmostDone(project) ||
+          $scope.isProjectStarted(project)
+        ) {
           return false;
         }
         return (
@@ -221,7 +228,10 @@ export default angular
       };
 
       $scope.isProjectLate = project => {
-        if ($scope.isProjectAlmostDone(project)) {
+        if (
+          $scope.isProjectAlmostDone(project) ||
+          $scope.isProjectStarted(project)
+        ) {
           return false;
         }
         return (

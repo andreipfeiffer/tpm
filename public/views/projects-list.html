@@ -75,6 +75,7 @@
               filterByClientId: filterClient
         ">
           <td class="cell-border" ng-class="{
+              'cell-border--started': isProjectStarted( project ),
               'cell-border--almost' : isProjectAlmostDone( project ),
               'cell-border--danger' : isProjectOverdue( project ),
               'cell-border--warning': isProjectLate( project )
@@ -82,15 +83,18 @@
             <b>{{ project.name }}</b><br />
             {{ project.clientName }}
 
+            <b class="cell-border__text" ng-if="isProjectStarted( project )">
+              Started
+            </b>
             <b class="cell-border__text" ng-if="isProjectAlmostDone( project )">
               Almost done
             </b>
-            <b class="cell-border__text" ng-if="!isProjectAlmostDone( project ) && isProjectOverdue( project )">
+            <b class="cell-border__text" ng-if="isProjectOverdue( project )">
               {{
                 project.status == "finished" ? project.passedText : "Overdue"
               }}
             </b>
-            <b class="cell-border__text" ng-if="!isProjectAlmostDone( project ) && isProjectLate( project )">
+            <b class="cell-border__text" ng-if="isProjectLate( project )">
               {{ project.status == "finished" ? project.passedText : "Late" }}
             </b>
           </td>
