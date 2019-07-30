@@ -5,6 +5,7 @@ node_js:
 
 services:
   - redis-server
+  - mysql
 
 before_install:
   - mysql -e "create database IF NOT EXISTS tpm_test;"
