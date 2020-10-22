@@ -72,39 +72,42 @@
         <tr ng-repeat="
             project in displayedProjectList |
               orderBy         : orderCriteria() |
-              filterByClientId: filterClient
+              filterByClientId: filterClient"
+          ng-class="{'row-separator': project.newYear === true}
         ">
-          <td class="cell-border" ng-class="{
+          <td class="cell-title">
+            <div class="cell-border" ng-class="{
               'cell-border--started': isProjectStarted( project ),
               'cell-border--almost' : isProjectAlmostDone( project ),
               'cell-border--danger' : isProjectOverdue( project ),
               'cell-border--warning': isProjectLate( project )
             }">
-            <b>{{ project.name }}</b><br />
-            {{ project.clientName }}
-
-            <b class="cell-border__text" ng-if="isProjectStarted( project )">
-              Started
-            </b>
-            <b class="cell-border__text" ng-if="isProjectAlmostDone( project )">
-              Almost done
-            </b>
-            <b class="cell-border__text" ng-if="isProjectOverdue( project )">
-              {{
-                project.status == "finished" ? project.passedText : "Overdue"
-              }}
-            </b>
-            <b class="cell-border__text" ng-if="isProjectLate( project )">
-              {{ project.status == "finished" ? project.passedText : "Late" }}
-            </b>
-          </td>
-          <td ng-show="!showActions" class="text-capitalize">
-            {{ project.status }}
-            <small class="text-muted" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) > -1">
-              <br />{{
-                project.passedText || project.date | date: "dd MMM yyyy"
-              }}
-            </small>
+              <b>{{ project.name }}</b><br />
+              {{ project.clientName }}
+              
+              <b class="cell-border__text" ng-if="isProjectStarted( project )">
+                Started
+              </b>
+              <b class="cell-border__text" ng-if="isProjectAlmostDone( project )">
+                Almost done
+              </b>
+              <b class="cell-border__text" ng-if="isProjectOverdue( project )">
+                {{
+                  project.status == "finished" ? project.passedText : "Overdue"
+                }}
+              </b>
+              <b class="cell-border__text" ng-if="isProjectLate( project )">
+                {{ project.status == "finished" ? project.passedText : "Late" }}
+              </b>
+          </div>
+        </td>
+        <td ng-show="!showActions" class="text-capitalize">
+          {{ project.status }}
+          <small class="text-muted" ng-show="filterInactiveStatusOptions.indexOf(filterStatus) > -1">
+            <br />{{
+              project.passedText || project.date | date: "dd MMM yyyy"
+            }}
+          </small>
           </td>
           <td class="b-one-line" ng-show="!showActions && filterInactiveStatusOptions.indexOf(filterStatus) == -1">
             <span ng-if="project.dateEstimatedFormatted">

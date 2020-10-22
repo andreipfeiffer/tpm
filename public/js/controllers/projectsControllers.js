@@ -7,8 +7,8 @@ const dateSettings = {
   dateFormat: "dd MMMM yyyy",
   dateOptions: {
     formatYear: "yy",
-    startingDay: 1
-  }
+    startingDay: 1,
+  },
 };
 
 export default angular
@@ -40,16 +40,16 @@ export default angular
       $scope.archivedList = {
         paid: {
           list: [],
-          count: 0
+          count: 0,
         },
         cancelled: {
           list: [],
-          count: 0
-        }
+          count: 0,
+        },
       };
       $scope.filterStatus = tpmCache.get("filterStatus") || "";
       $scope.filterStatusOptions = utils.statusList.filter(
-        s => s !== "paid" && s !== "cancelled"
+        (s) => s !== "paid" && s !== "cancelled"
       );
       $scope.filterActiveStatusOptions = utils.getActiveStatusList();
       $scope.filterInactiveStatusOptions = utils.getInactiveStatusList();
@@ -65,8 +65,8 @@ export default angular
       $q.all([
         Projects.http().query().$promise,
         Clients.http().query().$promise,
-        Projects.getProjectsArchivedCounts()
-      ]).then(data => {
+        Projects.getProjectsArchivedCounts(),
+      ]).then((data) => {
         $scope.clientsList = data[1];
         $scope.projectsList = initProjectsList(data[0]);
         $scope.archivedList["paid"].count = data[2].data.paid;
@@ -77,7 +77,7 @@ export default angular
       });
 
       function getClientById(id) {
-        var filtered = $scope.clientsList.filter(client => {
+        var filtered = $scope.clientsList.filter((client) => {
           return client.id === id;
         });
 
@@ -85,11 +85,22 @@ export default angular
       }
 
       function getProjectIndex(id) {
-        return $scope.projectsList.findIndex(project => project.id === id);
+        return $scope.projectsList.findIndex((project) => project.id === id);
       }
 
       function initProjectsList(arr) {
-        angular.forEach(arr, project => {
+        let currentYear;
+
+        try {
+          arr = arr.sort(
+            (a, b) => new Date(a.dateEstimated) - new Date(b.dateEstimated)
+          );
+          currentYear = 0;
+        } catch (e) {
+          currentYear = null;
+        }
+
+        angular.forEach(arr, (project) => {
           project.price =
             project.priceFinal > 0
               ? project.priceFinal
@@ -108,11 +119,21 @@ export default angular
             project.dateEstimatedFormatted = moment(
               project.dateEstimated
             ).format("DD MMM");
+
+            // used for displaying a separator between years
+            if (currentYear === null) {
+              project.newYear = false;
+            } else {
+              const year = moment(project.dateEstimated).format("YYYY");
+              project.newYear = currentYear > 0 && currentYear !== year;
+              currentYear = year;
+            }
           } else {
             project.remainingDays = "-";
             project.remainingText = "no deadline";
             project.remainingWeekendDays = "-";
             project.dateEstimatedFormatted = "";
+            project.newYear = false;
           }
 
           // set clients name
@@ -138,7 +159,7 @@ export default angular
 
       function getProjectsByStatus(status, limit) {
         return Projects.getProjectsByStatus(status, limit).then(
-          archivedProjects => {
+          (archivedProjects) => {
             $scope.archivedList[status].list = initProjectsList(
               archivedProjects.data
             );
@@ -167,7 +188,7 @@ export default angular
           return getArchivedProjects(filter, true);
         }
 
-        $scope.displayedProjectList = $scope.projectsList.filter(p => {
+        $scope.displayedProjectList = $scope.projectsList.filter((p) => {
           if (filter.length) {
             // if we pass a specific filter
             return p.status === filter;
@@ -179,17 +200,17 @@ export default angular
         });
       }
 
-      $scope.loadAllProjectsByStatus = status => {
+      $scope.loadAllProjectsByStatus = (status) => {
         getArchivedProjects(status, false);
       };
 
-      $scope.deleteProject = id => {
+      $scope.deleteProject = (id) => {
         Projects.http().delete({ id: id });
         $scope.projectsList.splice(getProjectIndex(id), 1);
         feedback.notify("Project was deleted");
       };
 
-      $scope.setFilterStatus = filter => {
+      $scope.setFilterStatus = (filter) => {
         $scope.filterStatus = filter;
         tpmCache.put("filterStatus", filter);
         setDisplayedProjectsList(filter);
@@ -205,15 +226,15 @@ export default angular
         return "remainingDays";
       };
 
-      $scope.isProjectAlmostDone = project => {
+      $scope.isProjectAlmostDone = (project) => {
         return project.status === "almost done";
       };
 
-      $scope.isProjectStarted = project => {
+      $scope.isProjectStarted = (project) => {
         return project.status === "started";
       };
 
-      $scope.isProjectOverdue = project => {
+      $scope.isProjectOverdue = (project) => {
         if (
           $scope.isProjectAlmostDone(project) ||
           $scope.isProjectStarted(project)
@@ -227,7 +248,7 @@ export default angular
         );
       };
 
-      $scope.isProjectLate = project => {
+      $scope.isProjectLate = (project) => {
         if (
           $scope.isProjectAlmostDone(project) ||
           $scope.isProjectStarted(project)
@@ -245,7 +266,7 @@ export default angular
       };
 
       $scope.hasProjects = () => $scope.projectsList.length;
-    }
+    },
   ])
 
   .controller("ProjectsViewController", [
@@ -255,14 +276,14 @@ export default angular
     ($scope, $routeParams, Projects) => {
       Projects.http()
         .get({ id: $routeParams.id })
-        .$promise.then(data => {
+        .$promise.then((data) => {
           $scope.project = data;
           // set remaining time
           var remaining = utils.getRemainingWorkTime(data.dateEstimated);
           $scope.project.remainingDays = remaining.days;
           $scope.project.remainingText = remaining.text;
         });
-    }
+    },
   ])
 
   .controller("ProjectsNewController", [
@@ -303,7 +324,7 @@ export default angular
         status: utils.statusList[0],
         dateEstimated: "",
         dateAdded: "",
-        description: ""
+        description: "",
       };
 
       $scope.clientsList = Clients.http().query();
@@ -324,7 +345,7 @@ export default angular
           });
       };
 
-      $scope.openDatePicker = $event => {
+      $scope.openDatePicker = ($event) => {
         $event.preventDefault();
         $event.stopPropagation();
 
@@ -336,7 +357,7 @@ export default angular
         $scope.hasDeadline = !$scope.hasDeadline;
         $scope.hasDeadline && ($scope.isDatePickerOpened = true);
       };
-    }
+    },
   ])
 
   .controller("ProjectsEditController", [
@@ -370,8 +391,8 @@ export default angular
 
       $q.all([
         Projects.http().get({ id: $routeParams.id }).$promise,
-        Clients.http().query().$promise
-      ]).then(data => {
+        Clients.http().query().$promise,
+      ]).then((data) => {
         $scope.project = data[0];
         $scope.clientsList = data[1];
         $scope.selectedDateEstimated = $scope.project.dateEstimated;
@@ -393,7 +414,7 @@ export default angular
           });
       };
 
-      $scope.openDatePicker = $event => {
+      $scope.openDatePicker = ($event) => {
         $event.preventDefault();
         $event.stopPropagation();
 
@@ -407,5 +428,5 @@ export default angular
         $scope.hasDeadline = !$scope.hasDeadline;
         $scope.hasDeadline && ($scope.isDatePickerOpened = true);
       };
-    }
+    },
   ]);
