@@ -4,15 +4,14 @@ module.exports = {
     host: "localhost",
     user: "root",
     password: "root",
-    database: "tpm"
+    database: "tpm",
   },
   google: {
-    clientID:
-      "884230170474-ndnan3kql7s5dd7rg7o5botd92d2fitl.apps.googleusercontent.com",
+    clientID: "884230170474-ndnan3kql7s5dd7rg7o5botd92d2fitl.apps.googleusercontent.com",
     clientSecret: "7ulfAHdrB6NGPuplrUGh8eYq",
-    redirectURL: "/auth/google/callback"
+    redirectURL: "/auth/google/callback",
   },
   // in seconds
   sessionExpirationTime: 60 * 60 * 24,
-  secret: "upsidedown-inseamna-Lia-si-Andrei"
+  secret: "upsidedown-inseamna-Lia-si-Andrei",
 };

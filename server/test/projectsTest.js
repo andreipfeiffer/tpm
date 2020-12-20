@@ -24,7 +24,7 @@
       dateAdded: "",
       dateEstimated: "",
       description: "description",
-      clientName: null
+      clientName: null,
     };
   }
 
@@ -33,7 +33,7 @@
       status: "finished",
       days: 5,
       priceEstimated: 100,
-      priceFinal: 200
+      priceFinal: 200,
     });
   }
 
@@ -44,31 +44,31 @@
       days: 6,
       priceEstimated: 150,
       priceFinal: 250,
-      description: "changed description"
+      description: "changed description",
     });
   }
 
   describe("Projects", () => {
-    beforeEach(done => {
+    beforeEach((done) => {
       sinon.stub(status, "updateIncome").returns();
       sinon.stub(status, "updateProjects").returns();
 
       db.createDb()
         .then(() => utils.authenticateUser(request))
-        .then(res => {
+        .then((res) => {
           utils.setAuthData(res.body);
           done();
         });
     });
 
-    afterEach(done => {
+    afterEach((done) => {
       status.updateIncome.restore();
       status.updateProjects.restore();
 
       db.dropDb().then(() => done());
     });
 
-    it("should add a new project with full data", done => {
+    it("should add a new project with full data", (done) => {
       var project = getProjectWithData();
 
       request
@@ -79,10 +79,7 @@
           expect(res.body).to.have.property("id");
           expect(res.body).to.have.property("name", project.name);
           expect(res.body).to.have.property("status", project.status);
-          expect(res.body).to.have.property(
-            "priceEstimated",
-            project.priceEstimated
-          );
+          expect(res.body).to.have.property("priceEstimated", project.priceEstimated);
           expect(res.body).to.have.property("priceFinal", project.priceFinal);
           expect(res.body).to.have.property("days", project.days);
           expect(res.body).to.have.property("description", project.description);
@@ -92,7 +89,7 @@
         });
     });
 
-    it("should add a new project, if days & prices are null", done => {
+    it("should add a new project, if days & prices are null", (done) => {
       var project = getEmptyProject();
 
       request
@@ -109,7 +106,7 @@
         });
     });
 
-    it("should add a new project, with a new client", done => {
+    it("should add a new project, with a new client", (done) => {
       var project = getProjectWithData();
       project.clientName = "new client per project";
 
@@ -124,7 +121,7 @@
         });
     });
 
-    it("should add a new project, with an existing client", done => {
+    it("should add a new project, with an existing client", (done) => {
       var project = getProjectWithData();
       // this client name should exist on the user
       // has id: 2
@@ -141,7 +138,7 @@
         });
     });
 
-    it("should update an existing project", done => {
+    it("should update an existing project", (done) => {
       var project = getProjectChanged();
 
       request
@@ -158,25 +155,16 @@
               expect(res.body).to.have.property("id", 1);
               expect(res.body).to.have.property("name", project.name);
               expect(res.body).to.have.property("status", project.status);
-              expect(res.body).to.have.property(
-                "priceEstimated",
-                project.priceEstimated
-              );
-              expect(res.body).to.have.property(
-                "priceFinal",
-                project.priceFinal
-              );
+              expect(res.body).to.have.property("priceEstimated", project.priceEstimated);
+              expect(res.body).to.have.property("priceFinal", project.priceFinal);
               expect(res.body).to.have.property("days", project.days);
-              expect(res.body).to.have.property(
-                "description",
-                project.description
-              );
+              expect(res.body).to.have.property("description", project.description);
               done();
             });
         });
     });
 
-    it("should delete an existing project", done => {
+    it("should delete an existing project", (done) => {
       request
         .delete("/projects/1")
         .set("authorization", utils.getAuthData().authToken)
@@ -193,7 +181,7 @@
         });
     });
 
-    it("should get all non-archived projects", done => {
+    it("should get all non-archived projects", (done) => {
       request
         .get("/projects")
         .set("authorization", utils.getAuthData().authToken)
@@ -208,24 +196,18 @@
     // pretty shitty test
     // cannot use the existing methods
     // to add google events
-    it("should remove all events", done => {
+    it("should remove all events", (done) => {
       var userId = utils.getUserId();
 
       knex("users")
         .where({ id: userId })
         .update({ googleSelectedCalendar: "calendarName" })
         .then(() =>
-          knex("projects")
-            .where({ idUser: userId })
-            .update({ googleEventId: "eventIdNumber" })
+          knex("projects").where({ idUser: userId }).update({ googleEventId: "eventIdNumber" }),
         )
         .then(() => projects.removeEvents(userId))
-        .then(() =>
-          knex("projects")
-            .select()
-            .where({ idUser: userId })
-        )
-        .then(data => {
+        .then(() => knex("projects").select().where({ idUser: userId }))
+        .then((data) => {
           expect(data[0].googleEventId).to.equal("");
           done();
         });
@@ -244,7 +226,7 @@
 
       xit("should not add the calendar event, if status is inactive", () => {});
 
-      it("should update the calendar event, if the event exists, and status is active", done => {
+      it("should update the calendar event, if the event exists, and status is active", (done) => {
         var project = getProjectChanged();
         project.status = "started";
 
@@ -263,7 +245,7 @@
           });
       });
 
-      it("should remove the calendar event, if the event exists, and status is inactive", done => {
+      it("should remove the calendar event, if the event exists, and status is inactive", (done) => {
         var project = getProjectChanged();
         project.status = "paid";
 
@@ -282,7 +264,7 @@
           });
       });
 
-      it("should add the calendar event, if the event does not exists, and status is active", done => {
+      it("should add the calendar event, if the event does not exists, and status is active", (done) => {
         var project = getProjectChanged();
         project.status = "started";
 
@@ -301,7 +283,7 @@
           });
       });
 
-      it("should not add the calendar event, if the event does not exists, and status is inactive", done => {
+      it("should not add the calendar event, if the event does not exists, and status is inactive", (done) => {
         var project = getProjectChanged();
         project.status = "paid";
 

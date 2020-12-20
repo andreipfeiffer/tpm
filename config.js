@@ -1,4 +1,4 @@
-module.exports = (function() {
+module.exports = (function () {
   "use strict";
 
   switch (process.env.NODE_ENV) {

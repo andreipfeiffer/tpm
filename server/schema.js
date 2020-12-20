@@ -5,7 +5,7 @@ var config = require("../config"),
 
 schema = {
   structure: {},
-  populate: {}
+  populate: {},
 };
 
 // @todo should move these 2 somewhere else

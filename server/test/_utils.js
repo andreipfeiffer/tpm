@@ -4,9 +4,9 @@ module.exports = (() => {
   var user = {
     credentials: {
       username: "asd",
-      password: "asdasd"
+      password: "asdasd",
     },
-    authData: {}
+    authData: {},
   };
 
   return {
@@ -40,9 +40,9 @@ module.exports = (() => {
     },
 
     logoutUser(request) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         request.get("/logout").end((err, res) => resolve(res));
       });
-    }
+    },
   };
 })();

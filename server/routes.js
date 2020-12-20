@@ -36,9 +36,7 @@ module.exports = (() => {
     .get(auth.ensureTokenAuthenticated, projects.getAll)
     .post(auth.ensureTokenAuthenticated, projects.add);
 
-  app
-    .route("/projects/status/:status")
-    .get(auth.ensureTokenAuthenticated, projects.getByStatus);
+  app.route("/projects/status/:status").get(auth.ensureTokenAuthenticated, projects.getByStatus);
   app
     .route("/projects/status/:status/:limit")
     .get(auth.ensureTokenAuthenticated, projects.getByStatus);
@@ -52,68 +50,52 @@ module.exports = (() => {
     .put(auth.ensureTokenAuthenticated, projects.update)
     .delete(auth.ensureTokenAuthenticated, projects.remove);
 
-  app
-    .route("/projects/client/:id")
-    .get(auth.ensureTokenAuthenticated, projects.getByClientId);
+  app.route("/projects/client/:id").get(auth.ensureTokenAuthenticated, projects.getByClientId);
 
   app
     .route("/clients")
     .get(auth.ensureTokenAuthenticated, (req, res) => {
-      clients.getAll(req.user).then(result => getResponse(res, result));
+      clients.getAll(req.user).then((result) => getResponse(res, result));
     })
     .post(auth.ensureTokenAuthenticated, (req, res) => {
-      clients.add(req.user, req.body).then(result => getResponse(res, result));
+      clients.add(req.user, req.body).then((result) => getResponse(res, result));
     });
 
-  app
-    .route("/clients/search/:keyword")
-    .get(auth.ensureTokenAuthenticated, (req, res) => {
-      var loggedUserId = req.user.id;
-      var searchName = req.params.keyword;
+  app.route("/clients/search/:keyword").get(auth.ensureTokenAuthenticated, (req, res) => {
+    var loggedUserId = req.user.id;
+    var searchName = req.params.keyword;
 
-      clients
-        .searchByName(loggedUserId, searchName)
-        .then(result => getResponse(res, result));
-    });
+    clients.searchByName(loggedUserId, searchName).then((result) => getResponse(res, result));
+  });
 
   app
     .route("/clients/:id")
     .get(auth.ensureTokenAuthenticated, (req, res) => {
       var id = parseInt(req.params.id);
-      clients.getById(req.user, id).then(result => getResponse(res, result));
+      clients.getById(req.user, id).then((result) => getResponse(res, result));
     })
     .put(auth.ensureTokenAuthenticated, (req, res) => {
       var id = parseInt(req.params.id);
-      clients
-        .update(req.user, id, req.body)
-        .then(result => getResponse(res, result));
+      clients.update(req.user, id, req.body).then((result) => getResponse(res, result));
     })
     .delete(auth.ensureTokenAuthenticated, (req, res) => {
       var id = parseInt(req.params.id);
-      clients.remove(req.user, id).then(result => getResponse(res, result));
+      clients.remove(req.user, id).then((result) => getResponse(res, result));
     });
 
   app.route("/reports").get(auth.ensureTokenAuthenticated, reports.getAll);
-  app
-    .route("/reports/month/:month")
-    .get(auth.ensureTokenAuthenticated, reports.getByMonth);
+  app.route("/reports/month/:month").get(auth.ensureTokenAuthenticated, reports.getByMonth);
 
-  app
-    .route("/status")
-    .get(auth.ensureTokenAuthenticated, (req, res) => res.send(true));
+  app.route("/status").get(auth.ensureTokenAuthenticated, (req, res) => res.send(true));
 
-  app
-    .route("/settings/google")
-    .get(auth.ensureTokenAuthenticated, settings.getGoogle);
+  app.route("/settings/google").get(auth.ensureTokenAuthenticated, settings.getGoogle);
 
   app
     .route("/settings/user")
     .get(auth.ensureTokenAuthenticated, settings.getUser)
     .put(auth.ensureTokenAuthenticated, settings.setUser);
 
-  app
-    .route("/settings/google/:calendarId")
-    .put(auth.ensureTokenAuthenticated, settings.setGoogle);
+  app.route("/settings/google/:calendarId").put(auth.ensureTokenAuthenticated, settings.setGoogle);
 
   app
     .route("/auth/google")
@@ -123,16 +105,12 @@ module.exports = (() => {
         scope: [
           "https://www.googleapis.com/auth/userinfo.profile",
           "https://www.googleapis.com/auth/userinfo.email",
-          "https://www.googleapis.com/auth/calendar"
+          "https://www.googleapis.com/auth/calendar",
         ],
-        accessType: "offline"
-      })
+        accessType: "offline",
+      }),
     )
     .delete(auth.ensureTokenAuthenticated, googleAuth.revokeAccess);
 
-  app.get(
-    "/auth/google/callback",
-    auth.ensureSessionAuthenticated,
-    googleAuth.callback
-  );
+  app.get("/auth/google/callback", auth.ensureSessionAuthenticated, googleAuth.callback);
 })();

@@ -9,7 +9,7 @@ module.exports = (() => {
     oauth2Client = new OAuth2(
       config.google.clientID,
       config.google.clientSecret,
-      config.google.redirectURL
+      config.google.redirectURL,
     );
 
   function setTokens(accessToken, refreshToken) {
@@ -20,13 +20,10 @@ module.exports = (() => {
 
   function getTokens(idUser) {
     return knex("users")
-      .select(
-        "googleOAuthToken as accessToken",
-        "googleOAuthRefreshToken as refreshToken"
-      )
+      .select("googleOAuthToken as accessToken", "googleOAuthRefreshToken as refreshToken")
       .where({
         id: idUser,
-        isDeleted: "0"
+        isDeleted: "0",
       });
   }
 
@@ -49,13 +46,11 @@ module.exports = (() => {
   }
 
   function clearTokens(userId) {
-    return knex("users")
-      .where({ id: userId })
-      .update({
-        googleOAuthToken: "",
-        googleOAuthRefreshToken: "",
-        googleSelectedCalendar: ""
-      });
+    return knex("users").where({ id: userId }).update({
+      googleOAuthToken: "",
+      googleOAuthRefreshToken: "",
+      googleSelectedCalendar: "",
+    });
   }
 
   return {
@@ -64,6 +59,6 @@ module.exports = (() => {
     getTokens,
     updateTokens,
     clearTokens,
-    refreshAccessToken
+    refreshAccessToken,
   };
 })();

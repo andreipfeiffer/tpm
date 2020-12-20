@@ -10,22 +10,22 @@
     expect = require("expect.js");
 
   describe("Reports", () => {
-    beforeEach(done => {
+    beforeEach((done) => {
       db.createDb()
         .then(() => utils.authenticateUser(request))
-        .then(res => {
+        .then((res) => {
           utils.setAuthData(res.body);
           done();
         });
     });
 
-    afterEach(done => {
+    afterEach((done) => {
       db.dropDb().then(() => done());
     });
 
     // ok, this tests only 1 complex query
     // based on fixtures on projects & projects_status_log tables
-    it("should return the report", done => {
+    it("should return the report", (done) => {
       request
         .get("/reports")
         .set("authorization", utils.getAuthData().authToken)

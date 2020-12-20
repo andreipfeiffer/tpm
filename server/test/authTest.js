@@ -10,13 +10,13 @@
     utils = require("./_utils");
 
   describe("Auth", () => {
-    beforeEach(done => db.createDb().then(() => done()));
-    afterEach(done => db.dropDb().then(() => done()));
+    beforeEach((done) => db.createDb().then(() => done()));
+    afterEach((done) => db.dropDb().then(() => done()));
 
-    it("should not login the user with invalid username", done => {
+    it("should not login the user with invalid username", (done) => {
       var body = {
         username: "x",
-        password: "x"
+        password: "x",
       };
 
       request
@@ -29,10 +29,10 @@
         });
     });
 
-    it("should not login the user with invalid password", done => {
+    it("should not login the user with invalid password", (done) => {
       var body = {
         username: "asd",
-        password: "x"
+        password: "x",
       };
 
       request
@@ -45,8 +45,8 @@
         });
     });
 
-    it("should login the user with correct credentials", done => {
-      utils.authenticateUser(request).then(res => {
+    it("should login the user with correct credentials", (done) => {
+      utils.authenticateUser(request).then((res) => {
         expect(res.body).to.have.property("authUserId");
         expect(res.body).to.have.property("authToken");
         expect(res.status).to.equal(200);
@@ -54,10 +54,10 @@
       });
     });
 
-    it("should logout the logged user", done => {
+    it("should logout the logged user", (done) => {
       utils
         .authenticateUser(request)
-        .then(res => {
+        .then((res) => {
           utils.setAuthData(res.body);
           return utils.logoutUser(request);
         })

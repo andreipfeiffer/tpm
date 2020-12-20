@@ -15,22 +15,19 @@
       idUser: 3,
       source: "utilsTest",
       data: { someData: "test" },
-      error: { error: "error object" }
+      error: { error: "error object" },
     };
   }
 
   describe("Utils", () => {
-    beforeEach(done => db.createDb().then(() => done()));
-    afterEach(done => db.dropDb().then(() => done()));
+    beforeEach((done) => db.createDb().then(() => done()));
+    afterEach((done) => db.dropDb().then(() => done()));
 
     it("should emit en error event", () => {
       var log = getLog();
       var mock = sinon.mock(utils);
 
-      mock
-        .expects("logError")
-        .once()
-        .withExactArgs(log);
+      mock.expects("logError").once().withExactArgs(log);
 
       app.emit("logError", log);
 
@@ -38,7 +35,7 @@
       mock.restore();
     });
 
-    it("should log a new error", done => {
+    it("should log a new error", (done) => {
       var log = getLog(),
         mock = sinon.mock(console);
 

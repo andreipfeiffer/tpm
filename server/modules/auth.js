@@ -13,8 +13,7 @@ module.exports = (() => {
 
   // private encryption & validation methods
   function generateSalt() {
-    var set =
-      "0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ";
+    var set = "0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ";
     var salt = "";
     for (var i = 0; i < 10; i += 1) {
       var p = Math.floor(Math.random() * set.length);
@@ -24,10 +23,7 @@ module.exports = (() => {
   }
 
   function md5(str) {
-    return crypto
-      .createHash("md5")
-      .update(str)
-      .digest("hex");
+    return crypto.createHash("md5").update(str).digest("hex");
   }
 
   function saltAndHashPassword(pass) {
@@ -45,21 +41,15 @@ module.exports = (() => {
   }
 
   function findUserById(id) {
-    return knex("users")
-      .select()
-      .where({ id: id, isDeleted: "0" });
+    return knex("users").select().where({ id: id, isDeleted: "0" });
   }
 
   function findUserByUsername(username) {
-    return knex("users")
-      .select()
-      .where({ email: username, isDeleted: "0" });
+    return knex("users").select().where({ email: username, isDeleted: "0" });
   }
 
   function findUserBySession(sessionID) {
-    return knex("users")
-      .select()
-      .where({ sessionID: sessionID, isDeleted: "0" });
+    return knex("users").select().where({ sessionID: sessionID, isDeleted: "0" });
   }
 
   function getCurrentTime() {
@@ -77,7 +67,7 @@ module.exports = (() => {
 
   function updateSession(userId, newSessionId, oldSessionId) {
     var data = {
-      dateLastActive: getCurrentTime()
+      dateLastActive: getCurrentTime(),
     };
 
     if (newSessionId !== oldSessionId) {
@@ -87,7 +77,7 @@ module.exports = (() => {
 
     return knex("users")
       .where({
-        id: userId
+        id: userId,
       })
       .update(data);
   }
@@ -95,7 +85,7 @@ module.exports = (() => {
   // used for initial username/password authentication
   var localStrategyAuth = new LocalStrategy((username, password, done) => {
     findUserByUsername(username)
-      .then(data => {
+      .then((data) => {
         var user = data[0];
         // console.log(user);
         if (!user) {
@@ -117,14 +107,14 @@ module.exports = (() => {
 
   function deserializeUser(id, done) {
     findUserById(id)
-      .then(user => {
+      .then((user) => {
         if (user) {
           done(null, user);
         } else {
           done(null, false);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         done(e, false);
       });
   }
@@ -138,7 +128,7 @@ module.exports = (() => {
         return res.status(401).send({ error: "Bad username or password" });
       }
 
-      req.logIn(user, err => {
+      req.logIn(user, (err) => {
         if (err) {
           return next(err);
         }
@@ -148,21 +138,18 @@ module.exports = (() => {
         var newAuthToken = jwt.sign({ id: user.id }, config.secret),
           loggedData = {
             authToken: newAuthToken,
-            authUserId: user.id
+            authUserId: user.id,
           };
 
         updateSession(user.id, req.sessionID)
           .then(() => googleClient.getTokens(user.id))
-          .then(data => {
+          .then((data) => {
             if (data[0].accessToken.length && !data[0].refreshToken.length) {
               setLoginError(user.id);
               loggedData.googleAuthNeeded = true;
               // googleAuth.revokeAccess(req, res);
               return res.status(200).json(loggedData);
-            } else if (
-              data[0].accessToken.length &&
-              data[0].refreshToken.length
-            ) {
+            } else if (data[0].accessToken.length && data[0].refreshToken.length) {
               googleClient.setTokens(data[0].accessToken, data[0].refreshToken);
               googleClient.refreshAccessToken(user.id, (/*newToken*/) => {
                 // loggedData.googleToken = newToken;
@@ -172,10 +159,8 @@ module.exports = (() => {
               return res.status(200).json(loggedData);
             }
           })
-          .catch(err => {
-            return res
-              .status(503)
-              .send({ error: "Database error: " + err.code });
+          .catch((err) => {
+            return res.status(503).send({ error: "Database error: " + err.code });
           });
       });
     })(req, res, next);
@@ -189,7 +174,7 @@ module.exports = (() => {
         req.logout();
         return res.status(200).end();
       })
-      .catch(e => {
+      .catch((e) => {
         return res.status(503).send({ error: "Database error: " + e.code });
       });
   }
@@ -205,7 +190,7 @@ module.exports = (() => {
     }
 
     findUserById(decoded.id)
-      .then(data => {
+      .then((data) => {
         var user = data[0],
           idle = getIdleTime(user.dateLastActive);
 
@@ -221,7 +206,7 @@ module.exports = (() => {
           return next();
         });
       })
-      .catch(e => {
+      .catch((e) => {
         return res.status(503).send({ error: "Database error: " + e.code });
       });
   }
@@ -233,7 +218,7 @@ module.exports = (() => {
     }
 
     findUserBySession(req.sessionID)
-      .then(data => {
+      .then((data) => {
         var user = data[0];
 
         if (!user) {
@@ -244,7 +229,7 @@ module.exports = (() => {
         req.user = user;
         return next();
       })
-      .catch(e => {
+      .catch((e) => {
         return res.status(503).send({ error: "Database error: " + e.code });
       });
   }
@@ -259,9 +244,8 @@ module.exports = (() => {
       idUser: idUser,
       source: "auth.login",
       error: {
-        message:
-          "App login successfull, access_token available but no refresh_token in db"
-      }
+        message: "App login successfull, access_token available but no refresh_token in db",
+      },
     };
 
     server.app.emit("logError", log);
@@ -274,6 +258,6 @@ module.exports = (() => {
     ensureSessionAuthenticated,
     create() {
       saltAndHashPassword();
-    }
+    },
   };
 })();

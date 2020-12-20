@@ -15,14 +15,14 @@ module.exports = (() => {
           idUser: o.idUser || 0,
           source: o.source || "",
           data: _data,
-          error: _error
+          error: _error,
         })
         .then(() => {
           console.error("[tpm_error]: " + new Date().toString());
           console.trace(o);
           resolve();
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           reject();
         });
@@ -31,11 +31,11 @@ module.exports = (() => {
 
   return {
     init() {
-      app.on("logError", o => this.logError(o));
+      app.on("logError", (o) => this.logError(o));
     },
 
     logError(o) {
       return logError(o);
-    }
+    },
   };
 })();

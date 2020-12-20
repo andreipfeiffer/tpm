@@ -26,7 +26,7 @@
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
     res.header(
       "Access-Control-Allow-Headers",
-      "Content-Type, Authorization, Content-Length, X-Requested-With"
+      "Content-Type, Authorization, Content-Length, X-Requested-With",
     );
 
     // intercept OPTIONS method
@@ -54,8 +54,8 @@
       host: config.mysql.host,
       user: config.mysql.user,
       password: config.mysql.password,
-      database: config.mysql.database
-    }
+      database: config.mysql.database,
+    },
   });
 
   app.set("etag", true);
@@ -84,11 +84,11 @@
         host: "localhost",
         port: 6379,
         client: redis.createClient(),
-        ttl: config.sessionExpirationTime
+        ttl: config.sessionExpirationTime,
       }),
       saveUninitialized: true,
-      resave: false
-    })
+      resave: false,
+    }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
@@ -113,7 +113,7 @@
     start,
     app,
     knex,
-    io
+    io,
   };
 
   // verify database structure
@@ -128,7 +128,7 @@
 
       start(config.port);
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(e);
     });
 })();

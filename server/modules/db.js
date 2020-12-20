@@ -20,15 +20,15 @@ module.exports = (() => {
           .raw(
             "CREATE DATABASE IF NOT EXISTS " +
               config.mysql.database +
-              " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci"
+              " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci",
           )
           .then(() => {
-            queries.forEach(item => {
+            queries.forEach((item) => {
               queryList.push(
                 knex
                   .raw(schema.structure[item])
                   .then(() => knex(item).select())
-                  .then(data => {
+                  .then((data) => {
                     if (data.length === 0 && schema.populate[item]) {
                       return knex.raw(schema.populate[item]);
                     } else {
@@ -36,15 +36,13 @@ module.exports = (() => {
                       return knex(item).select();
                     }
                   })
-                  .catch(err =>
-                    console.log("Error -> db.createDb() -> populate -> " + err)
-                  )
+                  .catch((err) => console.log("Error -> db.createDb() -> populate -> " + err)),
               );
             });
 
             Promise.all(queryList).then(() => resolve(true));
           })
-          .catch(err => {
+          .catch((err) => {
             console.log("Error -> db.createDb() -> create db -> " + err);
             reject(err);
           });
@@ -52,7 +50,7 @@ module.exports = (() => {
     },
 
     dropDb() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const queryList = [];
 
         // prevent deleting in production
@@ -60,12 +58,12 @@ module.exports = (() => {
           return resolve(false);
         }
 
-        queries.forEach(item => {
+        queries.forEach((item) => {
           queryList.push(knex.raw("DROP TABLE " + item));
         });
 
         Promise.all(queryList).then(() => resolve(true));
       });
-    }
+    },
   };
 })();

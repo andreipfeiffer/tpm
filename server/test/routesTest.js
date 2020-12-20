@@ -11,11 +11,11 @@
     pack = require("../../package.json");
 
   describe("Routes", () => {
-    beforeEach(done => db.createDb().then(() => done()));
-    afterEach(done => db.dropDb().then(() => done()));
+    beforeEach((done) => db.createDb().then(() => done()));
+    afterEach((done) => db.dropDb().then(() => done()));
 
     describe("Authorized routes without login", () => {
-      it("should return index page", done => {
+      it("should return index page", (done) => {
         request.get("/").end((err, res) => {
           expect(res.text).to.have.string(pack.name);
           expect(res.text).to.have.string(pack.description);
@@ -27,31 +27,31 @@
     });
 
     describe("Unauthorized routes", () => {
-      it("should return unauthorized for GET:/clients", done => {
+      it("should return unauthorized for GET:/clients", (done) => {
         request.get("/clients").end((err, res) => {
           expect(res.status).to.equal(401);
           done();
         });
       });
-      it("should return unauthorized for GET:/clients/1", done => {
+      it("should return unauthorized for GET:/clients/1", (done) => {
         request.get("/clients/1").end((err, res) => {
           expect(res.status).to.equal(401);
           done();
         });
       });
-      it("should return unauthorized for PUT:/clients/1", done => {
+      it("should return unauthorized for PUT:/clients/1", (done) => {
         request.put("/clients/1").end((err, res) => {
           expect(res.status).to.equal(401);
           done();
         });
       });
-      it("should return unauthorized for POST:/clients", done => {
+      it("should return unauthorized for POST:/clients", (done) => {
         request.post("/clients").end((err, res) => {
           expect(res.status).to.equal(401);
           done();
         });
       });
-      it("should return unauthorized for DELETE:/clients/1", done => {
+      it("should return unauthorized for DELETE:/clients/1", (done) => {
         request.del("/clients/1").end((err, res) => {
           expect(res.status).to.equal(401);
           done();
@@ -60,14 +60,14 @@
     });
 
     describe("Authorized routes after login", () => {
-      beforeEach(done => {
-        utils.authenticateUser(request).then(res => {
+      beforeEach((done) => {
+        utils.authenticateUser(request).then((res) => {
           utils.setAuthData(res.body);
           done();
         });
       });
 
-      it("should authorize GET:/clients", done => {
+      it("should authorize GET:/clients", (done) => {
         request
           .get("/clients")
           .set("authorization", utils.getAuthData().authToken)
@@ -76,7 +76,7 @@
             done();
           });
       });
-      it("should authorize GET:/clients/1", done => {
+      it("should authorize GET:/clients/1", (done) => {
         request
           .get("/clients/1")
           .set("authorization", utils.getAuthData().authToken)
@@ -85,7 +85,7 @@
             done();
           });
       });
-      it("should authorize PUT:/clients/1", done => {
+      it("should authorize PUT:/clients/1", (done) => {
         request
           .put("/clients/1")
           .set("authorization", utils.getAuthData().authToken)
@@ -95,7 +95,7 @@
             done();
           });
       });
-      it("should authorize POST:/clients", done => {
+      it("should authorize POST:/clients", (done) => {
         request
           .post("/clients")
           .set("authorization", utils.getAuthData().authToken)
@@ -105,7 +105,7 @@
             done();
           });
       });
-      it("should authorize DELETE:/clients/1", done => {
+      it("should authorize DELETE:/clients/1", (done) => {
         request
           .del("/clients/1")
           .set("authorization", utils.getAuthData().authToken)

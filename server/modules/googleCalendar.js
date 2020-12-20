@@ -11,30 +11,27 @@ module.exports = (() => {
       knex("users")
         .select("googleSelectedCalendar as googleCalendar")
         .where({ id: userId })
-        .then(data => resolve(data[0].googleCalendar))
-        .catch(err => reject(err));
+        .then((data) => resolve(data[0].googleCalendar))
+        .catch((err) => reject(err));
     });
   }
 
   function getCalendars() {
     return new Promise((resolve, reject) => {
-      calendar.calendarList.list(
-        { minAccessRole: "owner" },
-        (err, response) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      calendar.calendarList.list({ minAccessRole: "owner" }, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response);
         }
-      );
+      });
     });
   }
 
   function getProjectData(userId, projectData, calendarId) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (typeof calendarId === "undefined" || !calendarId) {
-        getSelectedCalendarId(userId).then(id => {
+        getSelectedCalendarId(userId).then((id) => {
           if (!id.length) {
             return resolve(false);
           }
@@ -55,12 +52,12 @@ module.exports = (() => {
       resource: {
         summary: projectData.name,
         start: {
-          date: getDateFormat(projectData.dateEstimated)
+          date: getDateFormat(projectData.dateEstimated),
         },
         end: {
-          date: getDateFormat(projectData.dateEstimated)
-        }
-      }
+          date: getDateFormat(projectData.dateEstimated),
+        },
+      },
     };
 
     if (eventId && eventId.length) {
@@ -71,8 +68,8 @@ module.exports = (() => {
   }
 
   function addEvent(userId, projectData, calendarId) {
-    return new Promise(resolve => {
-      getProjectData(userId, projectData, calendarId).then(params => {
+    return new Promise((resolve) => {
+      getProjectData(userId, projectData, calendarId).then((params) => {
         if (!params) {
           return resolve(false);
         }
@@ -87,7 +84,7 @@ module.exports = (() => {
   }
 
   function updateEvent(userId, eventId, projectData) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let data = JSON.parse(JSON.stringify(projectData));
 
       if (!eventId.length) {
@@ -96,7 +93,7 @@ module.exports = (() => {
 
       data.googleEventId = eventId;
 
-      getProjectData(userId, data).then(params => {
+      getProjectData(userId, data).then((params) => {
         if (!params) {
           return resolve(false);
         }
@@ -111,7 +108,7 @@ module.exports = (() => {
             var newEventId;
 
             addEvent(userId, projectData)
-              .then(newId => {
+              .then((newId) => {
                 newEventId = newId;
                 return setEventId(userId, projectData.id, newEventId);
               })
@@ -125,19 +122,19 @@ module.exports = (() => {
   }
 
   function deleteEvent(userId, eventId) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!eventId.trim().length) {
         return resolve(false);
       }
 
-      getSelectedCalendarId(userId).then(calendarId => {
+      getSelectedCalendarId(userId).then((calendarId) => {
         if (!calendarId.length) {
           return resolve(false);
         }
 
         var params = {
           calendarId: calendarId,
-          eventId: eventId
+          eventId: eventId,
         };
 
         calendar.events.delete(params, (err, response) => {
@@ -146,7 +143,7 @@ module.exports = (() => {
             var log = {
               idUser: userId,
               source: "googleCalendar.deleteEvent",
-              error: err
+              error: err,
             };
             server.app.emit("logError", log);
             return resolve(false);
@@ -164,12 +161,12 @@ module.exports = (() => {
         .select()
         .where({
           idUser: userId,
-          isDeleted: "0"
+          isDeleted: "0",
         })
         .andWhere("googleEventId", "!=", "")
         .andWhere("dateEstimated", ">=", getTodayDate())
         // @todo WTF of error handling is this?
-        .catch(e => console.log(e))
+        .catch((e) => console.log(e))
     );
   }
 
@@ -180,54 +177,50 @@ module.exports = (() => {
         .where({
           idUser: userId,
           isDeleted: "0",
-          googleEventId: ""
+          googleEventId: "",
         })
         .andWhere("dateEstimated", ">=", getTodayDate())
         // @todo WTF of error handling is this?
-        .catch(e => console.log(e))
+        .catch((e) => console.log(e))
     );
   }
 
   function changeCalendar(userId, oldCalendar, newCalendar) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (oldCalendar === newCalendar || !newCalendar.length) {
         return resolve(false);
       }
 
       getProjectsWithEvent(userId)
-        .then(data =>
-          moveEventsToAnotherCalendar(data, oldCalendar, newCalendar)
-        )
+        .then((data) => moveEventsToAnotherCalendar(data, oldCalendar, newCalendar))
         .then(() => getProjectsWithoutEvent(userId))
-        .then(data => addEventsToCalendar(userId, data, newCalendar))
+        .then((data) => addEventsToCalendar(userId, data, newCalendar))
         .then(() => resolve(true));
     });
   }
 
   function addEventsToCalendar(userId, eventsArray, newCalendar) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const requests = [];
 
-      eventsArray.forEach(project => {
+      eventsArray.forEach((project) => {
         requests.push(
-          addEvent(userId, project, newCalendar).then(eventId =>
-            setEventId(userId, project.id, eventId)
-          )
+          addEvent(userId, project, newCalendar).then((eventId) =>
+            setEventId(userId, project.id, eventId),
+          ),
         );
       });
 
-      Promise.all(requests).then(result => resolve(result));
+      Promise.all(requests).then((result) => resolve(result));
     });
   }
 
   function moveEventsToAnotherCalendar(eventsArray, oldCalendar, newCalendar) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const requests = [];
 
-      eventsArray.forEach(project => {
-        requests.push(
-          moveEvent(project.googleEventId, oldCalendar, newCalendar)
-        );
+      eventsArray.forEach((project) => {
+        requests.push(moveEvent(project.googleEventId, oldCalendar, newCalendar));
       });
 
       Promise.all(requests).then(() => resolve(true));
@@ -235,11 +228,11 @@ module.exports = (() => {
   }
 
   function moveEvent(id, oldCalendar, newCalendar) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const params = {
         calendarId: oldCalendar,
         destination: newCalendar,
-        eventId: id
+        eventId: id,
       };
 
       calendar.events.move(params, (err, response) => {
@@ -253,18 +246,18 @@ module.exports = (() => {
   }
 
   function setEventId(idUser, idProject, idEvent) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (idEvent || idEvent === "") {
         knex("projects")
           .where({
             id: idProject,
             idUser: idUser,
-            isDeleted: "0"
+            isDeleted: "0",
           })
           .update({
-            googleEventId: idEvent
+            googleEventId: idEvent,
           })
-          .then(result => resolve(result));
+          .then((result) => resolve(result));
       } else {
         resolve(false);
       }
@@ -276,12 +269,12 @@ module.exports = (() => {
       knex("projects")
         .where({
           idUser: userId,
-          isDeleted: "0"
+          isDeleted: "0",
         })
         .andWhere("googleEventId", "!=", "")
         .update({ googleEventId: "" })
         // @todo WTF of error handling is this?
-        .catch(e => console.log(e))
+        .catch((e) => console.log(e))
     );
   }
 
@@ -289,7 +282,7 @@ module.exports = (() => {
     var requests = [];
 
     if (projects && projects.length) {
-      projects.forEach(project => {
+      projects.forEach((project) => {
         requests.push(removeEvent(project.googleEventId, calendarId));
       });
     }
@@ -298,10 +291,10 @@ module.exports = (() => {
   }
 
   function removeEvent(eventId, calendarId) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const params = {
         calendarId: calendarId,
-        eventId: eventId
+        eventId: eventId,
       };
 
       calendar.events.delete(params, (err, response) => {
@@ -348,6 +341,6 @@ module.exports = (() => {
     removeEvents,
     clearEvents,
     changeCalendar,
-    doesEventExists
+    doesEventExists,
   };
 })();

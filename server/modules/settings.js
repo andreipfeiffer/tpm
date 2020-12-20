@@ -7,30 +7,26 @@ module.exports = (() => {
     googleClient = require("./googleClient");
 
   function getUserSettings(idUser) {
-    return knex("settings")
-      .select("currency")
-      .where({ idUser: idUser });
+    return knex("settings").select("currency").where({ idUser: idUser });
   }
 
   function updateUserSettings(idUser, settings) {
-    return knex("settings")
-      .where({ idUser: idUser })
-      .update(settings);
+    return knex("settings").where({ idUser: idUser }).update(settings);
   }
 
   function insertUserSettings(idUser, settings) {
     var data = Object.assign(
       {
-        idUser: idUser
+        idUser: idUser,
       },
-      settings
+      settings,
     );
 
     return knex("settings").insert(data);
   }
 
   function setUserSettings(idUser, data) {
-    return getUserSettings(idUser).then(s => {
+    return getUserSettings(idUser).then((s) => {
       if (s.length) {
         return updateUserSettings(idUser, data);
       } else {
@@ -46,7 +42,7 @@ module.exports = (() => {
 
       googleClient
         .getTokens(userLogged.id)
-        .then(tokens => {
+        .then((tokens) => {
           result.googleToken = !!tokens[0].accessToken.length;
 
           if (!result.googleToken) {
@@ -55,21 +51,19 @@ module.exports = (() => {
 
           googleClient.updateTokens(req.user);
 
-          googleCalendar.getSelectedCalendarId(userLogged.id).then(id => {
+          googleCalendar.getSelectedCalendarId(userLogged.id).then((id) => {
             result.selectedCalendar = id;
 
             googleCalendar
               .getCalendars()
-              .then(calendars => {
+              .then((calendars) => {
                 result.calendars = calendars;
                 return res.send(result);
               })
-              .catch(err => res.status(400).send({ error: err.message }));
+              .catch((err) => res.status(400).send({ error: err.message }));
           });
         })
-        .catch(e =>
-          res.status(503).send({ error: "Database error: " + e.code })
-        );
+        .catch((e) => res.status(503).send({ error: "Database error: " + e.code }));
     },
 
     setGoogle(req, res) {
@@ -80,25 +74,23 @@ module.exports = (() => {
 
       googleCalendar
         .getSelectedCalendarId(userLogged.id)
-        .then(id => googleCalendar.changeCalendar(userLogged.id, id, newId))
+        .then((id) => googleCalendar.changeCalendar(userLogged.id, id, newId))
         .then(() => {
           // @todo extract method
           return knex("users")
             .where({ id: userLogged.id })
             .update({
-              googleSelectedCalendar: newId
+              googleSelectedCalendar: newId,
             })
             .then(() => res.send(true))
-            .catch(e =>
-              res.status(503).send({ error: "Database error: " + e.code })
-            );
+            .catch((e) => res.status(503).send({ error: "Database error: " + e.code }));
         });
     },
 
     getUser(req, res) {
       var userLogged = req.user;
 
-      getUserSettings(userLogged.id).then(settings => res.send(settings[0]));
+      getUserSettings(userLogged.id).then((settings) => res.send(settings[0]));
     },
 
     setUser(req, res) {
@@ -106,6 +98,6 @@ module.exports = (() => {
         data = req.body;
 
       setUserSettings(userLogged.id, data).then(() => res.send(true));
-    }
+    },
   };
 })();
