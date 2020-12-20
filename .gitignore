@@ -1,5 +1,4 @@
 node_modules/*
-public/bower_components/*
 public/coverage/*
 server/coverage/*
 coverage/*
@@ -8,6 +7,7 @@ config/config.production*.js
 *.sublime-project
 *.sublime-workspace
 temp/*
+.next
 
 #################
 ## Eclipse
