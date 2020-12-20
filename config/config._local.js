@@ -1,5 +1,5 @@
 module.exports = {
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 3001,
   mysql: {
     host: "localhost",
     user: "root",
