@@ -12,7 +12,7 @@
     session = require("express-session"),
     passport = require("passport"),
     config = require("./config"),
-    favicon = require("serve-favicon"),
+    // favicon = require("serve-favicon"),
     app = require("express")(),
     server = require("http").Server(app),
     io = require("socket.io")(server),
@@ -59,7 +59,7 @@
   });
 
   app.set("etag", true);
-  app.use(favicon(__dirname + "/public/images/favicon.ico"));
+  // app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
   // setup middleware
   if ("test" !== ENV) {
@@ -68,7 +68,7 @@
 
   // setup common middleware
   app.set("views", __dirname + "/public");
-  app.set("view engine", "jade");
+  // app.set("view engine", "jade");
   app.set("view options", { layout: false });
   // render templates with identation
   app.locals.pretty = true;
@@ -99,10 +99,6 @@
   app.use("/public/js", express.static(__dirname + "/dist/dev/js"));
   app.use("/public", express.static(__dirname + "/public"));
   app.use("/dist", express.static(__dirname + "/dist"));
-  app.use(
-    "/node_modules/systemjs",
-    express.static(__dirname + "/node_modules/systemjs")
-  );
 
   // app.use(serveStatic(__dirname + '/dist', { 'maxAge': '365 days', 'etag': true }));
 
