@@ -8,6 +8,7 @@ config/config.production*.js
 *.sublime-project
 *.sublime-workspace
 temp/*
+.next
 
 #################
 ## Eclipse
