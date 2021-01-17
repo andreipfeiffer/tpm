@@ -18,7 +18,7 @@
           <button type="button" class="btn btn-default btn-sm" ng-class="{active: filterStatus == ''}"
             ng-click="setFilterStatus('')">
             Active
-            <span class="badge hidden-xs"
+            <span class="badge"
               ng-bind="(projectsList | filterByProjectStatus: '' | filterByClientId: filterClient).length"></span>
           </button>
           <button type="button" class="btn btn-default btn-sm text-capitalize" ng-repeat="status in filterStatusOptions"
