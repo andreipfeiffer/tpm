@@ -122,10 +122,10 @@ export default angular
 
             // used for displaying a separator between years
             if (currentYear === null) {
-              project.newYear = false;
+              project.separator = false;
             } else {
               const year = moment(project.dateEstimated).format("YYYY");
-              project.newYear = currentYear > 0 && currentYear !== year;
+              project.separator = currentYear > 0 && currentYear !== year;
               currentYear = year;
             }
           } else {
@@ -133,7 +133,7 @@ export default angular
             project.remainingText = "no deadline";
             project.remainingWeekendDays = "-";
             project.dateEstimatedFormatted = "";
-            project.newYear = false;
+            project.separator = false;
           }
 
           // set clients name

@@ -73,8 +73,9 @@
             project in displayedProjectList |
               orderBy         : orderCriteria() |
               filterByClientId: filterClient"
-          ng-class="{'row-separator': project.newYear === true}
-        ">
+          ng-class="{'row-separator': project.separator === true}
+        "
+        >
           <td class="cell-title">
             <div class="cell-border" ng-class="{
               'cell-border--started': isProjectStarted( project ),
