@@ -89,16 +89,23 @@ export default angular
       }
 
       function initProjectsList(arr) {
-        let currentYear;
+        arr = arr.sort(
+          (a, b) => new Date(a.dateEstimated) - new Date(b.dateEstimated)
+        );
 
-        try {
-          arr = arr.sort(
-            (a, b) => new Date(a.dateEstimated) - new Date(b.dateEstimated)
-          );
-          currentYear = 0;
-        } catch (e) {
-          currentYear = null;
-        }
+        const separators = [
+          // 1st of Sept
+          moment().set("month", 8).set("date", 1),
+          // the beginning of the year
+          moment().set("month", 0).set("date", 1).add(1, "years"),
+        ];
+
+        const firstProjectDate = moment(arr[0].dateEstimated);
+
+        // get the index of the starting separator
+        let separatorIndex = separators.findIndex((sep) =>
+          sep.isAfter(firstProjectDate)
+        );
 
         angular.forEach(arr, (project) => {
           project.price =
@@ -120,13 +127,26 @@ export default angular
               project.dateEstimated
             ).format("DD MMM");
 
-            // used for displaying a separator between years
-            if (currentYear === null) {
-              project.separator = false;
+            // add separators
+            if (
+              separators[separatorIndex].isBefore(
+                project.dateEstimated,
+                "day"
+              ) ||
+              separators[separatorIndex].isSame(project.dateEstimated, "day")
+            ) {
+              project.separator = true;
+
+              // increment separator year
+              separators[separatorIndex].add(1, "years");
+
+              // increment separator index
+              separatorIndex =
+                separatorIndex === separators.length - 1
+                  ? 0
+                  : separatorIndex + 1;
             } else {
-              const year = moment(project.dateEstimated).format("YYYY");
-              project.separator = currentYear > 0 && currentYear !== year;
-              currentYear = year;
+              project.separator = false;
             }
           } else {
             project.remainingDays = "-";
