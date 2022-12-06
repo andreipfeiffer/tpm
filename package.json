@@ -21,7 +21,7 @@
     "compression": "^1.7.3",
     "connect-redis": "3.0.1",
     "cookie-parser": "1.4.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-session": "^1.15.6",
     "googleapis": "1.0.21",
     "grunt": "0.4.5",
