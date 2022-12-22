@@ -36,7 +36,7 @@
     "grunt-dom-munger": "3.4.0",
     "grunt-exec": "0.4.6",
     "jade": "1.11.0",
-    "jsonwebtoken": "5.4.1",
+    "jsonwebtoken": "9.0.0",
     "knex": "^0.16.3",
     "matchdep": "1.0.0",
     "moment": "^2.24.0",
