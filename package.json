@@ -39,7 +39,7 @@
     "jsonwebtoken": "5.4.1",
     "knex": "^0.16.3",
     "matchdep": "1.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "passport": "0.1.17",
