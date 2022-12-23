@@ -130,11 +130,10 @@ export default angular
 
             // add separators
             if (
-              separators[separatorIndex].isBefore(
-                project.dateEstimated,
-                "day"
-              ) ||
-              separators[separatorIndex].isSame(project.dateEstimated, "day")
+              separators[separatorIndex] && (
+                separators[separatorIndex].isBefore(project.dateEstimated, "day") ||
+                separators[separatorIndex].isSame(project.dateEstimated, "day")
+              )
             ) {
               project.separator = true;
 
@@ -143,9 +142,9 @@ export default angular
 
               // increment separator index
               separatorIndex =
-                separatorIndex === separators.length - 1
-                  ? 0
-                  : separatorIndex + 1;
+              separatorIndex === separators.length - 1
+              ? 0
+              : separatorIndex + 1;
             } else {
               project.separator = false;
             }
@@ -156,6 +155,7 @@ export default angular
             project.dateEstimatedFormatted = "";
             project.separator = false;
           }
+
 
           // set clients name
           if (!project.idClient) {
