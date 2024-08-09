@@ -48,17 +48,29 @@ module.exports = (() => {
   function groupByMonth(projects) {
     const result = {};
 
-    projects.forEach(project => {
-      if (!result[project.month]) {
-        result[project.month] = {
-          count: 0,
-          total: 0
-        };
-      }
+    const sortedProjectsByDate = projects.sort((a, b) => a.date - b.date);
+    const firstProjectDate = sortedProjectsByDate[0];
+    const lastProjectDate = sortedProjectsByDate[sortedProjectsByDate.length - 1];
 
-      result[project.month].count += 1;
-      result[project.month].total += getPrice(project);
-    });
+    let currentMonth = getMonthFormat(firstProjectDate.date);
+    const lastMonth = getMonthFormat(lastProjectDate.date);
+    // console.log({firstProjectDate, lastProjectDate, currentMonth, lastMonth});
+
+    // we iterate month by month, from the first one to the last one
+    // because we need to account for empty months, without projects
+    while (currentMonth <= lastMonth) {
+      const projectsForMonth = projects.filter(p => p.month === currentMonth);
+
+      result[currentMonth] = projectsForMonth.reduce((acc, project) => ({
+        count: acc.count + 1,
+        total: acc.total + getPrice(project),
+      }), {
+        count: 0,
+        total: 0,
+      });
+
+      currentMonth = getMonthFormat(moment(currentMonth).add(1, "month"));
+    }
 
     return result;
   }
@@ -80,6 +92,10 @@ module.exports = (() => {
     });
 
     return result;
+  }
+
+  function getMonthFormat(date) {
+    return moment(date).format("YYYY-MM");
   }
 
   return {
