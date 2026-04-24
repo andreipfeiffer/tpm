@@ -12,7 +12,6 @@
     "url": "https://github.com/andreipfeiffer"
   },
   "scripts": {
-    "postinstall": "node node_modules/protractor/bin/webdriver-manager update --standalone || echo 'No protractor available, so we do not update'"
   },
   "dependencies": {
     "babel-plugin-transform-object-assign": "*",
