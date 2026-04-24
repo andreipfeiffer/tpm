@@ -94,8 +94,8 @@ export default angular
         );
 
         const separators = [
-          // 1st of July
-          moment().set("month", 6).set("date", 1),
+          // May 12
+          moment().set("month", 4).set("date", 12),
 
           // the beginning of the year
           moment().set("month", 0).set("date", 1).add(1, "years"),
